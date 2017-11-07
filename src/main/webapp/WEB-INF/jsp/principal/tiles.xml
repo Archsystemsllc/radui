@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>					  										
+	<definition name="principals" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/principal/principals.jsp" />
+	</definition>
+	
+	<definition name="principal" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/principal/principal.jsp" />
+	</definition>
+	
+	<definition name="principalsadd" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/principal/principalsadd.jsp" />
+	</definition>
+	
+	<definition name="principalsedit" extends="page">
+		<put-attribute name="content" value="/WEB-INF/views/principal/principalsedit.jsp" />
+	</definition>  
+	
+</tiles-definitions>
