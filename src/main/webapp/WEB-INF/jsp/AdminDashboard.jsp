@@ -464,7 +464,7 @@ background: url("${pageContext.request.contextPath}/resources/images/loading3.gi
 				// Set Reporting Option as "ALL" for Line Chart
 				$("#reportingOptionLookupId > option").each(function() {
 					if (this.text == 'ALL') {
-						$('#reportingOptionLookupId').val(this.value);
+						$('#reportingOptionLookupId1').val(this.value);
 					}
 				});
 			}
