@@ -105,10 +105,10 @@
 							<!--<a class="navbar-brand" href="page0.html">-->
 								<a href="https://www.cms.gov/" target="_blank"><img
 								src="${pageContext.request.contextPath}/resources/images/logo.png"
-								alt="logo" height="100px" style="float: left; width: 40%"></a>
-							<img
+								alt="logo" height="100px" style="float: left; width: 60%"></a>
+							<%-- <img
 								src="${pageContext.request.contextPath}/resources/images/ADDA.png"
-								alt="logo" height="100px" style="float: right; width: 45%;">
+								alt="logo" height="100px" style="float: right; width: 45%;"> --%>
 						</div>
 
 					</div>
@@ -132,7 +132,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="60%"
+				<td width="70%"
 					style="vertical-align: bottom; border: 0px; padding: 0px">
 					<div class="collapse navbar-collapse navbar-right">
 						<ul class="nav navbar-nav" style="font-weight: bold">
@@ -141,14 +141,14 @@
 							<li style="margin-left: 0px"><a
 								href="${pageContext.request.contextPath}/admin/dashboard">Home</a></li>
 							<li><a
-								href="${pageContext.request.contextPath}/admin/documentupload">Upload</a></li>
+								href="${pageContext.request.contextPath}/admin/documentupload">CSR</a></li>
 							<li><a
-								href="${pageContext.request.contextPath}/admin/templates">Download</a></li>
+								href="${pageContext.request.contextPath}/admin/templates">QAM Data Analytics</a></li>
 							<li><a
-								href="${pageContext.request.contextPath}/admin/users">Users</a></li>
-							<li><a href="${pageContext.request.contextPath}/admin/contactus">Contact Us</a></li>
+								href="${pageContext.request.contextPath}/admin/users">Rebuttals</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/contactus">My Account</a></li>
 							<li><a
-								href="${pageContext.request.contextPath}/admin/download-helpdoc">Help</a></li>
+								href="${pageContext.request.contextPath}/admin/download-helpdoc">Help Guide</a></li>
 						</ul>
 					</div>
 				</td>

@@ -78,18 +78,18 @@
 			<div class="navbar-brand">
 				<div class="row">
 					<!--<a class="navbar-brand" href="page0.html">-->
-					<div class="col-sm-4">
+					<div class="col-sm-8">
 						<a href="https://www.cms.gov/" target="_blank"><img
 							src="${pageContext.request.contextPath}/resources/images/logo.png"
 							alt="logo" height="100px"
 							style="display: block; margin: 0 auto; width: 80%"></a>
 					</div>
-					<div class="col-sm-8">
+					<%-- <div class="col-sm-8">
 						<img
 							src="${pageContext.request.contextPath}/resources/images/ADDA.png"
 							alt="logo" height="100px"
 							style="display: block; margin: auto; width: 100%;">
-					</div>
+					</div> --%>
 					<!-- <div class="col-sm-2">
 						<div style="text-align:right;float: right; padding-top: 60px; height: 100px">
 							<button class="btn btn-primary btn-xs"
