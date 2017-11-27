@@ -16,16 +16,16 @@ import com.archsystemsinc.rad.model.User;
  *
  */
 @Controller
-public class TestController {
+public class HomeController {
 
-	private static final Logger log = Logger.getLogger(TestController.class);
+	private static final Logger log = Logger.getLogger(HomeController.class);
 	
-	@RequestMapping(value = "/admin/dashboard", method = RequestMethod.GET)
-	public String showAdminDashboard(Model model) {
+	 @RequestMapping(value = "/admin/dashboard")
+	 public String showAdminDashboard(Model model) {
 		  log.debug("--> showAdminDashboard <--");
 		  User form = new User();
 		  model.addAttribute("userForm", form);
-		  return "AdminDashboard";
+		  return "AdminDashboard2";
 	}
 	
 	@RequestMapping(value = "/admin/uploadFile", method = RequestMethod.GET)
