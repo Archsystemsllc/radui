@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.archsystemsinc.rad.model.User;
 
@@ -25,10 +24,10 @@ public class HomeController {
 		  log.debug("--> showAdminDashboard <--");
 		  User form = new User();
 		  model.addAttribute("userForm", form);
-		  return "AdminDashboard2";
+		  return "homepage";
 	}
 	
-	@RequestMapping(value = "/admin/uploadFile", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/admin/uploadFile", method = RequestMethod.GET)
 	public String fileUpload(Model model) {
 		  log.debug("--> showAdminDashboard <--");
 		  User form = new User();
@@ -42,5 +41,5 @@ public class HomeController {
 		  User form = new User();
 		  model.addAttribute("userForm", form);
 		  return "showCsrLists";
-	}
+	}*/
 }
