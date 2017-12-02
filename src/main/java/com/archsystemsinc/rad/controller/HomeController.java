@@ -19,7 +19,7 @@ public class HomeController {
 
 	private static final Logger log = Logger.getLogger(HomeController.class);
 	
-	 @RequestMapping(value = "/admin/dashboard")
+	 @RequestMapping(value = "/admin/dashboard1")
 	 public String showAdminDashboard(Model model) {
 		  log.debug("--> showAdminDashboard <--");
 		  User form = new User();
