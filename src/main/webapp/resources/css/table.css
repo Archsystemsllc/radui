@@ -16,6 +16,12 @@ body * {
 	text-transform: uppercase;
 }
 
+.scorecardtdclass {
+	
+	padding-left:350px;
+	padding-bottom:10px;
+}
+
 /* img {
 	border-radius: 50%;
 	height: 60px;
