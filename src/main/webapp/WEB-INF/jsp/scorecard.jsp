@@ -433,20 +433,31 @@ $(document).ready(function(){
 									<td>
 									Knowledge Skills
 									</td>
+									</tr>
+									<tr>
 									<td>
 									<div class="scorecardtdclass">
-										 <span>Did the CSR provide accurate information? If 'No' was selected,please enter reason in text box below::</span>
-										  <span><input type = "text" name = "first_name" /></span>
-       
+										 <span>Did the CSR provide accurate information? If 'No' was selected,please enter reason in text box below:</span>
+										  <span>
+										  <form:radiobutton path="password" value="Yes"/>Yes
+										  <form:radiobutton path="password" value="No"/>No
+                                         </span>
+                                        
 							       </div>
-							       <div class="scorecardtdclass">
-										 <span>QM Start Date/Time:</span>
-										 <span><input type = "text" name = "first_name" /></span>
-       
-									</div>
+							     
+									</td>
+									</tr>
+									<tr>
+									<td>
 									<div class="scorecardtdclass">
-										 QM End Date/Time: <input type = "text" name = "first_name" />
-       </div>
+										 <span>Did the CSR provide complete information? If 'No' was selected,please enter reason in text box below:</span>
+										  <span>
+										  <form:radiobutton path="password" value="Yes"/>Yes
+										  <form:radiobutton path="password" value="No"/>No
+                                         </span>
+                                        
+							       </div>
+							     
 									</td>
 									</tr>
 									</table>
@@ -456,68 +467,117 @@ $(document).ready(function(){
 									<tr>
 									<td>
 									
-									
+									Adherence to Privacy
 									</td>
 									</tr>
 									<tr>
+									
 									<td>
 									<div class="scorecardtdclass">
-										 <span>QM Full Name:</span>
-										  <span><input type = "text" name = "first_name" /></span>
-       
+										 <span>Did CSR follow privacy procedures? If 'No' was selected,please select the reason below:</span>
+										  <span>
+										  <form:radiobutton path="password" value="Yes"/>Yes
+										  <form:radiobutton path="password" value="No"/>No
+                                         </span>
+                                        
 							       </div>
-							       <div class="scorecardtdclass">
-										 <span>QM Start Date/Time:</span>
-										 <span><input type = "text" name = "first_name" /></span>
-       
-									</div>
-									<div class="scorecardtdclass">
-										 QM End Date/Time: <input type = "text" name = "first_name" />
-       </div>
+							     
 									</td>
+									
 									</tr>
 									</table>
 									  <!--Customer Skills-->
 									<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr>
 									<td>
-									<div class="scorecardtdclass">
-										 <span>QM Full Name:</span>
-										  <span><input type = "text" name = "first_name" /></span>
-       
-							       </div>
-							       <div class="scorecardtdclass">
-										 <span>QM Start Date/Time:</span>
-										 <span><input type = "text" name = "first_name" /></span>
-       
-									</div>
-									<div class="scorecardtdclass">
-										 QM End Date/Time: <input type = "text" name = "first_name" />
-       </div>
+									
+								Customer Skills
 									</td>
+									</tr>
+									<tr>
+									
+									<td>
+									<div class="scorecardtdclass">
+										 <span>Did CSR follow privacy procedures? If 'No' was selected,please select the reason below:Was CSR courteous,friendly,and professional? If 'No' was selected,please select the reason below:</span>
+										  <span>
+										  <form:radiobutton path="password" value="Yes"/>Yes
+										  <form:radiobutton path="password" value="No"/>No
+                                         </span>
+                                        
+							       </div>
+							     
+									</td>
+									
 									</tr>
 									</table>
 									  <!--Result-->
 									<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
+					<tr>
+									
+									<td>
+									Results
+							     
+									</td>
+									
+									</tr>
 									<tr>
 									<td>
 									<div class="scorecardtdclass">
-										 <span>QM Full Name:</span>
-										  <span><input type = "text" name = "first_name" /></span>
+										 <span>Call Result:</span>
+										
+										 <span><select id="name" name="name"
+											title="Select one of the MAC">
+												<option value="">Select</option>
+												<option value="Option 1">Pass</option>
+												<option value="Option 2">Fail</option>
+										</select></span>
        
-							       </div>
-							       <div class="scorecardtdclass">
-										 <span>QM Start Date/Time:</span>
-										 <span><input type = "text" name = "first_name" /></span>
        
 									</div>
 									<div class="scorecardtdclass">
-										 QM End Date/Time: <input type = "text" name = "first_name" />
-       </div>
+										 <span>Call Failure Time:</span>
+										
+										 <span><select id="name" name="name"
+											title="Select one of the MAC">
+												<option value="">Select</option>
+												<option value="Option 1">Pass</option>
+												<option value="Option 2">Fail</option>
+										</select></span>
+       
+       
+									</div>
 									</td>
 									</tr>
+									<tr>
+									<td>
+									<div class="scorecardtdclass">
+										 <span>Fail Reason Comments:</span>
+										  <span><input type = "text" name = "first_name" /></span>
+       
+							       </div>
+							       </td>
+							       </tr>
+							       <tr>
+									<td>
+									<div class="scorecardtdclass">
+										 <span>Additional Comments Box:</span>
+										  <span><input type = "text" name = "first_name" /></span>
+       
+							       </div>
+							       </td>
+							       </tr>
 									</table>							
+										<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
+					
 									
+									<tr>
+									<td style="padding-top: 10px"><button class="btn btn-primary" id="ajax">Create</button></td>
+									<td style="padding-top: 10px"><button class="btn btn-primary" id="ajax">Close</button></td>
+
+							       </tr>
+							      
+									
+									</table>
 								
 									</form>		
 														
