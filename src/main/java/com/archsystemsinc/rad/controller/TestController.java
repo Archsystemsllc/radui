@@ -18,7 +18,7 @@ import com.archsystemsinc.rad.model.User;
 @Controller
 public class TestController {
 
-	private static final Logger log = Logger.getLogger(TestController.class);
+	/*private static final Logger log = Logger.getLogger(TestController.class);
 	  @RequestMapping(value = "/admin/dashboard")
 	  public String showAdminDashboard(Model model) {
 		  log.debug("--> showAdminDashboard <--");
@@ -41,5 +41,5 @@ public class TestController {
 		  User form = new User();
 		  model.addAttribute("userForm", form);
 		  return "showCsrLists";
-	}
+	}*/
 }
