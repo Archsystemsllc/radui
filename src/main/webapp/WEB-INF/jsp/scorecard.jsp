@@ -15,6 +15,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/js/radjavascript.js" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 <link rel="stylesheet" href="/resources/demos/style.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.33.3/es6-shim.min.js"></script>
@@ -26,241 +27,19 @@
 <!-- CSS for Bootstrap -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
 <!-- JQuery -->
+ <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-<script type="text/javascript">
-$(function() {
-  $('button[type=submit]').click(function(e) {
-    e.preventDefault();
-    //Disable submit button
-    $(this).prop('disabled',true);
-    
-    var form = document.forms[0];
-    var formData = new FormData(form);
-    var username="qamadmin";
-    var password="123456";
-    // Ajax call for file uploaling
-    var ajaxReq = $.ajax({
-      url : 'http://localhost:8080/radservices/api/uploadCsrList',
-      type : 'POST',
-      data : formData,
-      cache : false,
-      contentType : false,
-      processData : false,
-      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-      xhr: function(){
-        //Get XmlHttpRequest object
-         var xhr = $.ajaxSettings.xhr() ;
-        
-        //Set onprogress event handler 
-         xhr.upload.onprogress = function(event){
-          	var perc = Math.round((event.loaded / event.total) * 100);
-          	$('#progressBar').text(perc + '%');
-          	$('#progressBar').css('width',perc + '%');
-         };
-         return xhr ;
-    	},
-    	beforeSend: function( xhr ) {
-    		//Reset alert message and progress bar
-    		$('#alertMsg').text('');
-    		$('#progressBar').text('');
-    		$('#progressBar').css('width','0%');
-              }
-    });
-  
-    // Called on success of file upload
-    ajaxReq.done(function(msg) {
-      $('#alertMsg').text(msg+':'+'File Uploaded Succesfully');
-      $('input[type=file]').val('');
-      $('button[type=submit]').prop('disabled',false);
-    });
-    
-    // Called on failure of file upload
-    ajaxReq.fail(function(jqXHR) {
-      $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-      		' - '+jqXHR.statusText+')');
-      $('button[type=submit]').prop('disabled',false);
-    });
-  });
-  
-  $('button[id=keepPreviousListButton]').click(function(e) {
-	    e.preventDefault();
-	    //Disable submit button
-	    $(this).prop('disabled',true);
-	    
-	    var username="qamadmin";
-	    var password="123456";
-	    // Ajax call for file uploaling
-	    var ajaxReq2 = $.ajax({
-	      url : 'http://localhost:8080/radservices/api/keepCurrentList?userId=1',
-	      type : 'POST',
-	      cache : false,
-	      contentType : false,
-	      processData : false,
-	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-	      beforeSend: function( xhr ) {
-	    		//Reset alert message and progress bar
-	    		$('#alertMsg').text('');
-	    		
-	       }
-	    });
-	  
-	    // Called on success of file upload
-	    ajaxReq2.done(function(msg) {
-	      $('#alertMsg').text(msg+':'+'List Updated Succesfully');
-	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-	    });
-	    
-	    // Called on failure of file upload
-	    ajaxReq2.fail(function(jqXHR) {
-	      $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-	      		' - '+jqXHR.statusText+')');
-	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-	    });
-	  });
-});
-</script>
-
-
-
-<script type="text/javascript">
-	
-    $(document).ready(function () {
-    	 $('#resultstable').hide();
-    	 $('#csrLists').hide();
-    	 
-       var username="qamadmin";
- 	   var password="123456";
- 	   
- 	   $('#ajax').click(function(){ 
- 		  $('#resultstable').show();        
-
- 	  }); 
- 	   
- 	  $('#viewLink').click(function(){ 
- 		  
- 	         $.ajax({ 
- 	             type: "GET",
- 	             dataType: "json",
- 	             url: "http://localhost:8080/radservices/api/csrList?fromDate=November 2017&toDate=November 2017",
- 	             headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
- 	            success: function(data){   
- 	            	 
-	            	var trHTML = '';
-	                 
-            	    $.each(data, function (i, item) {
-            	        
-            	        trHTML += '<tr><td>' + item.fisrtName + '</td><td>' + item.lastName + '</td><td>' + item.location + '</td><td>' + item.jurisdiction + '</td><td>' + item.program + '</td></tr>';
-            	        $('#alertMsg').text('List Updated Succesfully');
-            	    });
-            	    
-            	    $('#csrLists').append(trHTML);
-            	    $('#csrLists').show();
-            	    
-            	    
- 	            },
- 	            failure: function () {
- 	                $("#csrLists").append(" Error when fetching data please contact administrator");
- 	            }
- 	        });
-
- 	  }); 	   
- 	  
-	});
-
-   
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#keepPreviousListButton").hide();
-	$("#dialog-confirm").hide();
-	
-	// Call monitoring date - date picker
-	$( function() {
-	    $( "#datepicker" ).datepicker();
-	  } );
-	
-   // Date and time picker
-   
-   $( function() {
-	    $( "#datepickertime1" ).datetimepicker();
-	  } );
-	
-   
-    $("#datepicker2").datepicker({ 
-        dateFormat: 'mm-yy',
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-
-        onClose: function(dateText, inst) {  
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
-            $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
-        }
-    });
-
-    $("#datepicker2").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $("#ui-datepicker-div").position({
-            my: "center top",
-            at: "center bottom",
-            of: $(this)
-        });    
-    }); 
-    
-    $('#keepCurrentListCB').click(function() {
-        if( $(this).is(':checked')) {
-            
-            
-            $( "#dialog-confirm" ).dialog({
-                resizable: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                
-                buttons: {
-                  "Yes": function() {
-                	$( this ).dialog( "close" );
-                    $("#keepPreviousListButton").show();
-                    $('#table1 .hideme').hide();
-                                        
-                  },
-                  Cancel: function() {                    
-                    $("#keepPreviousListButton").hide();
-                    $('#table1 .hideme').show();
-                    $('input[id=keepCurrentListCB]').attr('checked', false);
-                    $( this ).dialog( "close" );
-                  }
-                  
-                }
-	            
-              });
-            
-        } else {
-            $("#keepPreviousListButton").hide();
-            $('#table1 .hideme').show();
-        }
-    }); 
-});
-
-
-</script>
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div id="dialog-confirm" title="Current CSR List Confirmation?">
-  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Are you sure you want to keep the current CSR list?</p>
-	</div>
+
 	<table id="mid">
 		<form:form method="POST" modelAttribute="userForm" class="form-signin" action="#">
 			<tr>
-
 				<td style="vertical-align: top">
 
 					<div id="updates" class="boxed">
@@ -277,7 +56,7 @@ $(document).ready(function(){
 									<td>
 									<div class="scorecardtdclass">
 										 <span>QM Full Name:</span>
-										  <span><form:input type = "text" name = "first_name" path="password" /></span>
+										  <span style="padding-left:32px;"><form:input type = "text" name = "first_name" path="password" /></span>
        
 							       </div>
 							       <div class="scorecardtdclass">
@@ -286,7 +65,7 @@ $(document).ready(function(){
        
 									</div>
 									<div class="scorecardtdclass">
-										 QM End Date/Time: <form:input type = "text" name = "first_name" path="password"/>
+										 QM End Date/Time: <span style="padding-left:5px;"><form:input type = "text" name = "first_name" path="password"/></span>
        </div>
 									</td>
 									</tr>
@@ -298,7 +77,7 @@ $(document).ready(function(){
 									<td>
 									<div class="scorecardtdclass">
 										 <span>MAC:</span>
-										  <span><select id="name" name="name"
+										   <span style="padding-left:87px;"><select id="name" name="name"
 											title="Select one of the MAC">
 												<option value="">Select MAC</option>
 												<option value="Option 1">Option 1</option>
@@ -312,7 +91,7 @@ $(document).ready(function(){
 							       <td>
 							       <div class="scorecardtdclass">
 										 <span>Jurisdiction</span>
-										 <span><select id="name" name="name"
+										<span style="padding-left:53px;"><select id="name" name="name"
 											title="Select one of the MAC">
 												<option value="">Select MAC</option>
 												<option value="Option 1">Option 1</option>
@@ -329,7 +108,7 @@ $(document).ready(function(){
 							       <td>
 							       <div class="scorecardtdclass">
 										 <span>Program</span>
-										 <span><select id="name" name="name"
+										 <span style="padding-left:65px;"><select id="name" name="name"
 											title="Select one of the MAC">
 												<option value="">Select MAC</option>
 												<option value="Option 1">Option 1</option>
@@ -346,7 +125,7 @@ $(document).ready(function(){
 							       <td>
 							       <div class="scorecardtdclass">
 										 <span>LOB</span>
-										 <span><select id="name" name="name"
+										 <span style="padding-left:89px;"><select id="name" name="name"
 											title="Select one of the MAC">
 												<option value="">Select MAC</option>
 												<option value="Option 1">Option 1</option>
@@ -370,7 +149,7 @@ $(document).ready(function(){
 									<td>
 									<div class="scorecardtdclass">
 										 <span>CSR Full Name:</span>
-										  <span><input type = "text" name = "first_name" /></span>
+										  <span style="padding-left:20px;"><input type = "text" name = "first_name" /></span>
        
 							       </div>
 							       </td>
@@ -380,7 +159,7 @@ $(document).ready(function(){
 							       <div class="scorecardtdclass">
 										 <span>Call Category:</span>
 										
-										 <span><select id="name" name="name"
+										 <span style="padding-left:25px;"><select id="name" name="name"
 											title="Select one of the MAC">
 												<option value="">Select MAC</option>
 												<option value="Option 1">Option 1</option>
@@ -394,40 +173,65 @@ $(document).ready(function(){
 									<tr>
 									<td>
 									
-										 Call Duration: <input type = "text" name = "first_name" />
-                                   
+										 <div class="scorecardtdclass">
+										 <span> Call Duration:</span> 
+										  <span style="padding-left:25px;">
+										  <input type = "text" name = "first_name" /></span>
+                                   </div>
 									</td>
 									</tr>
 									<tr>
 									<td>
 									
-										 MAC Call Reference Id: <input type = "text" name = "first_name" />
+										 <div class="scorecardtdclass">
+										 <span>
+									
+										 MAC Call Reference Id:</span>
+										 <span style="padding-left:25px;">
+										  <input type = "text" name = "first_name" />
+										  </span></div>
                                    
 									</td>
 									</tr>
 									<tr>
 									<td>
+									 <div class="scorecardtdclass">
+										 <span>
 									
-										 Call Time: <input type = "text" name = "first_name" />
+										 Call Time:</span>
+										   <span style="padding-left:25px;">
+										   <input type = "text" name = "first_name" /></span>
+										   </div>
                                    
 									</td>
 									</tr>
 									<tr>
 									<td>
-									
-										 Call Language: <input type = "text" name = "first_name" />
+									<div class="scorecardtdclass">
+										 <span>
+										 Call Language: </span>
+										 <span style="padding-left:25px;">
+										  <input type = "text" name = "first_name" />
+										  </span>
+										  </div>
                                    
 									</td>
 									</tr>
 									<tr>
 									<td>
+									<div class="scorecardtdclass">
+										 <span>
 									
-										 CSR Level: <input type = "text" name = "first_name" />
+										 CSR Level:</span>
+										 <span style="padding-left:25px;">
+										  <input type = "text" name = "first_name" />
+										  </span></div>
                                    
 									</td>
 									</tr>
 									</table>
 									  <!--Knowledge Skills-->
+									  <div id="knowledgeskills">
 									<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr>
 									<td>
@@ -439,8 +243,8 @@ $(document).ready(function(){
 									<div class="scorecardtdclass">
 										 <span>Did the CSR provide accurate information? If 'No' was selected,please enter reason in text box below:</span>
 										  <span>
-										  <form:radiobutton path="password" value="Yes"/>Yes
-										  <form:radiobutton path="password" value="No"/>No
+										  <form:radiobutton path="password" value="Yes" name="knowskills" id="idknowskillsyes" />Yes
+										  <form:radiobutton path="password" value="No" name="knowskills" id="idknowskillsno"/>No
                                          </span>
                                         
 							       </div>
@@ -452,8 +256,8 @@ $(document).ready(function(){
 									<div class="scorecardtdclass">
 										 <span>Did the CSR provide complete information? If 'No' was selected,please enter reason in text box below:</span>
 										  <span>
-										  <form:radiobutton path="password" value="Yes"/>Yes
-										  <form:radiobutton path="password" value="No"/>No
+										  <form:radiobutton path="password" value="Yes" name="knowskillscomplete" id="idknowskillscompleteyes" />Yes
+										  <form:radiobutton path="password" value="No"  name="knowskillscomplete" id="idknowskillscompleteno"/>No
                                          </span>
                                         
 							       </div>
@@ -461,7 +265,9 @@ $(document).ready(function(){
 									</td>
 									</tr>
 									</table>
+									</div>
 									  <!--Adherence to Privacy-->
+									   <div id="adherencetoprivacy">
 									<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									
 									<tr>
@@ -486,7 +292,9 @@ $(document).ready(function(){
 									
 									</tr>
 									</table>
+									</div>
 									  <!--Customer Skills-->
+									   <div id="customerskills">
 									<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr>
 									<td>
@@ -510,6 +318,7 @@ $(document).ready(function(){
 									
 									</tr>
 									</table>
+									</div>
 									  <!--Result-->
 									<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 					<tr>
@@ -550,7 +359,7 @@ $(document).ready(function(){
 									</tr>
 									<tr>
 									<td>
-									<div class="scorecardtdclass">
+									<div class="scorecardtdclass" id="failreasoncommentsid">
 										 <span>Fail Reason Comments:</span>
 										  <span><input type = "text" name = "first_name" /></span>
        
@@ -567,12 +376,13 @@ $(document).ready(function(){
 							       </td>
 							       </tr>
 									</table>							
-										<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
+										<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 					
 									
 									<tr>
-									<td style="padding-top: 10px"><button class="btn btn-primary" id="ajax">Create</button></td>
-									<td style="padding-top: 10px"><button class="btn btn-primary" id="ajax">Close</button></td>
+									<td><span><button class="btn btn-primary" id="create">Create</button></span>
+									<span><button class="btn btn-primary" id="close">Close</button></span></td>
+								
 
 							       </tr>
 							      
