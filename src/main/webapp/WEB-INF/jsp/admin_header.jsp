@@ -83,9 +83,10 @@
 					style="vertical-align: bottom; border: 0px; padding: 0px">
 					<div class="collapse navbar-collapse navbar-right">
 						<ul class="nav navbar-nav" style="font-weight: bold">
-							<li style="margin-left: 0px"> <a href="${pageContext.request.contextPath}/admin/dashboard">Home</a></li>
+							<li style="margin-left: 0px"> <a href="${pageContext.request.contextPath}/admin/users">Home</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/templates">Scorecard</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/csrlist">CSR</a></li>
-							<li><a href="${pageContext.request.contextPath}/admin/templates">QAM Data Analytics</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/templates">Reports</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/users">Rebuttals</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/contactus">My Account</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/download-helpdoc">Help Guide</a></li>
