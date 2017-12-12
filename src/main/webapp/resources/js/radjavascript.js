@@ -1,6 +1,6 @@
 
 /*!
- * Scorecard hide section 5 & 6
+ * Scorecard hide section 5 & 6 & 7
  */
 
 <script type="text/javascript">
