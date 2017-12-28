@@ -82,7 +82,10 @@ import com.google.common.collect.Sets;
 public class ScoreCardController {
 	private static final Logger log = Logger.getLogger(ScoreCardController.class);
 	
-	 public static final String REST_SERVICE_URI = "http://localhost:8080/radservices/api/";
+	//Local For Testing 
+	//public static final String REST_SERVICE_URI = "http://localhost:8080/radservices/api/";
+	//Prod URL
+	 public static final String REST_SERVICE_URI = "http://radservices.us-east-1.elasticbeanstalk.com/api/";
 	 
 	 SecurityServiceImpl securityServiceImpl;
  
