@@ -56,7 +56,8 @@
     			var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	 
     			var selectedProgram = $('select[name=programS]').val();    
     			$.ajax({
-	    			url: "http://localhost:8080/radservices/api/csrListNames",
+	    			//url: "http://localhost:8080/radservices/api/csrListNames",
+	    			url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrListNames",
 	    			contentType: "application/json; charset=utf-8",
 	    			headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	    			dataType: "json",
