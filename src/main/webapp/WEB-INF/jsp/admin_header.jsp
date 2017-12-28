@@ -84,7 +84,7 @@
 					<div class="collapse navbar-collapse navbar-right">
 						<ul class="nav navbar-nav" style="font-weight: bold">
 							<li style="margin-left: 0px"> <a href="${pageContext.request.contextPath}/admin/users">Home</a></li>
-							<li><a href="${pageContext.request.contextPath}/admin/scorecard">Scorecard</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/scorecardlist">Score Card</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/csrlist">CSR</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/templates">Reports</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/users">Rebuttals</a></li>

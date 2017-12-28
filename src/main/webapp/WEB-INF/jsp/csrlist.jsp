@@ -39,7 +39,7 @@
 <script type="text/javascript">
 
 	function resetFields() {
-		alert("Inside ResetFields");
+		//alert("Inside ResetFields");
 	    $('#csrMonthLists').hide();
 		$('#csrlistsdiv').hide();
 		$('input[type=file]').val('');
@@ -80,8 +80,8 @@ $(function() {
     var password="123456";
     // Ajax call for file uploaling
     var ajaxReq = $.ajax({
-      //url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/uploadCsrList',
-      url : 'http://localhost:8080/radservices/api/uploadCsrList',
+      url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/uploadCsrList',
+      //url : 'http://localhost:8080/radservices/api/uploadCsrList',
       type : 'POST',
       data : formData,
       cache : false,
@@ -135,8 +135,8 @@ $(function() {
 	    var password="123456";
 	    // Ajax call for file uploaling
 	    var ajaxReq2 = $.ajax({
-	      //url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/keepCurrentList?userId=1',
-	      url : 'http://localhost:8080/radservices/api/keepCurrentList',
+	      url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/keepCurrentList?userId=1',
+	      //url : 'http://localhost:8080/radservices/api/keepCurrentList',
 	      type : 'POST',
 	      data : formData,
 	      cache : false,
@@ -152,7 +152,7 @@ $(function() {
 	  
 	    // Called on success of file upload
 	    ajaxReq2.done(function(msg) {
-	      $('#alertMsg').text('Current Months CSR List is Updated Successfully with Previous Months List');
+	      $('#alertMsg').text('Current Month CSR List is Updated Successfully with Previous Month\'s List');
 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
 	    });
 	    
@@ -190,8 +190,8 @@ $(function() {
 	             type: "GET",
 	             dataType: "json",
 	             data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
-	             //url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrListMonths",
-	             url : 'http://localhost:8080/radservices/api/csrListMonths',
+	             url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrListMonths",
+	             //url : 'http://localhost:8080/radservices/api/csrListMonths',
 	             headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	            success: function(data){	    
 		            //alert("Inside Success");        	 
@@ -223,8 +223,8 @@ $(function() {
  	   $.ajax({ 
            type: "GET",
            dataType: "json",           
-           //url: "http://radservices.us-east-1.elasticbeanstalk.com/api/macList",
-           url : 'http://localhost:8080/radservices/api/macList',
+           url: "http://radservices.us-east-1.elasticbeanstalk.com/api/macList",
+           //url : 'http://localhost:8080/radservices/api/macList',
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
            success: function(data){   
 
@@ -251,8 +251,8 @@ $(function() {
  	  $.ajax({ 
           type: "GET",
           dataType: "json",           
-          //url: "http://radservices.us-east-1.elasticbeanstalk.com/api/jurisdictionList",
-          url : 'http://localhost:8080/radservices/api/jurisdictionList',
+          url: "http://radservices.us-east-1.elasticbeanstalk.com/api/jurisdictionList",
+          //url : 'http://localhost:8080/radservices/api/jurisdictionList',
           headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
           success: function(data){   
          	 
@@ -389,6 +389,7 @@ CsrListTable = $("#csrLists").DataTable({
 	{ "data": "firstName" },
 	{ "data": "middleName" },
 	{ "data": "lastName" },
+	{ "data": "level" },
 	{ "data": "location" },
 	{ "data": "jurisdiction" },
 	{ "data": "program" },
@@ -422,8 +423,8 @@ $(document).on('click',".viewLink",function (){
          type: "GET",
          dataType: "json",
          data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
-         //url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrList",
-         url : 'http://localhost:8080/radservices/api/csrList',
+         url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrList",
+         //url : 'http://localhost:8080/radservices/api/csrList',
          headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
         success: function(data){ 
         	
@@ -546,6 +547,7 @@ $(document).on('click',".viewLink",function (){
 								            <th style="text-align: left">First Name</th>
 								            <th style="text-align: left">Middle Name</th>
 								            <th style="text-align: left">Last Name</th>
+								            <th style="text-align: left">CSR Level</th>
 								            <th style="text-align: left">Location</th>
 								            <th style="text-align: left">Jurisdiction</th>
 								            <th style="text-align: left">Program</th>       
