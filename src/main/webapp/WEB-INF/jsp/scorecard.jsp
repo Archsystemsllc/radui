@@ -42,19 +42,19 @@
   	   	var password="123456";
     	
     	$('#alertMsg').text('');
-
-    	var dNow = new Date();
-    	var localdate= (dNow.getMonth()+1) + '/' + dNow.getDate() + '/' + dNow.getFullYear() + ' ' + dNow.getHours() + ':' + dNow.getMinutes();
+    	//alert(new Date().toString("hh:mm tt"));
+    	//var dNow = new Date();
+    	//var localdate= (dNow.getMonth()+1) + '/' + dNow.getDate() + '/' + dNow.getFullYear() + ' ' + dNow.getHours() + ':' + dNow.getMinutes()+ ':' + dNow.getSeconds();
 		//alert(localdate);
-    	$('#qamStartdateTime').val(localdate);
-    	$("#qamStartdateTime,#qamEnddateTime,#qamFullName").attr("disabled", true);		
+    	
+    	//$("#qamStartdateTime,#qamEnddateTime,#qamFullName").attr("disabled", true);		
 
     	$("#csrFullName" ).autocomplete({
     		source: function(request, response) {
     			var autocompleteContext = request.term;
-    			var selectedMac = $('select[name=macIdS]').val();
-    			var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	 
-    			var selectedProgram = $('select[name=programS]').val();    
+    			var selectedMac = $('select[name=macId]').val();
+    			var selectedJurisdiction = $('#jurId :selected').text();
+    			var selectedProgram = $('#programId :selected').text();
     			$.ajax({
 	    			//url: "http://localhost:8080/radservices/api/csrListNames",
 	    			url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrListNames",
@@ -70,17 +70,20 @@
     	});	
     	
     	$('#qamStartdateTime').datetimepicker({
-    		timeFormat: 'HH:mm',
-    		
-    		timezoneList: [ 
-    				{ value: -300, label: 'Eastern'}, 
-    				{ value: -360, label: 'Central' }, 
-    				{ value: -420, label: 'Mountain' }, 
-    				{ value: -480, label: 'Pacific' } 
-    			]
-    	});
+    		timeFormat: 'hh:mm:ss TT'     	
+    	});    	
+
+    	/* //$('#DatePickerHidden').datetimepicker();
+        var date = new Date(
+            Date.parse($('#DatePickerHidden').val(),"mm/dd/yyyy hh:mm:ss TT")
+        );
+        alert("Current Date:"+date); 
+        var formatted = $.datepicker.formatTime("mm/dd/yyyy hh:mm:ss TT", new Date());
+         alert("Formatted Date:"+formatted);
+        $('#qamStartdateTime').datetimepicker('setDate', formatted);*/
+            	
     	$('#qamEnddateTime').datetimepicker({
-    		timeFormat: 'HH:mm',
+    		timeFormat: 'hh:mm:ss TT',
     		timezoneList: [ 
     				{ value: -300, label: 'Eastern'}, 
     				{ value: -360, label: 'Central' }, 
@@ -88,6 +91,8 @@
     				{ value: -480, label: 'Pacific' } 
     			]
     	});
+
+    	$('#callMonitoringDate').datepicker();
 
     	$('#callDuration').timepicker({
     		timeFormat: 'HH:mm',
@@ -112,32 +117,23 @@
     				{ value: -420, label: 'Mountain' }, 
     				{ value: -480, label: 'Pacific' } 
     			]
-    	});    	
-    	
+    	});     	
  	   	
- 	  
- 	   	
- 	   $.ajax({ 
+ 	   /* $.ajax({ 
            type: "GET",
            dataType: "json",           
            url: "http://radservices.us-east-1.elasticbeanstalk.com/api/macList",
            //url : 'http://localhost:8080/radservices/api/macList',
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-           success: function(data){   
-
-        	   $("#macIdS").get(0).options.length = 0;
- 	           $("#macIdS").get(0).options[0] = new Option("Select MAC", "");
- 	           
-	           
+           success: function(data){ 
+               $("#macIdS").get(0).options.length = 0;
+ 	           $("#macIdS").get(0).options[0] = new Option("Select MAC", ""); 
 	  	    	$.each(data, function (i, item) {
-	  	        
 	  	    		$("#macIdS").get(0).options[$("#macIdS").get(0).options.length] = new Option(item.macName, item.id);
 	  	    		
-	  	    	});  	    
-	  	    
+	  	    	});
 	          },
 	          failure: function () {
-	              
 	          }
 	      });
  	   
@@ -147,26 +143,198 @@
           url: "http://radservices.us-east-1.elasticbeanstalk.com/api/jurisdictionList",
           //url : 'http://localhost:8080/radservices/api/jurisdictionList',
           headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-          success: function(data){   
-         	 
+          success: function(data){
        	   $("#jurisdictionS").get(0).options.length = 0;	           
 	       $("#jurisdictionS").get(0).options[0] = new Option("Select All", "All");
-	      
-	           
 	  	    	$.each(data, function (i, item) {
-	  	        
 	  	    		$("#jurisdictionS").get(0).options[$("#jurisdictionS").get(0).options.length] = new Option(item.jurisdictionName, item.jurisdictionName);
 	  	    		
-	  	    	});  	    
-	  	    
+	  	    	});  
 	          },
 	          failure: function () {
-	              
 	          }
-	      });	   
+	      });	    */
  	
 	});
-    
+
+	$(function(){
+		$("select#macId").change(function(){
+            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+                    {macId: $(this).val()}, function(data){
+               
+                 $("#jurId").get(0).options.length = 0;	           
+      	      	 $("#jurId").get(0).options[0] = new Option("Select Jurisdiction", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+		$("select#jurId").change(function(){
+            $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
+                
+                 $("#programId").get(0).options.length = 0;	           
+      	      	 $("#programId").get(0).options[0] = new Option("Select Program", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+
+		$("#csrFullName").change(function(){
+			
+			var selectedJurisdiction = $('#jurId :selected').text();
+			var selectedProgram = $('#programId :selected').text();
+			var csrFullName = $(this).val();
+			var csrFullNameArray = csrFullName.split(",");
+			
+			var firstName = csrFullNameArray[0].substr(0,1);
+			var lastName = csrFullNameArray[2].substr(0,5);
+			var timeString = $('#qamStartdateTime').val();
+			
+            var macRefId = selectedJurisdiction+"_"+firstName+"_"+lastName+"_"+timeString;
+
+            $('#macCallReferenceNumber').val(macRefId);
+            
+            //var dNow = new Date();
+            //var localdate= (dNow.getMonth()+1) + '/' + dNow.getDate() + '/' + dNow.getFullYear() + ' ' + dNow.getHours() + ':' + dNow.getMinutes()+ ':' + dNow.getSeconds();
+        		
+        });
+
+        //Secton 4 - Option 1
+
+		$("input[name='csrPrvAccInfo']").change(function(){		
+			
+			var selected_value = $("input[name='csrPrvAccInfo']:checked").val();
+			
+			if(selected_value=="No") {
+				$("input[name='csrPrvCompInfo']").attr('disabled', true);	
+				$("input[name='csrFallPrivacyProv']").attr('disabled', true);	
+				$("input[name='csrWasCourteous']").attr('disabled', true);
+				$("#failReasonComments").focus();		
+				setCallResult();	
+			} else if(selected_value=="Yes") {
+				$("input[name='csrPrvCompInfo']").attr('disabled', false);	
+				$("input[name='csrFallPrivacyProv']").attr('disabled', false);	
+				$("input[name='csrWasCourteous']").attr('disabled', false);		
+				setCallResult();					
+			}    		
+        });
+
+        //Section 4 - Option 2
+
+		$("input[name='csrPrvCompInfo']").change(function(){		
+			
+			var selected_value = $("input[name='csrPrvCompInfo']:checked").val();			
+			if(selected_value=="No") {
+				$("input[name='csrPrvAccInfo']").attr('disabled', true);	
+				$("input[name='csrFallPrivacyProv']").attr('disabled', true);	
+				$("input[name='csrWasCourteous']").attr('disabled', true);
+				$("#failReasonComments").focus();		
+				setCallResult();	
+			} else if(selected_value=="Yes") {
+				$("input[name='csrPrvAccInfo']").attr('disabled', false);	
+				$("input[name='csrFallPrivacyProv']").attr('disabled', false);	
+				$("input[name='csrWasCourteous']").attr('disabled', false);
+				setCallResult();	
+			}    		
+        });
+
+        //Section 5 - Option 1
+
+		$("input[name='csrFallPrivacyProv']").change(function(){		
+			
+			var selected_value = $("input[name='csrFallPrivacyProv']:checked").val();			
+			if(selected_value=="No") {
+				$("input[name='csrPrvAccInfo']").attr('disabled', true);	
+				$("input[name='csrPrvCompInfo']").attr('disabled', true);	
+				$("input[name='csrWasCourteous']").attr('disabled', true);
+					
+
+				$("#failReason").get(0).options.length = 0;
+	 	        $("#failReason").get(0).options[0] = new Option("Select Failure Reason", ""); 
+
+	 	       	$("#failReason").get(0).options[1] = new Option("PII and/or PHI were released, but the caller was not authorized to receive the information"); 
+		 	  	$("#failReason").get(0).options[2] = new Option("PII and/or PHI were not released, but the caller requested and wAsuthorized to receive the information"); 
+		 	    $("#failReason").get(0).options[3] = new Option("PII and/or PHI were released, but the caller did not request the information"); 
+		 	    $("#failReason").get(0).options[4] = new Option("General information was requested, but not released and the CSR did not forward the call or obtain callback information"); 
+
+			  		
+		 	    $("#failReasonComments").focus();  		
+		 	   setCallResult();	
+
+				
+			} else if(selected_value=="Yes") {
+				$("input[name='csrPrvAccInfo']").attr('disabled', false);	
+				$("input[name='csrPrvCompInfo']").attr('disabled', false);	
+				$("input[name='csrWasCourteous']").attr('disabled', false);
+				$("#failReason").get(0).options.length = 0;
+				setCallResult();	
+			}    		
+        });
+
+        //Section 6 - Option 1
+
+		$("input[name='csrWasCourteous']").change(function(){		
+			
+			var selected_value = $("input[name='csrWasCourteous']:checked").val();			
+			if(selected_value=="No") {
+				$("input[name='csrPrvAccInfo']").attr('disabled', true);	
+				$("input[name='csrPrvCompInfo']").attr('disabled', true);	
+				$("input[name='csrFallPrivacyProv']").attr('disabled', true);
+				
+				$("#failReason").get(0).options.length = 0;
+	 	        $("#failReason").get(0).options[0] = new Option("Select Failure Reason", ""); 
+
+	 	       	$("#failReason").get(0).options[1] = new Option("Inappropriately interrupting the caller"); 
+		 	  	$("#failReason").get(0).options[2] = new Option("Using profanity"); 
+		 	    $("#failReason").get(0).options[3] = new Option("Hanging up on the caller"); 
+		 	    $("#failReason").get(0).options[4] = new Option("Using derogatory terms and/or making disrespectful comments"); 
+		 	    $("#failReason").get(0).options[5] = new Option("Making negative comments about CMS or the MACs"); 
+		 	    $("#failReason").get(0).options[6] = new Option("Making negative comments about CMS policies and procedures"); 			  	   
+				
+				$("#failReasonComments").focus();
+				setCallResult();
+							
+			} else if(selected_value=="Yes") {
+				$("input[name='csrPrvAccInfo']").attr('disabled', false);	
+				$("input[name='csrPrvCompInfo']").attr('disabled', false);	
+				$("input[name='csrFallPrivacyProv']").attr('disabled', false);
+				$("#failReason").get(0).options.length = 0;
+
+				setCallResult();
+			}    		
+        });
+
+		function setCallResult() {
+			$("#callResult").val("");
+        	var csrWasCourteous_value = $("input[name='csrWasCourteous']:checked").val();	
+        	var csrFallPrivacyProv_value = $("input[name='csrFallPrivacyProv']:checked").val();
+        	var csrPrvCompInfo_value = $("input[name='csrPrvCompInfo']:checked").val();	
+        	var csrPrvAccInfo_value = $("input[name='csrPrvAccInfo']:checked").val();
+
+        	var scorecardType_value = $("input[name='scorecardType']:checked").val();
+
+        	//alert("Inisde setCallResult"+csrWasCourteous_value+csrFallPrivacyProv_value+csrPrvCompInfo_value+csrPrvAccInfo_value+scorecardType_value);
+
+        	if ((scorecardType_value == "Non-Scoreable" || scorecardType_value == "Not-Valued") 
+        		|| (csrWasCourteous_value =="No" || csrFallPrivacyProv_value =="No" 
+            		|| csrPrvCompInfo_value =="No" || csrPrvAccInfo_value =="No" )             		
+            	) {
+            	
+        			$("#callResult").val("Fail");
+        	} 
+
+        	if (( scorecardType_value == "Scoreable" ) 
+            		&& ( csrWasCourteous_value == "Yes" && csrFallPrivacyProv_value == "Yes" 
+            			&& csrPrvCompInfo_value == "Yes" && csrPrvAccInfo_value == "Yes" )             		
+                	) {
+            		
+            		$("#callResult").val("Pass");
+        	}
+        }
+	});
 </script>
 
 </head>
@@ -196,28 +364,36 @@
 							     </table>						
       							 <div class="row " style="margin-top: 10px">
 				                <div class="col-md-8 col-md-offset-1 form-container">
-				                    <h2>QAM Info</h2> 
+				                    <h2>Section 1 - QAM Info</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> QM Full Name:</label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" />
+			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
 			                                <form:input type = "hidden" name = "id" path="id" />
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <!-- <label for="email"> Email:</label>
-			                                <input type="email" class="form-control" id="email" name="email" required> -->
+			                                <label for="email"> ScoreCard Type:</label></br>
+			                                <c:if test="${scorecardType==null}">
+											   <form:radiobutton path="scorecardType" value="Scoreable" checked="checked"/>Scoreable
+											</c:if>	
+											<c:if test="${scorecardType!=null}">
+											   <form:radiobutton path="scorecardType" value="Scoreable" />Scoreable
+											</c:if>			                                
+										  	<form:radiobutton path="scorecardType" value="Non-Scoreable" />Non-Scoreable
+										  	<form:radiobutton path="scorecardType" value="Not-Valued" />Not-Valued
 			                            </div>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> QM Start Date/Time:</label>
-			                                <form:input type = "text" class="form-control" id="qamStartdateTime" name = "qamStartdateTime" path="qamStartdateTime" />
+			                                <input type="hidden" id="DatePickerHidden" />
+			                                <form:input type = "text" class="form-control" id="qamStartdateTime" name = "qamStartdateTime" path="qamStartdateTime" readonly="true"/>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> QM End Date/Time:</label>
-			                                <form:input type = "text" class="form-control" id="qamEnddateTime" name = "qamEnddateTime" path="qamEnddateTime"/>
+			                                <form:input type = "text" class="form-control" id="qamEnddateTime" name = "qamEnddateTime" path="qamEnddateTime" readonly="true"/>
 			                            </div>
 			                        </div>
 				                    
@@ -226,45 +402,58 @@
 				            
 				             <div class="row " >
 				                <div class="col-md-8 col-md-offset-1 form-container">
-				                    <h2>QAM Contract Information</h2> 
+				                    <h2>Section 2 - QAM Contract Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
+				                    
+				                    <div class="row">
+			                            <div class="col-sm-6 form-group">
+			                                <label for="name"> Call Monitoring Date:</label>
+			                                <form:input type = "text" class="form-control" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" />
+			                            </div>
+			                            <div class="col-sm-6 form-group">
+			                                <label for="email"> </label>
+			                                
+			                            </div>
+			                        </div>
 				                   
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> MAC:</label>
-			                                <select class="form-control" id="macIdS" name="macIdS"
-											title="Select one of the MAC">
-												<option value="">Select MAC</option>
-												
-										</select>
+			                               
+										<form:select path="macId" class="form-control" id="macId">
+										   <form:option value="" label="--- Select MAC---"/>
+										   <form:options items="${macIdMap}" />
+										</form:select> 									
+										
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> Jurisdiction:</label>
-			                                <select class="form-control" id="jurisdictionS" name="jurisdictionS"
-											title="Select one of the Jurisdiction">
-												<option value="">Select Jurisdiction</option>
-												
-										</select>
+			                             
+										
+										<form:select path="jurId" class="form-control" id="jurId">
+										   <form:option value="" label="--- Select Jurisdiction---"/>
+										   <form:options items="${jurisMapEdit}" />
+										</form:select> 				
 			                            </div>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Program:</label>
-			                                <select class="form-control" id="programS" name="programS"
-											title="Select Program">
-												<option value="">Select Program</option>
-												<option value="ABMAC-A">ABMAC-A</option>
-												<option value="ABMAC-B">ABMAC-B</option>
-										</select>
+			                             
+										<form:select path="programId" class="form-control" id="programId">
+										   <form:option value="" label="--- Select Program---"/>
+										   <form:options items="${programMapEdit}" />
+										</form:select> 	
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> LOB:</label>
-			                                <select class="form-control" id="programId" name="programId"
-											title="Select LOB">
-												<option value="">Select LOB</option>
-												<option value="Option 1">Option 1</option>
-												<option value="Option 2">Option 2</option>
-										</select>
+			                                <form:select path="lob" class="form-control" id="lob">
+											   	<form:option value="" label="--- Select LOB---"/>
+											  	<form:option value="Appeals/Reopenings" />
+											  	<form:option value="Electronic Data Interchange (EDI)" />
+											  	<form:option value="Enrollments" />
+											  	<form:option value="General" />
+											</form:select> 
 			                            </div>
 			                        </div>
 				                    
@@ -273,78 +462,88 @@
 				            
 				             <div class="row " >
 				                <div class="col-md-8 col-md-offset-1 form-container">
-				                    <h2>QAM Call and CSR Information</h2> 
+				                    <h2>Section 3 - QAM Call and CSR Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
-			                                <label for="name"> CSR Last Name:</label>
+			                                <label for="name"> CSR Full Name:</label>
 			                                <form:input class="form-control" type = "text" name = "csrFullName" path="csrFullName" />
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> Call Category:</label>
-			                               <select class="form-control" id="callCategoryId" name="callCategoryId"
-											title="Select Call Category">
-												<option value="">Select Call Category</option>
-												<option value="Option 1">Option 1</option>
-												<option value="Option 2">Option 2</option>
-										</select>
+			                            	<label for="name"> CSR Level:</label>
+			                                <form:input class="form-control" type = "text" name = "csrLevel" path="csrLevel" />	
 			                            </div>
+			                        </div>
+			                        <div class="row">
+			                            <div class="col-sm-6 form-group">
+			                                <label for="macCallReferenceNumber"> MAC Call Reference Id:</label>
+			                                <form:input class="form-control" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true"/>
+			                               </div>
+			                            <div class="col-sm-6 form-group">
+			                                <label for="email"> Call Language: </label>
+			                                <form:select path="callLanguage" class="form-control" id="callLanguage">
+											   	<form:option value="" label="--- Select Language---"/>
+											  	<form:option value="English" />
+											  	<form:option value="Spanish" />											  	
+											</form:select> 	
+			                               
+										</div>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group">
-			                                <label for="name"> Call Duration:</label>
-			                                <form:input class="form-control"  type = "text" name = "callDuration" path="callDuration" />
+			                             <label for="email"> Call Category:</label>
+			                              <form:select path="callCategoryId" class="form-control" id="callCategoryId">
+											   	<form:option value="" label="--- Select Call Category---"/>
+											  	<form:option value="1" label="Option 1"/>
+											  	<form:option value="2" label="Option 2"/>											  	
+											</form:select> 	
+			                               
+			                                
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="macCallReferenceNumber"> MAC Call Reference Id:</label>
-			                                <form:input class="form-control" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber" />
+			                                <label for="email"> Call Sub Category:</label>
+			                                <form:select path="callSubCategoryId" class="form-control" id="callSubCategoryId">
+											   	<form:option value="" label="--- Select Call Sub Category---"/>
+											  	<form:option value="1" label="Option 1"/>
+											  	<form:option value="2" label="Option 2"/>											  	
+											</form:select> 	
+			                                
+			                              
 			                            </div>
 			                        </div>
 			                       
 			                        <div class="row">
 			                            <div class="col-sm-6 form-group">
+			                                <label for="name"> Call Duration:</label>
+			                                <form:input class="form-control"  type = "text" name = "callDuration" path="callDuration" />
+			                            </div>
+			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Call Time:</label>
 			                                <form:input class="form-control" type = "text" name = "callTime" path="callTime" />
 			                            </div>
-			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> Call Language: </label>
-			                                <form:input class="form-control" type = "text" name = "callLanguage" path="callLanguage" />
-			                            </div>
 			                        </div>
-			                         
-			                        <div class="row">
-			                            <div class="col-sm-6 form-group">
-			                                <label for="name"> CSR Level:</label>
-			                                <form:input class="form-control" type = "text" name = "csrLevel" path="csrLevel" />
-			                            </div>
-			                            <div class="col-sm-6 form-group">
-			                                <%-- <label for="email"> Call Language: </label>
-			                                <form:input type = "text" name = "callLanguage" path="callLanguage" /> --%>
-			                            </div>
-			                        </div>
-				                    
 				                </div>
 				            </div>
 				            
 				            <div class="row " >
 				                <div class="col-md-10 col-md-offset-1 form-container">
-				                    <h2>Knowledge Skills</h2> 
+				                    <h2>Section 4 - Knowledge Skills</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected,please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" name="csrPrvAccInfo" id="csrPrvAccInfoYes" />Yes
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" name="csrPrvAccInfo" id="csrPrvAccInfoNo"/>No
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" />Yes
+										  	<form:radiobutton path="csrPrvAccInfo" value="No" />No
 			                            </div>
 			                           
 			                        </div>
 			                        <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected,please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvCompInfo" value="Yes" name="csrPrvCompInfo" id="csrPrvCompInfoYes" />Yes
-										  	<form:radiobutton path="csrPrvCompInfo" value="No" name="csrPrvCompInfo" id="csrPrvCompInfoNo"/>No
+			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"  />Yes
+										  	<form:radiobutton path="csrPrvCompInfo" value="No" />No
 			                            </div>
 			                           
 			                        </div> 
@@ -353,13 +552,13 @@
 				            </div>
 				            <div class="row" >
 				                <div class="col-md-10 col-md-offset-1 form-container">
-				                    <h2>Adherence to Privacy</h2> 
+				                    <h2>Section 5 - Adherence to Privacy</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected,please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"/>Yes
+			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes" />Yes
 										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>No
 			                            </div>		                           
 			                        </div>         
@@ -368,14 +567,14 @@
 				            </div>
 				            <div class="row" >
 				                <div class="col-md-10 col-md-offset-1 form-container">
-				                    <h2>Customer Skills</h2> 
+				                    <h2>Section 6 - Customer Skills</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Did CSR follow privacy procedures? If 'No' was selected,please select the reason below:Was CSR courteous,friendly,and professional? If 'No' was selected,please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"/>Yes
-										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>No
+			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected,please select the reason below:</label>
+			                                <form:radiobutton path="csrWasCourteous" value="Yes"/>Yes
+										  <form:radiobutton path="csrWasCourteous" value="No"/>No
 			                            </div>		                           
 			                        </div>         
 				                    
@@ -383,17 +582,31 @@
 				            </div>
 				             <div class="row" >
 				                <div class="col-md-8 col-md-offset-1 form-container">
-				                    <h2>Results</h2> 
+				                    <h2>Section 7 - Results</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Call Result:</label>
-			                                <select class="form-control" class="form-control" id="callResult" name="callResult"
-											title="Select one of the MAC">
+			                                <!-- <select class="form-control" class="form-control" id="callResult" name="callResult"
+											title="Select one of the MAC" readonly>
 												<option value="">Select</option>
 												<option value="Pass">Pass</option>
 												<option value="Fail">Fail</option>
+											</select> -->
+											<form:input class="form-control" type = "text" name = "callResult" path="callResult" readonly="true"/>
+			                            </div>
+			                            <div class="col-sm-6 form-group">
+			                               <%--  <label for="email"> Call Failure Time:</label>
+			                                <form:input class="form-control" type = "text" name = "callFailureTime" path="callFailureTime" /> --%>
+			                            </div>
+			                        </div>
+			                        <div class="row">
+			                            <div class="col-sm-6 form-group">
+			                                <label for="name">Call Failure Reason:</label>
+			                                <select class="form-control" class="form-control" id="failReason" name="failReason"
+											title="Select one of the Failure Reason">
+												
 											</select>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
@@ -415,34 +628,21 @@
 			                        </div>       
 				                    
 				                </div>
-				            </div>
-				           
-                                
-                                 
-									
-										<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
-					
-									
+				            </div>		
+				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="create">Save/Update</button></span>
 									<span><button class="btn btn-primary" id="close">Close</button></span></td>
-								
-
 							       </tr>
-							      
-									
-									</table>
+							</table>
 								<!-- </div> -->
 							</div>
-
 						</div>
 					</div>
-
 				</td>
 			</tr>
 		</form:form>
 	</table>
 	<jsp:include page="footer.jsp"></jsp:include>
-	
 </body>
 </html>

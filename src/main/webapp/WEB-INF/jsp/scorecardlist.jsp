@@ -58,17 +58,20 @@
 					<div class="form_grid_12">
 					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SCORECARDS_MAP.values()}" 
 							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
-							
-							<display:column property="csrFullName" title="CSR Full Name" sortable="true" style="text-align:center;"/>
-							<display:column property="callCategoryId" title="Call Category Id" sortable="true" style="align:center"/>
-							<display:column property="macId" title="MAC" sortable="true" style="align:center"/>
-							<display:column property="jurId" title="Jurisdiction" sortable="true" style="align:center"/>
-							<display:column property="programId" title="Program" sortable="true" style="align:center"/>
+							<display:column property="macCallReferenceNumber" title="MAC Call Reference Number" sortable="true" style="text-align:center;"/>
+							<display:column property="qamFullName" title="QAM User ID" sortable="true" style="text-align:center;"/>
+							<display:column property="qamStartdateTime" title="QAM Start Date/Time" sortable="true" style="text-align:center;"/>
+							<display:column property="scorecardType" title="Scorecard Type" sortable="true" style="text-align:center;"/>
+							<display:column property="callResult" title="Scorecard Result" sortable="true" style="text-align:center;"/>
+							<display:column property="jurId" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 							<display:column title="Actions" style="text-align:center;">
 								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
 								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>								
 							</display:column>
-						</display:table>	
+						</display:table>
+						<c:if test="${fn:length(sessionScope.SCORECARDS_MAP.values()) eq 0}">
+						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>	
+						</c:if>	
 						</div>
 						</td>
 						</tr>

@@ -9,7 +9,10 @@ public class ScoreCard  {
 
 	
 	private Integer callCategoryId;	
-
+	
+	
+	private Integer callSubCategoryId;
+	
 	
 	private String csrFullName;
 	
@@ -54,7 +57,7 @@ public class ScoreCard  {
 	private String failReasonAdditionalComments;
 	
 	
-	private Integer failReasonId;
+	private String failReason;
 	
 	
 	private Integer jurId;
@@ -83,9 +86,37 @@ public class ScoreCard  {
 	
 	private String scorecardStatus;
 	
-
 	private Integer userId;
+	
+	private String scorecardType;
+	
+	private String lob;
+	
+	
+	
+	public String getLob() {
+		return lob;
+	}
 
+	public void setLob(String lob) {
+		this.lob = lob;
+	}
+
+	public Integer getCallSubCategoryId() {
+		return callSubCategoryId;
+	}
+
+	public void setCallSubCategoryId(Integer callSubCategoryId) {
+		this.callSubCategoryId = callSubCategoryId;
+	}
+
+	public String getScorecardType() {
+		return scorecardType;
+	}
+
+	public void setScorecardType(String scorecardType) {
+		this.scorecardType = scorecardType;
+	}
 	
 
 	public String getFailReasonAdditionalComments() {
@@ -285,23 +316,19 @@ public class ScoreCard  {
 
 
 
-	public Integer getFailReasonId() {
-		return failReasonId;
-	}
-
-
-
-	public void setFailReasonId(Integer failReasonId) {
-		this.failReasonId = failReasonId;
-	}
-
-
-
 	public Integer getJurId() {
 		return jurId;
 	}
 
 
+
+	public String getFailReason() {
+		return failReason;
+	}
+
+	public void setFailReason(String failReason) {
+		this.failReason = failReason;
+	}
 
 	public void setJurId(Integer jurId) {
 		this.jurId = jurId;
