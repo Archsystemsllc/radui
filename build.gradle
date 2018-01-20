@@ -44,4 +44,7 @@ dependencies {
     
     compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '2.39.0'
     
+    // https://mvnrepository.com/artifact/displaytag/displaytag
+	compile group: 'displaytag', name: 'displaytag', version: '1.2'
+    
 }
