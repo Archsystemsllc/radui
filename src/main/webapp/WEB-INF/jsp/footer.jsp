@@ -5,9 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
-<link
+<%-- <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
-	rel="stylesheet">
+	rel="stylesheet"> --%>
 <link href="${pageContext.request.contextPath}/resources/css/common.css"
 	rel="stylesheet">
 <link rel="shortcut icon"

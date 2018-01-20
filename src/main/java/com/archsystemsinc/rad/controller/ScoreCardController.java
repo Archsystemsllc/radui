@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
@@ -64,12 +62,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class ScoreCardController {
-	private static final Logger log = Logger.getLogger(ScoreCardController.class);
-	
-	
+	private static final Logger log = Logger.getLogger(ScoreCardController.class);	
 	 
-	 SecurityServiceImpl securityServiceImpl;
-	 
+	 SecurityServiceImpl securityServiceImpl; 
 	 
  
     /**
@@ -124,11 +119,9 @@ public class ScoreCardController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		request.getSession().setAttribute("SCORECARDS_MAP", resultsMap);
+		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		
-		//model.addAttribute("scorecards_map", resultsMap);
 		return "scorecardlist";
 	}
 	
@@ -147,21 +140,6 @@ public class ScoreCardController {
 		return "scorecard";
 	}
 	
-	@RequestMapping(value = "/admin/selectProgram", method = RequestMethod.GET)
-	@ResponseBody
-	public HashMap<Integer,String> selectProgram(@RequestParam("macId") final Integer macId,@RequestParam("jurisId") final Integer jurisId) {
-		
-		HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(macId+"_"+jurisId);
-		return programMap;
-	}
-	
-	@RequestMapping(value = "/admin/selectJuris", method = RequestMethod.GET)
-	@ResponseBody
-	public HashMap<Integer,String> selectJuris(@RequestParam("macId") final Integer macId) {
-		
-		HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(macId);
-		return jurisMap;
-	}
 	
 	@RequestMapping(value = "/admin/new-scorecard", method = RequestMethod.GET)
 	public String newScoreCardGet(@ModelAttribute("userForm") User userForm,final Model model) {
@@ -169,13 +147,14 @@ public class ScoreCardController {
 		ScoreCard scoreCard = new ScoreCard();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    String name = auth.getName(); //get logged in username
-	   
+	    	   
 		scoreCard.setQamFullName(name);
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 		String qamStartdateTime = simpleDateFormat.format(new Date());
 		scoreCard.setQamStartdateTime(qamStartdateTime);
+		scoreCard.setCallLanguage("English");
 		model.addAttribute("scorecard", scoreCard);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		return "scorecard";

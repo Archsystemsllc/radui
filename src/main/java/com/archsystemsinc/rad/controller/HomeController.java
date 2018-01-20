@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpEntity;
@@ -19,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import com.archsystemsinc.rad.model.MacInfo;
 import com.archsystemsinc.rad.model.MacProgJurisPccMapping;
 import com.archsystemsinc.rad.model.User;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -36,13 +39,14 @@ public class HomeController {
 	private static final Logger log = Logger.getLogger(HomeController.class);
 	
 	//Local For Testing 
-	//public static final String REST_SERVICE_URI = "http://localhost:8080/radservices/api/";
+	public static final String REST_SERVICE_URI = "http://localhost:8080/radservices/api/";
 	//Prod URL
-	public static final String REST_SERVICE_URI = "http://radservices.us-east-1.elasticbeanstalk.com/api/";
+	//public static final String REST_SERVICE_URI = "http://radservices.us-east-1.elasticbeanstalk.com/api/";
 	
 	public static Integer setupGlobalVarRanCount = 1;
 	
 	public static HashMap<Integer, String> MAC_ID_MAP;
+	public static HashMap<Integer, MacInfo> MAC_OBJECT_MAP;
 	public static HashMap<Integer, String> JURISDICTION_MAP;
 	public static HashMap<Integer,HashMap<Integer,String>> MAC_JURISDICTION_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_MAP;
@@ -50,10 +54,11 @@ public class HomeController {
 	
 	
 	 @RequestMapping(value = "/admin/dashboard")
-	 public String showAdminDashboard(Model model) {
+	 public String showAdminDashboard(Model model, HttpSession session) {
 		  log.debug("--> showAdminDashboard <--");
 		  User form = new User();
 		  model.addAttribute("userForm", form);
+		  session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		  if(MAC_ID_MAP == null) {
 			  setupGlobalVariables();
 		  }
@@ -85,12 +90,15 @@ public class HomeController {
 			
 			HashMap<Integer, String> macIdMap = null;
 			
+			ArrayList<MacInfo> macInfoList = null;
+			
 			HashMap<Integer, String> jurisdictionMap = null;
 			
 			HashMap<Integer,HashMap<Integer,String>> mapJurisMap = new HashMap<Integer,HashMap<Integer,String>>();
 			
 			HashMap<String,HashMap<Integer,String>> mapJurisProgramMap = new HashMap<String,HashMap<Integer,String>>();
 			
+			HashMap<Integer, MacInfo> macObjectMap = new HashMap<Integer, MacInfo>();
 			try {
 				
 				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "programMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
@@ -109,6 +117,9 @@ public class HomeController {
 				
 				MAC_ID_MAP = macIdMap;
 				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "macList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				
+				macInfoList = mapper.readValue(webServiceExchange.getBody(), new TypeReference<ArrayList<MacInfo>>(){});			
 				
 				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "macPrgmJurisPccList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
 				
@@ -138,21 +149,25 @@ public class HomeController {
 						programTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
 					}
 					
-					mapJurisProgramMap.put(macId_jurisId_Key, programTempMap);
-					
+					mapJurisProgramMap.put(macId_jurisId_Key, programTempMap);					
 				}
 				
+				for (MacInfo macInfo: macInfoList) {
+					macObjectMap.put(macInfo.getId().intValue(), macInfo);
+				}
+				
+				MAC_OBJECT_MAP = macObjectMap;
 				MAC_JURISDICTION_MAP = mapJurisMap;
 				MAC_JURISDICTION_PROGRAM_MAP = mapJurisProgramMap;
 				
 			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 	}

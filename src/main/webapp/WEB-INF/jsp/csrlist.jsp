@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -16,43 +17,65 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
 <link rel="stylesheet" href="/resources/demos/style.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.33.3/es6-shim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js"></script>
-
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 <!-- CSS for Bootstrap -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
-<!-- JQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
 
 	function resetFields() {
 		//alert("Inside ResetFields");
 	    $('#csrMonthLists').hide();
-		$('#csrlistsdiv').hide();
+	    CsrListTable.clear().draw();
+		$('#csrLists').hide();
 		$('input[type=file]').val('');
 		
 		$('#macIdU').prop('selectedIndex',0);
 		$('#macIdS').prop('selectedIndex',0);
 		$('#macIdK').prop('selectedIndex',0);
-	
+
+		$("#jurisdictionK option:selected").prop("selected", false);	
 		$("#jurisdictionS option:selected").prop("selected", false);
-		$("#jurisdictionU option:selected").prop("selected", false);
-		
+		$("#jurisdictionU option:selected").prop("selected", false);		
 	}
+	
 $(function() {
+
+	$("#csrupload").validate({
+	    // Specify validation rules
+	    rules: {
+	      // The key name on the left side is the name attribute
+	      // of an input field. Validation rules are defined
+	      // on the right side
+	      macIdK: "required",
+	      jurisdictionK: "required",
+	      datepicker1: "required"
+	    },
+	    // Specify validation error messages
+	    messages: {
+	    	macIdK: "Please enter your firstname",
+	      jurisdictionK: "Please enter your lastname",
+	      datepicker1: "date is required"
+	    },
+	    // Make sure the form is submitted to the destination defined
+	    // in the "action" attribute of the form when valid
+	    submitHandler: function(form) {
+		   alert("Inside SubmitHandler");
+	      //form.submit();
+	    }
+	  });
 
 	$('INPUT[type="file"]').change(function () {
 	    var ext = this.value.match(/\.(.+)$/)[1];
@@ -72,7 +95,24 @@ $(function() {
     //Disable submit button
     $(this).prop('disabled',true);
    
-    
+    	var validatedMac = $('#macIdU').val();
+		var validateJurisdiction = $('#jurisdictionU option:selected').val(); 
+	    var fileUpload = $('#file').val();
+		
+	  if(fileUpload == "" && validatedMac == "" && validateJurisdiction == "") {
+		  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
+			return;
+		} else if(fileUpload == "") {
+			  $('#alertMsg').text("Please Select a File for Upload");
+				return;
+			} else if(validatedMac == "" ) {
+			  $('#alertMsg').text("Please Select Mac Id ");
+				return;
+			} else if(validateJurisdiction == "") {
+				  $('#alertMsg').text("Please Select Jurisdiction Id");
+					return;
+				} 
+		
     var form = document.forms[0];
     var formData = new FormData(form);
     
@@ -80,8 +120,8 @@ $(function() {
     var password="123456";
     // Ajax call for file uploaling
     var ajaxReq = $.ajax({
-      url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/uploadCsrList',
-      //url : 'http://localhost:8080/radservices/api/uploadCsrList',
+      //url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/uploadCsrList',
+      url : "${WEB_SERVICE_URL}uploadCsrList",
       type : 'POST',
       data : formData,
       cache : false,
@@ -121,326 +161,316 @@ $(function() {
           		' - '+jqXHR.statusText+')');
       $('button[type=submit]').prop('disabled',false);
     });
-  });
+  });  
+
   
   $('button[id=keepPreviousListButton]').click(function(e) {
-	    e.preventDefault();
-	    //Disable submit button
-	    $(this).prop('disabled',true);
-	    $('#alertMsg').text('');
-	    var form = document.forms[0];
-	    var formData = new FormData(form);
-	    
-	    var username="qamadmin";
-	    var password="123456";
-	    // Ajax call for file uploaling
-	    var ajaxReq2 = $.ajax({
-	      url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/keepCurrentList?userId=1',
-	      //url : 'http://localhost:8080/radservices/api/keepCurrentList',
-	      type : 'POST',
-	      data : formData,
-	      cache : false,
-	      contentType : false,
-	      processData : false,
-	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-	      beforeSend: function( xhr ) {
-	    		//Reset alert message and progress bar
-	    		$('#alertMsg').text('');
-	    		
-	       }
-	    });
-	  
-	    // Called on success of file upload
-	    ajaxReq2.done(function(msg) {
-	      $('#alertMsg').text('Current Month CSR List is Updated Successfully with Previous Month\'s List');
-	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-	    });
-	    
-	    // Called on failure of file upload
-	    ajaxReq2.fail(function(jqXHR) {
-	      $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-	      		' - '+jqXHR.statusText+')');
-	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-	    });
-	  });
-});
-</script>
-<script type="text/javascript">
-	
-    $(document).ready(function () {
-    	$('#csrMonthLists').hide();
-    	$('#csrlistsdiv').hide();
-    	$('#alertMsg').text('');
-    	
-    	$('#table1 .progressBar_Hideme').hide();    
-
-    	$('#ajax').click(function(e){ 
- 	   		$('#alertMsg').text('');
- 	   		$('#csrMonthLists tbody').empty();
- 	   		
- 		  	e.preventDefault();			  	
-
- 		  	var selectedMac = $('select[name=macIdS]').val();
- 		  	var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
- 		 	
- 		 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
- 		 	var username="qamadmin";
- 		   	var password="123456";
- 		 	$.ajax({ 
-	             type: "GET",
-	             dataType: "json",
-	             data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
-	             url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrListMonths",
-	             //url : 'http://localhost:8080/radservices/api/csrListMonths',
-	             headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-	            success: function(data){	    
-		            //alert("Inside Success");        	 
-            		var trHTML = '<tbody>';
-                 
-        	    	$.each(data, function (i, item) {
-        	        
-	        	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-	        	        $('#alertMsg').text('CSR List Available Months Retrieved');
-        	    	});
-        	    
-        	    trHTML += '</tbody>';
-        	    
-        	    $('#csrMonthLists').append(trHTML);
-        	    $('#csrMonthLists').show();
-        	    
-        	    
-	            },
-	            failure: function () {
-	                $("#csrMonthLists").append("Error when fetching data please contact administrator");
-	            }
-	        });
-
- 	  	});	
- 	   	
- 	   var username="qamadmin";
-	   var password="123456";
- 	   	
- 	   $.ajax({ 
-           type: "GET",
-           dataType: "json",           
-           url: "http://radservices.us-east-1.elasticbeanstalk.com/api/macList",
-           //url : 'http://localhost:8080/radservices/api/macList',
-           headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-           success: function(data){   
-
-        	   $("#macIdK").get(0).options.length = 0;
- 	           $("#macIdK").get(0).options[0] = new Option("Select MAC", "");
- 	           $("#macIdS").get(0).options.length = 0;
-	           $("#macIdS").get(0).options[0] = new Option("Select All", "All");
-	           $("#macIdU").get(0).options.length = 0;
-	           $("#macIdU").get(0).options[0] = new Option("Select All", "All");
-	           
-	  	    	$.each(data, function (i, item) {
-	  	        
-	  	    		$("#macIdK").get(0).options[$("#macIdK").get(0).options.length] = new Option(item.macName, item.id);
-	  	    		$("#macIdS").get(0).options[$("#macIdS").get(0).options.length] = new Option(item.macName, item.id);
-	  	    		$("#macIdU").get(0).options[$("#macIdU").get(0).options.length] = new Option(item.macName, item.id);
-	  	    	});  	    
-	  	    
-	          },
-	          failure: function () {
-	              
-	          }
-	      });
- 	   
- 	  $.ajax({ 
-          type: "GET",
-          dataType: "json",           
-          url: "http://radservices.us-east-1.elasticbeanstalk.com/api/jurisdictionList",
-          //url : 'http://localhost:8080/radservices/api/jurisdictionList',
-          headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-          success: function(data){   
-         	 
-       	   $("#jurisdictionS").get(0).options.length = 0;	           
-	       $("#jurisdictionS").get(0).options[0] = new Option("Select All", "All");
-	       $("#jurisdictionU").get(0).options.length = 0;	           
-	       $("#jurisdictionU").get(0).options[0] = new Option("Select All", "All");
-	           
-	  	    	$.each(data, function (i, item) {
-	  	        
-	  	    		$("#jurisdictionS").get(0).options[$("#jurisdictionS").get(0).options.length] = new Option(item.jurisdictionName, item.jurisdictionName);
-	  	    		$("#jurisdictionU").get(0).options[$("#jurisdictionU").get(0).options.length] = new Option(item.jurisdictionName, item.jurisdictionName);
-	  	    	});  	    
-	  	    
-	          },
-	          failure: function () {
-	              
-	          }
-	      });	   
- 	
-	});
-    
-</script>
-<script type="text/css">
-	.ui-datepicker-calendar {
-    	display: none;
-    }	
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#keepPreviousListButton").hide();
-	$("#dialog-confirm").hide();
-	$("#macIdK").hide();		
-	
-	
-    $("#datepicker1").datepicker({ 
-        dateFormat: 'mm-yy',
-        maxDate: new Date,
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-
-        onClose: function(dateText, inst) {  
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
-            $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
-        }
-    });
-
-    $("#datepicker1").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $("#ui-datepicker-div").position({
-            my: "center top",
-            at: "center bottom",
-            of: $(this)
-        });    
-    });  
-    
-    $("#datepicker2").datepicker({ 
-        dateFormat: 'mm-yy',
-        maxDate: new Date,
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-
-        onClose: function(dateText, inst) {  
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
-            $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
-        }
-    });
-
-    $("#datepicker2").focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $("#ui-datepicker-div").position({
-            my: "center top",
-            at: "center bottom",
-            of: $(this)
-        });    
-    }); 
-    
-    $('#keepCurrentListCB').click(function() {
-    	$('#alertMsg').text('');
-        if( $(this).is(':checked')) {            
-        	
-            $( "#dialog-confirm" ).dialog({
-                resizable: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                
-                buttons: {
-                  "Yes": function() {
-                	$( this ).dialog( "close" );
-                    $("#keepPreviousListButton").show();
-                    $("#macIdK").show();		
-                    $('#table1 .progressBar_Hideme').hide();
-                    $('#table1 .hideme').hide();
-                                        
-                  },
-                  Cancel: function() {                    
-                    $("#keepPreviousListButton").hide();
-                    $("#macIdK").hide();
-                    $('#table1 .hideme').show();
-                    $('input[id=keepCurrentListCB]').attr('checked', false);
-                    $( this ).dialog( "close" );
-                  }
-                  
-                }
-	            
-              });
-            
-        } else {
-            $("#keepPreviousListButton").hide();
-            $("#macIdK").hide();
-            $('#table1 .hideme').show();
-        }
-    }); 
-    
-    
-});
-
-
-</script>
-<script>
-var CsrListTable;
-$(document).ready(function(){
-	
-
-CsrListTable = $("#csrLists").DataTable({
-	data:[],
-	columns: [
-	{ "data": "firstName" },
-	{ "data": "middleName" },
-	{ "data": "lastName" },
-	{ "data": "level" },
-	{ "data": "location" },
-	{ "data": "jurisdiction" },
-	{ "data": "program" },
-	{ "data": "status" }
-	],
-	rowCallback: function (row, data) {},
-		filter: false,
-		info: false,
-		ordering: true,
-		processing: true,
-		retrieve: true,
-		sort:true
+	  e.preventDefault();
+	  //var result = $("#csrupload").valid();
+	  //alert("result:"+result);
+	  var selectedMac = $('#macIdK').val();
+	  var validateJurisdiction = $('#jurisdictionK option:selected').val(); 
+	  var selectedJurisdiction = $('#jurisdictionK option:selected').text(); 
 		
-	});
+	  if(selectedMac == "" && validateJurisdiction == "") {
+		  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
+			return;
+		} else if(selectedMac == "" ) {
+			  $('#alertMsg').text("Please Select Mac Id ");
+				return;
+			} else if(validateJurisdiction == "") {
+				  $('#alertMsg').text("Please Select Jurisdiction Id");
+					return;
+				} 
+	  
+	  var username="qamadmin";
+	  var password="123456";
+	  $.ajax({ 
+	      type: "GET",
+	      dataType: "json",
+	      data: {userId: $('#userId').val(), macIdK: selectedMac, jurisdictionK: JSON.stringify(selectedJurisdiction)},
+	      url : "${WEB_SERVICE_URL}keepCurrentList",
+	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+	     success: function(data){	    
+		     //alert("Inside success"+data.erroMessage+data.status);
+	    	 $('#alertMsg').text(data.erroMessage);
+		      $('button[id=keepPreviousListButton]').prop('disabled',false);		    
+	     },
+	     failure: function (jqXHR) {
+	    	 $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
+	 	      		' - '+jqXHR.statusText+')');
+	 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
+	     }
+	 	});
+	 });  
 
-$('#csrLists').hide();
-});
-
-$(document).on('click',".viewLink",function (){    
-	$('#csrLists').hide();
-	$('#csrLists tbody').empty();
-	$('#alertMsg').text('');
-	 var row= $(this).closest('tr');  
-  	var monthYear=$("td:eq(0)",row).text(); 
-  	var selectedMac = $('select[name=macIdS]').val();
-	var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	
-	var username="qamadmin";
+  $(document).on('click',".viewLink",function (){    
+		
+		$('#csrLists tbody').empty();
+		$('#alertMsg').text('');
+		 var row= $(this).closest('tr');  
+	  	var monthYear=$("td:eq(0)",row).text(); 
+	  	var selectedMac = $('select[name=macIdS]').val();
+		var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	
+		var username="qamadmin";
 		var password="123456";
-  
-     $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
-         url: "http://radservices.us-east-1.elasticbeanstalk.com/api/csrList",
-         //url : 'http://localhost:8080/radservices/api/csrList',
-         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-        success: function(data){ 
-        	
-        	CsrListTable.clear().draw();
-        	CsrListTable.rows.add(data).draw(); 
- 	    	$('#csrLists').show();
- 	    
- 	    
-        },
-        failure: function () {
-            $("#csrLists").append("Error when fetching data please contact administrator");
-        }
-    });
+	  
+	     $.ajax({ 
+	         type: "GET",
+	         dataType: "json",
+	         data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
+	         url : "${WEB_SERVICE_URL}csrList",
+	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+	        success: function(data){ 
+	            $('#csrLists').show();
+	        	CsrListTable.clear().draw();
+	        	CsrListTable.rows.add(data).draw();	
+	        },
+	        failure: function () {
+	            $("#csrLists").append("Error when fetching data please contact administrator");
+	        }
+	    });
+	 });
+
+	$('#ajax').click(function(e){ 
+  		$('#alertMsg').text('');
+  		$('#csrMonthLists tbody').empty();
+  		
+	  	e.preventDefault();			  	
+	  	 var validateMac = $('select[name=macIdS]').val();
+		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
+	  	var validateFromDate = $('#datepicker1').val();
+		var validateToDate = $('#datepicker2').val();		  
+		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
+		  if(validateMac == null && validateJurisdiction == null) {
+			  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
+				return;
+			} else if(validateFromDate == "" ) {
+				  $('#alertMsg').text("Please Enter From Date");
+					return;
+				}else if(validateToDate == "" ) {
+					  $('#alertMsg').text("Please Enter To Date");
+						return;
+					} else if(validateMac == null ) {
+						  $('#alertMsg').text("Please Select Mac Id ");
+							return;
+						} else if(validateJurisdiction == null) {
+							  $('#alertMsg').text("Please Select Jurisdiction Id");
+								return;
+							} 
+			
+		 var selectedMac = $('select[name=macIdS]').val();
+		 var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
+	 	
+	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
+	 	var username="qamadmin";
+	   	var password="123456";
+	 	$.ajax({ 
+           type: "GET",
+           dataType: "json",
+           data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
+           url : "${WEB_SERVICE_URL}csrListMonths",
+           headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+          success: function(data){	    
+	            //alert("Inside Success");        	 
+      		var trHTML = '<tbody>';
+           
+  	    	$.each(data, function (i, item) {
+  	        
+      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
+      	        $('#alertMsg').text('CSR List Available Months Retrieved');
+  	    	});
+  	    
+  	    trHTML += '</tbody>';
+  	    
+  	    $('#csrMonthLists').append(trHTML);
+  	    $('#csrMonthLists').show();
+  	    
+  	    
+          },
+          failure: function () {
+              $("#csrMonthLists").append("Error when fetching data please contact administrator");
+          }
+      });
+
+ 	});	
 });
 </script>
-<script src="scripts/jquery.dataTables.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var CsrListTable;
+    $(document).ready(function () {
+
+    	$('#csrMonthLists').hide();
+    	$('#csrLists').hide();
+    	$('#alertMsg').text('');
+    	$("#keepPreviousListButton").hide();
+    	$("#dialog-confirm").hide();
+    	$("#macIdK").hide();	
+    	$("#jurisdictionK").hide();	
+    	
+    	$('#table1 .progressBar_Hideme').hide();   
+
+    	CsrListTable = $("#csrLists").DataTable({
+    		data:[],
+    		columns: [
+    		{ "data": "firstName" },
+    		{ "data": "middleName" },
+    		{ "data": "lastName" },
+    		{ "data": "level" },
+    		{ "data": "location" },
+    		{ "data": "jurisdiction" },
+    		{ "data": "program" },
+    		{ "data": "status" }
+    		],
+    		rowCallback: function (row, data) {},
+    			filter: false,
+    			info: false,
+    			ordering: true,
+    			processing: true,
+    			retrieve: true,
+    			sort:true
+    			
+    		});
+
+    	$('#csrLists').hide();
+    	
+    	$("#datepicker1").datepicker({ 
+            dateFormat: 'mm-yy',
+            maxDate: new Date,
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+
+            onClose: function(dateText, inst) {  
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
+            }
+        });
+
+        $("#datepicker1").focus(function () {
+            $(".ui-datepicker-calendar").hide();
+            $("#ui-datepicker-div").position({
+                my: "center top",
+                at: "center bottom",
+                of: $(this)
+            });    
+        });  
+        
+        $("#datepicker2").datepicker({ 
+            dateFormat: 'mm-yy',
+            maxDate: new Date,
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+
+            onClose: function(dateText, inst) {  
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
+            }
+        });
+
+        $("#datepicker2").focus(function () {
+            $(".ui-datepicker-calendar").hide();
+            $("#ui-datepicker-div").position({
+                my: "center top",
+                at: "center bottom",
+                of: $(this)
+            });    
+        }); 
+
+        $("select#macIdK").change(function(){
+            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+                    {macId: $(this).val(), multipleInput: false}, function(data){
+               
+                 $("#jurisdictionK").get(0).options.length = 0;	           
+      	      	 $("#jurisdictionK").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#jurisdictionK").get(0).options[$("#jurisdictionK").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+
+        $( "#macIdS" ).change(function () {
+          var selectedMacs = "";
+          $( "#macIdS option:selected" ).each(function() {
+        	  selectedMacs += $( this ).val() + ",";
+          });
+         
+         $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+                 {macId: selectedMacs, multipleInput: true}, function(data){
+            
+              $("#jurisdictionS").get(0).options.length = 0;	
+              $("#jurisdictionS").get(0).options[0] = new Option("---Select Jurisdiction---", "");           
+    	      	 $("#jurisdictionS").get(0).options[1] = new Option("Select ALL", "ALL");
+    	  	    	$.each(data, function (key,obj) {
+    	  	    		$("#jurisdictionS").get(0).options[$("#jurisdictionS").get(0).options.length] = new Option(obj, key);
+    	  	    		
+    	  	    	});  	   
+            });
+        })
+        .change();
+
+        $("select#macIdU").change(function(){
+            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+                    {macId: $(this).val(), multipleInput: false}, function(data){
+               
+                 $("#jurisdictionU").get(0).options.length = 0;	           
+                 $("#jurisdictionU").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#jurisdictionU").get(0).options[$("#jurisdictionU").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+        
+        $('#keepCurrentListCB').click(function() {
+        	$('#alertMsg').text('');
+            if( $(this).is(':checked')) {            
+            	
+                $( "#dialog-confirm" ).dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: 400,
+                    modal: true,
+                    
+                    buttons: {
+                      "Yes": function() {
+                    	$( this ).dialog( "close" );
+                        $("#keepPreviousListButton").show();
+                        $("#macIdK").show();	
+                        $("#jurisdictionK").show();	
+                        $('#table1 .progressBar_Hideme').hide();
+                        $('#table1 .hideme').hide();
+                                            
+                      },
+                      Cancel: function() {                    
+                        $("#keepPreviousListButton").hide();
+                        $("#macIdK").hide();
+                        $("#jurisdictionK").hide();	
+                        $('#table1 .hideme').show();
+                        $('input[id=keepCurrentListCB]').attr('checked', false);
+                        $( this ).dialog( "close" );
+                      }
+                      
+                    }
+    	            
+                  });
+                
+            } else {
+                $("#keepPreviousListButton").hide();
+                $("#macIdK").hide();
+                $("#jurisdictionK").hide();
+                $('#table1 .hideme').show();
+            }
+        }); 
+ 	  
+	});
+    
+</script>
+
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
@@ -449,7 +479,7 @@ $(document).on('click',".viewLink",function (){
 	</div>
 	
 	<table id="mid">
-		<form:form method="POST" modelAttribute="userForm" class="form-signin" action="#" enctype="multipart/form-data" id="csrupload">
+		<form:form method="POST" modelAttribute="csrUploadForm" class="form-signin" action="#" enctype="multipart/form-data" id="csrupload">
 			<tr>
 				
 				<td style="vertical-align: top">
@@ -476,31 +506,52 @@ $(document).on('click',".viewLink",function (){
 										  </div>
 									</td>
 									</tr>
+									
 									<tr>
+									
 										<td colspan="1" align="left" style="text-align: left"><a class="${linkcolor }"
 												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx">Download Sample CSR Template</a></td>
 										
-										<td colspan="2" align="left" style="text-align: left"><form:checkbox
-												path="username" value="username" id="keepCurrentListCB"/><label for="password">&nbsp;Keep Current List</label></td>
-										<td colspan="1"><select id="macIdK" name="macIdK"
-											title="Select one of the MAC" >
-																
-										</select></td>
+										<td colspan="1" align="left" style="text-align: left"><form:checkbox
+												path="keepCurrentListCB" value="keepCurrentListCB" id="keepCurrentListCB"/>
+												<label for="keepCurrentListCB">&nbsp;Keep Current List</label></td>
+										<td colspan="1">
+										
+										<form:select path="macIdK" id="macIdK" class="form-control required">
+										   <form:option value="" label="---Select MAC---"/>
+										   <form:options items="${macIdMap}" />
+										</form:select> 	
+										</td>
+										<td>
+										
+										<form:select path="jurisdictionK"  id="jurisdictionK" class="form-control required" data-val="true">
+										   <form:option value="" label="---Select Jurisdiction---"/>								   
+										</form:select></td>
 										<td colspan="1" ><button class="btn btn-primary" id="keepPreviousListButton">Keep List</button></td>
+									
 									</tr>									
 									
 									<tr class='hideme'>
-										<td><label for="password">CSR List Upload: </label></td>
+										<td><label for="file">CSR List Upload: </label></td>
 
-										<td colspan="1" align="right"><input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;"><input type="hidden" id="userId" name="userId" value="1"></input></td>
-										<td colspan="1"><select id="macIdU" name="macIdU"
-											title="Select one of the MAC" >
-																
-										</select></td>
-										<td><select id="jurisdictionU" name="jurisdictionU"
-											title="Select one of the Jurisdiction" multiple="multiple">										
-												
-										</select></td>
+										<td colspan="1" align="right">
+										<input type="hidden" id="userId" name="userId" value="1"/>
+										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;">
+										</input></td>
+										<td colspan="1">
+										
+										<form:select path="macIdU" class="form-control" id="macIdU">
+										   <form:option value="" label="---Select MAC---"/>
+										   <form:options items="${macIdMap}" />
+										</form:select> 	
+										</td>
+										<td>
+										
+										<form:select path="jurisdictionU" class="form-control" id="jurisdictionU">
+										   <form:option value="" label="---Select Jurisdiction---"/>
+										   
+										</form:select>
+										</td>
 										<td><button class="btn btn-primary" type="submit" name="uploadButton" id="uploadButton">Upload File</button></td>		
 									</tr>
 									
@@ -510,18 +561,22 @@ $(document).on('click',".viewLink",function (){
 												placeholder="From Date" id="datepicker1" ></input></td>
 										<td><input type="input" path="passwordConfirm"
 												placeholder="To Date" id="datepicker2"></input></td>
-										<td><select id="macIdS" name="macIdS"
-											title="Select one of the MAC" multiple="multiple">
-																
-										</select></td>
-										<td><select id="jurisdictionS" name="jurisdictionS"
-											title="Select one of the Jurisdiction" multiple="multiple">
-												
-												
-										</select></td>
+										<td>
+										
+										<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple">
+										   <form:option value="" label="---Select MAC---"/>
+										   <form:option value="ALL" label="Select ALL" />
+										   <form:options items="${macIdMap}" />
+										</form:select> 	
+										</td>
+										<td>
+										
+										<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple">
+										   <form:option value="" label="---Select Jurisdiction---" />
+										   <form:option value="ALL" label="Select ALL" />
+										   
+										</form:select></td>
 										<td style="padding-top: 10px"><button class="btn btn-primary" id="ajax">Search CSR</button></td>
-
-
 									</tr>
 								</table>
 								<br/>
@@ -536,12 +591,13 @@ $(document).on('click',".viewLink",function (){
 										</tr>
 									</thead>
 									
+								</table>
 								
 								<br/>
 								
-								<div id="csrlistsdiv">
-								
-								<table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrLists" style="width: 80%">
+								<div id="csrlistsdiv" style="width: 100%">
+												
+								<table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrLists" style="width: 90%">
 				                    <thead>
 								        <tr>
 								            <th style="text-align: left">First Name</th>
@@ -554,24 +610,14 @@ $(document).on('click',".viewLink",function (){
 								            <th style="text-align: left">Status</th>
 								        </tr>
 								    </thead>
-				                    <tbody>
-				                     
-				                    <tr>
-				                             <td></td>
-				                         <td></td>
-				                         <td></td>
-				                    </tr>
-				               
+				                    <tbody>  
 				                    </tbody>
-				                </table>
+				                </table> 
 				                </div>
-
-								<br/>
+				                <br/>
 							</div>
-
 						</div>
 					</div>
-
 				</td>
 			</tr>
 		</form:form>

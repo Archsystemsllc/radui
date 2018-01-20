@@ -44,7 +44,7 @@ $(function() {
     var password="123456";
     // Ajax call for file uploaling
     var ajaxReq = $.ajax({
-      url : 'http://localhost:8080/radservices/api/uploadCsrList',
+      url : url : "${WEB_SERVICE_URL}uploadCsrList",
       type : 'POST',
       data : formData,
       cache : false,
@@ -95,7 +95,7 @@ $(function() {
 	    var password="123456";
 	    // Ajax call for file uploaling
 	    var ajaxReq2 = $.ajax({
-	      url : 'http://localhost:8080/radservices/api/keepCurrentList?userId=1',
+	      url : url : "${WEB_SERVICE_URL}keepCurrentList?userId=1",
 	      type : 'POST',
 	      cache : false,
 	      contentType : false,
@@ -145,7 +145,7 @@ $(function() {
  	         $.ajax({ 
  	             type: "GET",
  	             dataType: "json",
- 	             url: "http://localhost:8080/radservices/api/csrList?fromDate=November 2017&toDate=November 2017",
+ 	             url: url : "${WEB_SERVICE_URL}csrList?fromDate=November 2017&toDate=November 2017",
  	             headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
  	            success: function(data){   
  	            	 

@@ -7,29 +7,19 @@
 <title>Admin Header</title>
 <link href="https://fonts.googleapis.com/css?family=Rubik"
 	rel="stylesheet">
-<link href="${pageContext.request.contextPath}/resources/css/main.css"
-	rel="stylesheet" />
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/images/adda_ico.png">
-<link href="${pageContext.request.contextPath}/resources/css/main.css"
+<link href="${pageContext.request.contextPath}/resources/css/main.css" 	rel="stylesheet" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png">
+<%-- <link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet"> --%>
+<link href="${pageContext.request.contextPath}/resources/css/responsive.css" rel="stylesheet">
+<link 	href="${pageContext.request.contextPath}/resources/css/prettyPhoto.css"
 	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/responsive.css"
+<link 	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"
 	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/prettyPhoto.css"
+<link 	href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
 	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/font-awesome.min.css"
+<link 	href="${pageContext.request.contextPath}/resources/css/animate.min.css"
 	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
-	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/animate.min.css"
-	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/bootstrap.css"
+<link 	href="${pageContext.request.contextPath}/resources/css/bootstrap.css"
 	rel="stylesheet">
 <%-- <link href="${pageContext.request.contextPath}/resources/css/login.css"
 	rel="stylesheet"> --%>
@@ -86,10 +76,10 @@
 							<li style="margin-left: 0px"> <a href="${pageContext.request.contextPath}/admin/users">Home</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/scorecardlist">Score Card</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/csrlist">CSR</a></li>
-							<li><a href="${pageContext.request.contextPath}/admin/templates">Reports</a></li>
-							<li><a href="${pageContext.request.contextPath}/admin/users">Rebuttals</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/reports">Reports</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/rebuttallist">Rebuttals</a></li>
 							<li><a href="${pageContext.request.contextPath}/admin/contactus">My Account</a></li>
-							<li><a href="${pageContext.request.contextPath}/admin/download-helpdoc">Help Guide</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/jqueryform_validation_example">Help Guide</a></li>
 						</ul>
 					</div>
 				</td>

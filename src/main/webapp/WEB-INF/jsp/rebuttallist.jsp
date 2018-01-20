@@ -37,9 +37,6 @@
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-
-	
-		
 		<table id="mid">
 			<tr>
 				<td style="vertical-align: top">
@@ -49,28 +46,27 @@
 						<div class="content">
 
 							<div class="table-users" style="width: 80%">
-								<div class="header">ScoreCard List</div>							
+								<div class="header">Rebuttal List</div>							
       
                                  <form action="scorecardsave" method="post" enctype="multipart/form-data">
                                  <!--  Section 1 -->
 								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr><td colspan="3" width="95%" >
 					<div class="form_grid_12">
-					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SCORECARDS_MAP.values()}" 
+					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.REBUTTAL_MAP.values()}" 
 							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference Number" sortable="true" style="text-align:center;"/>
-							<display:column property="qamFullName" title="QAM User ID" sortable="true" style="text-align:center;"/>
-							<display:column property="qamStartdateTime" title="QAM Start Date/Time" sortable="true" style="text-align:center;"/>
-							<display:column property="scorecardType" title="Scorecard Type" sortable="true" style="text-align:center;"/>
-							<display:column property="callResult" title="Scorecard Result" sortable="true" style="text-align:center;"/>
-							<display:column property="jurId" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-							<display:column title="Actions" style="text-align:center;">
-								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
-								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>								
+							<display:column property="qamFullName" title="QAM Full Name" sortable="true" style="text-align:center;"/>
+							<display:column property="callDate" title="Call Date" sortable="true" style="text-align:center;"/>
+							<display:column property="callTime" title="Call Time" sortable="true" style="text-align:center;"/>
+							
+							<<display:column title="Actions" style="text-align:center;">
+								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-rebuttal/${row.id}" title="Edit">Edit</a></span>
+								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>								
 							</display:column>
 						</display:table>
-						<c:if test="${fn:length(sessionScope.SCORECARDS_MAP.values()) eq 0}">
-						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>	
+						<c:if test="${fn:length(sessionScope.REBUTTAL_MAP.values()) eq 0}">
+						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>	
 						</c:if>	
 						</div>
 						</td>
@@ -79,10 +75,7 @@
 						</form>
 						</div>
 						</div>
-						</div></td></tr></table>		
-		
-
+						</div></td></tr></table>
 	<jsp:include page="footer.jsp"></jsp:include>
-	
 </body>
 </html>

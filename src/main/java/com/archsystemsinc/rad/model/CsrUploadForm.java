@@ -1,72 +1,76 @@
 package com.archsystemsinc.rad.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * This persistent class for the user database table.
  */
 
 public class CsrUploadForm {
-    private Long id;
-    private String username;
-    private String password;
-    private String passwordConfirm;
-    private String name;
-    private String email;
     
-
+    private String keepCurrentListCB;
+    
+    private String macIdK;
+    private String macIdS;
+    private String macIdU;
+    
+    private Integer userId;
+    
+    private String jurisdictionK;
+    private String jurisdictionS;
+    private String jurisdictionU;
+    
+    
+	public Integer getUserId() {
+		return userId;
+	}
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+	public String getKeepCurrentListCB() {
+		return keepCurrentListCB;
+	}
+	public void setKeepCurrentListCB(String keepCurrentListCB) {
+		this.keepCurrentListCB = keepCurrentListCB;
+	}
+	public String getMacIdK() {
+		return macIdK;
+	}
+	public void setMacIdK(String macIdK) {
+		this.macIdK = macIdK;
+	}
+	public String getMacIdS() {
+		return macIdS;
+	}
+	public void setMacIdS(String macIdS) {
+		this.macIdS = macIdS;
+	}
+	public String getMacIdU() {
+		return macIdU;
+	}
+	public void setMacIdU(String macIdU) {
+		this.macIdU = macIdU;
+	}
+	public String getJurisdictionK() {
+		return jurisdictionK;
+	}
+	public void setJurisdictionK(String jurisdictionK) {
+		this.jurisdictionK = jurisdictionK;
+	}
+	public String getJurisdictionS() {
+		return jurisdictionS;
+	}
+	public void setJurisdictionS(String jurisdictionS) {
+		this.jurisdictionS = jurisdictionS;
+	}
+	public String getJurisdictionU() {
+		return jurisdictionU;
+	}
+	public void setJurisdictionU(String jurisdictionU) {
+		this.jurisdictionU = jurisdictionU;
+	} 
+    
+    
    
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
     
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-  
-    public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	
 }
