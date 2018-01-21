@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.service.UserService;
-import com.archsystemsinc.rad.validator.UserValidator;
+import com.archsystemsinc.rad.ui.validator.UserValidator;
 import com.google.common.collect.Sets;
 
 /**
