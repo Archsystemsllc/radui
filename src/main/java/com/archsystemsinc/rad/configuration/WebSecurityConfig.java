@@ -12,9 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * This is the Configuration class for the Web Security.
- * 
- * @author Murugaraj Kandaswamy
- * @since 6/19/2017
  *
  */
 @Configuration

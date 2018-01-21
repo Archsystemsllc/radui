@@ -25,9 +25,6 @@ public class CommonController {
 	
 	private static final Logger log = Logger.getLogger(CommonController.class);
 	
-	@Value("${config.file.path}")
-	String configFilePath;
-	
 	@RequestMapping("/home")
 	public String home(){
 		return "welcome";
@@ -43,21 +40,8 @@ public class CommonController {
 		log.debug("<- admin ->");
 		return "admin";
 	}
-	@RequestMapping(value = "/config", method = RequestMethod.GET)
-	public @ResponseBody String config() {
-		log.debug("<--config-" + configFilePath);
-		String contents = "ERROR";
-		try {
-			contents = new String(Files.readAllBytes(Paths.get(configFilePath)));
-			//contents = new String(Files.readAllBytes(Paths.get(getClass().getResource("/"+configFilePath).toURI())));	
-		} catch (IOException e) {
-			log.error("Error while reading config:" + configFilePath);
-			e.printStackTrace();
-		}
-		log.debug("-->config-" + contents);
-		return contents;
-
-	}
+	
+	
 	
 	
 	@RequestMapping(value="/admin/jqueryform_validation_example")
