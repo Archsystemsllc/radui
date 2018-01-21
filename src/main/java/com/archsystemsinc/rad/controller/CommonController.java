@@ -104,8 +104,14 @@ public class CommonController {
 			}
 		} else {
 			if(!macIdString.equalsIgnoreCase("")) {
-				Integer macIdIntegerValue = Integer.valueOf(macIdString);
-				jurisFinalMap  = HomeController.MAC_JURISDICTION_MAP.get(macIdIntegerValue);
+				if(macIdString.equalsIgnoreCase("ALL")) {
+					jurisFinalMap = HomeController.JURISDICTION_MAP;
+					
+				} else {
+					Integer macIdIntegerValue = Integer.valueOf(macIdString);
+					jurisFinalMap  = HomeController.MAC_JURISDICTION_MAP.get(macIdIntegerValue);
+				}
+				
 			}			
 		}		
 		
@@ -114,10 +120,42 @@ public class CommonController {
 	
 	@RequestMapping(value = "/admin/selectProgram", method = RequestMethod.GET)
 	@ResponseBody
-	public HashMap<Integer,String> selectProgram(@RequestParam("macId") final Integer macId,@RequestParam("jurisId") final Integer jurisId) {
+	public HashMap<Integer,String> selectProgram(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString) {
 		
-		HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(macId+"_"+jurisId);
+		HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+		
+		if(!jurisIdString.equalsIgnoreCase("")) {
+			if(jurisIdString.equalsIgnoreCase("ALL")) {
+				programMap = HomeController.ALL_PROGRAM_MAP;
+				
+			} else {
+				
+				programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString));
+			}
+			
+		}	
+		
 		return programMap;
+	}
+	
+	@RequestMapping(value = "/admin/selectLocation", method = RequestMethod.GET)
+	@ResponseBody
+	public HashMap<Integer,String> selectLocation(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString,@RequestParam("programId") final String programIdString) {
+		
+		HashMap<Integer,String> locationMap = new HashMap<Integer,String>();
+		
+		if(!programIdString.equalsIgnoreCase("")) {
+			if(programIdString.equalsIgnoreCase("ALL")) {
+				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
+				
+			} else {
+				
+				locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString)+"_"+Integer.valueOf(programIdString));
+			}
+			
+		}	
+		
+		return locationMap;
 	}
 	
 	

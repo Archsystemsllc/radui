@@ -39,13 +39,10 @@
 
 <script type="text/javascript">
 
-$.validator.setDefaults({
-	submitHandler: function() {
-		alert("submitted!");
-	}
-});
-
 	$(document).ready(function () {    	
+
+		$('#scoreCardTypeDiv').hide();
+		$('#callResultDiv').hide();
 
     	$('#fromDate').datepicker({
     		
@@ -54,12 +51,32 @@ $.validator.setDefaults({
     	$('#toDate').datepicker({
     		maxDate: 0
     	});  	
-
-    	
  	
 	});
 
 	$(function(){
+
+		$("input[name='mainReportSelect']").change(function(){
+            var mainReportSelect = $(this).val();
+            if (mainReportSelect=="ScoreCard") {
+            	$('#scoreCardTypeDiv').show();
+            } else if (mainReportSelect=="Compliance") {
+            	$('#scoreCardTypeDiv').hide();
+            } else if (mainReportSelect=="Rebuttal") {
+            	$('#scoreCardTypeDiv').hide();
+            }
+        });
+
+		$("select#scoreCardType").change(function(){
+			 var scoreCardType = $(this).val();
+	            if (scoreCardType=="Scoreable") {
+	            	$('#callResultDiv').show();
+	            } else if (scoreCardType=="Non-Scoreable") {
+	            	$('#callResultDiv').hide();
+	            } else if (scoreCardType=="Does Not Count") {
+	            	$('#callResultDiv').hide();
+	            }
+        });
 
 		$("select#macId").change(function(){
             $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
@@ -67,6 +84,7 @@ $.validator.setDefaults({
                
                  $("#jurisId").get(0).options.length = 0;	           
       	      	 $("#jurisId").get(0).options[0] = new Option("Select Jurisdiction", "");
+      	      	 $("#jurisId").get(0).options[1] = new Option("Select All", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -78,8 +96,22 @@ $.validator.setDefaults({
                 
                  $("#programId").get(0).options.length = 0;	           
       	      	 $("#programId").get(0).options[0] = new Option("Select Program", "");
+      	      	 $("#programId").get(0).options[1] = new Option("Select All", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+
+		$("select#programId").change(function(){
+            $.getJSON("${pageContext.request.contextPath}/admin/selectLocation",{macId: $('#macId').val(),jurisId: $('#jurisId').val(),programId: $(this).val()}, function(data){
+                
+                 $("#loc").get(0).options.length = 0;	           
+      	      	 $("#loc").get(0).options[0] = new Option("Select Location", "");
+      	      	 $("#loc").get(0).options[1] = new Option("Select All", "ALL");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#loc").get(0).options[$("#loc").get(0).options.length] = new Option(obj, key);
       	  	    		
       	  	    	});  	   
                });
@@ -104,39 +136,30 @@ $.validator.setDefaults({
 						<div class="content">
 							
 							<div class="table-users" style="width: 80%">
-								<div class="header">QAM MAC By Jurisdiction Report</div>	
-								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>								
-									<tr>
-									<td><span><button class="btn btn-primary" id="create"  type="submit">Generate Report</button></span>
-									</td>
+								<div class="header">Search Report</div>	
+								<br/>
 								
-
-							       </tr>
-							     </table>						
-      							
 				             <div class="row " >
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                    
-				                    
 				                   
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> MAC:</label>
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true">
-										   <form:option value="" label="--- Select MAC---"/>
+										   <form:option value="" label="---Select MAC---"/>
+										   <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 									
 										
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> Jurisdiction:</label>
-			                             
-										
 										<form:select path="jurisId" class="form-control required" id="jurisId" required="true">
-										   <form:option value="" label="--- Select Jurisdiction---"/>
+										   <form:option value="" label="---Select Jurisdiction---"/>
+										    <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
@@ -144,20 +167,18 @@ $.validator.setDefaults({
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Program:</label>
-			                             
-										<form:select path="programId" class="form-control required" id="programId"  required="true">
-										   <form:option value="" label="--- Select Program---"/>
+										<form:select path="programId" class="form-control required" id="programId"  >
+										   <form:option value="" label="---Select Program---"/>
+										    <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${programMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> LOB:</label>
-			                                <form:select path="loc" class="form-control required" id="loc" required="true">
-											   	<form:option value="" label="--- Select LOB---"/>
-											  	<form:option value="Appeals/Reopenings" />
-											  	<form:option value="Electronic Data Interchange (EDI)" />
-											  	<form:option value="Enrollments" />
-											  	<form:option value="General" />
+			                                <label for="email"> PCC/Location:</label>
+			                                <form:select path="loc" class="form-control required" id="loc" >
+			                                	<form:option value="" label="---Select PCC/Location---"/>
+											   <form:option value="ALL" label="---Select All---"/>
+										   		<form:options items="${locationMapEdit}" />
 											</form:select> 
 			                            </div>
 			                        </div>
@@ -174,21 +195,42 @@ $.validator.setDefaults({
 			                            </div>
 			                        </div>
 			                        
-			                         <div class="row">
+			                        <div class="row">
 			                            <div class="col-sm-6 form-group">
-			                                <label for="name"> ScoreCard Type:</label> 
-										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" required="true">
+			                                
+			                               
+											<form:radiobutton path="mainReportSelect" value="ScoreCard" />ScoreCard											                            
+										  	<form:radiobutton path="mainReportSelect" value="Compliance" />Compliance
+										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" />Rebuttal
+			                            </div>
+			                        </div>
+			                        
+			                         <div class="row">
+			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
+			                                <label for="scoreCardType"> ScoreCard Type:</label> 
+										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" >
 											   	<form:option value="" label="--- Select Type---"/>
 											  	<form:option value="Scoreable" />
 											  	<form:option value="Non-Scoreable" />
 											  	<form:option value="Does Not Count" />											  	
 											</form:select> 
 			                            </div>
-			                            <div class="col-sm-6 form-group">
-			                                <!-- <label for="email"> To Date:</label> -->
-			                                
+			                            <div class="col-sm-6 form-group" id="callResultDiv">
+			                            <label for="callResult"> Call Result:</label> 
+			                                <form:select path="callResult" class="form-control required" id="callResult" >
+											   	<form:option value="All" Label="Both Pass and Fail"/>
+											  	<form:option value="Pass" />
+											  	<form:option value="Fail" />											  										  	
+											</form:select> 
 			                            </div>
 			                        </div>
+			                        
+			                          <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
+									<tr>
+									<td><span><button class="btn btn-primary" id="create" type="submit">Generate Repot</button></span>
+									<span><button class="btn btn-primary" id="reset">Reset</button></span></td>
+							       </tr>
+							</table>
 				                    
 				                </div>
 				            </div> 

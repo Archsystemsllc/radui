@@ -23,6 +23,38 @@ public class ReportsForm {
     private Date toDate;
     
     private String scoreCardType;
+    
+    private String compliance;
+    
+    private String mainReportSelect;
+    
+    private String callResult;
+    
+    
+
+	public String getCallResult() {
+		return callResult;
+	}
+
+	public void setCallResult(String callResult) {
+		this.callResult = callResult;
+	}
+
+	public String getMainReportSelect() {
+		return mainReportSelect;
+	}
+
+	public void setMainReportSelect(String mainReportSelect) {
+		this.mainReportSelect = mainReportSelect;
+	}
+
+	public String getCompliance() {
+		return compliance;
+	}
+
+	public void setCompliance(String compliance) {
+		this.compliance = compliance;
+	}
 
 	public String getMacId() {
 		return macId;

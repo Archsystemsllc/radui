@@ -16,19 +16,40 @@ public class QamMacByJurisdictionReviewReport {
     
     private String location;
     
-    private Integer scorableCount;
+    private Integer scorableCount = 0;
     
-    private Integer scorablePass;
+    private Integer scorablePass = 0;
     
-    private Integer scorableFail;
+    private Integer scorableFail = 0;
     
-    private Float scorablePassPercent;
+    private Float scorablePassPercent = 0.0f;
     
-    private Float scorableFailPercent;
+    private Float scorableFailPercent= 0.0f;
     
-    private Integer nonScorableCount;
+    private Integer nonScorableCount= 0;
     
-    private Float nonScorablePercent;
+    private Float nonScorablePercent= 0.0f;
+    
+    private String qamStartDate;
+    
+    private String qamEndDate;   
+    
+
+	public String getQamStartDate() {
+		return qamStartDate;
+	}
+
+	public void setQamStartDate(String qamStartDate) {
+		this.qamStartDate = qamStartDate;
+	}
+
+	public String getQamEndDate() {
+		return qamEndDate;
+	}
+
+	public void setQamEndDate(String qamEndDate) {
+		this.qamEndDate = qamEndDate;
+	}
 
 	public String getMacName() {
 		return macName;

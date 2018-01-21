@@ -92,7 +92,7 @@ public class ScoreCardController {
 		String base64Creds = new String(base64CredsBytes);
 		HashMap<Integer,ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
 		
-		System.out.println(HomeController.MAC_ID_MAP);
+		//System.out.println(HomeController.MAC_ID_MAP);
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", "application/json");
 		headers.add("Authorization", "Basic " + base64Creds);

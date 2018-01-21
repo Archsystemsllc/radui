@@ -48,9 +48,11 @@ public class HomeController {
 	public static HashMap<Integer, String> MAC_ID_MAP;
 	public static HashMap<Integer, MacInfo> MAC_OBJECT_MAP;
 	public static HashMap<Integer, String> JURISDICTION_MAP;
+	public static HashMap<Integer, String> ALL_PROGRAM_MAP;
+	public static HashMap<Integer, String> ALL_PCC_LOCATION_MAP;
 	public static HashMap<Integer,HashMap<Integer,String>> MAC_JURISDICTION_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_MAP;
-	public static HashMap<String,ArrayList<String>> MAC_PCC_PROGRAM_JURISDICTION_LIST;
+	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_PCC_MAP;
 	
 	
 	 @RequestMapping(value = "/admin/dashboard")
@@ -81,12 +83,15 @@ public class HomeController {
 			RestTemplate restTemplate = new RestTemplate();
 			
 			
-			ResponseEntity<String> webServiceExchange = null;
-			
+			ResponseEntity<String> webServiceExchange = null;			
 			
 			ObjectMapper mapper = new ObjectMapper();
+			
 			List<MacProgJurisPccMapping> macProgJurisPccMappingList = null;
+			
 			HashMap<Integer, String> programMap = null;
+			
+			HashMap<Integer, String> pccLocationMap = null;
 			
 			HashMap<Integer, String> macIdMap = null;
 			
@@ -98,12 +103,23 @@ public class HomeController {
 			
 			HashMap<String,HashMap<Integer,String>> mapJurisProgramMap = new HashMap<String,HashMap<Integer,String>>();
 			
+			HashMap<String,HashMap<Integer,String>> macJurisProgramLocationMap = new HashMap<String,HashMap<Integer,String>>();
+			
 			HashMap<Integer, MacInfo> macObjectMap = new HashMap<Integer, MacInfo>();
 			try {
+				
+				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "pccLocationMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				
+				pccLocationMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
+				
+				ALL_PCC_LOCATION_MAP = pccLocationMap;
 				
 				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "programMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
 				
 				programMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});
+				
+				ALL_PROGRAM_MAP = programMap;
 				
 				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "jurisdictionMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
 				
@@ -149,7 +165,22 @@ public class HomeController {
 						programTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
 					}
 					
-					mapJurisProgramMap.put(macId_jurisId_Key, programTempMap);					
+					mapJurisProgramMap.put(macId_jurisId_Key, programTempMap);		
+					
+					//MAC Jurisdiction Program Location Map Code
+					
+					String pccLocation = pccLocationMap.get(macProgJurisPccMapping.getPccId());
+					String macId_jurisId_programId_Key = macProgJurisPccMapping.getMacId()+"_"+macProgJurisPccMapping.getJurisdictionId()+"_"+macProgJurisPccMapping.getProgramId();
+					
+					HashMap<Integer,String> pccLocationTempMap = macJurisProgramLocationMap.get(macId_jurisId_programId_Key);
+					if(pccLocationTempMap == null) {
+						pccLocationTempMap = new HashMap<Integer,String>();
+						pccLocationTempMap.put(macProgJurisPccMapping.getPccId(),pccLocation);
+					} else {
+						pccLocationTempMap.put(macProgJurisPccMapping.getPccId(),pccLocation);
+					}
+					
+					macJurisProgramLocationMap.put(macId_jurisId_programId_Key, pccLocationTempMap);		
 				}
 				
 				for (MacInfo macInfo: macInfoList) {
@@ -159,6 +190,7 @@ public class HomeController {
 				MAC_OBJECT_MAP = macObjectMap;
 				MAC_JURISDICTION_MAP = mapJurisMap;
 				MAC_JURISDICTION_PROGRAM_MAP = mapJurisProgramMap;
+				MAC_JURISDICTION_PROGRAM_PCC_MAP = macJurisProgramLocationMap;
 				
 			} catch (JsonParseException e) {
 				

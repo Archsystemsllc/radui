@@ -38,7 +38,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
-
+function goBack() {
+    window.history.back();
+}
 
 </script>
 
@@ -47,49 +49,261 @@
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
+		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/goBackMacJurisReport" id="reportsForm" >
 			<tr>
 				<td style="vertical-align: top">
 
 					<div id="updates" class="boxed">
-
+					
+						
 						<div class="content">
+							<c:if test="${AllScoreCardReport == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+									
+								 <form:hidden path="macId" />
+								 <form:hidden path="jurisId" />
+								 <form:hidden path="programId" />
+								 <form:hidden path="loc" />
+								 <form:hidden path="fromDate" />
+								 <form:hidden path="toDate" />
+								 <form:hidden path="mainReportSelect" />
+								 <form:hidden path="scoreCardType" />
+								 <form:hidden path="callResult" />
+								 	
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>${ReportTitle}</h2> 
+					                  	<div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <button class="btn btn-primary" id="create"  onclick="history.go(-1);">Back</button>
+				                            </div>
+				                           
+				                        </div>
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableOnly" >${row.scorableCount}</a></span>
+													</display:column>
+													<display:column title="Scoreable Pass Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreablePass" title="Edit">${row.scorablePass}</a></span>
+													</display:column>
+													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableFail" >${row.scorableFail}</a></span>
+													</display:column>
+													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/Non-Scoreable" >${row.scorableFail}</a></span>
+													</display:column>
+													<display:column property="nonScorablePercent" title="Non Scoreable Percent" sortable="true" style="text-align:center;"/>
+													<display:setProperty name="export.excel.filename" value="TestReport.xls" />
+													<display:setProperty name="export.xml.filename" value="TestReport.xml" />
+													<display:setProperty name="export.csv.filename" value="TestReport.csv" />
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
 							
-							<div class="table-users" style="width: 80%">
-								<div class="header">QAM MAC By Jurisdiction Report</div>	
-								
-				           
-				             <div class="row" >
-				                <div class="col-md-12 col-md-offset-1 form-container">
-				                    <h2>Report</h2> 
-				                    <!-- <p> Please provide your feedback below: </p> -->
-				                   
-				                   
-			                         <div class="row">
-			                            <div class="col-sm-12 form-group">
-			                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
-												requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
-												<display:column property="macId" title="MAC" sortable="true" style="text-align:center;"/>
-												<display:column property="jurId" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-												<display:column property="programId" title="Program" sortable="true" style="text-align:center;"/>
-												<display:column property="lob" title="PCC" sortable="true" style="text-align:center;"/>
-												<display:column property="callResult" title="Scorecard Result" sortable="true" style="text-align:center;"/>
-												<display:column property="jurId" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-												
-											</display:table>
-											<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
-											   <span>No Data Found</span>	
-											</c:if>	
-			                            </div>		                           
-			                        </div>       
-			                           
-				                    
-				                </div>
-				            </div>		
-				            
-								<!-- </div> -->
-							</div>
-						</div>
+							<c:if test="${ScoreableReport == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>Report</h2> 
+					                    <!-- <p> Please provide your feedback below: </p> -->
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePass" title="Scoreable Pass" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
+															
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
+							
+							<c:if test="${ScoreablePassReport == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>Report</h2> 
+					                    <!-- <p> Please provide your feedback below: </p> -->
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePass" title="Scoreable Pass" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
+							
+							<c:if test="${ScoreableFailReport == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>Report</h2> 
+					                    <!-- <p> Please provide your feedback below: </p> -->
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
+														<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
+															
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
+							
+							<c:if test="${NonScoreable == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>Report</h2> 
+					                    <!-- <p> Please provide your feedback below: </p> -->
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorablePercent" title="Non Scoreable Percent" sortable="true" style="text-align:center;"/>
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
+							
+							<c:if test="${ComplianceReport == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>Report</h2> 
+					                    <!-- <p> Please provide your feedback below: </p> -->
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorableCount" title="Does Not Count" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorablePercent" title="Does Not Count Percent" sortable="true" style="text-align:center;"/>
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
+							
+							<c:if test="${RebuttalReport == true}">
+								<div class="table-users" style="width: 100%">
+									<div class="header">QAM MAC By Jurisdiction Report</div>
+					             <div class="row" >
+					                <div class="col-md-14 col-md-offset-1 form-container">
+					                    <h2>Report</h2> 
+					                    <!-- <p> Please provide your feedback below: </p> -->
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePass" title="Scoreable Pass" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column property="nonScorablePercent" title="Non Scoreable Percent" sortable="true" style="text-align:center;"/>
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+					                </div>
+					            </div>  <!-- Main Row Div -->
+								</div> 
+							</c:if>
+						</div> <!-- Content Div -->
 					</div>
 				</td>
 			</tr>

@@ -110,62 +110,7 @@ $.validator.setDefaults({
 
 	$(function(){
 
-		 /* $("#scorecardForm").validate({
-			    // Specify validation rules
-			    rules: {
-			      // The key name on the left side is the name attribute
-			      // of an input field. Validation rules are defined
-			      // on the right side
-			      callMonitoringDate: {
-		                required: true
-		            },
-			      csrFullName: {
-		                required: true
-		            }
-			    },
-			    // Specify validation error messages
-			    messages: {
-			    	callMonitoringDate: "Please enter QAM Start Date Time",
-			    	csrFullName: "required field"
-			    },
-			    // Make sure the form is submitted to the destination defined
-			    // in the "action" attribute of the form when valid
-			    submitHandler: function(form) {
-				  alert("test data")
-			      //form.submit();
-			    }
-		});
-
-		 $('button[type=submit]').click(function(e) {
-			   
-			  var result = $("#scorecardForm").valid();
-			  alert("result:"+result);
-			   
-			    	/* var validatedMac = $('#macIdU').val();
-					var validateJurisdiction = $('#jurisdictionU option:selected').val(); 
-				    var fileUpload = $('#file').val();
-					
-				  if(fileUpload == "" && validatedMac == "" && validateJurisdiction == "") {
-					  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
-						return;
-					} else if(fileUpload == "") {
-						  $('#alertMsg').text("Please Select a File for Upload");
-							return;
-						} else if(validatedMac == "" ) {
-						  $('#alertMsg').text("Please Select Mac Id ");
-							return;
-						} else if(validateJurisdiction == "") {
-							  $('#alertMsg').text("Please Select Jurisdiction Id");
-								return;
-							}  */
-/*
-			  e.preventDefault();
-			    //Disable submit button
-			    $(this).prop('disabled',true);
-				
-					
-			   
-		});   */
+		 
 		
 		$("select#macId").change(function(){
             $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
