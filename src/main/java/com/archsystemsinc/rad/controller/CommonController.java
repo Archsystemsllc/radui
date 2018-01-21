@@ -34,6 +34,21 @@ public class CommonController {
 		log.debug("<- reportingHome ->");
 		return "reporting_home";
 	}	
+	
+	
+	@RequestMapping("/admin/createusers")
+	public String createusers()
+	{
+		return "createusers";
+		
+	}
+	
+	@RequestMapping("/admin/listofusers")
+	public String listofusers()
+	{
+		return "listofusers";
+		
+	}
 
 	@RequestMapping(value="/admin", method = RequestMethod.GET)
 	public String admin(){
