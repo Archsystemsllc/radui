@@ -4,7 +4,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -18,7 +20,18 @@ import org.springframework.web.servlet.view.UrlBasedViewResolver;
 @EnableWebMvc
 @ComponentScan({ "com.archsystemsinc.rad" })
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+	@Bean
+   	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+   		String activeProfile = System.getProperty("spring.profiles.active",
+   				"local");
+   		String propertiesFilename = "application-" + activeProfile
+   				+ ".properties";
+   		System.out.println("propertiesFilename:" + propertiesFilename);
+   		PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+   		configurer.setLocation(new ClassPathResource(propertiesFilename));
 
+   		return configurer;
+   	}
 	@Bean
 	public ViewResolver viewResolver() {
 		final UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();

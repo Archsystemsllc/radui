@@ -24,8 +24,9 @@ public class BasicAuthRestTemplate extends RestTemplate {
         if (StringUtils.isEmpty(username)) {
             throw new RuntimeException("Username is mandatory for Basic Auth");
         }
+        ClientHttpRequestInterceptor ins=  new BasicAuthInterceptor(username, password);
 
-        List<ClientHttpRequestInterceptor> interceptors = Collections.singletonList(new BasicAuthInterceptor(username, password));
+        List<ClientHttpRequestInterceptor> interceptors = Collections.singletonList(ins);
         setRequestFactory(new InterceptingClientHttpRequestFactory(getRequestFactory(), interceptors));
     }
 }

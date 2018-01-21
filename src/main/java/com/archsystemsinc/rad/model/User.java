@@ -1,85 +1,127 @@
 package com.archsystemsinc.rad.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.Date;
 
 /**
  * This persistent class for the user database table.
  */
 
 public class User {
-    private Long id;
-    private String username;
-    private String password;
-    private String passwordConfirm;
-    private String name;
-    private String email;
-    private Set<Role> roles = new HashSet<Role>();
+	private Long id;
+	private String userName;
+	private String password;
+	private Role role;
+	private String createdBy;
+	private String updatedBy;
+	private Date createdDate;
+	private Date updateDate;
+	private String emailId;
+	
+	private String firstName;
+	private String middleName;
+	private String lastName;
+	
+	private Long macId;
 
-    private List<Long> rolesList;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-  
-    public String getName() {
-		return name;
+	private Long status;
+	private Long jurId;
+	private Long orgId;
+	public Long getId() {
+		return id;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getMiddleName() {
+		return middleName;
+	}
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public Long getMacId() {
+		return macId;
+	}
+	public void setMacId(Long macId) {
+		this.macId = macId;
+	}
+	public Long getStatus() {
+		return status;
+	}
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+	public Long getJurId() {
+		return jurId;
+	}
+	public void setJurId(Long jurId) {
+		this.jurId = jurId;
+	}
+	public Long getOrgId() {
+		return orgId;
+	}
+	public void setOrgId(Long orgId) {
+		this.orgId = orgId;
 	}
 	
-	public List<Long> getRolesList() {
-		return rolesList;
-	}
-
-	public void setRolesList(List<Long> rolesList) {
-		this.rolesList = rolesList;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+    
 }
