@@ -51,5 +51,23 @@ public class Role {
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Role [id=");
+		builder.append(id);
+		builder.append(", roleName=");
+		builder.append(roleName);
+		builder.append(", createdBy=");
+		builder.append(createdBy);
+		builder.append(", updatedBy=");
+		builder.append(updatedBy);
+		builder.append(", createdDate=");
+		builder.append(createdDate);
+		builder.append(", updateDate=");
+		builder.append(updateDate);
+		builder.append("]");
+		return builder.toString();
+	}
 
 }

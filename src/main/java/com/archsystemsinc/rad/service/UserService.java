@@ -14,7 +14,7 @@ import com.archsystemsinc.rad.model.User;
  */
 public interface UserService {
 
-	void save(User user);
+	void save(User user) throws Exception;
 	
 	void update(User user);
 

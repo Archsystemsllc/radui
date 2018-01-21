@@ -1,15 +1,28 @@
 package com.archsystemsinc.rad.controller;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.archsystemsinc.rad.model.Role;
+import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.service.UserService;
+import com.archsystemsinc.rad.validator.UserValidator;
+import com.google.common.collect.Sets;
 
 /**
  * This is the Spring Controller Class for User Login Functionality.
@@ -18,6 +31,191 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class UserController {
 
 	private static final Logger log = Logger.getLogger(UserController.class);
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private UserValidator userValidator;
+
+	/**
+	 * This method provides the functionalities for listing users.
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/admin/users", method = RequestMethod.GET)
+	public String listUsers(Model model) {
+		log.debug("--> List Users");
+		model.addAttribute("users", userService.findAll());
+		log.debug("<-- List Users");
+		return "users";
+	}
+
+	/**
+	 * This method provides the functionalities for the User Registration.
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/admin/registration", method = RequestMethod.GET)
+	public String registration(Model model) {
+		log.debug("--> registration......" + HomeController.MAC_ID_MAP);
+		User blank = new User();
+		Role br = new Role();
+		blank.setRole(br);
+		model.addAttribute("userForm", blank);
+		model.addAttribute("allRoles", userService.findAllRoles());
+		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
+		model.addAttribute("progIds",
+				HomeController.MAC_JURISDICTION_PROGRAM_MAP);
+
+		log.debug("<-- registration");
+		return "registration";
+	}
+
+	/**
+	 * 
+	 * This method provides the functionalities for the user to re-direct to the
+	 * welcome page after successful login.
+	 * 
+	 * @param userForm
+	 * @param bindingResult
+	 * @return
+	 */
+	@RequestMapping(value = "/admin/registration", method = RequestMethod.POST)
+	public String registration(@ModelAttribute("userForm") User userForm,
+			BindingResult bindingResult,
+			final RedirectAttributes redirectAttributes, Model model) {
+		log.debug("--> registration:" + userForm);
+		userValidator.validate(userForm, bindingResult);
+		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("allRoles", userService.findAllRoles());
+			model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
+			model.addAttribute("progIds",
+					HomeController.MAC_JURISDICTION_PROGRAM_MAP);
+			return "registration";
+		}
+		try {
+			userService.save(userForm);
+			redirectAttributes.addFlashAttribute("success",
+					"success.register.user");
+		} catch (Exception e) {
+			log.error("Fialed to save user!", e);
+			redirectAttributes
+					.addFlashAttribute("error", "failed.user.created");
+		}
+
+		log.debug("<-- registration");
+		return "redirect:users";
+	}
+
+	/**
+	 * 
+	 * This method provides the functionalities for the user to re-direct to the
+	 * welcome page after successful login.
+	 * 
+	 * @param userForm
+	 * @param bindingResult
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/admin/edit-user", method = RequestMethod.POST)
+	public String editUser(@ModelAttribute("userForm") User userForm,
+			BindingResult bindingResult,
+			final RedirectAttributes redirectAttributes, Model model) {
+		// userForm.setPasswordConfirm(userForm.getPassword());
+		Set<Role> roles = Sets.newHashSet();
+		/*
+		 * for(long roleId : userForm.getRolesList()) {
+		 * roles.add(userService.findRoleById(roleId)); } if(!roles.isEmpty()) {
+		 * userForm.setRoles(roles); }
+		 */
+		User user = userService.findByUsername(userForm.getUserName());
+		boolean skipPasswordCheck = user.getPassword().equals(
+				userForm.getPassword());
+		boolean skipDuplicateUserCheck = user.getUserName().equals(
+				userForm.getUserName());
+		userValidator.updateUserDetailsValidation(userForm, bindingResult,
+				skipDuplicateUserCheck, skipPasswordCheck);
+		if (bindingResult.hasErrors()) {
+			return "useredit";
+		}
+		if (skipPasswordCheck) {
+			userService.update(userForm);
+			redirectAttributes
+					.addFlashAttribute("success", "success.edit.user");
+		} else {
+			try {
+				userService.save(userForm);
+				redirectAttributes.addFlashAttribute("success",
+						"success.register.user");
+			} catch (Exception e) {
+				log.error("Fialed to save user!", e);
+				redirectAttributes.addFlashAttribute("error",
+						"failed.user.created");
+			}
+		}
+
+		// securityService.autologin(userForm.getUsername(),
+		// userForm.getPasswordConfirm());
+
+		return "redirect:../users";
+	}
+
+	/**
+	 * This method provides the functionalities for users Edit.
+	 * 
+	 * @param id
+	 * @param model
+	 * @param user
+	 * @return
+	 */
+
+	@RequestMapping(value = "/admin/edit-user/{id}", method = RequestMethod.GET)
+	public String editUser(@PathVariable("id") final Long id,
+			final Model model, User user) {
+		final User userByID = userService.findById(id);
+
+		model.addAttribute("userForm", userByID);
+		model.addAttribute("allRoles", userService.findAllRoles());
+		return "useredit";
+	}
+
+	/**
+	 * 
+	 * This method provides the functionalities for the user to re-direct to the
+	 * welcome page after successful login.
+	 * 
+	 * @param userForm
+	 * @param bindingResult
+	 * @param model
+	 * @return
+	 */
+
+	/**
+	 * 
+	 * 
+	 * @param id
+	 *            the id of the user profile to be deleted.
+	 * @param redirectAttributes
+	 * @return the string to which the page to be redirected.
+	 */
+	@RequestMapping(value = "/admin/delete-user/{id}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable("id") final Long id,
+			final RedirectAttributes redirectAttributes) {
+		userService.deleteById(id);
+
+		redirectAttributes.addFlashAttribute("success", "success.delete.user");
+		// securityService.autologin(userForm.getUsername(),
+		// userForm.getPasswordConfirm());
+
+		return "redirect:../users";
+	}
+
 	/**
 	 * 
 	 * This method provides the functionalities for the User to login to the
@@ -30,10 +228,10 @@ public class UserController {
 	 */
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public String login(Model model, String error) {
-		log.debug("error::"+error);
+		log.debug("error::" + error);
 		if (error != null)
-			model.addAttribute("error", "Your username and password is invalid.");
-		
+			model.addAttribute("error",
+					"Your username and password is invalid.");
 
 		return "login";
 	}
@@ -54,8 +252,10 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpServletRequest request, HttpServletResponse response) {
-		org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	public String logout(HttpServletRequest request,
+			HttpServletResponse response) {
+		org.springframework.security.core.Authentication auth = SecurityContextHolder
+				.getContext().getAuthentication();
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}

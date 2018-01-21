@@ -107,20 +107,25 @@ $(document).ready(function(){
 									                    <table class="display data_tbl" id="table">
 									                        <thead>
 									                        <tr>
-									                            <th title="User Id">ID</th>
-									                            <th title="Username">Username</th>	
-																<th title="Name of the User">Name</th>
+									                            <th title="User Id"> User Id</th>
+									                            <th title="Fist Name">First Name</th>	
+																<th title="Middle Name">Middle Name</th>
+																<th title="Last Name">Last Name</th>
 																<th title="Email Id">Email</th>
-																<th title="Edit or Create User">Manage</th>
+																<th title="Status">Status</th>
+																<th title="Edit or Delete User">Manage</th>
 									                        </tr>
 									                        </thead>
 									                        <tbody>
 									                        <c:forEach var="user" items="${users}">
 									                            <tr>
-									                                <td><a class="${linkcolor }">${user.id}</a></td>
-									                                <td><a class="${linkcolor }" href="edit-user/${user.id}">${user.username}</a></td>
-									                                <td><a class="${linkcolor }">${user.name}</a></td>
-									                                <td><a class="${linkcolor }">${user.email}</a></td>
+									                               <%--  <td><a class="${linkcolor }">${user.id}</a></td> --%>
+									                                <td><a class="${linkcolor }" href="edit-user/${user.id}">${user.userName}</a></td>
+									                                <td><a class="${linkcolor }">${user.firstName}</a></td>
+									                                 <td><a class="${linkcolor }">${user.middleName}</a></td>
+									                                  <td><a class="${linkcolor }">${user.lastName}</a></td>
+									                                <td><a class="${linkcolor }">${user.emailId}</a></td>
+									                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 									                                <td>
 									                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}" title="Edit">Edit</a></span>
 									                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>

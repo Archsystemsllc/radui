@@ -22,12 +22,12 @@
 	</appender>
 
 	<root>
-		<level value="WARN" />
+		<level value="DEBUG" />
 		<appender-ref ref="console" />
 		<appender-ref ref="file" />
 	</root>
 <logger name="org.hibernate">
-  <level value="WARN"/> 
+  <level value="DEBUG"/> 
 </logger>
 
 </log4j:configuration>

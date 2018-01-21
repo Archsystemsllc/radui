@@ -4,10 +4,13 @@
 
 package com.archsystemsinc.rad.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.archsystemsinc.rad.common.utils.RadServiceApiClient;
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.service.UserService;
@@ -18,29 +21,32 @@ import com.archsystemsinc.rad.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	private RadServiceApiClient radServiceApiClient;
+	
     @Override
-    public void save(User user) {
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    public void save(User user) throws Exception {
+    
+    	radServiceApiClient.saveUser(user);
     }
     
     @Override
     public void update(User user) {
-        //userRepository.save(user);
     }
 
     @Override
-    public User findByUsername(String username) {
-        return null;
+    public User findByUsername(String userName) {
+        return radServiceApiClient.getUser(userName);
     }
     
     @Override
 	public User findById(Long id) {		
-		return null;
+	return null;
 	}
     
     @Override
 	public List<User> findAll() {
-		return null;
+		return radServiceApiClient.getAllUsers();
 	}
     
     @Override
@@ -50,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<Role> findAllRoles() {
-		return null;
+		return radServiceApiClient.getRoles();
 	}
 	
 	@Override

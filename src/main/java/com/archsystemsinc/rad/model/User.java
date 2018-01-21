@@ -10,6 +10,15 @@ public class User {
 	private Long id;
 	private String userName;
 	private String password;
+	
+	private String passwordConfirm;
+	
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 	private Role role;
 	private String createdBy;
 	private String updatedBy;
@@ -24,8 +33,13 @@ public class User {
 	private Long macId;
 
 	private Long status;
+	
+
+	
 	private Long jurId;
 	private Long orgId;
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -122,6 +136,45 @@ public class User {
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
 	}
-	
-    
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [id=");
+		builder.append(id);
+		builder.append(", userName=");
+		builder.append(userName);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", passwordConfirm=");
+		builder.append(passwordConfirm);
+		builder.append(", role=");
+		builder.append(role);
+		builder.append(", createdBy=");
+		builder.append(createdBy);
+		builder.append(", updatedBy=");
+		builder.append(updatedBy);
+		builder.append(", createdDate=");
+		builder.append(createdDate);
+		builder.append(", updateDate=");
+		builder.append(updateDate);
+		builder.append(", emailId=");
+		builder.append(emailId);
+		builder.append(", firstName=");
+		builder.append(firstName);
+		builder.append(", middleName=");
+		builder.append(middleName);
+		builder.append(", lastName=");
+		builder.append(lastName);
+		builder.append(", macId=");
+		builder.append(macId);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", jurId=");
+		builder.append(jurId);
+		builder.append(", orgId=");
+		builder.append(orgId);
+		builder.append("]");
+		return builder.toString();
+	}
+	    
 }
