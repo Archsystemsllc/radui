@@ -49,25 +49,30 @@
 						<div class="content">
 
 							<div class="table-users" style="width: 80%">
-								<div class="header">ScoreCard List</div>							
+								<div class="header">List of Scorecards</div>							
       
                                  <form action="scorecardsave" method="post" enctype="multipart/form-data">
                                  <!--  Section 1 -->
 								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
-									<tr><td colspan="3" width="95%" >
+									<tr><td colspan="3"  >
 					<div class="form_grid_12">
 					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SCORECARDS_MAP.values()}" 
-							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:95%;" export="true" pagesize="15" sort="list">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference Id" sortable="true" style="text-align:center;"/>
 							<display:column property="qamFullName" title="QAM User ID" sortable="true" style="text-align:center;"/>
 							<display:column property="qamStartdateTime" title="QAM Start Date/Time" sortable="true" style="text-align:center;"/>
 							<display:column property="scorecardType" title="Scorecard Type" sortable="true" style="text-align:center;"/>
-							<display:column property="callResult" title="Scorecard Result" sortable="true" style="text-align:center;"/>
-							<display:column property="jurId" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-							<display:column title="Actions" style="text-align:center;">
+							<display:column property="callResult" title="Status" sortable="true" style="text-align:center;"/>
+							<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+							<display:column title="Actions" style="text-align:center;" media="html">
 								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
 								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>								
 							</display:column>
+							<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+							<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
+							<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+							<display:setProperty name="export.pdf" value="true" />
+						
 						</display:table>
 						<c:if test="${fn:length(sessionScope.SCORECARDS_MAP.values()) eq 0}">
 						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>	

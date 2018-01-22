@@ -92,8 +92,28 @@ public class ScoreCard  {
 	
 	private String lob;
 	
+	private String nonScoreableReason;
+	
+	//Temporary Jursidction Name Variable
+	private String jurisdictionName;
 	
 	
+	public String getNonScoreableReason() {
+		return nonScoreableReason;
+	}
+
+	public void setNonScoreableReason(String nonScoreableReason) {
+		this.nonScoreableReason = nonScoreableReason;
+	}
+
+	public String getJurisdictionName() {
+		return jurisdictionName;
+	}
+
+	public void setJurisdictionName(String jurisdictionName) {
+		this.jurisdictionName = jurisdictionName;
+	}
+
 	public String getLob() {
 		return lob;
 	}

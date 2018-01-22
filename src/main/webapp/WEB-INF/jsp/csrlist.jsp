@@ -53,30 +53,6 @@
 	
 $(function() {
 
-	$("#csrupload").validate({
-	    // Specify validation rules
-	    rules: {
-	      // The key name on the left side is the name attribute
-	      // of an input field. Validation rules are defined
-	      // on the right side
-	      macIdK: "required",
-	      jurisdictionK: "required",
-	      datepicker1: "required"
-	    },
-	    // Specify validation error messages
-	    messages: {
-	    	macIdK: "Please enter your firstname",
-	      jurisdictionK: "Please enter your lastname",
-	      datepicker1: "date is required"
-	    },
-	    // Make sure the form is submitted to the destination defined
-	    // in the "action" attribute of the form when valid
-	    submitHandler: function(form) {
-		   alert("Inside SubmitHandler");
-	      //form.submit();
-	    }
-	  });
-
 	$('INPUT[type="file"]').change(function () {
 	    var ext = this.value.match(/\.(.+)$/)[1];
 	    switch (ext) {
@@ -241,7 +217,7 @@ $(function() {
 		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
 	  	var validateFromDate = $('#datepicker1').val();
 		var validateToDate = $('#datepicker2').val();		  
-		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
+		alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
 		  if(validateMac == null && validateJurisdiction == null) {
 			  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
 				return;
@@ -259,16 +235,16 @@ $(function() {
 								return;
 							} 
 			
-		 var selectedMac = $('select[name=macIdS]').val();
-		 var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
-	 	
-	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
+		 
+		 var selectedMac = $('#macIdS option:selected').val();     	
+		 var selectedJurisdiction = $('#jurisdictionS option:selected').text(); 
+	 	alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
 	 	var username="qamadmin";
 	   	var password="123456";
 	 	$.ajax({ 
            type: "GET",
            dataType: "json",
-           data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
+           data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: validateMac, jurisdictionS: validateJurisdiction},
            url : "${WEB_SERVICE_URL}csrListMonths",
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
           success: function(data){	    

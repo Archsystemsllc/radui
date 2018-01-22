@@ -107,6 +107,7 @@ public class ScoreCardController {
 		try {
 			scoreCardList = mapper.readValue(exchange.getBody(), new TypeReference<List<ScoreCard>>(){});
 			for(ScoreCard scoreCard: scoreCardList) {
+				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
 				resultsMap.put(scoreCard.getId(), scoreCard);
 			}
 		} catch (JsonParseException e) {
