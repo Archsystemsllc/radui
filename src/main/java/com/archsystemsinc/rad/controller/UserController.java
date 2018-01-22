@@ -105,6 +105,7 @@ public class UserController {
 		userValidator.validate(userForm, bindingResult);
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
 		if (bindingResult.hasErrors()) {
+			model.addAttribute("userForm", userForm);
 			model.addAttribute("roleIds", HomeController.ROLE_MAP);
 			model.addAttribute("macIds", HomeController.MAC_ID_MAP);
 			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);

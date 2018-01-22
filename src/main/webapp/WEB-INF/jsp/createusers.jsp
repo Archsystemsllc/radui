@@ -57,7 +57,7 @@
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
- <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/registration" class="form-signin">
+ <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/createUser" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -80,36 +80,44 @@
 									<div class="row">
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="userName"> User Name:</label> 
-											
+											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="userName" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="userName"></form:errors>
 								            </div>
+								            </spring:bind>
 										</div>
 										
 										<div class="col-sm-6 col-md-offset-1 form-group">
-											<label for="password"> Password:</label>  <div class="form-group ${status.error ? 'has-error' : ''}">
+											<label for="password"> Password:</label> 
+											 <spring:bind path="password">
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="password" path="password" class="form-control" placeholder=""></form:input>
 								                <form:errors path="password"></form:errors>
 								            </div>
+								            </spring:bind>
 										</div>
 										
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="passwordConfirm"> Confirm your password:</label> 
+											<spring:bind path="passwordConfirm">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="password" path="passwordConfirm" class="form-control"
 								                            placeholder=""></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
 								            </div>
+								            </spring:bind>
 										</div>
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="firstName"> First Name:</label> 
+											<spring:bind path="firstName">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="firstName" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="firstName"></form:errors>
 								            </div>
+								            </spring:bind>
 										</div>
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="middleName"> Middle Name:</label> 
