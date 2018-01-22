@@ -51,6 +51,9 @@ public class HomeController {
 	public static HashMap<Integer, String> ALL_PROGRAM_MAP;
 	public static HashMap<Integer, String> ALL_PCC_LOCATION_MAP;
 	public static HashMap<Integer,HashMap<Integer,String>> MAC_JURISDICTION_MAP;
+	public static HashMap<Integer,HashMap<Integer,String>> ORGANIZATION_MAP;
+	public static HashMap<Integer,HashMap<Integer,String>> ROLE_MAP;
+	public static HashMap<Integer,HashMap<Integer,String>> PCC_LOC_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_PCC_MAP;
 	
@@ -132,6 +135,17 @@ public class HomeController {
 				macIdMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});			
 				
 				MAC_ID_MAP = macIdMap;
+				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "orgMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				
+				ORGANIZATION_MAP = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
+				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "roleMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				ROLE_MAP = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
+				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "pccLocationMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				PCC_LOC_MAP = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
+				
 				
 				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "macList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
 				

@@ -10,7 +10,18 @@ public class User {
 	private Long id;
 	private String userName;
 	private String password;
+	
+	private String passwordConfirm;
+	private String passwordFromdb;
+	
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
 	private Role role;
+	private OrganizationLookup organizationLookup;
 	private String createdBy;
 	private String updatedBy;
 	private Date createdDate;
@@ -24,8 +35,15 @@ public class User {
 	private Long macId;
 
 	private Long status;
+	
+	private Long pccId;
+	
+
+	
 	private Long jurId;
 	private Long orgId;
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -123,5 +141,68 @@ public class User {
 		this.orgId = orgId;
 	}
 	
-    
+	
+	public OrganizationLookup getOrganizationLookup() {
+		return organizationLookup;
+	}
+	public void setOrganizationLookup(OrganizationLookup organizationLookup) {
+		this.organizationLookup = organizationLookup;
+	}
+	public Long getPccId() {
+		return pccId;
+	}
+	public void setPccId(Long pccId) {
+		this.pccId = pccId;
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("User [id=");
+		builder.append(id);
+		builder.append(", userName=");
+		builder.append(userName);
+		builder.append(", passwordConfirm=");
+		builder.append(passwordConfirm);
+		builder.append(", role=");
+		builder.append(role);
+		builder.append(", organizationLookup=");
+		builder.append(organizationLookup);
+		builder.append(", createdBy=");
+		builder.append(createdBy);
+		builder.append(", updatedBy=");
+		builder.append(updatedBy);
+		builder.append(", createdDate=");
+		builder.append(createdDate);
+		builder.append(", updateDate=");
+		builder.append(updateDate);
+		builder.append(", emailId=");
+		builder.append(emailId);
+		builder.append(", firstName=");
+		builder.append(firstName);
+		builder.append(", middleName=");
+		builder.append(middleName);
+		builder.append(", lastName=");
+		builder.append(lastName);
+		builder.append(", macId=");
+		builder.append(macId);
+		builder.append(", status=");
+		builder.append(status);
+		builder.append(", pccId=");
+		builder.append(pccId);
+		builder.append(", jurId=");
+		builder.append(jurId);
+		builder.append(", orgId=");
+		builder.append(orgId);
+		builder.append("]");
+		return builder.toString();
+	}
+	public String getPasswordFromdb() {
+		return passwordFromdb;
+	}
+	public void setPasswordFromdb(String passwordFromdb) {
+		this.passwordFromdb = passwordFromdb;
+	}
+	
+	
+	    
 }

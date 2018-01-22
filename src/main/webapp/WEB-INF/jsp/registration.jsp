@@ -63,11 +63,11 @@
 							<!-- 	<div class="container">  -->
 								
 								    <form:form method="POST" modelAttribute="userForm" class="form-signin">
-								        <spring:bind path="username">
+								        <spring:bind path="userName">
 								            <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="username" class="form-control" placeholder="Username"
+								                <form:input type="text" path="userName" class="form-control" placeholder="User Name"
 								                            autofocus="true"></form:input>
-								                <form:errors path="username"></form:errors>
+								                <form:errors path="userName"></form:errors>
 								            </div>
 								        </spring:bind>
 								
@@ -86,27 +86,62 @@
 								            </div>
 								        </spring:bind>
 								        
-								        <spring:bind path="name">
+								        <spring:bind path="firstName">
 								            <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="name" class="form-control" placeholder="name"
+								                <form:input type="text" path="firstName" class="form-control" placeholder="First Name"
 								                            autofocus="true"></form:input>
-								                <form:errors path="name"></form:errors>
+								                <form:errors path="firstName"></form:errors>
 								            </div>
 								        </spring:bind>
 								        
-								        <spring:bind path="email">
+								          <spring:bind path="middleName">
 								            <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="email" class="form-control" placeholder="email"
+								                <form:input type="text" path="middleName" class="form-control" placeholder="Middle Name"
 								                            autofocus="true"></form:input>
-								                <form:errors path="email"></form:errors>
+								                <form:errors path="middleName"></form:errors>
 								            </div>
 								        </spring:bind>
-								        <form:select path="rolesList" id="role">
+								        
+								          <spring:bind path="lastName">
+								            <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="lastName" class="form-control" placeholder="Last Name"
+								                            autofocus="true"></form:input>
+								                <form:errors path="lastName"></form:errors>
+								            </div>
+								        </spring:bind>
+								        
+								        <spring:bind path="emailId">
+								            <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="emailId" class="form-control" placeholder="Email Id"
+								                            autofocus="true"></form:input>
+								                <form:errors path="emailId"></form:errors>
+								            </div>
+								        </spring:bind>
+								      
+								        <form:select path="role.id" id="role" class="form-control">
 												<c:forEach var="role" items="${allRoles}">
-													<option value="${role.id}">${role.name}</option>
+													<option value="---">Select Role</option>
+													<option value="${role.id}">${role.roleName}</option>
 												</c:forEach>
 										</form:select> 
-										
+										<br/>
+										  <form:select path="macId" id="macId" class="form-control">
+										 		 <option value="-1">Select Mac Id</option>
+												<form:options items="${macIds}" />
+										</form:select> 
+										<br/>
+										  <form:select path="jurId" id="jurId" class="form-control">
+										 		 <option value="-1">Select Jurisdiction Id</option>
+												<form:options items="${jurIds}" />
+										</form:select> 
+										<br/>
+										  <form:select path="orgId" id="orgId" class="form-control">
+										 		 <option value="-1">Select Program Id</option>
+												<form:options items="${orgIds}" />
+										</form:select> 
+										  <spring:bind path="createdBy">
+										 <form:input type="hidden" path="createdBy" value=" ${pageContext.request.userPrincipal.name}"/>
+										</spring:bind>
 										<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 								    </form:form>
 								

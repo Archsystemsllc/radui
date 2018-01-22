@@ -69,7 +69,7 @@
 							<div class="panel panel-primary table-users" style="width: 75%; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1); border: 1px solid #327a81;">
 								<div class="panel-heading" style="background-color: #327a81;">List of Users</div>
 								<div class="panel-body" style="background-color: white;">
-
+<form:form method="GET" modelAttribute="userFilterForm" action="${pageContext.request.contextPath}/admin/userFilter">
 
 									<table
 										style="border-collapse: separate; border-spacing: 2px; valign: middle"
@@ -80,22 +80,26 @@
 
 									<div class="row">
 										<div class="col-sm-3 form-group">
-											<label for="email"> Last Name:</label> <input type="text"
-												class="form-control" />
+											<label for="lastName"> Last Name:</label> 
+											<form:input type="text" path="lastName" class="form-control" />
 										</div>
 										<div class="col-md-3 col-md-offset-1 form-container">
-											<label for="name"> Role:</label> <select path="roleId"
-													class="form-control required" id="roleId" required="true">
-													<option value="" label="--- Select MAC---" />
-													<%-- <options items="${macIdMap}" /> --%>
-												</select>
+											<label for="roleId"> Role:</label> 
+											<form:select path="roleId"
+													class="form-control" id="roleId" required="true">
+													<option value="" label="--- Select Role---" />
+													<form:options items="${roleIds}" />
+												</form:select>
 										</div>
 										<div class="col-md-3 col-md-offset-1 form-container">
-											<label for="organization"> Organization:</label> <select
-													path="organizationId" class="form-control required" id="organizationId"
+											<label for="organizationId"> Organization:</label>
+											
+											 <form:select path="orgId"
+													 class="form-control" id="organizationId"
 													required="true">
-													<option value="" label="--- Select MAC---" />
-												</select>
+													<option value="" label="--- Select Org---" />
+													<form:options items="${orgIds}" />
+												</form:select>
 										</div>
 									</div>
 									<div class="row">
@@ -103,16 +107,26 @@
 											<button class=" btn btn-primary">Submit</button>
 										</div>
 									</div>
+									</form:form>
 								</div>
 							</div>
-							
+							<div align="center">
+							<c:if test="${not empty success}">
+			                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
+			                    </div>
+			                 </c:if>
+			                 </div>
 							<div class="row">
 								<div class="col-md-2">
+								
 								</div>
 								<div class="col-md-8">
 									<table id="usersTable">
 										<thead>
 											<tr>
+											<td>
+													User Id
+												</td>
 												<td>
 													FirstName
 												</td>
@@ -136,6 +150,24 @@
 												</td>
 											</tr>
 										</thead>
+										 <tbody>
+					                        <c:forEach var="user" items="${users}">
+					                            <tr>
+					                          	  
+					                                <td><a class="${linkcolor }">${user.id}</a></td>
+					                                <td><a class="${linkcolor }">${user.firstName}</a></td>
+					                                 <td><a class="${linkcolor }">${user.middleName}</a></td>
+					                                  <td><a class="${linkcolor }">${user.lastName}</a></td>
+					                                <td><a class="${linkcolor }">${user.organizationLookup.organizationName}</a></td>
+					                                 <td><a class="${linkcolor }">${user.role.roleName}</a></td>
+					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
+					                                <td>
+					                                    <span><a class="action-icons c-edit" href="edit-user/${user.id}" title="Edit">Edit</a></span>
+					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+					                                </td>
+					                            </tr>
+					                        </c:forEach>
+					                        </tbody>
 									</table>
 								</div>
 								<div class="col-md-2">
@@ -155,7 +187,38 @@
 	<script>
 	$(document).ready(function() {
 		$("#usersTable").DataTable();
+	
+		$("#usersTable").on('dblclick','tr',function() {
+			//alert("aaaaaa:"+$(this).text())
+	          var id = $(this).find("td:first-child").text();
+	          var updatedBy = "${pageContext.request.userPrincipal.name}";
+	          var st = $(this).find("td:nth-child(7)");
+	          var replaceSt = "Active";
+	          var status = 1;
+	          if(st.text() == 'Active'){
+	        	  status = 0;
+	        	  replaceSt = "Inactive";
+	          }
+	          
+	          var username="qamadmin";
+	          var password="123456";
+	          $(this).toggleClass("select");
+			 $.ajax({
+				url : "${WEB_SERVICE_URL}updateStatus",
+				 headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+			    method: 'POST',
+			    data: { userId : id, status: status, updatedBy: updatedBy },
+			    success: function(result) {
+			      var jsondata = $.parseJSON(result);
+			       st.html(replaceSt);	
+			       st.css("font-weight","bold");
+			    }
+			  });
+
+	        });
 	});
+	
+	
 	</script>
 </head>
 </html>

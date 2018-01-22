@@ -10,7 +10,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - CreateUsers</title>
+<title>QAM - Edit User</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
 	rel="stylesheet" />
 <link rel="shortcut icon"
@@ -57,7 +57,7 @@
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
- <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/createUser" class="form-signin">
+ <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/edit-user" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -66,7 +66,7 @@
 						<div class="content">
 
 							<div class="table-users" style="width: 80%">
-								<div class="header">Create User</div>
+								<div class="header">Edit User</div>
 								<div class="row">
 
 
@@ -83,7 +83,7 @@
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="userName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" readonly="true"></form:input>
 								                <form:errors path="userName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -188,8 +188,13 @@
 											
 												</form:select>
 										</div>
-
-										<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}"/>
+                                    <%-- <form:input type="hidden" path="userName" value="${userName}"/> --%>
+                                    <form:input type="hidden" path="PasswordFromdb" value="${PasswordFromdb}"/>
+                                    
+									<form:input type="hidden" path="id" value="${id}"/>
+									<form:input type="hidden" path="updatedBy" value="${pageContext.request.userPrincipal.name}"/>
+									
+										
 										
 										<div class="col-md-8 col-md-offset-1 form-container">
 											<button class=" btn btn-primary">Submit</button>
