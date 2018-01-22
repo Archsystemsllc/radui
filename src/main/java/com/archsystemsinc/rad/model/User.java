@@ -12,6 +12,7 @@ public class User {
 	private String password;
 	
 	private String passwordConfirm;
+	private String passwordFromdb;
 	
 	public String getPasswordConfirm() {
 		return passwordConfirm;
@@ -194,6 +195,12 @@ public class User {
 		builder.append(orgId);
 		builder.append("]");
 		return builder.toString();
+	}
+	public String getPasswordFromdb() {
+		return passwordFromdb;
+	}
+	public void setPasswordFromdb(String passwordFromdb) {
+		this.passwordFromdb = passwordFromdb;
 	}
 	
 	

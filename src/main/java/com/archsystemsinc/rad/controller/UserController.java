@@ -39,6 +39,7 @@ public class UserController {
 	@Autowired
 	private UserValidator userValidator;
 
+	//TODO:Need to remove this
 	/**
 	 * This method provides the functionalities for listing users.
 	 * 
@@ -80,11 +81,7 @@ public class UserController {
 		Role br = new Role();
 		blank.setRole(br);
 		model.addAttribute("userForm", blank);
-		model.addAttribute("roleIds", HomeController.ROLE_MAP);
-		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
-		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
-		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
-		model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);
+		userDefaults(model);
 		return "createusers";
 	}
 
@@ -106,27 +103,25 @@ public class UserController {
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", userForm);
-			model.addAttribute("roleIds", HomeController.ROLE_MAP);
-			model.addAttribute("macIds", HomeController.MAC_ID_MAP);
-			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
-			model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
-			model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);
+			userDefaults(model);
 			return "createusers";
+		}else{
+			try {
+				userService.save(userForm);
+				redirectAttributes.addFlashAttribute("success",
+						"success.register.user");
+			} catch (Exception e) {
+				log.error("Fialed to save user!", e);
+				redirectAttributes
+						.addFlashAttribute("error", "failed.user.created");
+			}
 		}
-		try {
-			userService.save(userForm);
-			redirectAttributes.addFlashAttribute("success",
-					"success.register.user");
-		} catch (Exception e) {
-			log.error("Fialed to save user!", e);
-			redirectAttributes
-					.addFlashAttribute("error", "failed.user.created");
-		}
+		
 
 		log.debug("<-- createUser");
 		return "redirect:listofusers";
 	}
-	
+
 	@RequestMapping("/admin/listofusers")
 	public String listofusers(Model model) {
 		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
@@ -139,6 +134,7 @@ public class UserController {
 
 	}
 
+	//TODO:Need to remove this
 	/**
 	 * This method provides the functionalities for the User Registration.
 	 * 
@@ -147,7 +143,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/admin/registration", method = RequestMethod.GET)
 	public String registration(Model model) {
-		log.debug("--> registration......" );
+		log.debug("--> registration......");
 		User blank = new User();
 		Role br = new Role();
 		blank.setRole(br);
@@ -161,6 +157,7 @@ public class UserController {
 		return "registration";
 	}
 
+	//TODO:Need to remove this
 	/**
 	 * 
 	 * This method provides the functionalities for the user to re-direct to the
@@ -181,8 +178,7 @@ public class UserController {
 			model.addAttribute("allRoles", userService.findAllRoles());
 			model.addAttribute("macIds", HomeController.MAC_ID_MAP);
 			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
-			model.addAttribute("progIds",
-					HomeController.MAC_JURISDICTION_PROGRAM_MAP);
+			model.addAttribute("progIds", HomeController.MAC_JURISDICTION_PROGRAM_MAP);
 			return "registration";
 		}
 		try {
@@ -213,43 +209,35 @@ public class UserController {
 	public String editUser(@ModelAttribute("userForm") User userForm,
 			BindingResult bindingResult,
 			final RedirectAttributes redirectAttributes, Model model) {
-		// userForm.setPasswordConfirm(userForm.getPassword());
-		Set<Role> roles = Sets.newHashSet();
-		/*
-		 * for(long roleId : userForm.getRolesList()) {
-		 * roles.add(userService.findRoleById(roleId)); } if(!roles.isEmpty()) {
-		 * userForm.setRoles(roles); }
-		 */
-		User user = userService.findByUsername(userForm.getUserName());
-		boolean skipPasswordCheck = user.getPassword().equals(
-				userForm.getPassword());
-		boolean skipDuplicateUserCheck = user.getUserName().equals(
-				userForm.getUserName());
-		userValidator.updateUserDetailsValidation(userForm, bindingResult,
-				skipDuplicateUserCheck, skipPasswordCheck);
+		log.debug("--> editUser:" + userForm);
+		userValidator.updateUserDetailsValidation(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
-			return "useredit";
+			userDefaults(model);
+			return "edituser";
+
 		}
-		if (skipPasswordCheck) {
+		try {
 			userService.update(userForm);
-			redirectAttributes
-					.addFlashAttribute("success", "success.edit.user");
-		} else {
-			try {
-				userService.save(userForm);
-				redirectAttributes.addFlashAttribute("success",
-						"success.register.user");
-			} catch (Exception e) {
-				log.error("Fialed to save user!", e);
-				redirectAttributes.addFlashAttribute("error",
-						"failed.user.created");
-			}
+			redirectAttributes.addFlashAttribute("success", "success.edit.user");
+		} catch (Exception e) {
+			log.error("Error while updating user",e);
+			redirectAttributes.addFlashAttribute("success", "fail.edit.user");
 		}
+		redirectAttributes.addFlashAttribute("success", "success.edit.user");
+		log.debug("<-- editUser");
+		return "redirect:listofusers";
+	}
 
-		// securityService.autologin(userForm.getUsername(),
-		// userForm.getPasswordConfirm());
-
-		return "redirect:../listofusers";
+	/**
+	 * 
+	 * @param model
+	 */
+	private void userDefaults(Model model) {
+		model.addAttribute("roleIds", HomeController.ROLE_MAP);
+		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
+		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
+		model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);
 	}
 
 	/**
@@ -260,15 +248,17 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-
 	@RequestMapping(value = "/admin/edit-user/{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable("id") final Long id,
 			final Model model, User user) {
+		log.debug("--> editUser:"+id);
 		final User userByID = userService.findById(id);
-
+		userByID.setPasswordFromdb(userByID.getPassword());
+		userByID.setPasswordConfirm(userByID.getPassword());
 		model.addAttribute("userForm", userByID);
-		model.addAttribute("allRoles", userService.findAllRoles());
-		return "useredit";
+		userDefaults(model);
+		log.debug("<-- editUser");
+		return "edituser";
 	}
 
 	/**
@@ -291,9 +281,10 @@ public class UserController {
 	 * @return the string to which the page to be redirected.
 	 */
 	@RequestMapping(value = "/admin/delete-user/{id}/{deletedBy}", method = RequestMethod.GET)
-	public String deleteUser(@PathVariable("id") final Long id,@PathVariable("deletedBy") final String deletedBy,
+	public String deleteUser(@PathVariable("id") final Long id,
+			@PathVariable("deletedBy") final String deletedBy,
 			final RedirectAttributes redirectAttributes) {
-		userService.deleteById(id,2,deletedBy);
+		userService.deleteById(id, 2, deletedBy);
 		redirectAttributes.addFlashAttribute("success", "success.delete.user");
 		return "redirect:../../listofusers";
 	}
@@ -313,7 +304,7 @@ public class UserController {
 		log.debug("error::" + error);
 		if (error != null)
 			model.addAttribute("error",
-					"Your username and password is invalid.");
+					"Your username and password is invalid or Account Deactivated/Deleted.");
 
 		return "login";
 	}

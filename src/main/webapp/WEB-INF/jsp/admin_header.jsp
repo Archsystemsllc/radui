@@ -105,8 +105,8 @@
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
-									      <li><a href="createusers">create-users</a></li>
-									      <li><a href="listofusers">list of users</a></li>
+									      <li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
+									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>
 									    </ul>
 									</li>
 								</ul>

@@ -162,7 +162,7 @@
 					                                 <td><a class="${linkcolor }">${user.role.roleName}</a></td>
 					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 					                                <td>
-					                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Edit">Edit</a></span>
+					                                    <span><a class="action-icons c-edit" href="edit-user/${user.id}" title="Edit">Edit</a></span>
 					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
 					                                </td>
 					                            </tr>
@@ -188,7 +188,8 @@
 	$(document).ready(function() {
 		$("#usersTable").DataTable();
 	
-		$("#usersTable").on('click','tr',function() {
+		$("#usersTable").on('dblclick','tr',function() {
+			//alert("aaaaaa:"+$(this).text())
 	          var id = $(this).find("td:first-child").text();
 	          var updatedBy = "${pageContext.request.userPrincipal.name}";
 	          var st = $(this).find("td:nth-child(7)");

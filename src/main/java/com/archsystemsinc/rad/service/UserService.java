@@ -17,7 +17,7 @@ public interface UserService {
 
 	void save(User user) throws Exception;
 	
-	void update(User user);
+	void update(User user) throws Exception;
 
 	User findByUsername(String username);
 	

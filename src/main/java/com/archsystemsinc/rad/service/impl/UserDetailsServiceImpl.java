@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		User user = radServiceApiClient.getUser(username);
 		log.debug("user::" + user);
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-		if (user == null)
+		if (user == null || user.getStatus() != 1)
 			return new org.springframework.security.core.userdetails.User(" ", " ", grantedAuthorities);
 		if(user.getRole() != null) {
 			log.debug("role.getName()::" + user.getRole().getRoleName());

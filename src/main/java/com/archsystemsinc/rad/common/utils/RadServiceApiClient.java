@@ -132,17 +132,19 @@ public class RadServiceApiClient {
 	}
 
 
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
 	public Object saveUser(User user) throws Exception {
-	
 		log.debug("--> saveUser");
 		ResponseEntity<String> response  = null;
 		try {
 			HttpHeaders headers = createServiceHeaders();
-			
 			headers.set("Content-Type", "application/x-www-form-urlencoded");
-			
-
-			RestTemplate restTemplate = new RestTemplate();
+					RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
 			map.add("userName", user.getUserName());
 			map.add("password", user.getPassword());
@@ -159,9 +161,7 @@ public class RadServiceApiClient {
 			map.add("organizationLookup.id", ""+user.getOrganizationLookup().getId());
 			map.add("pccId", ""+user.getPccId());
 			map.add("status", "1");
-			
-
-			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+					HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 			response = restTemplate.exchange( radservicesEndpoint + "createUser", HttpMethod.POST,request , String.class );
 			log.debug("response:"+response);
 		} catch (final HttpClientErrorException httpClientErrorException) {
@@ -179,6 +179,11 @@ public class RadServiceApiClient {
 	}
 
 
+	/**
+	 * 
+	 * @param userFilter
+	 * @return
+	 */
 	public List<User> findUsers(UserFilter userFilter) {
 		log.debug("--> getUser");
 		List<User> users = null;
@@ -200,23 +205,23 @@ public class RadServiceApiClient {
 	}
 
 
+	/**
+	 * 
+	 * @param id
+	 * @param status
+	 * @param deletedBy
+	 */
 	public void deleteById(Long id, int status, String deletedBy) {
 		log.debug("--> deleteById");
 		ResponseEntity<String> response  = null;
 		try {
 			HttpHeaders headers = createServiceHeaders();
-			
 			headers.set("Content-Type", "application/x-www-form-urlencoded");
-			
-
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
 			map.add("userId", ""+id);
 			map.add("status", ""+status);
 			map.add("updatedBy", deletedBy);
-			
-			
-
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 			response = restTemplate.exchange( radservicesEndpoint + "updateStatus", HttpMethod.POST,request , String.class );
 			log.debug("response:"+response);
@@ -231,7 +236,72 @@ public class RadServiceApiClient {
 	        //throw new Exception("Errro while finding user, userName="+id,exception);
 	    }
 		log.debug("<-- deleteById");
-		
+	}
+
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public User getUser(Long id) {
+		log.debug("--> getUser");
+		User user = null;
+		try {
+			HttpHeaders headers = createServiceHeaders();
+			RestTemplate restTemplate = new RestTemplate();
+			
+			ResponseEntity<User> exchange = restTemplate.exchange(radservicesEndpoint + "findUserById/"+id, HttpMethod.GET,
+					new HttpEntity<String>(headers), User.class);
+			user = exchange.getBody();
+			log.debug("user::"+user);
+			
+		}catch(Exception ex) {
+			log.error("Errro while finding user, id="+id,ex);
+		//	throw new Exception("Errro while finding user, userName="+userName,ex);
+		}
+		log.debug("<-- getUser");
+		return user;
+
+	}
+
+
+	public void updateUser(User user) throws Exception {
+		log.debug("--> updateUser");
+		ResponseEntity<String> response  = null;
+		try {
+			HttpHeaders headers = createServiceHeaders();
+			headers.set("Content-Type", "application/x-www-form-urlencoded");
+					RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("id", ""+user.getId());
+			map.add("password", user.getPassword());
+			map.add("firstName", user.getFirstName());
+			map.add("lastName", user.getLastName());
+			map.add("middleName", user.getMiddleName());
+			map.add("emailId", user.getEmailId());
+			log.debug("user.getRole().getId()::"+user.getRole().getId());
+			map.add("role.id", ""+user.getRole().getId());
+			map.add("updatedBy", user.getUpdatedBy());
+			map.add("macId", ""+user.getMacId());
+			map.add("jurId", ""+user.getJurId());
+			map.add("organizationLookup.id", ""+user.getOrganizationLookup().getId());
+			map.add("pccId", ""+user.getPccId());
+			//map.add("status", ""+user.getStatus());
+					HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			response = restTemplate.exchange( radservicesEndpoint + "updateUser", HttpMethod.POST,request , String.class );
+			log.debug("response:"+response);
+		} catch (final HttpClientErrorException httpClientErrorException) {
+			log.error("Errro while saving user, httpClientErrorException="+user,httpClientErrorException);
+	        throw new Exception("Errro while finding user, userName="+user,httpClientErrorException);
+	  } catch (HttpServerErrorException httpServerErrorException) {
+		  log.error("Errro while saving user, httpServerErrorException="+user,httpServerErrorException);
+	        throw new Exception("Errro while finding user, userName="+user,httpServerErrorException);
+	  } catch (Exception exception) {
+		  log.error("Errro while saving user, exception="+user,exception);
+	        throw new Exception("Errro while finding user, userName="+user,exception);
+	    }
+		log.debug("<-- updateUser");
 		
 	}
 }

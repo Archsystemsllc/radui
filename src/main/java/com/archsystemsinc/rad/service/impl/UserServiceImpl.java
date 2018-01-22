@@ -6,7 +6,9 @@ package com.archsystemsinc.rad.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.archsystemsinc.rad.common.utils.RadServiceApiClient;
@@ -20,7 +22,9 @@ import com.archsystemsinc.rad.service.UserService;
  */
 @Service
 public class UserServiceImpl implements UserService {
-
+	private static final Logger log = Logger.getLogger(UserServiceImpl.class);
+	
+	
 	@Autowired
 	private RadServiceApiClient radServiceApiClient;
 	
@@ -31,7 +35,15 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public void update(User user) {
+    public void update(User user) throws Exception {
+		if(user.getPasswordFromdb().equals(user.getPassword())){
+			log.debug("No need encrypt Password!!");
+		}else{
+			BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+			String userPwd = b.encode(user.getPassword());
+			user.setPassword(userPwd);
+		}
+    	radServiceApiClient.updateUser(user);
     }
 
     @Override
@@ -41,7 +53,7 @@ public class UserServiceImpl implements UserService {
     
     @Override
 	public User findById(Long id) {		
-	return null;
+    	return radServiceApiClient.getUser(id);
 	}
     
     @Override

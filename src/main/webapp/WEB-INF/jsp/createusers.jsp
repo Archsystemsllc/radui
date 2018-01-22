@@ -189,7 +189,7 @@
 												</form:select>
 										</div>
 
-										
+										<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}"/>
 										
 										<div class="col-md-8 col-md-offset-1 form-container">
 											<button class=" btn btn-primary">Submit</button>
