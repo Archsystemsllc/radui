@@ -249,7 +249,7 @@ public class UserController {
 		// securityService.autologin(userForm.getUsername(),
 		// userForm.getPasswordConfirm());
 
-		return "redirect:../users";
+		return "redirect:../listofusers";
 	}
 
 	/**
@@ -290,16 +290,12 @@ public class UserController {
 	 * @param redirectAttributes
 	 * @return the string to which the page to be redirected.
 	 */
-	@RequestMapping(value = "/admin/delete-user/{id}", method = RequestMethod.GET)
-	public String deleteUser(@PathVariable("id") final Long id,
+	@RequestMapping(value = "/admin/delete-user/{id}/{deletedBy}", method = RequestMethod.GET)
+	public String deleteUser(@PathVariable("id") final Long id,@PathVariable("deletedBy") final String deletedBy,
 			final RedirectAttributes redirectAttributes) {
-		userService.deleteById(id);
-
+		userService.deleteById(id,2,deletedBy);
 		redirectAttributes.addFlashAttribute("success", "success.delete.user");
-		// securityService.autologin(userForm.getUsername(),
-		// userForm.getPasswordConfirm());
-
-		return "redirect:../users";
+		return "redirect:../../listofusers";
 	}
 
 	/**

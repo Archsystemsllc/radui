@@ -198,4 +198,40 @@ public class RadServiceApiClient {
 		log.debug("<-- getUser");
 		return users;
 	}
+
+
+	public void deleteById(Long id, int status, String deletedBy) {
+		log.debug("--> deleteById");
+		ResponseEntity<String> response  = null;
+		try {
+			HttpHeaders headers = createServiceHeaders();
+			
+			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("userId", ""+id);
+			map.add("status", ""+status);
+			map.add("updatedBy", deletedBy);
+			
+			
+
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			response = restTemplate.exchange( radservicesEndpoint + "updateStatus", HttpMethod.POST,request , String.class );
+			log.debug("response:"+response);
+		} catch (final HttpClientErrorException httpClientErrorException) {
+			log.error("Errro while saving user, httpClientErrorException="+id,httpClientErrorException);
+	        //throw new Exception("Errro while finding user, userName="+id,httpClientErrorException);
+	  } catch (HttpServerErrorException httpServerErrorException) {
+		  log.error("Errro while saving user, httpServerErrorException="+id,httpServerErrorException);
+	        //throw new Exception("Errro while finding user, userName="+id,httpServerErrorException);
+	  } catch (Exception exception) {
+		  log.error("Errro while saving user, exception="+id,exception);
+	        //throw new Exception("Errro while finding user, userName="+id,exception);
+	    }
+		log.debug("<-- deleteById");
+		
+		
+	}
 }

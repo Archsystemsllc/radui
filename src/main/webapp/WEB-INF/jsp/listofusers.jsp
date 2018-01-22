@@ -110,9 +110,15 @@
 									</form:form>
 								</div>
 							</div>
-							
+							<div align="center">
+							<c:if test="${not empty success}">
+			                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
+			                    </div>
+			                 </c:if>
+			                 </div>
 							<div class="row">
 								<div class="col-md-2">
+								
 								</div>
 								<div class="col-md-8">
 									<table id="usersTable">
@@ -156,8 +162,8 @@
 					                                 <td><a class="${linkcolor }">${user.role.roleName}</a></td>
 					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 					                                <td>
-					                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}" title="Edit">Edit</a></span>
-					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+					                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Edit">Edit</a></span>
+					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
 					                                </td>
 					                            </tr>
 					                        </c:forEach>

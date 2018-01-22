@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
 	}
     
     @Override
-	public void deleteById(Long id) {		
-    	//userRepository.delete(id);
+	public void deleteById(Long id, int status, String deletedBy) {		
+    	radServiceApiClient.deleteById(id, status, deletedBy);
 	}
 
 	@Override

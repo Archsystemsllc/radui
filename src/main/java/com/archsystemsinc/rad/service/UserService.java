@@ -25,7 +25,7 @@ public interface UserService {
 	
 	List<User> findAll();
 	
-	void deleteById(final Long id);
+	void deleteById(final Long id, int status, String deletedBy);
 	
 	List<Role> findAllRoles();
 	
