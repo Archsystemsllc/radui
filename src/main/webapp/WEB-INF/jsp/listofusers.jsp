@@ -118,6 +118,9 @@
 									<table id="usersTable">
 										<thead>
 											<tr>
+											<td>
+													User Id
+												</td>
 												<td>
 													FirstName
 												</td>
@@ -144,7 +147,8 @@
 										 <tbody>
 					                        <c:forEach var="user" items="${users}">
 					                            <tr>
-					                               <%--  <td><a class="${linkcolor }">${user.id}</a></td> --%>
+					                          	  
+					                                <td><a class="${linkcolor }">${user.id}</a></td>
 					                                <td><a class="${linkcolor }">${user.firstName}</a></td>
 					                                 <td><a class="${linkcolor }">${user.middleName}</a></td>
 					                                  <td><a class="${linkcolor }">${user.lastName}</a></td>
@@ -177,7 +181,37 @@
 	<script>
 	$(document).ready(function() {
 		$("#usersTable").DataTable();
+	
+		$("#usersTable").on('click','tr',function() {
+	          var id = $(this).find("td:first-child").text();
+	          var updatedBy = "${pageContext.request.userPrincipal.name}";
+	          var st = $(this).find("td:nth-child(7)");
+	          var replaceSt = "Active";
+	          var status = 1;
+	          if(st.text() == 'Active'){
+	        	  status = 0;
+	        	  replaceSt = "Inactive";
+	          }
+	          
+	          var username="qamadmin";
+	          var password="123456";
+	          $(this).toggleClass("select");
+			 $.ajax({
+				url : "${WEB_SERVICE_URL}updateStatus",
+				 headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+			    method: 'POST',
+			    data: { userId : id, status: status, updatedBy: updatedBy },
+			    success: function(result) {
+			      var jsondata = $.parseJSON(result);
+			       st.html(replaceSt);	
+			       st.css("font-weight","bold");
+			    }
+			  });
+
+	        });
 	});
+	
+	
 	</script>
 </head>
 </html>
