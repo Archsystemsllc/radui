@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.model.UserFilter;
 
 /**
  * This is the Service interface for user database table.
@@ -29,4 +30,6 @@ public interface UserService {
 	List<Role> findAllRoles();
 	
 	Role findRoleById(Long id);
+
+	List<User> findUsers(UserFilter userFilter);
 }

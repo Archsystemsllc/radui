@@ -69,7 +69,7 @@
 							<div class="panel panel-primary table-users" style="width: 75%; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1); border: 1px solid #327a81;">
 								<div class="panel-heading" style="background-color: #327a81;">List of Users</div>
 								<div class="panel-body" style="background-color: white;">
-
+<form:form method="GET" modelAttribute="userFilterForm" action="${pageContext.request.contextPath}/admin/userFilter">
 
 									<table
 										style="border-collapse: separate; border-spacing: 2px; valign: middle"
@@ -80,22 +80,26 @@
 
 									<div class="row">
 										<div class="col-sm-3 form-group">
-											<label for="email"> Last Name:</label> <input type="text"
-												class="form-control" />
+											<label for="lastName"> Last Name:</label> 
+											<form:input type="text" path="lastName" class="form-control" />
 										</div>
 										<div class="col-md-3 col-md-offset-1 form-container">
-											<label for="name"> Role:</label> <select path="roleId"
-													class="form-control required" id="roleId" required="true">
-													<option value="" label="--- Select MAC---" />
-													<%-- <options items="${macIdMap}" /> --%>
-												</select>
+											<label for="roleId"> Role:</label> 
+											<form:select path="roleId"
+													class="form-control" id="roleId" required="true">
+													<option value="" label="--- Select Role---" />
+													<form:options items="${roleIds}" />
+												</form:select>
 										</div>
 										<div class="col-md-3 col-md-offset-1 form-container">
-											<label for="organization"> Organization:</label> <select
-													path="organizationId" class="form-control required" id="organizationId"
+											<label for="organizationId"> Organization:</label>
+											
+											 <form:select path="orgId"
+													 class="form-control" id="organizationId"
 													required="true">
-													<option value="" label="--- Select MAC---" />
-												</select>
+													<option value="" label="--- Select Org---" />
+													<form:options items="${orgIds}" />
+												</form:select>
 										</div>
 									</div>
 									<div class="row">
@@ -103,6 +107,7 @@
 											<button class=" btn btn-primary">Submit</button>
 										</div>
 									</div>
+									</form:form>
 								</div>
 							</div>
 							
@@ -136,6 +141,23 @@
 												</td>
 											</tr>
 										</thead>
+										 <tbody>
+					                        <c:forEach var="user" items="${users}">
+					                            <tr>
+					                               <%--  <td><a class="${linkcolor }">${user.id}</a></td> --%>
+					                                <td><a class="${linkcolor }">${user.firstName}</a></td>
+					                                 <td><a class="${linkcolor }">${user.middleName}</a></td>
+					                                  <td><a class="${linkcolor }">${user.lastName}</a></td>
+					                                <td><a class="${linkcolor }">${user.organizationLookup.organizationName}</a></td>
+					                                 <td><a class="${linkcolor }">${user.role.roleName}</a></td>
+					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
+					                                <td>
+					                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}" title="Edit">Edit</a></span>
+					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+					                                </td>
+					                            </tr>
+					                        </c:forEach>
+					                        </tbody>
 									</table>
 								</div>
 								<div class="col-md-2">

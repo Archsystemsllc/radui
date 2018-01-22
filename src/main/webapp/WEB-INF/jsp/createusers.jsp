@@ -57,6 +57,7 @@
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
+ <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/registration" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -77,51 +78,115 @@
 									</table>
 
 									<div class="row">
-										<div class="col-sm-8 col-md-offset-1 form-group">
-											<label for="name"> First Name:</label> <input type="text"
-												class="form-control" />
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="userName"> User Name:</label> 
+											
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="userName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="userName"></form:errors>
+								            </div>
 										</div>
-										<div class="col-sm-8 col-md-offset-1 form-group">
-											<label for="email"> Last Name:</label> <input type="text"
-												class="form-control" />
+										
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="password"> Password:</label>  <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="password" path="password" class="form-control" placeholder=""></form:input>
+								                <form:errors path="password"></form:errors>
+								            </div>
 										</div>
-										<div class="col-md-8 col-md-offset-1 form-container">
-											<label for="name"> Role:</label> <select path="roleId"
+										
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="passwordConfirm"> Confirm your password:</label> 
+											<div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="password" path="passwordConfirm" class="form-control"
+								                            placeholder=""></form:input>
+								                <form:errors path="passwordConfirm"></form:errors>
+								            </div>
+										</div>
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="firstName"> First Name:</label> 
+											<div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="firstName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="firstName"></form:errors>
+								            </div>
+										</div>
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="middleName"> Middle Name:</label> 
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="middleName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="middleName"></form:errors>
+								            </div>
+										</div>
+										
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="lastName"> Last Name:</label> 
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="lastName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="lastName"></form:errors>
+								            </div>
+										</div>
+										
+										<div class="col-sm-6 col-md-offset-1 form-group">
+											<label for="emailId"> Email Id:</label> 
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="emailId" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="emailId"></form:errors>
+								            </div>
+										</div>
+										<div class="col-md-6 col-md-offset-1 form-container">
+											<label for="name"> Role:</label>
+											<form:select path="role.id"
 													class="form-control required" id="roleId" required="true">
-													<option value="" label="--- Select MAC---" />
-													<%-- <options items="${macIdMap}" /> --%>
-												</select>
+													<option value="" label="--- Select Role---" />
+													<form:options items="${roleIds}" />
+												</form:select>
+											 
 										</div>
-										<div class="col-md-8 col-md-offset-1 form-container">
-											<label for="organization"> Organization:</label> <select
-													path="organizationId" class="form-control required" id="organizationId"
-													required="true">
-													<option value="" label="--- Select MAC---" />
-												</select>
+										<div class="col-md-6 col-md-offset-1 form-container">
+											<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
+													class="form-control required" id="organizationLookupId" required="true">
+													<option value="" label="--- Select Role---" />
+													<form:options items="${orgIds}" />
+												</form:select>
 										</div>
-										<div class="col-md-8 col-md-offset-1 form-container">
-										<label for="name"> MAC:</label> <select path="macId"
+										<div class="col-md-6 col-md-offset-1 form-container">
+										<label for="name"> MAC:</label>
+										
+										<form:select path="macId"
 													class="form-control required" id="macId" required="true">
 													<option value="" label="--- Select MAC---" />
-												</select>
+													<form:options items="${macIds}" />
+												</form:select>
 										</div>
-										<div class="col-md-8 col-md-offset-1 form-container">
-																						<label for="email"> Jurisdiction:</label> <select
-													path="jurisId" class="form-control required" id="jurisId"
-													required="true">
-													<option value="" label="--- Select Jurisdiction---" />
-												</select>
+										<div class="col-md-6 col-md-offset-1 form-container">
+													<label for="email"> Jurisdiction:</label>
+													<form:select path="jurId"
+													class="form-control required" id="jurId" required="true">
+													<option value="" label="--- Select Jurisidiction---" />
+													<form:options items="${jurIds}" />
+												</form:select>
 										</div>
-										<div class="col-md-8 col-md-offset-1 form-container" style ="padding-bottom: 40px;">
-										<label for="pccLocation"> PCC Location:</label> <select
-													path="pccLocationId" class="form-control required" id="pccLocationId"
-													required="true">
+										<div class="col-md-6 col-md-offset-1 form-container" style ="padding-bottom: 40px;">
+										<label for="pccLocation"> PCC Location:</label>
+										<form:select path="pccId"
+													class="form-control required" id="pccId" required="true">
 													<option value="" label="--- Select PCC Location---" />
-												</select>
+													<form:options items="${pccIds}" />
+													
+											
+												</form:select>
 										</div>
 
-
-
+										
+										
+										<div class="col-md-8 col-md-offset-1 form-container">
+											<button class=" btn btn-primary">Submit</button>
+										</div>
+									
 										</div>
 									</div>
 								</div>
@@ -130,7 +195,7 @@
 				</td>
 			</tr>
 
-			<%-- 		</form:form> --%>
+					</form:form>
 		</table>
 	</div>
 	<jsp:include page="footer.jsp"></jsp:include>

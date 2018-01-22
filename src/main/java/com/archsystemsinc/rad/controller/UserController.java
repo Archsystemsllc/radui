@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.model.UserFilter;
 import com.archsystemsinc.rad.service.UserService;
 import com.archsystemsinc.rad.ui.validator.UserValidator;
 import com.google.common.collect.Sets;
@@ -46,10 +47,95 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/admin/users", method = RequestMethod.GET)
 	public String listUsers(Model model) {
-		log.debug("--> List Users");
+		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
+		model.addAttribute("userFilterForm", new UserFilter());
+		model.addAttribute("roleIds", HomeController.ROLE_MAP);
+		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 		model.addAttribute("users", userService.findAll());
 		log.debug("<-- List Users");
-		return "users";
+		return "listofusers";
+	}
+
+	@RequestMapping(value = "/admin/userFilter", method = RequestMethod.GET)
+	public String filterUsers(Model model, UserFilter userFilter) {
+		log.debug("--> filterUsers::" + userFilter);
+
+		model.addAttribute("roleIds", HomeController.ROLE_MAP);
+		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
+		if (userFilter != null
+				&& (!"".equals(userFilter.getRoleId().trim()) && !""
+						.equals(userFilter.getOrgId().trim()))) {
+			model.addAttribute("users", userService.findUsers(userFilter));
+		} else {
+			model.addAttribute("users", userService.findAll());
+		}
+		model.addAttribute("userFilterForm", userFilter);
+		log.debug("<-- filterUsers");
+		return "listofusers";
+	}
+
+	@RequestMapping("/admin/createusers")
+	public String createusers(Model model) {
+		User blank = new User();
+		Role br = new Role();
+		blank.setRole(br);
+		model.addAttribute("userForm", blank);
+		model.addAttribute("roleIds", HomeController.ROLE_MAP);
+		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
+		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
+		model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);
+		return "createusers";
+	}
+
+	/**
+	 * 
+	 * This method provides the functionalities for the user to re-direct to the
+	 * welcome page after successful login.
+	 * 
+	 * @param userForm
+	 * @param bindingResult
+	 * @return
+	 */
+	@RequestMapping(value = "/admin/createUser", method = RequestMethod.POST)
+	public String createUser(@ModelAttribute("userForm") User userForm,
+			BindingResult bindingResult,
+			final RedirectAttributes redirectAttributes, Model model) {
+		log.debug("--> createUser:" + userForm);
+		userValidator.validate(userForm, bindingResult);
+		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("roleIds", HomeController.ROLE_MAP);
+			model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
+			model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
+			model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);
+			return "createusers";
+		}
+		try {
+			userService.save(userForm);
+			redirectAttributes.addFlashAttribute("success",
+					"success.register.user");
+		} catch (Exception e) {
+			log.error("Fialed to save user!", e);
+			redirectAttributes
+					.addFlashAttribute("error", "failed.user.created");
+		}
+
+		log.debug("<-- createUser");
+		return "redirect:listofusers";
+	}
+	
+	@RequestMapping("/admin/listofusers")
+	public String listofusers(Model model) {
+		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
+		model.addAttribute("userFilterForm", new UserFilter());
+		model.addAttribute("roleIds", HomeController.ROLE_MAP);
+		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
+		model.addAttribute("users", userService.findAll());
+		log.debug("<-- List Users");
+		return "listofusers";
+
 	}
 
 	/**
@@ -60,7 +146,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "/admin/registration", method = RequestMethod.GET)
 	public String registration(Model model) {
-		log.debug("--> registration......" + HomeController.MAC_ID_MAP);
+		log.debug("--> registration......" );
 		User blank = new User();
 		Role br = new Role();
 		blank.setRole(br);
@@ -68,8 +154,7 @@ public class UserController {
 		model.addAttribute("allRoles", userService.findAllRoles());
 		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
 		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
-		model.addAttribute("progIds",
-				HomeController.MAC_JURISDICTION_PROGRAM_MAP);
+		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 
 		log.debug("<-- registration");
 		return "registration";

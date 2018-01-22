@@ -4,7 +4,6 @@
 
 package com.archsystemsinc.rad.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.archsystemsinc.rad.common.utils.RadServiceApiClient;
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.model.UserFilter;
 import com.archsystemsinc.rad.service.UserService;
 
 /**
@@ -62,5 +62,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Role findRoleById(Long id) {
 		return null;
+	}
+
+	@Override
+	public List<User> findUsers(UserFilter userFilter) {
+		return radServiceApiClient.findUsers(userFilter);
 	}
 }

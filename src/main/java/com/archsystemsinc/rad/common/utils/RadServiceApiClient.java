@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.model.UserFilter;
 
 /**
  * @author 
@@ -155,7 +156,8 @@ public class RadServiceApiClient {
 			map.add("updatedBy", user.getCreatedBy());
 			map.add("macId", ""+user.getMacId());
 			map.add("jurId", ""+user.getJurId());
-			map.add("orgId", ""+user.getOrgId());
+			map.add("organizationLookup.id", ""+user.getOrganizationLookup().getId());
+			map.add("pccId", ""+user.getPccId());
 			map.add("status", "1");
 			
 
@@ -174,5 +176,26 @@ public class RadServiceApiClient {
 	    }
 		log.debug("<-- saveUser");
 		return response;
+	}
+
+
+	public List<User> findUsers(UserFilter userFilter) {
+		log.debug("--> getUser");
+		List<User> users = null;
+		try {
+			HttpHeaders headers = createServiceHeaders();
+			RestTemplate restTemplate = new RestTemplate();
+			
+			ResponseEntity<List> exchange = restTemplate.exchange(radservicesEndpoint + "findUser/"+userFilter.getLastName()+"/"+userFilter.getRoleId()+"/"+userFilter.getOrgId(), HttpMethod.GET,
+					new HttpEntity<String>(headers), List.class);
+			users = exchange.getBody();
+			log.debug("users::"+users);
+			
+		}catch(Exception ex) {
+			log.error("Errro while finding user, userFilter="+userFilter,ex);
+		//	throw new Exception("Errro while finding user, userName="+userName,ex);
+		}
+		log.debug("<-- getUser");
+		return users;
 	}
 }

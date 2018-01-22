@@ -20,6 +20,7 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 	private Role role;
+	private OrganizationLookup organizationLookup;
 	private String createdBy;
 	private String updatedBy;
 	private Date createdDate;
@@ -33,6 +34,8 @@ public class User {
 	private Long macId;
 
 	private Long status;
+	
+	private Long pccId;
 	
 
 	
@@ -136,6 +139,20 @@ public class User {
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
 	}
+	
+	
+	public OrganizationLookup getOrganizationLookup() {
+		return organizationLookup;
+	}
+	public void setOrganizationLookup(OrganizationLookup organizationLookup) {
+		this.organizationLookup = organizationLookup;
+	}
+	public Long getPccId() {
+		return pccId;
+	}
+	public void setPccId(Long pccId) {
+		this.pccId = pccId;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -143,12 +160,12 @@ public class User {
 		builder.append(id);
 		builder.append(", userName=");
 		builder.append(userName);
-		builder.append(", password=");
-		builder.append(password);
 		builder.append(", passwordConfirm=");
 		builder.append(passwordConfirm);
 		builder.append(", role=");
 		builder.append(role);
+		builder.append(", organizationLookup=");
+		builder.append(organizationLookup);
 		builder.append(", createdBy=");
 		builder.append(createdBy);
 		builder.append(", updatedBy=");
@@ -169,6 +186,8 @@ public class User {
 		builder.append(macId);
 		builder.append(", status=");
 		builder.append(status);
+		builder.append(", pccId=");
+		builder.append(pccId);
 		builder.append(", jurId=");
 		builder.append(jurId);
 		builder.append(", orgId=");
@@ -176,5 +195,7 @@ public class User {
 		builder.append("]");
 		return builder.toString();
 	}
+	
+	
 	    
 }
