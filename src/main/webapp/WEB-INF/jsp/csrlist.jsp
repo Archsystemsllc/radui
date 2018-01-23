@@ -66,7 +66,7 @@ $(function() {
 	    }
 	});	
 	
-  $('button[type=submit]').click(function(e) {
+  $('button[id=uploadCsr]').click(function(e) {
     e.preventDefault();
     //Disable submit button
     $(this).prop('disabled',true);
@@ -194,7 +194,7 @@ $(function() {
 	     $.ajax({ 
 	         type: "GET",
 	         dataType: "json",
-	         data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
+	         data: {fromDate: $("#fromDate").val(), toDate: $("#fromDate").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
 	         url : "${WEB_SERVICE_URL}csrList",
 	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	        success: function(data){ 
@@ -208,16 +208,16 @@ $(function() {
 	    });
 	 });
 
-	$('#ajax').click(function(e){ 
+	$('#searchCsr').click(function(e){ 
   		$('#alertMsg').text('');
   		$('#csrMonthLists tbody').empty();
   		
 	  	e.preventDefault();			  	
 	  	 var validateMac = $('select[name=macIdS]').val();
 		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
-	  	var validateFromDate = $('#datepicker1').val();
-		var validateToDate = $('#datepicker2').val();		  
-		alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
+	  	var validateFromDate = $('#fromDate').val();
+		var validateToDate = $('#fromDate').val();		  
+		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
 		  if(validateMac == null && validateJurisdiction == null) {
 			  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
 				return;
@@ -236,33 +236,33 @@ $(function() {
 							} 
 			
 		 
-		 var selectedMac = $('#macIdS option:selected').val();     	
-		 var selectedJurisdiction = $('#jurisdictionS option:selected').text(); 
-	 	alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
+		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
+		 var selectedJurisdiction = JSON.stringify($('select[name=jurisdictionS]').val()); 
+	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
 	 	var username="qamadmin";
 	   	var password="123456";
 	 	$.ajax({ 
            type: "GET",
            dataType: "json",
-           data: {fromDate: $("#datepicker1").val(), toDate: $("#datepicker2").val(), macIdS: validateMac, jurisdictionS: validateJurisdiction},
+           data: {fromDate: $("#fromDate").val(), toDate: $("#fromDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
            url : "${WEB_SERVICE_URL}csrListMonths",
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
           success: function(data){	    
-	            //alert("Inside Success");        	 
-      		var trHTML = '<tbody>';
-           
-  	    	$.each(data, function (i, item) {
-  	        
-      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-      	        $('#alertMsg').text('CSR List Available Months Retrieved');
-  	    	});
-  	    
-  	    trHTML += '</tbody>';
-  	    
-  	    $('#csrMonthLists').append(trHTML);
-  	    $('#csrMonthLists').show();
-  	    
-  	    
+	        var resultCount = data.count;
+	        alert("Result Count:"+resultCount);
+	        if(resultCount==0) {
+	        	$('#alertMsg').text('No Data Found for the Selected Months');
+		    } else {
+		    	var trHTML = '<tbody>';  
+		    	$.each(data, function (i, item) {  	        
+	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
+	      	        $('#alertMsg').text('CSR List Available Months Retrieved');
+	  	    	});
+		    	trHTML += '</tbody>';
+		  	    
+		  	    $('#csrMonthLists').append(trHTML);
+		  	    $('#csrMonthLists').show();
+			 } 
           },
           failure: function () {
               $("#csrMonthLists").append("Error when fetching data please contact administrator");
@@ -281,10 +281,10 @@ $(function() {
     	$('#alertMsg').text('');
     	$("#keepPreviousListButton").hide();
     	$("#dialog-confirm").hide();
-    	$("#macIdK").hide();	
-    	$("#jurisdictionK").hide();	
+    	$("#macIdK_Div").hide();	
+    	$("#jurisdictionK_Div").hide();	
     	
-    	$('#table1 .progressBar_Hideme').hide();   
+    	$('#progressBar_Hideme').hide();   
 
     	CsrListTable = $("#csrLists").DataTable({
     		data:[],
@@ -310,7 +310,7 @@ $(function() {
 
     	$('#csrLists').hide();
     	
-    	$("#datepicker1").datepicker({ 
+    	$("#fromDate").datepicker({ 
             dateFormat: 'mm-yy',
             maxDate: new Date,
             changeMonth: true,
@@ -324,7 +324,7 @@ $(function() {
             }
         });
 
-        $("#datepicker1").focus(function () {
+        $("#fromDate").focus(function () {
             $(".ui-datepicker-calendar").hide();
             $("#ui-datepicker-div").position({
                 my: "center top",
@@ -333,7 +333,7 @@ $(function() {
             });    
         });  
         
-        $("#datepicker2").datepicker({ 
+        $("#toDate").datepicker({ 
             dateFormat: 'mm-yy',
             maxDate: new Date,
             changeMonth: true,
@@ -347,7 +347,7 @@ $(function() {
             }
         });
 
-        $("#datepicker2").focus(function () {
+        $("#toDate").focus(function () {
             $(".ui-datepicker-calendar").hide();
             $("#ui-datepicker-div").position({
                 my: "center top",
@@ -416,16 +416,16 @@ $(function() {
                       "Yes": function() {
                     	$( this ).dialog( "close" );
                         $("#keepPreviousListButton").show();
-                        $("#macIdK").show();	
-                        $("#jurisdictionK").show();	
-                        $('#table1 .progressBar_Hideme').hide();
+                        $("#macIdK_Div").show();	
+                        $("#jurisdictionK_Div").show();	
+                        $('#progressBar_Hideme').hide();
                         $('#table1 .hideme').hide();
                                             
                       },
                       Cancel: function() {                    
                         $("#keepPreviousListButton").hide();
-                        $("#macIdK").hide();
-                        $("#jurisdictionK").hide();	
+                        $("#macIdK_Div").hide();
+                        $("#jurisdictionK_Div").hide();	
                         $('#table1 .hideme').show();
                         $('input[id=keepCurrentListCB]').attr('checked', false);
                         $( this ).dialog( "close" );
@@ -437,8 +437,8 @@ $(function() {
                 
             } else {
                 $("#keepPreviousListButton").hide();
-                $("#macIdK").hide();
-                $("#jurisdictionK").hide();
+                $("#macIdK_Div").hide();
+                $("#jurisdictionK_Div").hide();
                 $('#table1 .hideme').show();
             }
         }); 
@@ -463,142 +463,195 @@ $(function() {
 					<div id="updates" class="boxed">
 
 						<div class="content">
-
-							<div class="table-users" style="width: 80%">
-								<div class="header">CSR Lists</div>							
-      
-
-								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
-									<tr>
-									<td class='progressBar_Hideme' colspan="5">
-										<div class="progress">
+						
+						<div class="table-users" style="width: 80%">
+								<div class="header">CSR List</div>	
+												
+      							 <div class="row " style="margin-top: 10px">
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                   				                   
+				                    <div class="row">
+				                      <div id="alertMsg" style="color: red;font-size: 18px;"  class="col-lg-6 form-group"></div>
+									</div>
+				                     <div class="row" id='progressBar_Hideme'>
+				                     	<div class="progress" >
 										      <div id="progressBar" class="progress-bar progress-bar-success" role="progressbar"
 										        aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
-										    </div>
-									</td>
-									<td>	
-										    <!-- Alert -->
-										    <div id="alertMsg" style="color: red;font-size: 18px;"></div>
-										  </div>
-									</td>
-									</tr>
-									
-									<tr>
-									
-										<td colspan="1" align="left" style="text-align: left"><a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx">Download Sample CSR Template</a></td>
-										
-										<td colspan="1" align="left" style="text-align: left"><form:checkbox
+										</div>
+				                     </div>
+				                 </div>
+				                </div>
+				                
+				             <div class="row " >
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                    
+				                    <div class="row">
+			                              <div class="col-lg-6 form-group">
+			                                <a class="${linkcolor }"
+												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx">Download Sample CSR Template</a>
+			                             </div>
+			                        </div>
+			                      </div>
+			                      </div>
+				             <div class="row " >
+				                <div class="col-lg-8 col-lg-offset-1 form-container">  
+				                <h2>Keep Current List Section</h2> 
+				                    <div class="row">
+				                    	<div class="col-lg-6 form-group">
+			                                <form:checkbox
 												path="keepCurrentListCB" value="keepCurrentListCB" id="keepCurrentListCB"/>
-												<label for="keepCurrentListCB">&nbsp;Keep Current List</label></td>
-										<td colspan="1">
+												<label for="keepCurrentListCB">&nbsp;Keep Current List</label>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="col-lg-8 col-lg-offset-1 form-container">  
+				                    <div class="row">
+			                            <div class="col-lg-6 form-group" id="macIdK_Div">
+			                             <label for="name"> MAC:</label>
+			                                <form:select path="macIdK" id="macIdK" class="form-control required">
+											   <form:option value="" label="---Select MAC---"/>
+											   <form:options items="${macIdMap}" />
+											</form:select> 	
 										
-										<form:select path="macIdK" id="macIdK" class="form-control required">
-										   <form:option value="" label="---Select MAC---"/>
-										   <form:options items="${macIdMap}" />
-										</form:select> 	
-										</td>
-										<td>
-										
-										<form:select path="jurisdictionK"  id="jurisdictionK" class="form-control required" data-val="true">
+			                            </div>
+			                            <div class="col-lg-6 form-group" id="jurisdictionK_Div">
+			                             <label for="name"> Jurisdiction:</label>
+			                               <form:select path="jurisdictionK"  id="jurisdictionK" class="form-control required" data-val="true">
 										   <form:option value="" label="---Select Jurisdiction---"/>								   
-										</form:select></td>
-										<td colspan="1" ><button class="btn btn-primary" id="keepPreviousListButton">Keep List</button></td>
-									
-									</tr>									
-									
-									<tr class='hideme'>
-										<td><label for="file">CSR List Upload: </label></td>
-
-										<td colspan="1" align="right">
+										</form:select>		
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               <button class="btn btn-primary" id="keepPreviousListButton">Keep List</button>	
+			                            </div>
+			                        </div>
+				                </div>
+				            </div>
+				            
+				             <div class="row " >
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                 <h2>Upload CSR Section</h2> 
+				                     <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="file">CSR List Upload: </label>
 										<input type="hidden" id="userId" name="userId" value="1"/>
 										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;">
-										</input></td>
-										<td colspan="1">
-										
-										<form:select path="macIdU" class="form-control" id="macIdU">
+										</input>
+			                            </div>
+			                          </div>
+			                         </div>
+			                          <div class="col-lg-8 col-lg-offset-1 form-container">
+				                     <div class="row">
+			                             <div class="col-lg-6 form-group">
+			                              <label for="name"> MAC:</label>
+			                                <form:select path="macIdU" class="form-control" id="macIdU">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 	
-										</td>
-										<td>
-										
-										<form:select path="jurisdictionU" class="form-control" id="jurisdictionU">
-										   <form:option value="" label="---Select Jurisdiction---"/>
-										   
-										</form:select>
-										</td>
-										<td><button class="btn btn-primary" type="submit" name="uploadButton" id="uploadButton">Upload File</button></td>		
-									</tr>
-									
-									<tr>
-
-										<td><input type="input" path="password"
-												placeholder="From Date" id="datepicker1" ></input></td>
-										<td><input type="input" path="passwordConfirm"
-												placeholder="To Date" id="datepicker2"></input></td>
-										<td>
-										
-										<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple">
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> Jurisdiction:</label>
+			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU">
+										   		<form:option value="" label="---Select Jurisdiction---"/>
+											</form:select>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               	<button class="btn btn-primary" type="submit" name="uploadCsr" id="uploadCsr">Upload File</button>
+			                            </div>
+			                        </div>
+				                </div>
+				            </div>
+				            
+				             <div class="row " >
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                    <h2>Search CSR Section</h2> 
+				                    <!-- <p> Please provide your feedback below: </p> -->
+				                    
+				                     <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> From Date:</label>
+			                            	<form:input class="form-control"  type="text" path="fromDate" placeholder="From Date"/>
+			                            </div>
+			                             <div class="col-lg-6 form-group">
+			                              <label for="name"> To Date:</label>
+			                             	<form:input class="form-control"  type="text" path="toDate" placeholder="To Date"/>
+			                            </div>
+			                            
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> MAC:</label>
+			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:option value="ALL" label="Select ALL" />
 										   <form:options items="${macIdMap}" />
 										</form:select> 	
-										</td>
-										<td>
-										
-										<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple">
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> Jurisdiction:</label>
+			                               	<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple">
 										   <form:option value="" label="---Select Jurisdiction---" />
 										   <form:option value="ALL" label="Select ALL" />
-										   
-										</form:select></td>
-										<td style="padding-top: 10px"><button class="btn btn-primary" id="ajax">Search CSR</button></td>
-									</tr>
-								</table>
-								<br/>
-
-
-								<table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrMonthLists" style="width: 80%">
-									<thead>
-										<tr>
-											<th title="Monthly">Monthly</th>
-											<th title="CSR Name">Action</th>
-
-										</tr>
-									</thead>
-									
-								</table>
-								
-								<br/>
-								
-								<div id="csrlistsdiv" style="width: 100%">
-												
-								<table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrLists" style="width: 90%">
-				                    <thead>
-								        <tr>
-								            <th style="text-align: left">First Name</th>
-								            <th style="text-align: left">Middle Name</th>
-								            <th style="text-align: left">Last Name</th>
-								            <th style="text-align: left">CSR Level</th>
-								            <th style="text-align: left">Location</th>
-								            <th style="text-align: left">Jurisdiction</th>
-								            <th style="text-align: left">Program</th>       
-								            <th style="text-align: left">Status</th>
-								        </tr>
-								    </thead>
-				                    <tbody>  
-				                    </tbody>
-				                </table> 
+										</form:select>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               	<button class="btn btn-primary" id="searchCsr">Search CSR</button>
+			                            </div>
+			                        </div>
 				                </div>
-				                <br/>
-							</div>
+				            </div>
+				            
+				            <div class="row " id="section4Div">
+				                <div class="col-lg-10 col-lg-offset-1 form-container">
+				                    
+				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                   
+			                         <div class="row">
+			                            <div class="col-lg-10 form-group">
+			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrMonthLists" style="width: 80%">
+											<thead>
+												<tr>
+													<th title="Monthly">Monthly</th>
+													<th title="CSR Name">Action</th>
+												</tr>
+											</thead>
+										</table>
+			                            </div>
+			                        </div>
+				                </div>
+				            </div>
+				            <div class="row" id="section5Div">
+				                <div class="col-lg-10 col-lg-offset-1 form-container">
+				                   
+				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                   
+			                         <div class="row" id="csrlistsdiv">
+			                            <div class="col-lg-10 form-group">
+			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrLists" style="width: 90%">
+						                    <thead>
+										        <tr>
+										            <th style="text-align: left">First Name</th>
+										            <th style="text-align: left">Middle Name</th>
+										            <th style="text-align: left">Last Name</th>
+										            <th style="text-align: left">CSR Level</th>
+										            <th style="text-align: left">Location</th>
+										            <th style="text-align: left">Jurisdiction</th>
+										            <th style="text-align: left">Program</th>       
+										            <th style="text-align: left">Status</th>
+										        </tr>
+										    </thead>
+						                    <tbody>  
+						                    </tbody>
+						                </table> 
+			                            </div>		                           
+			                        </div>         
+				                    
+				                </div>
+				            </div>
 						</div>
+					</div>
 					</div>
 				</td>
 			</tr>
 		</form:form>
 	</table>
 	<jsp:include page="footer.jsp"></jsp:include>
-	
 </body>
 </html>

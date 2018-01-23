@@ -3,13 +3,9 @@
  */
 package com.archsystemsinc.rad.controller;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,9 +37,6 @@ public class CommonController {
 		log.debug("<- admin ->");
 		return "admin";
 	}
-	
-	
-	
 	
 	@RequestMapping(value="/admin/jqueryform_validation_example")
 	public String jqueryExample()
