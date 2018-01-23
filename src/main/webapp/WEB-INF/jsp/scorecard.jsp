@@ -85,7 +85,7 @@
     			var dateString= $('#callMonitoringDate_Alt').val();
     			var timeString = $('#callTime_Alt').val();
 
-    			alert("Provided Values"+firstName+lastName+dateString+timeString)
+    			//alert("Provided Values"+firstName+lastName+dateString+timeString)
                 var macRefId = selectedJurisdiction+firstName+lastName+dateString+"_"+timeString;
 
                 $('#macCallReferenceNumber').val(macRefId);         	 

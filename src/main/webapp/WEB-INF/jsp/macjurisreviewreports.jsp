@@ -95,14 +95,12 @@ function goBack() {
 														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreablePass" title="Edit">${row.scorablePass}</a></span>
 													</display:column>
 													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
-													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+													<display:column title="Scoreable Fail Count" sortable="true" style="text-align:center;">
 														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableFail" >${row.scorableFail}</a></span>
 													</display:column>
 													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
-													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
-													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/Non-Scoreable" >${row.scorableFail}</a></span>
+													<display:column title="Non Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/Non-Scoreable" >${row.nonScorableCount}</a></span>
 													</display:column>
 													<display:column property="nonScorablePercent" title="Non Scoreable Percent" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="TestReport.xls" />

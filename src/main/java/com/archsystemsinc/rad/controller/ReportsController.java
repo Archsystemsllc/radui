@@ -74,7 +74,7 @@ public class ReportsController {
 			if(searchString.equalsIgnoreCase("")) {
 				resultsMap.put(scoreCard.getId(), scoreCard);
 			} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
-				if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"));
+				if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"))
 					resultsMap.put(scoreCard.getId(), scoreCard);
 			}else if(searchString.equalsIgnoreCase("ScoreablePass")) {
 				if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) 
@@ -83,7 +83,7 @@ public class ReportsController {
 				if(scoreCard.getCallResult().equalsIgnoreCase("Fail"))
 						 resultsMap.put(scoreCard.getId(), scoreCard);
 			} else if(searchString.equalsIgnoreCase("Non-Scoreable")) {
-				if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable"));
+				if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable"))
 					 resultsMap.put(scoreCard.getId(), scoreCard);
 			}		
 		}

@@ -69,7 +69,7 @@ $(function() {
   $('button[id=uploadCsr]').click(function(e) {
     e.preventDefault();
     //Disable submit button
-    $(this).prop('disabled',true);
+    //$(this).prop('disabled',true);
    
     	var validatedMac = $('#macIdU').val();
 		var validateJurisdiction = $('#jurisdictionU option:selected').val(); 
@@ -127,7 +127,7 @@ $(function() {
     // Called on success of file upload
     ajaxReq.done(function(data) {
       $('#alertMsg').text(data.status);      
-      $('button[type=submit]').prop('disabled',false);
+     
       resetFields();
     });
     
@@ -135,7 +135,7 @@ $(function() {
     ajaxReq.fail(function(jqXHR) {
     	$('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
           		' - '+jqXHR.statusText+')');
-      $('button[type=submit]').prop('disabled',false);
+    	
     });
   });  
 
@@ -186,15 +186,22 @@ $(function() {
 		$('#alertMsg').text('');
 		 var row= $(this).closest('tr');  
 	  	var monthYear=$("td:eq(0)",row).text(); 
-	  	var selectedMac = $('select[name=macIdS]').val();
-		var selectedJurisdiction = $('select[name=jurisdictionS]').val(); 	
+	  	
 		var username="qamadmin";
 		var password="123456";
+
+		var selectedJurisArr = [];
+        $.each($("#jurisdictionS option:selected"), function(){            
+        	selectedJurisArr.push($(this).text());
+        });
+	 
+	 	var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
+		var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
 	  
 	     $.ajax({ 
 	         type: "GET",
 	         dataType: "json",
-	         data: {fromDate: $("#fromDate").val(), toDate: $("#fromDate").val(), macIdS: JSON.stringify(selectedMac), jurisdictionS: JSON.stringify(selectedJurisdiction)},
+	         data: {fromDate: $("#fromDate").val(), toDate: $("#fromDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
 	         url : "${WEB_SERVICE_URL}csrList",
 	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	        success: function(data){ 
@@ -234,11 +241,17 @@ $(function() {
 							  $('#alertMsg').text("Please Select Jurisdiction Id");
 								return;
 							} 
-			
+
+		  var selectedJurisArr = [];
+	        $.each($("#jurisdictionS option:selected"), function(){            
+	        	selectedJurisArr.push($(this).text());
+	        });
 		 
 		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
-		 var selectedJurisdiction = JSON.stringify($('select[name=jurisdictionS]').val()); 
-	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction);
+		 var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
+
+		 
+	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction+':::'+selectedJurisArr+"::::"+JSON.stringify(selectedJurisArr));
 	 	var username="qamadmin";
 	   	var password="123456";
 	 	$.ajax({ 
@@ -248,8 +261,8 @@ $(function() {
            url : "${WEB_SERVICE_URL}csrListMonths",
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
           success: function(data){	    
-	        var resultCount = data.count;
-	        alert("Result Count:"+resultCount);
+	        var resultCount = data.length;
+	       // alert("Result Count:"+resultCount);
 	        if(resultCount==0) {
 	        	$('#alertMsg').text('No Data Found for the Selected Months');
 		    } else {
@@ -369,7 +382,7 @@ $(function() {
                });
         });
 
-        $( "#macIdS" ).change(function () {
+        $("#macIdS").change(function () {
           var selectedMacs = "";
           $( "#macIdS option:selected" ).each(function() {
         	  selectedMacs += $( this ).val() + ",";
@@ -471,7 +484,7 @@ $(function() {
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                   				                   
 				                    <div class="row">
-				                      <div id="alertMsg" style="color: red;font-size: 18px;"  class="col-lg-6 form-group"></div>
+				                      <div id="alertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
 									</div>
 				                     <div class="row" id='progressBar_Hideme'>
 				                     	<div class="progress" >
