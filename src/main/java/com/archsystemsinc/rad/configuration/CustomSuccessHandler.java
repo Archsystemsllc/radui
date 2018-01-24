@@ -26,6 +26,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
  
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     private static final Logger log = Logger.getLogger(CustomSuccessHandler.class);
+    
     @Override
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
@@ -58,6 +59,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
  
         if (isAdmin(roles)) {
             url = "/admin/dashboard";
+            
+            
         } else if (isUser(roles)) {
             /*url = "/reportingHome";*/
         	url = "/user/dashboard";

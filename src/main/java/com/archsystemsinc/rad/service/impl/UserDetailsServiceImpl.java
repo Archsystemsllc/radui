@@ -42,6 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			return new org.springframework.security.core.userdetails.User(" ", " ", grantedAuthorities);
 		if(user.getRole() != null) {
 			log.debug("role.getName()::" + user.getRole().getRoleName());
+			radServiceApiClient.updateUserLastLoginDate(user.getId());
 			grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
 		}
 		log.debug("<-- loadUserByUsername");

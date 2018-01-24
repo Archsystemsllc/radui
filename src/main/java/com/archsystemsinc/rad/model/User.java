@@ -42,8 +42,15 @@ public class User {
 	
 	private Long jurId;
 	private Long orgId;
+	private Date lastLoggedinDate;
 	
 	
+	public Date getLastLoggedinDate() {
+		return lastLoggedinDate;
+	}
+	public void setLastLoggedinDate(Date lastLoggedinDate) {
+		this.lastLoggedinDate = lastLoggedinDate;
+	}
 	public Long getId() {
 		return id;
 	}
