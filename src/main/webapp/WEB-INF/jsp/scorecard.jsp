@@ -261,7 +261,8 @@
 				//$("#callResultDiv").hide();	
 				$("#callFailureReasonDiv").hide();
 				$("#failReasonCommentsDiv").hide();	
-				$('#section7HeaderDiv').hide();		
+				$('#section7HeaderDiv').hide();	
+				$('#section4HeaderDiv').hide()	
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
 								
