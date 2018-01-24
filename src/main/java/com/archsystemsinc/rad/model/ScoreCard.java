@@ -94,10 +94,89 @@ public class ScoreCard  {
 	
 	private String nonScoreableReason;
 	
+	private String accuracyCallFailureReason;
+	
+	private String accuracyCallFailureTime;
+	
+	private String completenessCallFailureReason;
+	
+	private String completenessCallFailureTime;
+	
+	private String privacyCallFailureReason;
+	
+	private String privacyCallFailureTime;
+	
+	private String customerSkillsCallFailureReason;
+	
+	private String customerSkillsCallFailureTime;
+	
 	//Temporary Jursidction Name Variable
-	private String jurisdictionName;
+	private String jurisdictionName;	
 	
-	
+	public String getAccuracyCallFailureReason() {
+		return accuracyCallFailureReason;
+	}
+
+	public void setAccuracyCallFailureReason(String accuracyCallFailureReason) {
+		this.accuracyCallFailureReason = accuracyCallFailureReason;
+	}
+
+	public String getAccuracyCallFailureTime() {
+		return accuracyCallFailureTime;
+	}
+
+	public void setAccuracyCallFailureTime(String accuracyCallFailureTime) {
+		this.accuracyCallFailureTime = accuracyCallFailureTime;
+	}
+
+	public String getCompletenessCallFailureReason() {
+		return completenessCallFailureReason;
+	}
+
+	public void setCompletenessCallFailureReason(String completenessCallFailureReason) {
+		this.completenessCallFailureReason = completenessCallFailureReason;
+	}
+
+	public String getCompletenessCallFailureTime() {
+		return completenessCallFailureTime;
+	}
+
+	public void setCompletenessCallFailureTime(String completenessCallFailureTime) {
+		this.completenessCallFailureTime = completenessCallFailureTime;
+	}
+
+	public String getPrivacyCallFailureReason() {
+		return privacyCallFailureReason;
+	}
+
+	public void setPrivacyCallFailureReason(String privacyCallFailureReason) {
+		this.privacyCallFailureReason = privacyCallFailureReason;
+	}
+
+	public String getPrivacyCallFailureTime() {
+		return privacyCallFailureTime;
+	}
+
+	public void setPrivacyCallFailureTime(String privacyCallFailureTime) {
+		this.privacyCallFailureTime = privacyCallFailureTime;
+	}
+
+	public String getCustomerSkillsCallFailureReason() {
+		return customerSkillsCallFailureReason;
+	}
+
+	public void setCustomerSkillsCallFailureReason(String customerSkillsCallFailureReason) {
+		this.customerSkillsCallFailureReason = customerSkillsCallFailureReason;
+	}
+
+	public String getCustomerSkillsCallFailureTime() {
+		return customerSkillsCallFailureTime;
+	}
+
+	public void setCustomerSkillsCallFailureTime(String customerSkillsCallFailureTime) {
+		this.customerSkillsCallFailureTime = customerSkillsCallFailureTime;
+	}
+
 	public String getNonScoreableReason() {
 		return nonScoreableReason;
 	}

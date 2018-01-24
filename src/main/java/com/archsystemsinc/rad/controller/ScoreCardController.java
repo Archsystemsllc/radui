@@ -2,10 +2,14 @@ package com.archsystemsinc.rad.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -138,6 +142,12 @@ public class ScoreCardController {
 		
 		HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCard.getMacId()+"_"+scoreCard.getJurId());
 		model.addAttribute("programMapEdit", programMap);
+		
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
+		model.addAttribute("subCategorylMapEdit", subCategorylMap);
+		
 		return "scorecard";
 	}
 	
@@ -151,13 +161,17 @@ public class ScoreCardController {
 	    	   
 		scoreCard.setQamFullName(name);
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-		String qamStartdateTime = simpleDateFormat.format(new Date());
+		
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
+        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+        sdfAmerica.setTimeZone(tzInAmerica);
+	     
+		String qamStartdateTime = sdfAmerica.format(new Date());
 		scoreCard.setQamStartdateTime(qamStartdateTime);
 		scoreCard.setCallLanguage("English");
 		model.addAttribute("scorecard", scoreCard);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		return "scorecard";
 	}
 
@@ -172,9 +186,12 @@ public class ScoreCardController {
 		String ROOT_URI = new String(HomeController.REST_SERVICE_URI + "saveOrUpdateScoreCard");
 		
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-		String qamEnddateTime = simpleDateFormat.format(new Date());
+		
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
+        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+        sdfAmerica.setTimeZone(tzInAmerica);
+	     
+		String qamEnddateTime = sdfAmerica.format(new Date());
 		scoreCard.setQamEnddateTime(qamEnddateTime);
 
 		try {

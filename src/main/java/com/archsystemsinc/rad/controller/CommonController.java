@@ -136,5 +136,16 @@ public class CommonController {
 		return locationMap;
 	}
 	
+	@RequestMapping(value = "/admin/selectCallSubcategories", method = RequestMethod.GET)
+	@ResponseBody
+	public HashMap<Integer,String> selectCallSubCategories(@RequestParam("categoryId") final Integer categoryId) {
+		
+		HashMap<Integer,String> subCategorylMap = new HashMap<Integer, String>();	
+		
+		subCategorylMap  = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(categoryId);
+		return subCategorylMap;
+	}
+	
+	
 	
 }

@@ -59,7 +59,7 @@
 					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SCORECARDS_MAP.values()}" 
 							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:95%;" export="true" pagesize="15" sort="list">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference Id" sortable="true" style="text-align:center;"/>
-							<display:column property="qamFullName" title="QAM User ID" sortable="true" style="text-align:center;"/>
+							<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;"/>
 							<display:column property="qamStartdateTime" title="QAM Start Date/Time" sortable="true" style="text-align:center;"/>
 							<display:column property="scorecardType" title="Scorecard Type" sortable="true" style="text-align:center;"/>
 							<display:column property="callResult" title="Status" sortable="true" style="text-align:center;"/>

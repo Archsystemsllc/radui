@@ -57,6 +57,10 @@ public class HomeController {
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_PCC_MAP;
 	
+	public static HashMap<Integer, String> CALL_CATEGORY_MAP = null;
+	
+	public static HashMap<Integer,HashMap<Integer,String>> CALL_CATEGORY_SUB_CATEGORY_MAP = null;
+	
 	
 	 @RequestMapping(value = "/admin/dashboard")
 	 public String showAdminDashboard(Model model, HttpSession session) {
@@ -109,6 +113,10 @@ public class HomeController {
 			HashMap<String,HashMap<Integer,String>> macJurisProgramLocationMap = new HashMap<String,HashMap<Integer,String>>();
 			
 			HashMap<Integer, MacInfo> macObjectMap = new HashMap<Integer, MacInfo>();
+			
+			HashMap<Integer, String> callCategoryMap = null;
+			
+			HashMap<Integer,HashMap<Integer,String>> callCatSubCatMap = null;
 			try {
 				
 				
@@ -200,6 +208,17 @@ public class HomeController {
 				for (MacInfo macInfo: macInfoList) {
 					macObjectMap.put(macInfo.getId().intValue(), macInfo);
 				}
+				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "callCategoryMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				
+				callCategoryMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});
+				
+				webServiceExchange = restTemplate.exchange(REST_SERVICE_URI + "callSubcategoriesMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+				
+				callCatSubCatMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,HashMap<Integer,String>>>(){});
+				
+				CALL_CATEGORY_MAP = callCategoryMap;
+				CALL_CATEGORY_SUB_CATEGORY_MAP = callCatSubCatMap;
 				
 				MAC_OBJECT_MAP = macObjectMap;
 				MAC_JURISDICTION_MAP = mapJurisMap;

@@ -120,7 +120,7 @@ function goBack() {
 							
 							<c:if test="${ScoreableReport == true}">
 								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
+									<div class="header">QAM MAC By Jurisdiction - Scoreable Pass and Fail Report</div>
 					             <div class="row" >
 					                <div class="col-md-14 col-md-offset-1 form-container">
 					                    <h2>Report</h2> 
@@ -133,10 +133,16 @@ function goBack() {
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
-													<display:column property="scorablePass" title="Scoreable Pass" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableOnly" >${row.scorableCount}</a></span>
+													</display:column>
+													<display:column title="Scoreable Pass Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreablePass" title="Edit">${row.scorablePass}</a></span>
+													</display:column>
 													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Fail Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableFail" >${row.scorableFail}</a></span>
+													</display:column>
 													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
 															
 												</display:table>
@@ -152,7 +158,7 @@ function goBack() {
 							
 							<c:if test="${ScoreablePassReport == true}">
 								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
+									<div class="header">QAM MAC By Jurisdiction - Scoreable Pass Report</div>
 					             <div class="row" >
 					                <div class="col-md-14 col-md-offset-1 form-container">
 					                    <h2>Report</h2> 
@@ -165,8 +171,12 @@ function goBack() {
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
-													<display:column property="scorablePass" title="Scoreable Pass" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableOnly" >${row.scorableCount}</a></span>
+													</display:column>
+													<display:column title="Scoreable Pass Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreablePass" title="Edit">${row.scorablePass}</a></span>
+													</display:column>
 													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
 														
 												</display:table>
@@ -182,7 +192,7 @@ function goBack() {
 							
 							<c:if test="${ScoreableFailReport == true}">
 								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
+									<div class="header">QAM MAC By Jurisdiction - Scoreable Fail Report</div>
 					             <div class="row" >
 					                <div class="col-md-14 col-md-offset-1 form-container">
 					                    <h2>Report</h2> 
@@ -195,8 +205,12 @@ function goBack() {
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
-														<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
+													<display:column title="Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableOnly" >${row.scorableCount}</a></span>
+													</display:column>
+														<display:column title="Scoreable Fail Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableFail" >${row.scorableFail}</a></span>
+													</display:column>
 													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
 															
 												</display:table>
@@ -212,7 +226,7 @@ function goBack() {
 							
 							<c:if test="${NonScoreable == true}">
 								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
+									<div class="header">QAM MAC By Jurisdiction - Non-Scoreable Report</div>
 					             <div class="row" >
 					                <div class="col-md-14 col-md-offset-1 form-container">
 					                    <h2>Report</h2> 
@@ -225,7 +239,9 @@ function goBack() {
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column title="Non Scoreable Count" sortable="true" style="text-align:center;">
+														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/Non-Scoreable" >${row.nonScorableCount}</a></span>
+													</display:column>
 													<display:column property="nonScorablePercent" title="Non Scoreable Percent" sortable="true" style="text-align:center;"/>
 														
 												</display:table>
