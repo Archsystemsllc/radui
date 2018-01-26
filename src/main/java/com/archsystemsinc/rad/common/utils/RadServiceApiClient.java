@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,7 +29,9 @@ import com.archsystemsinc.rad.model.UserFilter;
  */
 @Service
 public class RadServiceApiClient {
+
 	private static final Logger log = Logger.getLogger(RadServiceApiClient.class);
+	
 	@Value("${radservices.endpoint}")
 	String radservicesEndpoint;
 	@Value("${radservices.username}")
@@ -266,6 +267,53 @@ public class RadServiceApiClient {
 	}
 
 
+	public void updateUserLastLoginDate(Long id) {
+		log.debug("--> updateUserLastLoginDate");
+		String updateCount = null;
+		try {
+			HttpHeaders headers = createServiceHeaders();
+			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("userId", ""+id);
+			
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			ResponseEntity<String> response = restTemplate.exchange( radservicesEndpoint + "updateUserLastLoginDate", HttpMethod.POST,request , String.class );
+			
+			updateCount = response.getBody();
+			log.debug("updateCount::"+updateCount);
+			
+		}catch(Exception ex) {
+			log.error("Errro while updating user last logged in date, id="+id,ex);
+		}
+		log.debug("<-- updateUserLastLoginDate");
+
+	}
+
+	public void updateStatusForAll() {
+		log.debug("--> updateStatusForAll");
+		String updateCount = null;
+		try {
+			HttpHeaders headers = createServiceHeaders();
+			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("status", "0");
+			map.add("updatedBy", "UserInactiveJob");
+			
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			ResponseEntity<String> response = restTemplate.exchange( radservicesEndpoint + "updateStatusForAll", HttpMethod.POST,request , String.class );
+			
+			updateCount = response.getBody();
+			log.debug("updateCount::"+updateCount);
+			
+		}catch(Exception ex) {
+			log.error("Errro while updating user status",ex);
+		}
+		log.debug("<-- updateStatusForAll");
+
+	}
+	
 	public void updateUser(User user) throws Exception {
 		log.debug("--> updateUser");
 		ResponseEntity<String> response  = null;
