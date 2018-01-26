@@ -48,7 +48,10 @@
 
 		$("#jurisdictionK option:selected").prop("selected", false);	
 		$("#jurisdictionS option:selected").prop("selected", false);
-		$("#jurisdictionU option:selected").prop("selected", false);		
+		$("#jurisdictionU option:selected").prop("selected", false);	
+
+		$('#csrListViewDiv').hide();
+		$('#csrListMonthDiv').hide();	
 	}
 	
 $(function() {
@@ -70,6 +73,8 @@ $(function() {
     e.preventDefault();
     //Disable submit button
     //$(this).prop('disabled',true);
+    $('#csrListViewDiv').hide();
+	$('#csrListMonthDiv').hide();
    
     	var validatedMac = $('#macIdU').val();
 		var validateJurisdiction = $('#jurisdictionU option:selected').val(); 
@@ -88,8 +93,11 @@ $(function() {
 				  $('#alertMsg').text("Please Select Jurisdiction Id");
 					return;
 				} 
-		
+
+	  $('#jurisdictionUText').val($('#jurisdictionU option:selected').text()); 
+	 	
     var form = document.forms[0];
+    
     var formData = new FormData(form);
     
     var username="qamadmin";
@@ -144,6 +152,9 @@ $(function() {
 	  e.preventDefault();
 	  //var result = $("#csrupload").valid();
 	  //alert("result:"+result);
+	  $('#csrListViewDiv').hide();
+	  $('#csrListMonthDiv').hide();
+	  
 	  var selectedMac = $('#macIdK').val();
 	  var validateJurisdiction = $('#jurisdictionK option:selected').val(); 
 	  var selectedJurisdiction = $('#jurisdictionK option:selected').text(); 
@@ -181,13 +192,14 @@ $(function() {
 	 });  
 
   $(document).on('click',".viewLink",function (){    
-		
-		$('#csrLists tbody').empty();
+
+
+	  	$('#csrLists tbody').empty();
 		$('#alertMsg').text('');
 		 var row= $(this).closest('tr');  
 	  	var monthYear=$("td:eq(0)",row).text(); 
-	  	
-		var username="qamadmin";
+
+	  	var username="qamadmin";
 		var password="123456";
 
 		var selectedJurisArr = [];
@@ -201,11 +213,12 @@ $(function() {
 	     $.ajax({ 
 	         type: "GET",
 	         dataType: "json",
-	         data: {fromDate: $("#fromDate").val(), toDate: $("#fromDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
+	         data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
 	         url : "${WEB_SERVICE_URL}csrList",
 	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	        success: function(data){ 
-	            $('#csrLists').show();
+	        	$('#csrListViewDiv').show();
+	            $('#csrLists').show();	            
 	        	CsrListTable.clear().draw();
 	        	CsrListTable.rows.add(data).draw();	
 	        },
@@ -218,7 +231,9 @@ $(function() {
 	$('#searchCsr').click(function(e){ 
   		$('#alertMsg').text('');
   		$('#csrMonthLists tbody').empty();
-  		
+  		$('#csrListViewDiv').hide();
+  	  	$('#csrListMonthDiv').hide();
+  	  	
 	  	e.preventDefault();			  	
 	  	 var validateMac = $('select[name=macIdS]').val();
 		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
@@ -257,7 +272,7 @@ $(function() {
 	 	$.ajax({ 
            type: "GET",
            dataType: "json",
-           data: {fromDate: $("#fromDate").val(), toDate: $("#fromDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
+           data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
            url : "${WEB_SERVICE_URL}csrListMonths",
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
           success: function(data){	    
@@ -266,13 +281,14 @@ $(function() {
 	        if(resultCount==0) {
 	        	$('#alertMsg').text('No Data Found for the Selected Months');
 		    } else {
+		    	 
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
 	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
 	      	        $('#alertMsg').text('CSR List Available Months Retrieved');
 	  	    	});
 		    	trHTML += '</tbody>';
-		  	    
+		    	$('#csrListMonthDiv').show();
 		  	    $('#csrMonthLists').append(trHTML);
 		  	    $('#csrMonthLists').show();
 			 } 
@@ -566,6 +582,7 @@ $(function() {
 			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU">
 										   		<form:option value="" label="---Select Jurisdiction---"/>
 											</form:select>
+											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                               	<button class="btn btn-primary" type="submit" name="uploadCsr" id="uploadCsr">Upload File</button>
@@ -611,7 +628,7 @@ $(function() {
 				                </div>
 				            </div>
 				            
-				            <div class="row " id="section4Div">
+				            <div class="row " id="csrListMonthDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
@@ -630,7 +647,7 @@ $(function() {
 			                        </div>
 				                </div>
 				            </div>
-				            <div class="row" id="section5Div">
+				            <div class="row" id="csrListViewDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   

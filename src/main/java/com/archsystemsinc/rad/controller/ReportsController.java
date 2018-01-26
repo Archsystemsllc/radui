@@ -1,9 +1,13 @@
 package com.archsystemsinc.rad.controller;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,11 +23,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+import com.archsystemsinc.rad.model.CsrLog;
 import com.archsystemsinc.rad.model.MacInfo;
 import com.archsystemsinc.rad.model.QamMacByJurisdictionReviewReport;
+import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ReportsForm;
 import com.archsystemsinc.rad.model.ScoreCard;
-import com.archsystemsinc.rad.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -47,6 +52,27 @@ public class ReportsController {
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		
+		if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+			HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
+			model.addAttribute("programMapEdit", programMap);
+		} else {
+			
+			model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);
+			reportsForm.setJurisdictionName(reportsForm.getJurisId());
+		}
+		
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
+			model.addAttribute("jurisMapEdit", jurisMap);
+		} 
+		
+		if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
+			HashMap<Integer,String> locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
+			model.addAttribute("locationMapEdit", locationMap);
+		} 
+		
+		
 		return "reports";
 	}
 	
@@ -106,8 +132,31 @@ public class ReportsController {
 		String ROOT_URI;
 		
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
+		
+		
 			
 		try {
+			
+			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+			
+			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
+			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
+			
+			if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+				String jurisdictionName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
+				reportsForm.setJurisdictionName(jurisdictionName);
+			} else {
+				reportsForm.setJurisdictionName(reportsForm.getJurisId());
+			}
+			
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+				reportsForm.setMacName(macName);
+			} else {
+				reportsForm.setMacName(reportsForm.getMacId());
+			}
+			
+			
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
 				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getMacJurisReport");
@@ -120,30 +169,63 @@ public class ReportsController {
 				if(reportsForm.getScoreCardType().equalsIgnoreCase("")) {
 					model.addAttribute("AllScoreCardReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records");
+					
 					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
 					model.addAttribute("ScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Both Pass and Fail Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("ScoreablePassReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Pass Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Fail") ) {
 					
 					model.addAttribute("ScoreableFailReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Fail Records)");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Non-Scoreable")) {
 					model.addAttribute("NonScoreable",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
 					model.addAttribute("ScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
 				}
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
+				
+				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getComplianceReport");
+				
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<CsrLog> complianceList = mapper.convertValue(resultsMap.values(), new TypeReference<List<CsrLog>>() { });
+				
+				finalResultsMap = generateComplianceReport(complianceList,session);
+				model.addAttribute("COMPLIANCE_REPORT",finalResultsMap);
+				model.addAttribute("ComplianceReport",true);
+				model.addAttribute("ReportTitle","Compliance Report");
+				
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
+				
+				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getRebuttalReport");
+				
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<Rebuttal> rebuttalList = mapper.convertValue(resultsMap.values(), new TypeReference<List<Rebuttal>>() { });
+				
+				finalResultsMap = generateRebuttalReport(rebuttalList,session);
+				model.addAttribute("REBUTTAL_REPORT",finalResultsMap);
+				model.addAttribute("RebuttalReport",true);
+				model.addAttribute("ReportTitle","Rebuttal Report");
+				
 			}
-			
-			
-			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -231,6 +313,91 @@ public class ReportsController {
 		}
 		
 		session.setAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
+		
+		return finalResultsMap;
+	}
+	
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateComplianceReport(List<CsrLog> csrLogList,HttpSession session) {
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();
+		//HashMap<String,ArrayList<CsrLog>> qamMacByJurisReportSessionObject = new HashMap<String,ArrayList<CsrLog>>();
+		
+		for(CsrLog csrLog: csrLogList) {
+			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(csrLog.getMacId());
+			if(macInfo != null) {
+				String macNameTemp = macInfo.getMacName();
+				String jurisdictionTemp = csrLog.getJurisdiction();
+				
+				Calendar calObject = Calendar.getInstance();
+				calObject.setTime(csrLog.getCreatedDate());
+				Integer year = calObject.get(Calendar.YEAR); 
+				String monthName = calObject.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+				
+				//ArrayList<CsrLog> csrLogListTemp = qamMacByJurisReportSessionObject.get(macNameTemp+"_"+jurisdictionTemp+"_"+year+"_"+month);
+				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macNameTemp+"_"+jurisdictionTemp+"_"+monthName+"_"+year);
+				
+				/*if(csrLogListTemp == null) {
+					csrLogListTemp = new ArrayList<CsrLog>();
+				} 
+				
+				csrLogListTemp.add(csrLog);
+				qamMacByJurisReportSessionObject.put(macNameTemp+"_"+jurisdictionTemp, csrLogListTemp);		*/	
+								
+				if(qamMacByJurisdictionReviewReport == null) {
+					qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+					qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
+					qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+					qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+					qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+					qamMacByJurisdictionReviewReport.setMonthYear(monthName+", "+year);
+					
+				} 
+				
+				
+				
+				if(csrLog.getComplianceStatus() == 1) {
+					qamMacByJurisdictionReviewReport.setComplianceStatus("Compliant");
+				} else {
+					qamMacByJurisdictionReviewReport.setComplianceStatus("Non-Compliant");
+				}
+				
+				finalResultsMap.put(macNameTemp+"_"+jurisdictionTemp+"_"+monthName+"_"+year, qamMacByJurisdictionReviewReport);
+				
+			}
+		}		
+		
+		//session.setAttribute("COMPLIANCE_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
+		
+		return finalResultsMap;
+	}
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateRebuttalReport(List<Rebuttal> rebuttalList,HttpSession session) {
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();
+			
+		for(Rebuttal rebuttal: rebuttalList) {
+			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(rebuttal.getMacId());
+			if(macInfo != null) {
+				String macNameTemp = macInfo.getMacName();
+				String jurisdictionNameTemp = HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId());
+				
+				
+				
+				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macNameTemp+"_"+jurisdictionNameTemp);			
+								
+				if(qamMacByJurisdictionReviewReport == null) {
+					qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+					qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionNameTemp);
+					qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+					qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+					qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+					
+				} 
+				qamMacByJurisdictionReviewReport.setScorableCount(qamMacByJurisdictionReviewReport.getScorableCount()+1);
+				
+				finalResultsMap.put(macNameTemp+"_"+jurisdictionNameTemp, qamMacByJurisdictionReviewReport);
+				
+			}
+		}	
 		
 		return finalResultsMap;
 	}

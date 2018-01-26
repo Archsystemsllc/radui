@@ -65,7 +65,30 @@ public class Rebuttal  {
 	
 	private String macCallReferenceNumber;
 	
+	private Integer macId;
 	
+	private Integer jurisId;
+
+	public Integer getMacId() {
+		return macId;
+	}
+
+
+	public void setMacId(Integer macId) {
+		this.macId = macId;
+	}
+
+
+	public Integer getJurisId() {
+		return jurisId;
+	}
+
+
+	public void setJurisId(Integer jurisId) {
+		this.jurisId = jurisId;
+	}
+
+
 	public Rebuttal() {
 	}	
 

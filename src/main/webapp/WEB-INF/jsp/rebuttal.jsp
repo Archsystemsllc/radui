@@ -73,8 +73,10 @@
               		$("#qamFullName").val(data.csrFullName);
               		$("#callTime").val(data.callTime);
               		$("#callDate").val(data.callMonitoringDate);
-              		$("#callCategory").val(data.callCategoryId);
+              		$("#callCategory").val(data.callCategoryName);
               		$("#macCallReferenceNumber").val(data.macCallReferenceNumber);
+              		$("#macId").val(data.macId);
+              		$("#jurisId").val(data.jurId);
               });
         });
 	});
@@ -96,19 +98,16 @@
 							<div class="table-users" style="width: 80%">
 								<div class="header">Save/Update Rebuttal</div>	
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
-					
-									
 									<tr>
 									<td><span><button class="btn btn-primary" id="create">Save/Update</button></span>
 									<span><button class="btn btn-primary" id="close">Close</button></span></td>
-								
-
 							       </tr>
 							     </table>						
       							 <div class="row " style="margin-top: 10px">
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   
-				                   
+				                   <form:hidden path="macId" />
+								 	<form:hidden path="jurisId" />
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="macReferenceId"> MAC Call Reference Id:</label>
@@ -147,7 +146,7 @@
 			                                <form:input type = "text" class="form-control" id="datePosted" name = "datePosted" path="datePosted" readonly="true"/>
 			                            </div>
 			                         <div class="col-sm-6 form-group">
-			                                <label for="name">Call Failure Reason:</label>
+			                                <label for="name">Call Failure Reasons:</label>
 			                                <form:input type = "text" class="form-control" id="failureReason" name = "failureReason" path="failureReason" readonly="true"/>
 			                                
 			                            </div>

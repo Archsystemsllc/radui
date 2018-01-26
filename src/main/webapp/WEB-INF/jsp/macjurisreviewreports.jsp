@@ -38,9 +38,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
-function goBack() {
-    window.history.back();
-}
+
 
 </script>
 
@@ -57,11 +55,8 @@ function goBack() {
 					
 						
 						<div class="content">
-							<c:if test="${AllScoreCardReport == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
-									
-								 <form:hidden path="macId" />
+						
+						 <form:hidden path="macId" />
 								 <form:hidden path="jurisId" />
 								 <form:hidden path="programId" />
 								 <form:hidden path="loc" />
@@ -70,16 +65,54 @@ function goBack() {
 								 <form:hidden path="mainReportSelect" />
 								 <form:hidden path="scoreCardType" />
 								 <form:hidden path="callResult" />
+								 <form:hidden path="fromDateString" />
+								 <form:hidden path="toDateString" />
+								 
+								 			
+								<div class="table-users" style="width: 80%">
+									<div class="header">Report Results Screen</div>
+									<br/>
+									<div class="col-lg-12 col-lg-offset-1 form-container">
+				                    <%-- <h2>"${reportName}"</h2>  --%>
+				                    <!-- <p> Please provide your feedback below: </p> -->
+				                    
+				                    <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <button class="btn btn-primary" id="create"  type="submit">Back</button>
+				                            </div>
+				                           
+				                        </div>
+				                   
+				                    <div class="row">
+			                            <div class="col-lg-4 form-group">
+			                                <label for="name"> MAC:</label>
+			                                <label for="name"> ${reportsForm.macName}</label>
+			                            </div>
+			                            <div class="col-lg-4 form-group">
+			                                <label for="name"> Jurisdiction:</label>
+			                                <label for="name"> ${reportsForm.jurisdictionName}</label>
+			                            </div>
+			                        </div>
+			                         <div class="row">
+			                            <div class="col-lg-4 form-group">
+			                                <label for="name"> Report From Date:</label>
+			                                 <label for="name"> ${reportsForm.fromDateString}</label>
+			                            </div>
+			                            <div class="col-lg-4 form-group">
+			                                <label for="name"> Report From Date:</label>
+			                                 <label for="name"> ${reportsForm.toDateString}</label>
+			                            </div>
+			                        </div>
+				                    
+				                </div>
+									
+								
 								 	
 					             <div class="row" >
 					                <div class="col-md-14 col-md-offset-1 form-container">
 					                    <h2>${ReportTitle}</h2> 
-					                  	<div class="row">
-				                            <div class="col-sm-12 form-group">
-				                                <button class="btn btn-primary" id="create"  onclick="history.go(-1);">Back</button>
-				                            </div>
-				                           
-				                        </div>
+					                  	
+				                        <c:if test="${AllScoreCardReport == true}">
 				                         <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
@@ -113,18 +146,8 @@ function goBack() {
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
-					                </div>
-					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
-							
-							<c:if test="${ScoreableReport == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction - Scoreable Pass and Fail Report</div>
-					             <div class="row" >
-					                <div class="col-md-14 col-md-offset-1 form-container">
-					                    <h2>Report</h2> 
-					                    <!-- <p> Please provide your feedback below: </p> -->
+				                        </c:if>
+				                        <c:if test="${ScoreableReport == true}">
 				                         <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
@@ -151,19 +174,9 @@ function goBack() {
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
-					                </div>
-					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
-							
-							<c:if test="${ScoreablePassReport == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction - Scoreable Pass Report</div>
-					             <div class="row" >
-					                <div class="col-md-14 col-md-offset-1 form-container">
-					                    <h2>Report</h2> 
-					                    <!-- <p> Please provide your feedback below: </p> -->
-				                         <div class="row">
+				                        </c:if>
+				                        <c:if test="${ScoreablePassReport == true}">
+				                        <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
@@ -185,19 +198,9 @@ function goBack() {
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
-					                </div>
-					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
-							
-							<c:if test="${ScoreableFailReport == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction - Scoreable Fail Report</div>
-					             <div class="row" >
-					                <div class="col-md-14 col-md-offset-1 form-container">
-					                    <h2>Report</h2> 
-					                    <!-- <p> Please provide your feedback below: </p> -->
-				                         <div class="row">
+				                        </c:if>
+				                        <c:if test="${ScoreableFailReport == true}">
+				                        <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
@@ -219,18 +222,8 @@ function goBack() {
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
-					                </div>
-					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
-							
-							<c:if test="${NonScoreable == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction - Non-Scoreable Report</div>
-					             <div class="row" >
-					                <div class="col-md-14 col-md-offset-1 form-container">
-					                    <h2>Report</h2> 
-					                    <!-- <p> Please provide your feedback below: </p> -->
+				                        </c:if>
+				                        <c:if test="${NonScoreable == true}">
 				                         <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
@@ -250,73 +243,49 @@ function goBack() {
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
-					                </div>
-					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
-							
-							<c:if test="${ComplianceReport == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
-					             <div class="row" >
-					                <div class="col-md-14 col-md-offset-1 form-container">
-					                    <h2>Report</h2> 
-					                    <!-- <p> Please provide your feedback below: </p> -->
-				                         <div class="row">
+				                        </c:if>
+				                        <c:if test="${ComplianceReport == true}">
+				                        <div class="row">
 				                            <div class="col-sm-12 form-group">
-				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+				                                <display:table class="display hover stripe cell-border " id="row" name="${COMPLIANCE_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="nonScorableCount" title="Does Not Count" sortable="true" style="text-align:center;"/>
-													<display:column property="nonScorablePercent" title="Does Not Count Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="monthYear" title="Month, Year" sortable="true" style="text-align:center;"/>
+													<display:column property="complianceStatus" title="Compliance Status" sortable="true" style="text-align:center;"/>
 														
 												</display:table>
-												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												<c:if test="${fn:length(COMPLIANCE_REPORT.values()) eq 0}">
 												   <span>No Data Found</span>	
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
-					                </div>
-					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
-							
-							<c:if test="${RebuttalReport == true}">
-								<div class="table-users" style="width: 100%">
-									<div class="header">QAM MAC By Jurisdiction Report</div>
-					             <div class="row" >
-					                <div class="col-md-14 col-md-offset-1 form-container">
-					                    <h2>Report</h2> 
-					                    <!-- <p> Please provide your feedback below: </p> -->
-				                         <div class="row">
+				                        </c:if>
+				                        <c:if test="${RebuttalReport == true}">
+				                        <div class="row">
 				                            <div class="col-sm-12 form-group">
-				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+				                                <display:table class="display hover stripe cell-border " id="row" name="${REBUTTAL_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
-													<display:column property="scorablePass" title="Scoreable Pass" sortable="true" style="text-align:center;"/>
-													<display:column property="scorablePassPercent" title="Scoreable Pass Percent" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableFail" title="Scoreable Fail" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableFailPercent" title="Scoreable Fail Percent" sortable="true" style="text-align:center;"/>
-													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
-													<display:column property="nonScorablePercent" title="Non Scoreable Percent" sortable="true" style="text-align:center;"/>
+													<display:column property="scorableCount" title="Number of Rebuttals" sortable="true" style="text-align:center;"/>
+													
 														
 												</display:table>
-												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												<c:if test="${fn:length(REBUTTAL_REPORT.values()) eq 0}">
 												   <span>No Data Found</span>	
 												</c:if>	
 				                            </div>		                           
 				                        </div>  
+				                        </c:if>
 					                </div>
 					            </div>  <!-- Main Row Div -->
-								</div> 
-							</c:if>
+								</div> 						
+						
 						</div> <!-- Content Div -->
 					</div>
 				</td>

@@ -18,12 +18,18 @@ public class CsrUploadForm {
     private String jurisdictionS;
     private String jurisdictionU;
     
+    private String jurisdictionUText;
+    
     private String fromDate;
-    private String toDate;
+    private String toDate;   
     
     
-    
-    
+	public String getJurisdictionUText() {
+		return jurisdictionUText;
+	}
+	public void setJurisdictionUText(String jurisdictionUText) {
+		this.jurisdictionUText = jurisdictionUText;
+	}
 	public String getFromDate() {
 		return fromDate;
 	}

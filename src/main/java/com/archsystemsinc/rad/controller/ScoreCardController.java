@@ -157,7 +157,8 @@ public class ScoreCardController {
 		
 		ScoreCard scoreCard = new ScoreCard();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    String name = auth.getName(); //get logged in username
+	    String name = auth.getName(); //get logged in username 
+	    
 	    	   
 		scoreCard.setQamFullName(name);
 		String pattern = "MM/dd/yyyy hh:mm:ss a";

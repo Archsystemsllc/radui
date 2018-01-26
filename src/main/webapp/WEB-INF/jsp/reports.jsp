@@ -44,12 +44,14 @@
 		$('#scoreCardTypeDiv').hide();
 		$('#callResultDiv').hide();
 
-    	$('#fromDate').datepicker({
-    		
+    	$('#fromDateString').datepicker({
+    		maxDate: 0,
+    		format: "mm/dd/yyyy"
     	});    
 
-    	$('#toDate').datepicker({
-    		maxDate: 0
+    	$('#toDateString').datepicker({
+    		maxDate: 0,
+    		format: "mm/dd/yyyy"
     	});  	
  	
 	});
@@ -136,7 +138,7 @@
 						<div class="content">
 							
 							<div class="table-users" style="width: 80%">
-								<div class="header">Search Report</div>	
+								<div class="header">Search Report Screen</div>	
 								<br/>
 								
 				             <div class="row " >
@@ -187,11 +189,11 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> From Date:</label>
 			                             
-										<form:input type = "text" class="form-control" id="fromDate" name = "fromDate" path="fromDate" />
+										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" />
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> To Date:</label>
-			                                <form:input type = "text" class="form-control" id="toDate" name = "toDate" path="toDate"/>
+			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"/>
 			                            </div>
 			                        </div>
 			                        

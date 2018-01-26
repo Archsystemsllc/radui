@@ -367,20 +367,6 @@
         		$("#callResult").val("N/A");
            } 
         }
-
-	function convertTo24Hour(time) {
-	    var hours = parseInt(time.substr(0, 2));
-	    if(time.indexOf('am') != -1 && hours == 12) {
-	        time = time.replace('12', '0');
-	    }
-	    if(time.indexOf('pm')  != -1 && hours < 12) {
-	        time = time.replace(hours, (hours + 12));
-	    }
-	    time = time.replace(/:/,'');
-	    return time.replace(/(AM|PM)/, '');
-	}
-
-		
 	});
 </script>
 

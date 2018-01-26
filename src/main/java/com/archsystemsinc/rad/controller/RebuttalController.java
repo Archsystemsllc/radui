@@ -120,6 +120,7 @@ public class RebuttalController {
 			for(ScoreCard scoreCard: failedScorecardList) {
 				resultsMap.put(scoreCard.getId(), scoreCard);
 				failedMacRefList.put(scoreCard.getId(), scoreCard.getMacCallReferenceNumber());
+				
 			}
 		} catch (JsonParseException e) {
 			// TODO Auto-generated catch block
@@ -143,6 +144,10 @@ public class RebuttalController {
 		
 		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("MAC_REF_FAILED_MAP");
 		ScoreCard scoreCard = resultsMap.get(scoreCardId);
+		
+		String callCategoryName = HomeController.CALL_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
+		
+		scoreCard.setCallCategoryName(callCategoryName);
 		
 		return scoreCard;
 	}

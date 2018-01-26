@@ -113,6 +113,18 @@ public class ScoreCard  {
 	//Temporary Jursidction Name Variable
 	private String jurisdictionName;	
 	
+	private String callCategoryName;
+	
+	
+	
+	public String getCallCategoryName() {
+		return callCategoryName;
+	}
+
+	public void setCallCategoryName(String callCategoryName) {
+		this.callCategoryName = callCategoryName;
+	}
+
 	public String getAccuracyCallFailureReason() {
 		return accuracyCallFailureReason;
 	}

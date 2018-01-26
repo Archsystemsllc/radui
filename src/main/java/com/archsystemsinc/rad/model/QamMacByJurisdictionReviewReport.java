@@ -34,6 +34,27 @@ public class QamMacByJurisdictionReviewReport {
     
     private String qamEndDate;   
     
+    private String complianceStatus;
+    
+    private String monthYear;
+    
+        
+
+	public String getMonthYear() {
+		return monthYear;
+	}
+
+	public void setMonthYear(String monthYear) {
+		this.monthYear = monthYear;
+	}
+
+	public String getComplianceStatus() {
+		return complianceStatus;
+	}
+
+	public void setComplianceStatus(String complianceStatus) {
+		this.complianceStatus = complianceStatus;
+	}
 
 	public String getQamStartDate() {
 		return qamStartDate;

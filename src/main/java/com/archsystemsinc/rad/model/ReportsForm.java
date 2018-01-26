@@ -30,7 +30,45 @@ public class ReportsForm {
     
     private String callResult;
     
+    private String macName;
     
+    private String jurisdictionName;
+    
+    private String fromDateString;
+    
+    private String toDateString;
+
+	public String getFromDateString() {
+		return fromDateString;
+	}
+
+	public void setFromDateString(String fromDateString) {
+		this.fromDateString = fromDateString;
+	}
+
+	public String getToDateString() {
+		return toDateString;
+	}
+
+	public void setToDateString(String toDateString) {
+		this.toDateString = toDateString;
+	}
+
+	public String getMacName() {
+		return macName;
+	}
+
+	public void setMacName(String macName) {
+		this.macName = macName;
+	}
+
+	public String getJurisdictionName() {
+		return jurisdictionName;
+	}
+
+	public void setJurisdictionName(String jurisdictionName) {
+		this.jurisdictionName = jurisdictionName;
+	}
 
 	public String getCallResult() {
 		return callResult;
