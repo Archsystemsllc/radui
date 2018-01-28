@@ -56,8 +56,8 @@
 								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr><td colspan="3"  >
 					<div class="form_grid_12">
-					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SCORECARDS_MAP.values()}" 
-							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:95%;" export="true" pagesize="15" sort="list">
+					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()}" 
+							keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:95%;" export="true" pagesize="15" sort="list" requestURI="${pageContext.request.contextPath}/admin/scorecardlist">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference Id" sortable="true" style="text-align:center;"/>
 							<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;"/>
 							<display:column property="qamStartdateTime" title="QAM Start Date/Time" sortable="true" style="text-align:center;"/>
@@ -74,7 +74,7 @@
 							<display:setProperty name="export.pdf" value="true" />
 						
 						</display:table>
-						<c:if test="${fn:length(sessionScope.SCORECARDS_MAP.values()) eq 0}">
+						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()) eq 0}">
 						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>	
 						</c:if>	
 						</div>

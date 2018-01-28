@@ -124,7 +124,7 @@ public class ScoreCardController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		request.getSession().setAttribute("SCORECARDS_MAP", resultsMap);
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
 		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		
 		return "scorecardlist";
@@ -132,7 +132,7 @@ public class ScoreCardController {
 	
 	@RequestMapping(value = "/admin/edit-scorecard/{id}", method = RequestMethod.GET)
 	public String editScoreCardGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session) {
-		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SCORECARDS_MAP");
+		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
 		ScoreCard scoreCard = resultsMap.get(id);
 		model.addAttribute("scorecard", scoreCard);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);

@@ -113,7 +113,7 @@ public class ReportsController {
 					 resultsMap.put(scoreCard.getId(), scoreCard);
 			}		
 		}
-		session.setAttribute("SCORECARDS_MAP", resultsMap);
+		session.setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
 		model.addAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		
 		return "scorecardlist";

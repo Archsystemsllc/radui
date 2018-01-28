@@ -654,7 +654,7 @@ $(document).on('click',".viewLink",function (){
 								<br/>
 								
 								<div id="csrlistsdiv">
-								<%-- <display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SCORECARDS_MAP.values()}" 
+								<%-- <display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()}" 
 									requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 									<display:column property="firstName" title="First Name" sortable="true" style="text-align:center;"/>
 									<display:column property="middleName" title="Middle Name" sortable="true" style="text-align:center;"/>
@@ -666,7 +666,7 @@ $(document).on('click',".viewLink",function (){
 									<display:column property="status" title="Status" sortable="true" style="text-align:center;"/>
 							
 								</display:table>
-						<c:if test="${fn:length(sessionScope.SCORECARDS_MAP.values()) eq 0}">
+						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()) eq 0}">
 						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-scorecard" title="Create">Create</a></span>	
 						</c:if>	 --%>
 				

@@ -53,19 +53,22 @@
 								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr><td colspan="3" width="95%" >
 					<div class="form_grid_12">
-					<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.REBUTTAL_MAP.values()}" 
-							requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+					<display:table class="display hover stripe cell-border " id="rebuttalRow" name="${sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()}" 
+							  style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" requestURI="${pageContext.request.contextPath}/admin/rebuttallist">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference Number" sortable="true" style="text-align:center;"/>
-							<display:column property="qamFullName" title="QAM Full Name" sortable="true" style="text-align:center;"/>
-							<display:column property="callDate" title="Call Date" sortable="true" style="text-align:center;"/>
-							<display:column property="callTime" title="Call Time" sortable="true" style="text-align:center;"/>
+							<display:column property="qamFullName" title="QAM Name/ID" sortable="true" style="text-align:center;"/>
+							<display:column property="macPCCNameTempValue" title="PCC/Location" sortable="true" style="text-align:center;"/>
+							<display:column property="datePosted" title="Date Posted" sortable="true" style="text-align:center;"/>
+							<display:column property="callDate" title="Reporting Month" sortable="true" style="text-align:center;"/>
+							<display:column property="rebuttalStatus" title="Status" sortable="true" style="text-align:center;"/>
+							<display:column property="rebuttalResult" title="Result" sortable="true" style="text-align:center;"/>
 							
 							<<display:column title="Actions" style="text-align:center;">
-								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-rebuttal/${row.id}" title="Edit">Edit</a></span>
+								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-rebuttal/${rebuttalRow.id}" title="Edit">Edit</a></span>
 								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>								
 							</display:column>
 						</display:table>
-						<c:if test="${fn:length(sessionScope.REBUTTAL_MAP.values()) eq 0}">
+						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()) eq 0}">
 						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>	
 						</c:if>	
 						</div>

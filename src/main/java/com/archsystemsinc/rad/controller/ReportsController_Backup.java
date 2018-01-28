@@ -94,7 +94,7 @@ public class ReportsController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		request.getSession().setAttribute("SCORECARDS_MAP", resultsMap);
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
 		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		
 		return "scorecardlist";

@@ -1,6 +1,7 @@
 package com.archsystemsinc.rad.model;
 
 import java.util.Date;
+import java.util.HashMap;
 
 
 public class ScoreCard  {
@@ -110,13 +111,22 @@ public class ScoreCard  {
 	
 	private String customerSkillsCallFailureTime;
 	
-	//Temporary Jursidction Name Variable
+	//Temporary Variables
 	private String jurisdictionName;	
 	
 	private String callCategoryName;
 	
+	private HashMap<Integer,String> pccLocationMap;
 	
-	
+
+	public HashMap<Integer, String> getPccLocationMap() {
+		return pccLocationMap;
+	}
+
+	public void setPccLocationMap(HashMap<Integer, String> pccLocationMap) {
+		this.pccLocationMap = pccLocationMap;
+	}
+
 	public String getCallCategoryName() {
 		return callCategoryName;
 	}

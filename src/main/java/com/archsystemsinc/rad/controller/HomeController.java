@@ -53,7 +53,7 @@ public class HomeController {
 	public static HashMap<Integer,HashMap<Integer,String>> MAC_JURISDICTION_MAP;
 	public static HashMap<Integer,HashMap<Integer,String>> ORGANIZATION_MAP;
 	public static HashMap<Integer,HashMap<Integer,String>> ROLE_MAP;
-	public static HashMap<Integer,HashMap<Integer,String>> PCC_LOC_MAP;
+	public static HashMap<Integer,String> PCC_LOC_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_PCC_MAP;
 	

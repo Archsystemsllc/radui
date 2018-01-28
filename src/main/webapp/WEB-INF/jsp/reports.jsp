@@ -189,11 +189,11 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> From Date:</label>
 			                             
-										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" />
+										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" required="true"/>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> To Date:</label>
-			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"/>
+			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"  required="true"/>
 			                            </div>
 			                        </div>
 			                        
@@ -230,7 +230,7 @@
 			                          <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="create" type="submit">Generate Repot</button></span>
-									<span><button class="btn btn-primary" id="reset">Reset</button></span></td>
+									<span><button class="btn btn-primary" id="reset" type="button">Reset</button></span></td>
 							       </tr>
 							</table>
 				                    

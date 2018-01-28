@@ -47,8 +47,6 @@ public class Rebuttal  {
 	
 	private int userId;	
 	
-	private String macPCCName;
-	
 	private String csrFullName;
 	
 	private String failureReason;
@@ -68,6 +66,142 @@ public class Rebuttal  {
 	private Integer macId;
 	
 	private Integer jurisId;
+	
+	private Integer programId;
+	
+	private String rebuttalStatus;
+	
+	private String rebuttalResult;
+	
+	private String accuracyCallFailureReason;	
+	
+	private String completenessCallFailureReason;	
+	
+	private String privacyCallFailureReason;
+	
+	private String customerSkillsCallFailureReason;
+	
+	private Integer pccLocationId;
+	
+	//Temporaray Variables
+	
+	private String descriptionCommentsAppend;
+	
+	private String rebuttalCompleteFlag;
+	
+	private String macPCCNameTempValue;
+	
+
+	public String getMacPCCNameTempValue() {
+		return macPCCNameTempValue;
+	}
+
+
+	public void setMacPCCNameTempValue(String macPCCNameTempValue) {
+		this.macPCCNameTempValue = macPCCNameTempValue;
+	}
+
+
+	public String getRebuttalResult() {
+		return rebuttalResult;
+	}
+
+
+	public void setRebuttalResult(String rebuttalResult) {
+		this.rebuttalResult = rebuttalResult;
+	}
+	
+	
+
+
+	public Integer getPccLocationId() {
+		return pccLocationId;
+	}
+
+
+	public void setPccLocationId(Integer pccLocationId) {
+		this.pccLocationId = pccLocationId;
+	}
+
+
+	public String getRebuttalCompleteFlag() {
+		return rebuttalCompleteFlag;
+	}
+
+
+	public void setRebuttalCompleteFlag(String rebuttalCompleteFlag) {
+		this.rebuttalCompleteFlag = rebuttalCompleteFlag;
+	}
+
+
+	public String getDescriptionCommentsAppend() {
+		return descriptionCommentsAppend;
+	}
+
+
+	public void setDescriptionCommentsAppend(String descriptionCommentsAppend) {
+		this.descriptionCommentsAppend = descriptionCommentsAppend;
+	}
+
+	public String getAccuracyCallFailureReason() {
+		return accuracyCallFailureReason;
+	}
+
+
+	public void setAccuracyCallFailureReason(String accuracyCallFailureReason) {
+		this.accuracyCallFailureReason = accuracyCallFailureReason;
+	}
+
+
+	public String getCompletenessCallFailureReason() {
+		return completenessCallFailureReason;
+	}
+
+
+	public void setCompletenessCallFailureReason(String completenessCallFailureReason) {
+		this.completenessCallFailureReason = completenessCallFailureReason;
+	}
+
+
+	public String getPrivacyCallFailureReason() {
+		return privacyCallFailureReason;
+	}
+
+
+	public void setPrivacyCallFailureReason(String privacyCallFailureReason) {
+		this.privacyCallFailureReason = privacyCallFailureReason;
+	}
+
+
+	public String getCustomerSkillsCallFailureReason() {
+		return customerSkillsCallFailureReason;
+	}
+
+
+	public void setCustomerSkillsCallFailureReason(String customerSkillsCallFailureReason) {
+		this.customerSkillsCallFailureReason = customerSkillsCallFailureReason;
+	}
+
+
+	public Integer getProgramId() {
+		return programId;
+	}
+
+
+	public void setProgramId(Integer programId) {
+		this.programId = programId;
+	}
+
+
+	public String getRebuttalStatus() {
+		return rebuttalStatus;
+	}
+
+
+	public void setRebuttalStatus(String rebuttalStatus) {
+		this.rebuttalStatus = rebuttalStatus;
+	}
+
 
 	public Integer getMacId() {
 		return macId;
@@ -93,9 +227,7 @@ public class Rebuttal  {
 	}	
 
 
-	public String getMacPCCName() {
-		return macPCCName;
-	}
+	
 
 	public String getMacCallReferenceNumber() {
 		return macCallReferenceNumber;
@@ -105,15 +237,6 @@ public class Rebuttal  {
 	public void setMacCallReferenceNumber(String macCallReferenceNumber) {
 		this.macCallReferenceNumber = macCallReferenceNumber;
 	}
-
-
-	public void setMacPCCName(String macPCCName) {
-		this.macPCCName = macPCCName;
-	}
-
-
-
-
 
 
 	public String getCallCategory() {

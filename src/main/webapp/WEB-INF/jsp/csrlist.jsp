@@ -35,24 +35,24 @@
 
 <script type="text/javascript">
 
-	function resetFields() {
-		//alert("Inside ResetFields");
-	    $('#csrMonthLists').hide();
-	    CsrListTable.clear().draw();
-		$('#csrLists').hide();
-		$('input[type=file]').val('');
-		
-		$('#macIdU').prop('selectedIndex',0);
-		$('#macIdS').prop('selectedIndex',0);
-		$('#macIdK').prop('selectedIndex',0);
+function resetFields() {
+	//alert("Inside ResetFields");
+    $('#csrMonthLists').hide();
+    CsrListTable.clear().draw();
+	$('#csrLists').hide();
+	$('input[type=file]').val('');
+	
+	$('#macIdU').prop('selectedIndex',0);
+	$('#macIdS').prop('selectedIndex',0);
+	$('#macIdK').prop('selectedIndex',0);
 
-		$("#jurisdictionK option:selected").prop("selected", false);	
-		$("#jurisdictionS option:selected").prop("selected", false);
-		$("#jurisdictionU option:selected").prop("selected", false);	
+	$("#jurisdictionK option:selected").prop("selected", false);	
+	$("#jurisdictionS option:selected").prop("selected", false);
+	$("#jurisdictionU option:selected").prop("selected", false);	
 
-		$('#csrListViewDiv').hide();
-		$('#csrListMonthDiv').hide();	
-	}
+	$('#csrListViewDiv').hide();
+	$('#csrListMonthDiv').hide();	
+}
 	
 $(function() {
 
