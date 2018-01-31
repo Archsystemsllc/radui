@@ -46,30 +46,40 @@
 						<div class="content">
 
 							<div class="table-users" style="width: 80%">
-								<div class="header">Rebuttal List</div>							
+								<div class="header">Rebuttal Report List</div>	
+								<div class="row"  style="margin-top: 10px">
+								<div class="col-lg-12 col-lg-offset-1 form-container">
+									<span><a href="${pageContext.request.contextPath}/admin/getMacJurisReportFromSession"><button class="btn btn-primary" id="back" type="button" >Back</button></a></span>
+										
+									</div>
+								</div>						
       
                                  <form action="scorecardsave" method="post" enctype="multipart/form-data">
                                  <!--  Section 1 -->
 								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr><td colspan="3" width="95%" >
 					<div class="form_grid_12">
-					<display:table class="display hover stripe cell-border " id="rebuttalRow" name="${sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()}" 
-							  style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" requestURI="${pageContext.request.contextPath}/admin/rebuttallist">
+					<display:table class="display hover stripe cell-border " id="rebuttalRow" name="${sessionScope.SESSION_SCOPE_REBUTTALS_REPORT_MAP.values()}" 
+							  style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" requestURI="#">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;"/>
-							<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;"/>
-							<display:column property="macPCCNameTempValue" title="PCC/Location" sortable="true" style="text-align:center;"/>
+							
 							<display:column property="datePosted" title="Date Posted" sortable="true" style="text-align:center;"/>
-							<display:column property="callDate" title="Reporting Month" sortable="true" style="text-align:center;"/>
+							<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;"/>
 							<display:column property="rebuttalStatus" title="Status" sortable="true" style="text-align:center;"/>
 							<display:column property="rebuttalResult" title="Result" sortable="true" style="text-align:center;"/>
 							
+							
 							<<display:column title="Actions" style="text-align:center;">
-								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-rebuttal/${rebuttalRow.id}" title="Edit">Edit</a></span>
-								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>								
+								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/view-rebuttal/${rebuttalRow.id}" title="View">View</a></span>
+															
 							</display:column>
+							<display:setProperty name="export.excel.filename" value="Rebuttal.xls" />
+									<display:setProperty name="export.pdf.filename" value="Rebuttal.pdf" />
+									<display:setProperty name="export.csv.filename" value="Rebuttal.csv" />
+									<display:setProperty name="export.pdf" value="true" />
 						</display:table>
-						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()) eq 0}">
-						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>	
+						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_REBUTTALS_REPORT_MAP.values()) eq 0}">
+						   No Data Found
 						</c:if>	
 						</div>
 						</td>

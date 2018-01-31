@@ -184,10 +184,14 @@ public class RebuttalController {
 		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
         TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
         sdfAmerica.setTimeZone(tzInAmerica);
-	     
-		String datePosted = sdfAmerica.format(new Date());
-		
-		rebuttal.setDatePosted(datePosted);
+        String currentDateString = sdfAmerica.format(new Date());
+        if(rebuttal.getId()==0) {
+    		rebuttal.setDatePosted(currentDateString);
+    		rebuttal.setCreatedDate(currentDateString);
+        } else {
+        	rebuttal.setUpdatedDate(currentDateString);
+        }
+        
 		if(rebuttal.getRebuttalCompleteFlag()==null) {
 			rebuttal.setRebuttalStatus("Pending");
 		} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("Yes")) {
@@ -198,7 +202,7 @@ public class RebuttalController {
 			rebuttal.setRebuttalResult("Pending");
 		} 
 		
-		rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"<br/>"+rebuttal.getDescriptionCommentsAppend());
+		rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"\n"+rebuttal.getDescriptionCommentsAppend());
 
 		try {
 			ResponseEntity<Rebuttal> response = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
@@ -234,5 +238,27 @@ public class RebuttalController {
 		
 		model.addAttribute("programMapEdit", pccLocationMap);
 		return "rebuttal";
+	}	
+	
+	@RequestMapping(value = "/admin/view-rebuttal/{id}", method = RequestMethod.GET)
+	public String viewRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
+		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTALS_REPORT_MAP");
+		Rebuttal rebuttal = resultsMap.get(id);
+		
+		if(rebuttal.getRebuttalStatus() == null) {
+			rebuttal.setRebuttalCompleteFlag("");
+		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Completed")) {
+			rebuttal.setRebuttalCompleteFlag("Yes");			
+		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Pending")) {
+			rebuttal.setRebuttalCompleteFlag("No");
+		} 
+		model.addAttribute("rebuttal", rebuttal);
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		HashMap<Integer,String> pccLocationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(rebuttal.getMacId()+"_"+rebuttal.getJurisId()+"_"+rebuttal.getProgramId());
+		
+		
+		
+		model.addAttribute("programMapEdit", pccLocationMap);
+		return "rebuttalview";
 	}	
 }

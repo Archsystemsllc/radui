@@ -205,7 +205,7 @@
                });
         });
 
-		 $('#close').click(function(e) {	
+		 $('#close1,#close2').click(function(e) {	
 			 e.preventDefault();		
 	          $("#dialog-confirm" ).dialog({
 	              resizable: false,
@@ -392,7 +392,7 @@
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="create"  type="submit">Save/Update</button></span>
-									<span><button class="btn btn-primary" id="close" type="button">Close</button></span></td>
+									<span><button class="btn btn-primary" id="close1" type="button">Close</button></span></td>
 							       </tr>
 							     </table>						
       							 <div class="row " style="margin-top: 10px">
@@ -736,7 +736,7 @@
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="create" type="submit">Save/Update</button></span>
-									<span><button class="btn btn-primary" id="close" type="button">Close</button></span></td>
+									<span><button class="btn btn-primary" id="close2" type="button">Close</button></span></td>
 							       </tr>
 							</table>
 								<!-- </div> -->

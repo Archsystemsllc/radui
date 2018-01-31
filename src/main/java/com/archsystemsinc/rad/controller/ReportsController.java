@@ -52,6 +52,7 @@ public class ReportsController {
 		
 		model.addAttribute("reportsForm", reportsForm);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		
@@ -84,8 +85,10 @@ public class ReportsController {
 		log.debug("--> viewReports <--");
 		
 		ReportsForm reportsForm = new ReportsForm();
+		reportsForm.setMainReportSelect("ScoreCard");
 		model.addAttribute("reportsForm", reportsForm);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		return "reports";
@@ -125,6 +128,34 @@ public class ReportsController {
 		return "scorecardlist";
 	}
 	
+	@RequestMapping(value = "/admin/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}", method = RequestMethod.GET)
+	public String rebuttalReportDrillDown(@PathVariable("macId") final String macIdString, @PathVariable("jurisId") final String jurIdString, @PathVariable("callCategoryId") final String callCategoryId,@PathVariable("rebuttalStatus") final String rebuttalStatus, final Model model,HttpSession session) {
+		
+		HashMap<Integer,Rebuttal> resultsMap = new HashMap<Integer,Rebuttal>();
+		HashMap<String,ArrayList<Rebuttal>> rebuttalSessionMap = (HashMap<String,ArrayList<Rebuttal>>) session.getAttribute("REBUTTAL_MAC_JURIS_REPORT_SESSION_OBJECT");
+		ArrayList<Rebuttal> rebuttalList = rebuttalSessionMap.get(macIdString+"_"+jurIdString);
+		
+		for(Rebuttal rebuttal: rebuttalList) {
+			if(callCategoryId.equalsIgnoreCase("ALL") && rebuttalStatus.equalsIgnoreCase("ALL")) {
+				resultsMap.put(rebuttal.getId(), rebuttal);
+			} else if(callCategoryId.equalsIgnoreCase("ALL")) {
+				if(rebuttal.getRebuttalStatus().equalsIgnoreCase(rebuttalStatus))
+					resultsMap.put(rebuttal.getId(), rebuttal);
+			}else if(rebuttalStatus.equalsIgnoreCase("ALL")) {
+				if(rebuttal.getCallCategory().equalsIgnoreCase(callCategoryId)) 
+					resultsMap.put(rebuttal.getId(), rebuttal);
+			}else {
+				if((rebuttal.getCallCategory().equalsIgnoreCase(callCategoryId) && rebuttal.getRebuttalStatus().equalsIgnoreCase(rebuttalStatus)))
+						resultsMap.put(rebuttal.getId(), rebuttal);
+			} 		
+		}
+		session.setAttribute("SESSION_SCOPE_REBUTTALS_REPORT_MAP", resultsMap);
+		model.addAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		model.addAttribute("ReportFlag",true);
+		
+		return "rebuttalreportlist";
+	}
+	
 	
 		
 	@RequestMapping(value = "/admin/getMacJurisReport")
@@ -138,8 +169,6 @@ public class ReportsController {
 		String ROOT_URI;
 		
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
-		
-		
 			
 		try {
 			
@@ -276,6 +305,7 @@ public class ReportsController {
 	@RequestMapping(value = "/admin/getMacJurisReportFromSession")
 	public String getMacJurisReportFromSession(HttpServletRequest request, final Model model, HttpSession session) {
 		ReportsForm reportsForm= (ReportsForm) session.getAttribute("ReportsFormSession");
+		
 		String returnView = "";
 		log.debug("--> getMacJurisReport <--");
 		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer, ScoreCard> ();
@@ -521,13 +551,6 @@ public class ReportsController {
 				//ArrayList<CsrLog> csrLogListTemp = qamMacByJurisReportSessionObject.get(macNameTemp+"_"+jurisdictionTemp+"_"+year+"_"+month);
 				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macNameTemp+"_"+jurisdictionTemp+"_"+monthName+"_"+year);
 				
-				/*if(csrLogListTemp == null) {
-					csrLogListTemp = new ArrayList<CsrLog>();
-				} 
-				
-				csrLogListTemp.add(csrLog);
-				qamMacByJurisReportSessionObject.put(macNameTemp+"_"+jurisdictionTemp, csrLogListTemp);		*/	
-								
 				if(qamMacByJurisdictionReviewReport == null) {
 					qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
 					qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
@@ -558,6 +581,7 @@ public class ReportsController {
 	
 	private HashMap<String,QamMacByJurisdictionReviewReport> generateRebuttalReport(List<Rebuttal> rebuttalList,HttpSession session) {
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();
+		HashMap<String,ArrayList<Rebuttal>> rebuttalMacJurisReportSessionObject = new HashMap<String,ArrayList<Rebuttal>>();
 			
 		for(Rebuttal rebuttal: rebuttalList) {
 			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(rebuttal.getMacId());
@@ -566,8 +590,15 @@ public class ReportsController {
 				String jurisdictionNameTemp = HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId());
 				
 				
-				
+				ArrayList<Rebuttal> rebuttalListTemp = rebuttalMacJurisReportSessionObject.get(macNameTemp+"_"+jurisdictionNameTemp);
 				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macNameTemp+"_"+jurisdictionNameTemp);			
+				
+				if(rebuttalListTemp == null) {
+					rebuttalListTemp = new ArrayList<Rebuttal>();
+				} 
+				
+				rebuttalListTemp.add(rebuttal);
+				rebuttalMacJurisReportSessionObject.put(macNameTemp+"_"+jurisdictionNameTemp, rebuttalListTemp);		
 								
 				if(qamMacByJurisdictionReviewReport == null) {
 					qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
@@ -583,6 +614,8 @@ public class ReportsController {
 				
 			}
 		}	
+		
+		session.setAttribute("REBUTTAL_MAC_JURIS_REPORT_SESSION_OBJECT", rebuttalMacJurisReportSessionObject);
 		
 		return finalResultsMap;
 	}

@@ -67,6 +67,9 @@
 								 <form:hidden path="callResult" />
 								 <form:hidden path="fromDateString" />
 								 <form:hidden path="toDateString" />
+								  <form:hidden path="complianceReportType" />
+								  <form:hidden path="callCategoryType" />
+								  <form:hidden path="rebuttalStatus" />
 								 
 								 			
 								<div class="table-users" style="width: 80%">
@@ -334,7 +337,10 @@
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${REBUTTAL_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
-													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
+													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
+														<span><a href="${pageContext.request.contextPath}/admin/rebuttal-report-drilldown/${row.macName}/${row.jurisdictionName}/${reportsForm.callCategoryType}/${reportsForm.rebuttalStatus}" >${row.macName}</a></span>
+													</display:column>
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf excel csv"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>

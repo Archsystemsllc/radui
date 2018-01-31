@@ -83,6 +83,8 @@ public class Rebuttal  {
 	
 	private Integer pccLocationId;
 	
+	private String rebuttalCallCategory;
+	
 	//Temporaray Variables
 	
 	private String descriptionCommentsAppend;
@@ -91,6 +93,18 @@ public class Rebuttal  {
 	
 	private String macPCCNameTempValue;
 	
+	
+	
+
+	public String getRebuttalCallCategory() {
+		return rebuttalCallCategory;
+	}
+
+
+	public void setRebuttalCallCategory(String rebuttalCallCategory) {
+		this.rebuttalCallCategory = rebuttalCallCategory;
+	}
+
 
 	public String getMacPCCNameTempValue() {
 		return macPCCNameTempValue;

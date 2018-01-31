@@ -84,7 +84,7 @@ $(document).ready(function () {
 						<div class="table-users" style="width: 80%">
 							<div class="header">List of Scorecards</div>
 							
-								<c:if test="${ScoreCardFilter == true}">
+								<%-- <c:if test="${ScoreCardFilter == true}">
 										
 										
 								<div class="row " style="margin-top: 10px">
@@ -158,8 +158,8 @@ $(document).ready(function () {
 									</table>
 									</div>
 								</div>
-								</c:if>
-								<c:if test="${ReportFlag == true}">
+								</c:if> --%>
+								<c:if test="${ReportFlag == true}" style="margin-top: 10px">
 								<div class="row"  style="margin-top: 10px">
 								<div class="col-lg-12 col-lg-offset-1 form-container">
 									<span><a href="${pageContext.request.contextPath}/admin/getMacJurisReportFromSession"><button class="btn btn-primary" id="back" type="button" >Back</button></a></span>
@@ -167,7 +167,7 @@ $(document).ready(function () {
 									</div>
 								</div>
 								</c:if>
-								<div class="row ">
+								<div class="row " style="margin-top: 10px">
 									<!--  Section 1 -->
 									<div class="col-lg-12 col-lg-offset-1 form-container">
 									

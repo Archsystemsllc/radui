@@ -43,6 +43,9 @@
 
 		$('#scoreCardTypeDiv').hide();
 		$('#callResultDiv').hide();
+		$('#complianceTypeDiv').hide();
+		$('#callCategoryTypeDiv').hide();
+		$('#rebuttalStatusDiv').hide();
 
     	$('#fromDateString').datepicker({
     		maxDate: 0,
@@ -54,12 +57,23 @@
     		format: "mm/dd/yyyy"
     	});  
 
-    	var reportSelectValue = $("input[name='mainReportSelect']").val();
-    	//alert(reportSelectValue);
-    	if (reportSelectValue == 'ScoreCard' ) {
+    	
+    	var reportSelectValue=$('input:radio[name=mainReportSelect]:checked').val();
+    	
+    	if (reportSelectValue == '') {    		
+    		$('input:radio[name=mainReportSelect]')[0].checked = true;
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
-        }
+        } else if (reportSelectValue == 'ScoreCard' ) {
+        	$('input:radio[name=mainReportSelect]')[0].checked = true;
+    		$('#scoreCardTypeDiv').show();
+    		$('#callResultDiv').show();
+        } else if (reportSelectValue == 'Compliance' ) {
+        	$('#complianceTypeDiv').show();
+        } else if (reportSelectValue == 'Rebuttal' ) {
+        	$('#callCategoryTypeDiv').show();
+    		$('#rebuttalStatusDiv').show();
+        } 
  	
 	});
 
@@ -70,12 +84,22 @@
             if (mainReportSelect=="ScoreCard") {
             	$('#scoreCardTypeDiv').show();
             	$('#callResultDiv').show();
+            	$('#complianceTypeDiv').hide();
+            	$('#callCategoryTypeDiv').hide();
+        		$('#rebuttalStatusDiv').hide();
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
+            	$('#complianceTypeDiv').show();
+            	$('#callCategoryTypeDiv').hide();
+        		$('#rebuttalStatusDiv').hide();
+        		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
+            	$('#complianceTypeDiv').hide();
+            	$('#callCategoryTypeDiv').show();
+        		$('#rebuttalStatusDiv').show();
             }
         });
 
@@ -140,7 +164,7 @@
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
+		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsFormId">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -180,7 +204,7 @@
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Program:</label>
-										<form:select path="programId" class="form-control required" id="programId"  >
+										<form:select path="programId" class="form-control required" id="programId" required="true" >
 										   <form:option value="" label="---Select Program---"/>
 										    <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${programMapEdit}" />
@@ -209,14 +233,8 @@
 			                        </div>
 			                        
 			                        <div class="row">
-			                            <div class="col-sm-6 form-group">
-			                                <c:if test="${mainReportSelect==null}">
-											   <form:radiobutton path="mainReportSelect" value="ScoreCard" checked="checked"/>ScoreCard
-											</c:if>	
-											 <c:if test="${mainReportSelect!=null}">
-											   <form:radiobutton path="mainReportSelect" value="ScoreCard" />ScoreCard
-											</c:if>              
-																					                            
+			                            <div class="col-sm-6 form-group">			                                 
+											<form:radiobutton path="mainReportSelect" value="ScoreCard" />ScoreCard										                            
 										  	<form:radiobutton path="mainReportSelect" value="Compliance" />Compliance
 										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" />Rebuttal
 			                            </div>
@@ -232,12 +250,35 @@
 											  	<form:option value="Does Not Count" />											  	
 											</form:select> 
 			                            </div>
+			                            <div class="col-sm-6 form-group" id="complianceTypeDiv">
+			                                <label for="complianceReportType"> Compliance Type:</label> 
+										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" >
+											   	<form:option value="" label="ALL"/>
+											  	<form:option value="Compliant" />
+											  	<form:option value="Non-Compliant" /> 	
+											</form:select> 
+			                            </div>
 			                            <div class="col-sm-6 form-group" id="callResultDiv">
 			                            <label for="callResult"> Call Result:</label> 
 			                                <form:select path="callResult" class="form-control required" id="callResult" >
 											   	<form:option value="All" Label="Both Pass and Fail"/>
 											  	<form:option value="Pass" />
 											  	<form:option value="Fail" />											  										  	
+											</form:select> 
+			                            </div>
+			                            <div class="col-sm-6 form-group" id="callCategoryTypeDiv">
+			                            <label for="callCategoryType"> Call Category:</label> 
+			                               <form:select path="callCategoryType" class="form-control" id="callCategoryType" >
+											   	<form:option value="ALL" label="ALL"/>
+											  	<form:options items="${callCategoryMap}" />										  	
+											</form:select> 		
+			                            </div>
+			                            <div class="col-sm-6 form-group" id="rebuttalStatusDiv">
+			                            <label for="rebuttalStatus"> Rebuttal Status:</label> 
+			                                <form:select path="rebuttalStatus" class="form-control required" id="rebuttalStatus" >
+											   	<form:option value="All" Label="ALL"/>
+											  	<form:option value="Completed" />
+											  	<form:option value="Pending" />											  										  	
 											</form:select> 
 			                            </div>
 			                        </div>

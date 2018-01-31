@@ -40,7 +40,36 @@ public class ReportsForm {
     
     private String toDateString;
     
+    private String complianceReportType;
     
+    private String callCategoryType;
+    
+    private String rebuttalStatus;    
+
+	public String getComplianceReportType() {
+		return complianceReportType;
+	}
+
+	public void setComplianceReportType(String complianceReportType) {
+		this.complianceReportType = complianceReportType;
+	}
+
+	public String getCallCategoryType() {
+		return callCategoryType;
+	}
+
+	public void setCallCategoryType(String callCategoryType) {
+		this.callCategoryType = callCategoryType;
+	}
+
+	
+	public String getRebuttalStatus() {
+		return rebuttalStatus;
+	}
+
+	public void setRebuttalStatus(String rebuttalStatus) {
+		this.rebuttalStatus = rebuttalStatus;
+	}
 
 	public String getProgramName() {
 		return programName;

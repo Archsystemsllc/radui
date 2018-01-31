@@ -168,23 +168,8 @@
               });
         });
 
-		 $('#close1,#close2').click(function(e) {	
-			 e.preventDefault();		
-	          $("#dialog-confirm" ).dialog({
-	              resizable: false,
-	              height: "auto",
-	              width: 400,
-	              modal: true,	              
-	              buttons: {
-	                "Yes": function() {
-	              		$( this ).dialog("close");	              		
-	              		window.location.href= '${pageContext.request.contextPath}/admin/rebuttallist';          	 	
-	                },
-	                Cancel: function() {                    
-	                	$( this ).dialog("close"); 
-	                }
-	              }
-            });
+		 $('#back').click(function(e) {	
+			 window.history.back();
 	     }); 
 
 		 $('#rebuttalCompleteFlag').change(function(e) {
@@ -238,7 +223,7 @@
 	
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="rebuttal" class="form-signin" action="${pageContext.request.contextPath}/admin/saveOrUpdateRebuttal" id="rebuttalForm">
+		<form:form method="POST" modelAttribute="rebuttal" class="form-signin" action="#" id="rebuttalForm">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -247,11 +232,11 @@
 						<div class="content">
 							
 							<div class="table-users" style="width: 80%">
-								<div class="header">Save/Update Rebuttal</div>	
+								<div class="header">View Rebuttal</div>	
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create">Save/Update</button></span>
-									<span><button class="btn btn-primary" id="close1" type="button">Close</button></span></td>
+									<td><span><button class="btn btn-primary" id="back" type="button">Back</button></span>
+									
 							       </tr>
 							     </table>						
       							 <div class="row " style="margin-top: 10px">
@@ -266,7 +251,7 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="macReferenceId"> MAC Call Reference ID:</label>
 			                                <c:if test="${rebuttal.id == 0}">
-			                                <form:select path="macReferenceId" class="form-control" id="macReferenceId" required="true">	
+			                                <form:select path="macReferenceId" class="form-control" id="macReferenceId" readonly="true">	
 			                                	<form:option value="" >---Select Mac Call Reference ID---</form:option>										   	
 											  	<form:options items="${macReferenceFailedList}" />
 											</form:select> 
@@ -280,7 +265,7 @@
 			                            </div>
 			                           <div class="col-sm-6 form-group">
 			                                <label for="contactPerson">PCC Contact Person:</label>
-			                                <form:select path="contactPerson" class="form-control" id="contactPerson" required="true">
+			                                <form:select path="contactPerson" class="form-control" id="contactPerson" readonly="true">
 											   	<form:option value="" label="---Select Contact---"/>
 											  	<form:option value="Contact 1" />
 											  	<form:option value="Contact 2" />
@@ -292,7 +277,7 @@
 			                         <div class="row">
 			                             <div class="col-sm-6 form-group">
 			                                <label for="name"> PCC/Location:</label>
-			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" >
+			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" readonly="true">
 			                                	<form:option value="" label="---Select PCC/Location---"/>
 			                                	<form:options items="${programMapEdit}" />
 											</form:select> 
@@ -331,14 +316,14 @@
 			                              
 			                            <div class="col-lg-6 form-group">
 			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" required="true">
+			                              <form:select path="callCategory" class="form-control required" id="callCategory" readonly="true">
 											   	<form:option value="" label="--- Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                         	</div>
 			                         	<div class="col-lg-6 form-group">
 			                             <label for="email"> Rebuttal Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" required="true">
+			                              <form:select path="callCategory" class="form-control required" id="callCategory" readonly="true">
 											   	<form:option value="" label="--- Select Rebuttal Call Category---"/>
 											   	<form:option value="1" label="QAM"/>
 											   	<form:option value="2" label="EDI"/>
@@ -349,7 +334,7 @@
 			                         	<c:if test="${rebuttal.id != 0}">
 			                         	 <div class="col-sm-6 form-group">
 			                                <label for="rebuttalCompleteFlag">Complete:</label>
-			                                <form:select path="rebuttalCompleteFlag" class="form-control"  required="true">
+			                                <form:select path="rebuttalCompleteFlag" class="form-control"  readonly="true">
 											   	<form:option value="" label="---Select---"/>
 											  	<form:option value="Yes" />
 											  	<form:option value="No" />
@@ -400,34 +385,24 @@
 					                <c:if test="${rebuttal.id != 0}">
 					                 <div class="row">
 			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Saved Description/Comments:</label>
+			                                <label for="name">Description/Comments:</label>
 			                                <form:textarea class="required form-control" type = "textarea" name = "descriptionComments" path="descriptionComments" readonly="true"/>
 			                            </div>		                           
 			                        </div>    
 					                </c:if>
 			                        
-			                         <div class="row">
-			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Description/Comments:</label>
-			                                <form:textarea class="required form-control" type = "textarea" name = "descriptionCommentsAppend" path="descriptionCommentsAppend" required="true"/>
-			                            </div>		                           
-			                        </div>       
+			                        
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name">Attachments:</label>			                                
-			                               <input class="form-control" id="file" type="file" name="uploadAttachment" style="box-sizing: content-box;" >
+			                               <input class="form-control" id="file" type="file" name="uploadAttachment" style="box-sizing: content-box;" value="TestFile.xls">
 										</input>
 			                            </div>		                           
 			                        </div>       
 				                    
 				                </div>
 				            </div>		
-				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
-									<tr>
-									<td><span><button class="btn btn-primary" id="create">Save/Update</button></span>
-									<span><button class="btn btn-primary" id="close2" type="button">Close</button></span></td>
-							       </tr>
-							</table>
+				            
 								<!-- </div> -->
 							</div>
 						</div>
