@@ -34,9 +34,21 @@ public class ReportsForm {
     
     private String jurisdictionName;
     
+    private String programName;
+    
     private String fromDateString;
     
     private String toDateString;
+    
+    
+
+	public String getProgramName() {
+		return programName;
+	}
+
+	public void setProgramName(String programName) {
+		this.programName = programName;
+	}
 
 	public String getFromDateString() {
 		return fromDateString;

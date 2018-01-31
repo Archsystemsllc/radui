@@ -104,7 +104,7 @@
     			var csrFullNameArray = csrFullName.split(",");
     			
     			var firstName = ui.item.firstName.substr(0,1);
-    			var lastName = ui.item.lastName;
+    			var lastName = ui.item.lastName.substr(0,5);
 
     			var dateString= $('#callMonitoringDate_Alt').val();
     			
@@ -158,9 +158,10 @@
     	});
 
     	$('#callFailureTime,#accuracyCallFailureTime,#completenessCallFailureTime,#privacyCallFailureTime,#customerSkillsCallFailureTime').timepicker({
-    		timeFormat: 'hh:mm:ss TT',
+    		timeFormat: 'HH:mm:ss',
     		controlType: 'select',
-        	oneLine: true
+        	oneLine: true,
+        	hourMax: 4
     	}); 
  	
 	});
@@ -391,11 +392,18 @@
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="create"  type="submit">Save/Update</button></span>
-									<span><button class="btn btn-primary" id="close">Close</button></span></td>
+									<span><button class="btn btn-primary" id="close" type="button">Close</button></span></td>
 							       </tr>
 							     </table>						
       							 <div class="row " style="margin-top: 10px">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                <div class="row">
+				                      <div style="color: red;font-size: 18px;"  class="col-lg-12 form-group">
+				                      <c:if test="${not empty ValidationFailure}">
+										${ValidationFailure}
+										</c:if>
+				                      </div>
+									</div>
 				                    <h2>Section 1 - QAM Info</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   
@@ -706,7 +714,7 @@
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Non-Scoreable Reason:</label>
 			                                <form:select class="form-control" id="nonScoreableReason" path="nonScoreableReason" title="Select one of the Reason">
-			                                 	<form:option value="" label="Select Customer Skills Call Failure Reason"/>
+			                                 	<form:option value="" label="Select Non-Scoreable Reason"/>
 			                                 	<form:option value="Recorded file disconnected unexpectedly"/>
 			                                 	<form:option value="Recorded file was inaudible/not viewable and deemed corrupted"/>
 			                                 	<form:option value="Recorded file was not available"/>
@@ -728,7 +736,7 @@
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="create" type="submit">Save/Update</button></span>
-									<span><button class="btn btn-primary" id="close">Close</button></span></td>
+									<span><button class="btn btn-primary" id="close" type="button">Close</button></span></td>
 							       </tr>
 							</table>
 								<!-- </div> -->

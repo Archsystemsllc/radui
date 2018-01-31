@@ -1,13 +1,15 @@
 package com.archsystemsinc.rad.controller;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -97,7 +99,7 @@ public class ReportsController {
 		ArrayList<ScoreCard> scoreCardList = scoreCardSessionMap.get(macIdString+"_"+jurIdString);
 		
 		for(ScoreCard scoreCard: scoreCardList) {
-			if(searchString.equalsIgnoreCase("")) {
+			if(searchString.equalsIgnoreCase("ALL")) {
 				resultsMap.put(scoreCard.getId(), scoreCard);
 			} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
 				if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"))
@@ -111,10 +113,14 @@ public class ReportsController {
 			} else if(searchString.equalsIgnoreCase("Non-Scoreable")) {
 				if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable"))
 					 resultsMap.put(scoreCard.getId(), scoreCard);
-			}		
+			} else if(searchString.equalsIgnoreCase("Does Not Count")) {
+				if(scoreCard.getScorecardType().equalsIgnoreCase("Does Not Count"))
+					 resultsMap.put(scoreCard.getId(), scoreCard);
+			}			
 		}
 		session.setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
 		model.addAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		model.addAttribute("ReportFlag",true);
 		
 		return "scorecardlist";
 	}
@@ -156,7 +162,29 @@ public class ReportsController {
 				reportsForm.setMacName(reportsForm.getMacId());
 			}
 			
+			if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
+				String programName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
+				reportsForm.setMacName(programName);
+			} else {
+				reportsForm.setMacName(reportsForm.getMacId());
+			}
 			
+			if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase("ALL") ) {
+				/*String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+				reportsForm.setMacName(macName);*/
+			} else {
+				/*reportsForm.setMacName(reportsForm.getMacId());*/
+			}
+			
+			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = new TreeMap<String, QamMacByJurisdictionReviewReport>(
+					new Comparator<String>() {
+
+						@Override
+						public int compare(String o1, String o2) {
+							return o1.compareTo(o2);
+						}
+
+					});
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
 				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getMacJurisReport");
@@ -166,35 +194,42 @@ public class ReportsController {
 				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
 				finalResultsMap = generateScoreCardReport(scoreCardList,session);
 				
+				
+				
+				/*Map<Integer, String> treeMap2 = new TreeMap<>( (Comparator<Integer>) (o1, o2) -> o2.compareTo(o1)
+		        );*/
+				
+				finalSortedMap.putAll(finalResultsMap);
+				
 				if(reportsForm.getScoreCardType().equalsIgnoreCase("")) {
 					model.addAttribute("AllScoreCardReport",true);
-					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records");
 					
 					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
 					model.addAttribute("ScoreableReport",true);
-					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Both Pass and Fail Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("ScoreablePassReport",true);
-					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Pass Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Fail") ) {
 					
 					model.addAttribute("ScoreableFailReport",true);
-					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Fail Records)");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Non-Scoreable")) {
-					model.addAttribute("NonScoreable",true);
-					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("NonScoreableReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
-					model.addAttribute("ScoreableReport",true);
-					model.addAttribute("MAC_JURIS_REPORT",finalResultsMap);
+					model.addAttribute("DoesNotCountReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
 				}
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
@@ -207,7 +242,8 @@ public class ReportsController {
 				List<CsrLog> complianceList = mapper.convertValue(resultsMap.values(), new TypeReference<List<CsrLog>>() { });
 				
 				finalResultsMap = generateComplianceReport(complianceList,session);
-				model.addAttribute("COMPLIANCE_REPORT",finalResultsMap);
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("COMPLIANCE_REPORT",finalSortedMap);
 				model.addAttribute("ComplianceReport",true);
 				model.addAttribute("ReportTitle","Compliance Report");
 				
@@ -221,7 +257,139 @@ public class ReportsController {
 				List<Rebuttal> rebuttalList = mapper.convertValue(resultsMap.values(), new TypeReference<List<Rebuttal>>() { });
 				
 				finalResultsMap = generateRebuttalReport(rebuttalList,session);
-				model.addAttribute("REBUTTAL_REPORT",finalResultsMap);
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("REBUTTAL_REPORT",finalSortedMap);
+				model.addAttribute("RebuttalReport",true);
+				model.addAttribute("ReportTitle","Rebuttal Report");
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		session.setAttribute("ReportsFormSession", reportsForm);
+		model.addAttribute("reportsForm", reportsForm);
+		return "macjurisreviewreports";
+	}
+	
+	@RequestMapping(value = "/admin/getMacJurisReportFromSession")
+	public String getMacJurisReportFromSession(HttpServletRequest request, final Model model, HttpSession session) {
+		ReportsForm reportsForm= (ReportsForm) session.getAttribute("ReportsFormSession");
+		String returnView = "";
+		log.debug("--> getMacJurisReport <--");
+		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer, ScoreCard> ();
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI;
+		
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
+		
+		
+			
+		try {
+			
+			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+			
+			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
+			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
+			
+			if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+				String jurisdictionName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
+				reportsForm.setJurisdictionName(jurisdictionName);
+			} else {
+				reportsForm.setJurisdictionName(reportsForm.getJurisId());
+			}
+			
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+				reportsForm.setMacName(macName);
+			} else {
+				reportsForm.setMacName(reportsForm.getMacId());
+			}
+			
+			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = new TreeMap<String, QamMacByJurisdictionReviewReport>(
+	                new Comparator<String>() {
+
+	                    @Override
+	                    public int compare(String o1, String o2) {
+	                        return o1.compareTo(o2);
+	                    }
+
+	                });
+			
+			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
+				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getMacJurisReport");
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+				finalResultsMap = generateScoreCardReport(scoreCardList,session);
+				
+				
+				
+				/*Map<Integer, String> treeMap2 = new TreeMap<>( (Comparator<Integer>) (o1, o2) -> o2.compareTo(o1)
+		        );*/
+				
+				finalSortedMap.putAll(finalResultsMap);
+				
+				if(reportsForm.getScoreCardType().equalsIgnoreCase("")) {
+					model.addAttribute("AllScoreCardReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records");
+					
+					
+				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+					model.addAttribute("ScoreableReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Both Pass and Fail Records)");
+					
+				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
+					model.addAttribute("ScoreablePassReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Pass Records)");
+					
+				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Fail") ) {
+					
+					model.addAttribute("ScoreableFailReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Fail Records)");
+				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Non-Scoreable")) {
+					model.addAttribute("NonScoreable",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
+				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
+					model.addAttribute("ScoreableReport",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
+				}
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
+				
+				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getComplianceReport");
+				
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<CsrLog> complianceList = mapper.convertValue(resultsMap.values(), new TypeReference<List<CsrLog>>() { });
+				
+				finalResultsMap = generateComplianceReport(complianceList,session);
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("COMPLIANCE_REPORT",finalSortedMap);
+				model.addAttribute("ComplianceReport",true);
+				model.addAttribute("ReportTitle","Compliance Report");
+				
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
+				
+				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getRebuttalReport");
+				
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<Rebuttal> rebuttalList = mapper.convertValue(resultsMap.values(), new TypeReference<List<Rebuttal>>() { });
+				
+				finalResultsMap = generateRebuttalReport(rebuttalList,session);
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("REBUTTAL_REPORT",finalSortedMap);
 				model.addAttribute("RebuttalReport",true);
 				model.addAttribute("ReportTitle","Rebuttal Report");
 				
@@ -264,6 +432,9 @@ public class ReportsController {
 					qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
 					qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
 					qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+					qamMacByJurisdictionReviewReport.setMacId(macInfo.getId().intValue());
+					qamMacByJurisdictionReviewReport.setScoreCardType(scoreCardType);
+					qamMacByJurisdictionReviewReport.setTotalCount(1);
 					
 					if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 						qamMacByJurisdictionReviewReport.setScorableCount(1);
@@ -274,10 +445,13 @@ public class ReportsController {
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
 						qamMacByJurisdictionReviewReport.setNonScorableCount(1);						
+					} else if(scoreCardType.equalsIgnoreCase("Does Not Count")) {
+						qamMacByJurisdictionReviewReport.setDoesNotCount_Number(1);						
 					}
 					
 					
 				} else {
+					qamMacByJurisdictionReviewReport.setTotalCount(qamMacByJurisdictionReviewReport.getTotalCount()+1);
 					if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 						qamMacByJurisdictionReviewReport.setScorableCount(qamMacByJurisdictionReviewReport.getScorableCount()+1);
 						if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
@@ -287,6 +461,8 @@ public class ReportsController {
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
 						qamMacByJurisdictionReviewReport.setNonScorableCount(qamMacByJurisdictionReviewReport.getNonScorableCount()+1);	
+					} else if(scoreCardType.equalsIgnoreCase("Does Not Count")) {
+						qamMacByJurisdictionReviewReport.setDoesNotCount_Number(qamMacByJurisdictionReviewReport.getDoesNotCount_Number()+1);	
 					}
 				}
 				
@@ -298,17 +474,26 @@ public class ReportsController {
 		for(String macJurisKey: finalResultsMap.keySet()) {
 			
 			DecimalFormat twoDForm = new DecimalFormat("#.##");
-			
 			QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macJurisKey);
-			Float scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
-			scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
-			Float scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
-			scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
-			Float scNsPercent =  ((float)qamMacByJurisdictionReviewReport.getNonScorableCount()*100/(qamMacByJurisdictionReviewReport.getScorableCount()+qamMacByJurisdictionReviewReport.getNonScorableCount()));
-			scNsPercent =  Float.valueOf((twoDForm.format(scNsPercent)));
-			qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
-			qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);
-			qamMacByJurisdictionReviewReport.setNonScorablePercent(scNsPercent);		
+			
+			if(qamMacByJurisdictionReviewReport.getScoreCardType().equalsIgnoreCase("Scoreable")) {
+				Float scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+				scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
+				Float scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+				scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
+				qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
+				qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);
+				
+			} else if(qamMacByJurisdictionReviewReport.getScoreCardType().equalsIgnoreCase("Non-Scoreable")) {
+				Float scNsPercent =  ((float)qamMacByJurisdictionReviewReport.getNonScorableCount()*100/(qamMacByJurisdictionReviewReport.getTotalCount()));
+				scNsPercent =  Float.valueOf((twoDForm.format(scNsPercent)));
+				qamMacByJurisdictionReviewReport.setNonScorablePercent(scNsPercent);		
+			}  else if(qamMacByJurisdictionReviewReport.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
+				Float dncPercent =  ((float)qamMacByJurisdictionReviewReport.getDoesNotCount_Number()*100/(qamMacByJurisdictionReviewReport.getTotalCount()));
+				dncPercent =  Float.valueOf((twoDForm.format(dncPercent)));
+				qamMacByJurisdictionReviewReport.setDoesNotCount_Percent(dncPercent);		
+			}
+			
 			finalResultsMap.put(macJurisKey, qamMacByJurisdictionReviewReport);
 		}
 		

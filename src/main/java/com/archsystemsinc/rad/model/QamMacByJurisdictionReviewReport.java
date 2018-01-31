@@ -6,7 +6,7 @@ import java.util.Date;
  * This persistent class for the user database table.
  */
 
-public class QamMacByJurisdictionReviewReport {  
+public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJurisdictionReviewReport>{  
     
     private String macName;   
     
@@ -15,6 +15,8 @@ public class QamMacByJurisdictionReviewReport {
     private String program;
     
     private String location;
+    
+    private Integer totalCount = 0;
     
     private Integer scorableCount = 0;
     
@@ -30,6 +32,10 @@ public class QamMacByJurisdictionReviewReport {
     
     private Float nonScorablePercent= 0.0f;
     
+    private Integer doesNotCount_Number= 0;
+    
+    private Float doesNotCount_Percent= 0.0f;
+    
     private String qamStartDate;
     
     private String qamEndDate;   
@@ -38,7 +44,51 @@ public class QamMacByJurisdictionReviewReport {
     
     private String monthYear;
     
-        
+    private Integer macId;
+    
+    private String scoreCardType;
+    
+    public String getScoreCardType() {
+		return scoreCardType;
+	}
+
+	public Integer getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(Integer totalCount) {
+		this.totalCount = totalCount;
+	}
+
+
+
+	public void setScoreCardType(String scoreCardType) {
+		this.scoreCardType = scoreCardType;
+	}
+
+	public Integer getDoesNotCount_Number() {
+		return doesNotCount_Number;
+	}
+
+	public void setDoesNotCount_Number(Integer doesNotCount_Number) {
+		this.doesNotCount_Number = doesNotCount_Number;
+	}
+
+	public Float getDoesNotCount_Percent() {
+		return doesNotCount_Percent;
+	}
+
+	public void setDoesNotCount_Percent(Float doesNotCount_Percent) {
+		this.doesNotCount_Percent = doesNotCount_Percent;
+	}
+
+	public Integer getMacId() {
+		return macId;
+	}
+
+	public void setMacId(Integer macId) {
+		this.macId = macId;
+	}
 
 	public String getMonthYear() {
 		return monthYear;
@@ -158,5 +208,18 @@ public class QamMacByJurisdictionReviewReport {
 
 	public void setNonScorablePercent(Float nonScorablePercent) {
 		this.nonScorablePercent = nonScorablePercent;
-	}   	
+	}
+
+	@Override
+	public int compareTo(QamMacByJurisdictionReviewReport object) {
+
+	int compareMacId = ((QamMacByJurisdictionReviewReport) object).getMacId();
+
+	//ascending order
+	return this.macId - compareMacId;
+
+	//descending order
+	//return compareQuantity - this.quantity;
+
+	}
 }

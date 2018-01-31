@@ -52,7 +52,14 @@
     	$('#toDateString').datepicker({
     		maxDate: 0,
     		format: "mm/dd/yyyy"
-    	});  	
+    	});  
+
+    	var reportSelectValue = $("input[name='mainReportSelect']").val();
+    	//alert(reportSelectValue);
+    	if (reportSelectValue == 'ScoreCard' ) {
+    		$('#scoreCardTypeDiv').show();
+    		$('#callResultDiv').show();
+        }
  	
 	});
 
@@ -62,20 +69,26 @@
             var mainReportSelect = $(this).val();
             if (mainReportSelect=="ScoreCard") {
             	$('#scoreCardTypeDiv').show();
+            	$('#callResultDiv').show();
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
+            	$('#callResultDiv').hide();
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
+            	$('#callResultDiv').hide();
             }
         });
 
 		$("select#scoreCardType").change(function(){
 			 var scoreCardType = $(this).val();
 	            if (scoreCardType=="Scoreable") {
+	            	
 	            	$('#callResultDiv').show();
 	            } else if (scoreCardType=="Non-Scoreable") {
+	            	
 	            	$('#callResultDiv').hide();
 	            } else if (scoreCardType=="Does Not Count") {
+	            	
 	            	$('#callResultDiv').hide();
 	            }
         });
@@ -118,9 +131,7 @@
       	  	    	});  	   
                });
         });
-
 		
-        
      });		
 </script>
 
@@ -199,9 +210,13 @@
 			                        
 			                        <div class="row">
 			                            <div class="col-sm-6 form-group">
-			                                
-			                               
-											<form:radiobutton path="mainReportSelect" value="ScoreCard" />ScoreCard											                            
+			                                <c:if test="${mainReportSelect==null}">
+											   <form:radiobutton path="mainReportSelect" value="ScoreCard" checked="checked"/>ScoreCard
+											</c:if>	
+											 <c:if test="${mainReportSelect!=null}">
+											   <form:radiobutton path="mainReportSelect" value="ScoreCard" />ScoreCard
+											</c:if>              
+																					                            
 										  	<form:radiobutton path="mainReportSelect" value="Compliance" />Compliance
 										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" />Rebuttal
 			                            </div>
@@ -211,7 +226,7 @@
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
 			                                <label for="scoreCardType"> ScoreCard Type:</label> 
 										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" >
-											   	<form:option value="" label="--- Select Type---"/>
+											   	<form:option value="" label="ALL"/>
 											  	<form:option value="Scoreable" />
 											  	<form:option value="Non-Scoreable" />
 											  	<form:option value="Does Not Count" />											  	
@@ -229,8 +244,8 @@
 			                        
 			                          <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create" type="submit">Generate Repot</button></span>
-									<span><button class="btn btn-primary" id="reset" type="button">Reset</button></span></td>
+									<td><span><button class="btn btn-primary" id="generateReport" type="submit">Generate Repot</button></span>
+									<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span></td>
 							       </tr>
 							</table>
 				                    

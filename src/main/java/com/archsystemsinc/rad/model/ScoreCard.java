@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-public class ScoreCard  {
+public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private int id;
 
@@ -118,6 +118,45 @@ public class ScoreCard  {
 	
 	private HashMap<Integer,String> pccLocationMap;
 	
+	private String filterFromDateString;	
+	
+	private String filterToDateString;
+	
+	private Date filterFromDate;
+	
+	private Date filterToDate;
+	
+	public String getFilterFromDateString() {
+		return filterFromDateString;
+	}
+
+	public void setFilterFromDateString(String filterFromDateString) {
+		this.filterFromDateString = filterFromDateString;
+	}
+
+	public String getFilterToDateString() {
+		return filterToDateString;
+	}
+
+	public void setFilterToDateString(String filterToDateString) {
+		this.filterToDateString = filterToDateString;
+	}
+
+	public Date getFilterFromDate() {
+		return filterFromDate;
+	}
+
+	public void setFilterFromDate(Date filterFromDate) {
+		this.filterFromDate = filterFromDate;
+	}
+
+	public Date getFilterToDate() {
+		return filterToDate;
+	}
+
+	public void setFilterToDate(Date filterToDate) {
+		this.filterToDate = filterToDate;
+	}
 
 	public HashMap<Integer, String> getPccLocationMap() {
 		return pccLocationMap;
@@ -561,6 +600,20 @@ public class ScoreCard  {
 
 	public void setUserId(Integer userId) {
 		this.userId = userId;
-	}	
+	}
+
+
+
+	public int compareTo(ScoreCard scoreCard) {
+
+		int compareMacId = ((ScoreCard) scoreCard).getMacId();
+
+		//ascending order
+		return this.macId - compareMacId;
+
+		//descending order
+		//return compareQuantity - this.quantity;
+
+	}
 
 }
