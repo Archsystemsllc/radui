@@ -73,13 +73,12 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private Integer programId;
 
 	
-	private String qamEnddateTime;
-
-	
 	private String qamFullName;
 
 	
-	private String qamStartdateTime;
+	private Date qamStartdateTime;
+	
+	private Date qamEnddateTime;
 
 	
 	private String scorecardComments;
@@ -126,6 +125,75 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private Date filterToDate;
 	
+	private String qamStartdateTimeString;
+	
+	private String qamEnddateTimeString;
+	
+	
+	//Temporatry Fields
+	private String macIdReportSearchString;	
+	
+	private String jurisIdReportSearchString;
+	
+	private String programIdReportSearchString;
+	
+
+	public String getMacIdReportSearchString() {
+		return macIdReportSearchString;
+	}
+
+	public void setMacIdReportSearchString(String macIdReportSearchString) {
+		this.macIdReportSearchString = macIdReportSearchString;
+	}
+
+	public String getJurisIdReportSearchString() {
+		return jurisIdReportSearchString;
+	}
+
+	public void setJurisIdReportSearchString(String jurisIdReportSearchString) {
+		this.jurisIdReportSearchString = jurisIdReportSearchString;
+	}
+
+	public String getProgramIdReportSearchString() {
+		return programIdReportSearchString;
+	}
+
+	public void setProgramIdReportSearchString(String programIdReportSearchString) {
+		this.programIdReportSearchString = programIdReportSearchString;
+	}
+
+	public Date getQamStartdateTime() {
+		return qamStartdateTime;
+	}
+
+	public Date getQamEnddateTime() {
+		return qamEnddateTime;
+	}
+
+	public String getQamStartdateTimeString() {
+		return qamStartdateTimeString;
+	}
+
+	public void setQamStartdateTimeString(String qamStartdateTimeString) {
+		this.qamStartdateTimeString = qamStartdateTimeString;
+	}
+
+	public String getQamEnddateTimeString() {
+		return qamEnddateTimeString;
+	}
+
+	public void setQamEnddateTimeString(String qamEnddateTimeString) {
+		this.qamEnddateTimeString = qamEnddateTimeString;
+	}
+
+	public void setQamStartdateTime(Date qamStartdateTime) {
+		this.qamStartdateTime = qamStartdateTime;
+	}
+
+	public void setQamEnddateTime(Date qamEnddateTime) {
+		this.qamEnddateTime = qamEnddateTime;
+	}
+
 	public String getFilterFromDateString() {
 		return filterFromDateString;
 	}
@@ -532,18 +600,6 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 
 
 
-	public String getQamEnddateTime() {
-		return qamEnddateTime;
-	}
-
-
-
-	public void setQamEnddateTime(String qamEnddateTime) {
-		this.qamEnddateTime = qamEnddateTime;
-	}
-
-
-
 	public String getQamFullName() {
 		return qamFullName;
 	}
@@ -553,19 +609,7 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	public void setQamFullName(String qamFullName) {
 		this.qamFullName = qamFullName;
 	}
-
-
-
-	public String getQamStartdateTime() {
-		return qamStartdateTime;
-	}
-
-
-
-	public void setQamStartdateTime(String qamStartdateTime) {
-		this.qamStartdateTime = qamStartdateTime;
-	}
-
+	
 
 
 	public String getScorecardComments() {

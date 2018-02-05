@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+
 import com.archsystemsinc.rad.model.CsrLog;
 import com.archsystemsinc.rad.model.MacInfo;
 import com.archsystemsinc.rad.model.QamMacByJurisdictionReviewReport;
@@ -54,7 +55,7 @@ public class ReportsController {
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
-		session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		
 		if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
 			HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
@@ -90,7 +91,7 @@ public class ReportsController {
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
-		session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "reports";
 	}
 	
@@ -122,7 +123,7 @@ public class ReportsController {
 			}			
 		}
 		session.setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
-		model.addAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		model.addAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		model.addAttribute("ReportFlag",true);
 		
 		return "scorecardlist";
@@ -150,7 +151,7 @@ public class ReportsController {
 			} 		
 		}
 		session.setAttribute("SESSION_SCOPE_REBUTTALS_REPORT_MAP", resultsMap);
-		model.addAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		model.addAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		model.addAttribute("ReportFlag",true);
 		
 		return "rebuttalreportlist";
@@ -193,9 +194,9 @@ public class ReportsController {
 			
 			if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
 				String programName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
-				reportsForm.setMacName(programName);
+				reportsForm.setProgramName(programName);
 			} else {
-				reportsForm.setMacName(reportsForm.getMacId());
+				reportsForm.setProgramName(reportsForm.getProgramId());
 			}
 			
 			if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase("ALL") ) {
@@ -216,7 +217,7 @@ public class ReportsController {
 					});
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
-				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getMacJurisReport");
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getMacJurisReport");
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
 				resultsMap = responseEntity.getBody();
@@ -263,7 +264,7 @@ public class ReportsController {
 				}
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
-				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getComplianceReport");
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getComplianceReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
@@ -278,7 +279,7 @@ public class ReportsController {
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
 				
-				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getRebuttalReport");
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getRebuttalReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
@@ -348,7 +349,7 @@ public class ReportsController {
 	                });
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
-				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getMacJurisReport");
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getMacJurisReport");
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
 				resultsMap = responseEntity.getBody();
@@ -395,7 +396,7 @@ public class ReportsController {
 				}
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
-				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getComplianceReport");
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getComplianceReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
@@ -410,7 +411,7 @@ public class ReportsController {
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
 				
-				ROOT_URI = new String(HomeController.REST_SERVICE_URI + "getRebuttalReport");
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getRebuttalReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();

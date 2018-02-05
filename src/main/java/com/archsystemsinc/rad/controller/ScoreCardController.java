@@ -1,27 +1,16 @@
 package com.archsystemsinc.rad.controller;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -31,15 +20,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.client.RestTemplate;
 
+import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.service.impl.SecurityServiceImpl;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -70,6 +58,9 @@ public class ScoreCardController {
 	 
 	 SecurityServiceImpl securityServiceImpl; 
 	 
+	 @Autowired
+	 UtilityFunctions utilityFunctions;
+	 
  
     /**
      * This method provides the functionalities for getting the scorecard jsp.
@@ -77,7 +68,7 @@ public class ScoreCardController {
      * @param 
      * @return scorecard
      */
-    @RequestMapping(value = "/admin/scorecard", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/scorecardpagination", method = RequestMethod.GET)
     public String getScorecard(Model model) {
     	 log.debug("--> showCreateScoreCard Screen <--");
 		  User form = new User();
@@ -89,102 +80,88 @@ public class ScoreCardController {
 	public String getScorecardList(HttpServletRequest request,Model model) {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardNew = new ScoreCard();
+		HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew);
 		model.addAttribute("scorecard", scoreCardNew);
-		String plainCreds = "qamadmin:123456";
-		byte[] plainCredsBytes = plainCreds.getBytes();
-		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-		String base64Creds = new String(base64CredsBytes);
-		HashMap<Integer,ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
-		
-		//System.out.println(HomeController.MAC_ID_MAP);
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Accept", "application/json");
-		headers.add("Authorization", "Basic " + base64Creds);
-
-		headers.set("Content-Length", "35");
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.REST_SERVICE_URI + "findAllScorecard", HttpMethod.GET,
-				new HttpEntity<String>(headers), String.class);
-		ObjectMapper mapper = new ObjectMapper();
-		List<ScoreCard> scoreCardList = null;
-		
-		try {
-			scoreCardList = mapper.readValue(exchange.getBody(), new TypeReference<List<ScoreCard>>(){});
-			for(ScoreCard scoreCard: scoreCardList) {
-				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
-				resultsMap.put(scoreCard.getId(), scoreCard);
-			}
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
-		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
 		model.addAttribute("ScoreCardFilter",true);
+		HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
+		model.addAttribute("jurisMapEdit", jurisMap);
+		
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
+		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "scorecardlist";
 	}
 	
-	@RequestMapping(value = "/admin/scorecardfilter", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/scorecardfilter")
 	public String filterScorecardList(@ModelAttribute("scorecard") ScoreCard scoreCard, final BindingResult result,
-			final Model model) {
+			final Model model,HttpServletRequest request) {
 		log.debug("--> getScorecardList Screen <--");
-		ScoreCard scoreCardNew = new ScoreCard();
-		model.addAttribute("scorecard", scoreCard);
-		String ROOT_URI="";
-
-		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
-		HashMap<Integer, ScoreCard> finalResultsMap = new HashMap<Integer, ScoreCard> ();
-		
-		try {
+		HashMap<Integer, ScoreCard> resultsMap = null;
+		try {		
 			
-			String pattern = "MM/dd/yyyy hh:mm:ss a";
-			
-			String fromDateString = scoreCard.getFilterFromDateString()+ " 00:00:01 AM";
-			String toDateString = scoreCard.getFilterToDateString()+ " 11:59:59 PM";
-			
-			SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
-	        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-	        sdfAmerica.setTimeZone(tzInAmerica);
-		     
-			Date fromDateObject = sdfAmerica.parse(fromDateString);
-			Date toDateObject = sdfAmerica.parse(toDateString);
-			
-			scoreCard.setFilterFromDate(fromDateObject);
-			scoreCard.setFilterToDate(toDateObject);
-			
-			ROOT_URI = new String(HomeController.REST_SERVICE_URI + "searchScoreCard");
-			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard, List.class);
-			ObjectMapper mapper = new ObjectMapper();
-			resultsMap = responseEntity.getBody();
-			List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap, new TypeReference<List<ScoreCard>>() { });
-			
-			for(ScoreCard scoreCardTemp: scoreCardList) {
-				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
-				finalResultsMap.put(scoreCardTemp.getId(), scoreCardTemp);
+			if(!scoreCard.getFilterFromDateString().equalsIgnoreCase("")) {
+				String fromDateString = scoreCard.getFilterFromDateString()+ " 00:00:01 AM";
+				Date fromDateObject = utilityFunctions.convertToDateFromString(fromDateString);
+				scoreCard.setFilterFromDate(fromDateObject);
 			}
+			if(!scoreCard.getFilterToDateString().equalsIgnoreCase("")) {
+				String toDateString = scoreCard.getFilterToDateString()+ " 11:59:59 PM";
+				Date toDateObject = utilityFunctions.convertToDateFromString(toDateString);
+				scoreCard.setFilterToDate(toDateObject);
+			}
+			
+			resultsMap = retrieveScoreCardList(scoreCard);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		model.addAttribute("scorecard",scoreCard);
 		model.addAttribute("ScoreCardFilter",true);
-		//request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
-		//request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
+		model.addAttribute("jurisMapEdit", jurisMap);
+		
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
+		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		
 		return "scorecardlist";
+	}
+	
+	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject) {		
+		
+		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
+		HashMap<Integer, ScoreCard> finalResultsMap = new HashMap<Integer, ScoreCard> ();
+		try {
+		
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchScoreCard");
+			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardModelObject, List.class);
+			ObjectMapper mapper = new ObjectMapper();
+			resultsMap = responseEntity.getBody();
+			List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap, new TypeReference<List<ScoreCard>>() { });
+			
+			for(ScoreCard scoreCardTemp: scoreCardList) {
+				String qamStartdateTimeString = utilityFunctions.convertToStingFromDate(scoreCardTemp.getQamStartdateTime());
+				scoreCardTemp.setQamStartdateTimeString(qamStartdateTimeString);
+				scoreCardTemp.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCardTemp.getJurId()));
+				finalResultsMap.put(scoreCardTemp.getId(), scoreCardTemp);
+			}		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return finalResultsMap;
 	}
 	
 	@RequestMapping(value = "/admin/edit-scorecard/{id}", method = RequestMethod.GET)
 	public String editScoreCardGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session) {
 		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
 		ScoreCard scoreCard = resultsMap.get(id);
+		
+		String qamStartDateString = utilityFunctions.convertToStingFromDate(scoreCard.getQamStartdateTime());
+		String qamEndDateString = utilityFunctions.convertToStingFromDate(scoreCard.getQamEnddateTime());
+		
+		scoreCard.setQamStartdateTimeString(qamStartDateString);
+		scoreCard.setQamEnddateTimeString(qamEndDateString);
+		
 		model.addAttribute("scorecard", scoreCard);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		
@@ -210,17 +187,11 @@ public class ScoreCardController {
 		ScoreCard scoreCard = new ScoreCard();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    String name = auth.getName(); //get logged in username 
-	    
-	    	   
 		scoreCard.setQamFullName(name);
-		String pattern = "MM/dd/yyyy hh:mm:ss a";
 		
-		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
-        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-        sdfAmerica.setTimeZone(tzInAmerica);
-	     
-		String qamStartdateTime = sdfAmerica.format(new Date());
-		scoreCard.setQamStartdateTime(qamStartdateTime);
+		String qamStartdateTime = utilityFunctions.convertToStingFromDate(new Date());
+		
+		scoreCard.setQamStartdateTimeString(qamStartdateTime);
 		scoreCard.setCallLanguage("English");
 		model.addAttribute("scorecard", scoreCard);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
@@ -258,19 +229,14 @@ public class ScoreCardController {
 			try {
 				
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-				String ROOT_URI = new String(HomeController.REST_SERVICE_URI + "saveOrUpdateScoreCard");
-				
-				String pattern = "MM/dd/yyyy hh:mm:ss a";
-				
-				SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
-		        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-		        sdfAmerica.setTimeZone(tzInAmerica);
+				String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateScoreCard");
 			     
-				String qamEnddateTime = sdfAmerica.format(new Date());
+				String qamEnddateTimeString = utilityFunctions.convertToStingFromDate(new Date());
+				Date qamEnddateTime = utilityFunctions.convertToDateFromString(qamEnddateTimeString);
+				scoreCard.setQamEnddateTimeString(qamEnddateTimeString);
 				scoreCard.setQamEnddateTime(qamEnddateTime);
-				ResponseEntity<ScoreCard> response = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,
-						ScoreCard.class);
-				//System.out.println(response.getBody().toString());
+				ResponseEntity<ScoreCard> response = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,ScoreCard.class);
+				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -279,13 +245,8 @@ public class ScoreCardController {
 		}
 
 		return returnView;
-	}
-    
-    private List<HttpMessageConverter<?>> getMessageConverters() {
-    	List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
-    	converters.add(new MappingJackson2HttpMessageConverter());
-    	return converters;
-    }    
+	}    
+        
     
     private String validateScoreCard(ScoreCard scoreCard) {
     	

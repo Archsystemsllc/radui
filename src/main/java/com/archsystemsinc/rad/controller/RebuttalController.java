@@ -30,6 +30,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+
 import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
@@ -65,7 +66,7 @@ public class RebuttalController {
 
 		headers.set("Content-Length", "35");
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.REST_SERVICE_URI + "rebuttallist", HttpMethod.GET,
+		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.RAD_WS_URI + "rebuttallist", HttpMethod.GET,
 				new HttpEntity<String>(headers), String.class);
 		ObjectMapper mapper = new ObjectMapper();
 		List<Rebuttal> rebuttalList = null;
@@ -88,7 +89,7 @@ public class RebuttalController {
 			e.printStackTrace();
 		}
 		request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_MAP", resultsMap);
-		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "rebuttallist";
 	}
 	
@@ -123,7 +124,7 @@ public class RebuttalController {
 
 		headers.set("Content-Length", "35");
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.REST_SERVICE_URI + "retrieveMacCallRefFailList", HttpMethod.GET,
+		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.RAD_WS_URI + "retrieveMacCallRefFailList", HttpMethod.GET,
 				new HttpEntity<String>(headers), String.class);
 		ObjectMapper mapper = new ObjectMapper();
 		List<ScoreCard> failedScorecardList = null;
@@ -177,7 +178,7 @@ public class RebuttalController {
 		log.debug("--> saverebuttal <--");
 
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-		String ROOT_URI = new String(HomeController.REST_SERVICE_URI + "saveOrUpdateRebuttal");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
 		
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
 		

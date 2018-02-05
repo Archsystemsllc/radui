@@ -380,6 +380,10 @@
 
 	<table id="mid">
 		<form:form method="POST" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/admin/saveorupdatescorecard" id="scorecardForm">
+		<!-- Hidden Fields -->
+		<form:input type = "hidden" path="id" />
+		<form:input type = "hidden" path="qamStartdateTime" />
+		<form:input type = "hidden" path="qamEnddateTime" />
 			<tr>
 				<td style="vertical-align: top">
 
@@ -410,8 +414,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> QM Name/QM ID:</label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
-			                                <form:input type = "hidden" name = "id" path="id" />
+			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> ScoreCard Type:</label></br>
@@ -429,11 +432,11 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> QM Start Date/Time:</label>
 			                                <input type="hidden" id="DatePickerHidden" />
-			                                <form:input type = "text" class="form-control" id="qamStartdateTime" name = "qamStartdateTime" path="qamStartdateTime" readonly="true"/>
+			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> QM End Date/Time:</label>
-			                                <form:input type = "text" class="form-control" id="qamEnddateTime" name = "qamEnddateTime" path="qamEnddateTime" readonly="true"/>
+			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true"/>
 			                            </div>
 			                        </div>
 				                    

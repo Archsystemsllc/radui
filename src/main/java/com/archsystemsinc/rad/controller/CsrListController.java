@@ -27,7 +27,7 @@ public class CsrListController {
 		CsrUploadForm csrUploadForm = new CsrUploadForm();
 		model.addAttribute("csrUploadForm", csrUploadForm);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
-		session.setAttribute("WEB_SERVICE_URL",HomeController.REST_SERVICE_URI);
+		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "csrlist";
 	}
 }

@@ -119,7 +119,7 @@
 				                         <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
-													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" >
 													
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
 														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/AlL" >${row.macName}</a></span>
