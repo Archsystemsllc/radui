@@ -59,12 +59,20 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
  
         if (isAdmin(roles)) {
             url = "/admin/dashboard";
-            
-            
-        } else if (isUser(roles)) {
-            /*url = "/reportingHome";*/
+        } else if (isUser(roles)) {           
         	url = "/user/dashboard";
-        } else {
+        } else if (isQualityManager(roles)) {           
+        	url = "/quality_manager/dashboard";
+        } else if (isCmsUser(roles)) {           
+        	url = "/cms_user/dashboard";
+        } else if (isMacAdmin(roles)) {           
+        	url = "/mac_admin/dashboard";
+        } else if (isQualityMonitor(roles)) {           
+        	url = "/quality_monitor/dashboard";
+        }else if (isMacUser(roles)) {           
+        	url = "/mac_user/dashboard";
+        } 
+        else {
             url = "/accessDenied";
         }
         log.debug("<-- determineTargetUrl-url:"+url);
@@ -80,6 +88,41 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
  
     private boolean isAdmin(List<String> roles) {
         if (roles.contains("Administrator")) {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isQualityManager(List<String> roles) {
+        if (roles.contains("Quality Manager")) {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isCmsUser(List<String> roles) {
+        if (roles.contains("CMS User")) {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isMacAdmin(List<String> roles) {
+        if (roles.contains("MAC Admin")) {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isQualityMonitor(List<String> roles) {
+        if (roles.contains("Quality Monitor")) {
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean isMacUser(List<String> roles) {
+        if (roles.contains("MAC User")) {
             return true;
         }
         return false;

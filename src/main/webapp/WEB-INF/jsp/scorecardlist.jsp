@@ -4,6 +4,7 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -72,9 +73,7 @@
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<table id="mid">
-		<form:form method="POST" modelAttribute="scorecard"
-			class="form-signin"
-			action="${pageContext.request.contextPath}/admin/scorecardfilter"
+		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardfilter"
 			id="scorecardfilterForm">
 			<tr>
 				<td style="vertical-align: top">
@@ -87,8 +86,6 @@
 								<div class="header">List of Scorecards</div>
 
 								<c:if test="${ScoreCardFilter == true}">
-
-
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
@@ -101,13 +98,11 @@
 														<form:option value="Pass" />
 														<form:option value="Fail" />
 													</form:select>
-
 												</div>
 												<div class="col-lg-4 form-group">
 													<label for="name"> QM Name/QM ID:</label>
 													<form:input type="text" class="form-control"
 														id="qamFullName" name="qamFullName" path="qamFullName" />
-
 												</div>
 											</div>
 											<div class="row">
@@ -115,7 +110,7 @@
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurId" class="form-control required"
 														id="jurId" required="true">
-														<form:option value="" label="ALL" />
+														<form:option value="0" label="ALL" />
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
 												</div>
@@ -128,7 +123,6 @@
 														<form:option value="Non-Scoreable" />
 														<form:option value="Does Not Count" />
 													</form:select>
-
 												</div>
 											</div>
 											<div class="row">
@@ -144,7 +138,6 @@
 														path="filterToDateString" />
 												</div>
 											</div>
-
 										</div>
 									</div>
 									<div class="row ">
@@ -165,9 +158,8 @@
 									<div class="row" style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<span><a
-												href="${pageContext.request.contextPath}/admin/getMacJurisReportFromSession"><button
+												href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession"><button
 														class="btn btn-primary" id="back" type="button">Back</button></a></span>
-
 										</div>
 									</div>
 								</c:if>
@@ -180,68 +172,44 @@
 
 												<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()}"													 
 													style="width:95%;font-size:95%;" export="true" pagesize="15" requestURI="">
-													<display:column property="macCallReferenceNumber"
-														title="MAC Call Reference ID" sortable="true"
-														style="text-align:center;" />
-													<display:column property="qamFullName" title="QM Name/ID"
-														sortable="true" style="text-align:center;" />
-													<display:column property="qamStartdateTimeString"
-														title="QM Start Date/Time" sortable="true"
-														style="text-align:center;" />
-													<display:column property="scorecardType"
-														title="Scorecard Type" sortable="true"
-														style="text-align:center;" />
-													<display:column property="callResult" title="Status"
-														sortable="true" style="text-align:center;" />
-													<display:column property="jurisdictionName"
-														title="Jurisdiction" sortable="true"
-														style="text-align:center;" />
-													<display:column title="Actions" style="text-align:center;"
-														media="html">
-														<span><a class="action-icons c-edit"
-															href="${pageContext.request.contextPath}/admin/edit-scorecard/${row.id}"
-															title="Edit">Edit</a></span>
-														<span><a class="action-icons c-approve"
-															href="${pageContext.request.contextPath}/admin/new-scorecard"
-															title="Create">Create</a></span>
+													<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;" />
+													<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;" />
+													<display:column property="qamStartdateTimeString" title="QM Start Date/Time" sortable="true" style="text-align:center;" />
+													<display:column property="scorecardType"	title="Scorecard Type" sortable="true"	style="text-align:center;" />
+													<display:column property="callResult" title="Status"	sortable="true" style="text-align:center;" />
+													<display:column property="jurisdictionName"	title="Jurisdiction" sortable="true"	style="text-align:center;" />
+													<display:column title="Actions" style="text-align:center;"	media="html">
+														<span><a class="action-icons c-pending"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/${row.id}" title="View">View</a></span>
+														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
+														<span><a class="action-icons c-edit"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
+														</sec:authorize>
+														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
+														<span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create">Create</a></span>
+														</sec:authorize>
 													</display:column>
-													<display:setProperty name="export.excel.filename"
-														value="ScorecardReport.xls" />
-													<display:setProperty name="export.csv.filename"
-														value="ScorecardReport.csv" />
-													<display:setProperty name="export.pdf.filename"
-														value="ScorecardReport.pdf" />
+													<display:setProperty name="export.excel.filename"	value="ScorecardReport.xls" />
+													<display:setProperty name="export.csv.filename"	value="ScorecardReport.csv" />
+													<display:setProperty name="export.pdf.filename"	value="ScorecardReport.pdf" />
 													<display:setProperty name="export.pdf" value="true" />
 
 												</display:table>
 												<c:if
 													test="${fn:length(sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()) eq 0}">
 													<span><a class="action-icons c-approve"
-														href="${pageContext.request.contextPath}/admin/new-scorecard"
+														href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard"
 														title="Create">Create</a></span>
 												</c:if>
 											</div>
 										</div>
-
 									</div>
 								</div>
-
-
-
 							</div>
 						</div>
 					</div>
-
-
 				</td>
-
 			</tr>
-
 		</form:form>
 	</table>
-
-
 	<jsp:include page="footer.jsp"></jsp:include>
-
 </body>
 </html>

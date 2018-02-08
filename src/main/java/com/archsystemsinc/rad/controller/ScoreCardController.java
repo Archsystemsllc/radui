@@ -30,26 +30,6 @@ import com.archsystemsinc.rad.service.impl.SecurityServiceImpl;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * This is the Spring Controller Class for User Login Functionality.
- * 
- * This class provides the functionalities for 1. User Registration,
- * 2. Re-directing to the welcome Page, and 3. The Login Page.
- * 
- * @author Murugaraj Kandaswamy
- * @since 6/19/2017
- */
-
-/**
- * This is the Spring Controller Class for Scorecard functionality (create, edit, monitoring scorecard).
- * 
- * This class provides the functionalities for 
- * 1. Create scorecard
- * 2. Edit score card
- * Updated
- * @author Mobeena
- * @since 11/27/2017
- */
 
 
 @Controller
@@ -67,16 +47,11 @@ public class ScoreCardController {
      * 
      * @param 
      * @return scorecard
-     */
-    @RequestMapping(value = "/admin/scorecardpagination", method = RequestMethod.GET)
-    public String getScorecard(Model model) {
-    	 log.debug("--> showCreateScoreCard Screen <--");
-		  User form = new User();
-		  model.addAttribute("userForm", form);
-    	  return "scorecard";
-    }
-    
-	@RequestMapping(value = "/admin/scorecardlist")
+     */	 
+
+	 
+	 @RequestMapping(value ={"/admin/scorecardlist", "/quality_manager/scorecardlist", "/cms_user/scorecardlist",
+			 "/mac_admin/scorecardlist","/mac_user/scorecardlist"})	
 	public String getScorecardList(HttpServletRequest request,Model model) {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardNew = new ScoreCard();
@@ -91,7 +66,8 @@ public class ScoreCardController {
 		return "scorecardlist";
 	}
 	
-	@RequestMapping(value = "/admin/scorecardfilter")
+	 @RequestMapping(value ={"/admin/scorecardfilter", "/quality_manager/scorecardfilter", "/cms_user/scorecardfilter",
+			 "/mac_admin/scorecardfilter","/mac_user/scorecardfilter"})		
 	public String filterScorecardList(@ModelAttribute("scorecard") ScoreCard scoreCard, final BindingResult result,
 			final Model model,HttpServletRequest request) {
 		log.debug("--> getScorecardList Screen <--");
@@ -151,7 +127,8 @@ public class ScoreCardController {
 		return finalResultsMap;
 	}
 	
-	@RequestMapping(value = "/admin/edit-scorecard/{id}", method = RequestMethod.GET)
+	 @RequestMapping(value ={"/admin/edit-scorecard/{id}", "/quality_manager/edit-scorecard/{id}", "/cms_user/edit-scorecard/{id}",
+			 "/mac_admin/edit-scorecard/{id}","/mac_user/edit-scorecard/{id}"}, method = RequestMethod.GET)	
 	public String editScoreCardGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session) {
 		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
 		ScoreCard scoreCard = resultsMap.get(id);
@@ -179,9 +156,41 @@ public class ScoreCardController {
 		
 		return "scorecard";
 	}
+	 
+	 @RequestMapping(value ={"/admin/view-scorecard/{id}", "/quality_manager/view-scorecard/{id}", "/cms_user/view-scorecard/{id}",
+			 "/mac_admin/view-scorecard/{id}","/mac_user/view-scorecard/{id}"}, method = RequestMethod.GET)
+	public String viewScoreCardGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session) {
+		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
+		ScoreCard scoreCard = resultsMap.get(id);
+		
+		String qamStartDateString = utilityFunctions.convertToStingFromDate(scoreCard.getQamStartdateTime());
+		String qamEndDateString = utilityFunctions.convertToStingFromDate(scoreCard.getQamEnddateTime());
+		
+		scoreCard.setQamStartdateTimeString(qamStartDateString);
+		scoreCard.setQamEnddateTimeString(qamEndDateString);
+		
+		model.addAttribute("scorecard", scoreCard);
+		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		
+		HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCard.getMacId());
+		model.addAttribute("jurisMapEdit", jurisMap);
+		
+		HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCard.getMacId()+"_"+scoreCard.getJurId());
+		model.addAttribute("programMapEdit", programMap);
+		
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
+		model.addAttribute("subCategorylMapEdit", subCategorylMap);
+		
+		
+		return "scorecardview";
+	}
 	
 	
-	@RequestMapping(value = "/admin/new-scorecard", method = RequestMethod.GET)
+	 @RequestMapping(value ={"/admin/new-scorecard", "/quality_manager/new-scorecard", "/cms_user/new-scorecard",
+			 "/mac_admin/new-scorecard","/mac_user/new-scorecard"}, method = RequestMethod.GET)
+	
 	public String newScoreCardGet(@ModelAttribute("userForm") User userForm,final Model model) {
 		
 		ScoreCard scoreCard = new ScoreCard();
@@ -199,7 +208,9 @@ public class ScoreCardController {
 		return "scorecard";
 	}
 
-	@RequestMapping(value = "/admin/saveorupdatescorecard", method = RequestMethod.POST)
+	
+	@RequestMapping(value ={"/admin/saveorupdatescorecard", "/quality_manager/saveorupdatescorecard", "/cms_user/saveorupdatescorecard",
+			 "/mac_admin/saveorupdatescorecard","/mac_user/saveorupdatescorecard"}, method = RequestMethod.POST)
 	public String saveScorecard(@ModelAttribute("scorecard") ScoreCard scoreCard, final BindingResult result,
 			final Model model) {
 

@@ -248,7 +248,7 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/edit-user/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/{id}", method = RequestMethod.GET)
 	public String editUser(@PathVariable("id") final Long id,
 			final Model model, User user) {
 		log.debug("--> editUser:"+id);
@@ -280,13 +280,13 @@ public class UserController {
 	 * @param redirectAttributes
 	 * @return the string to which the page to be redirected.
 	 */
-	@RequestMapping(value = "/admin/delete-user/{id}/{deletedBy}", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/{deletedBy}", method = RequestMethod.GET)
 	public String deleteUser(@PathVariable("id") final Long id,
 			@PathVariable("deletedBy") final String deletedBy,
 			final RedirectAttributes redirectAttributes) {
 		userService.deleteById(id, 2, deletedBy);
 		redirectAttributes.addFlashAttribute("success", "success.delete.user");
-		return "redirect:../../listofusers";
+		return "redirect:../admin/listofusers";
 	}
 
 	/**
@@ -300,6 +300,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
+	
 	public String login(Model model, String error) {
 		log.debug("error::" + error);
 		if (error != null)

@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Admin Header</title>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <link href="https://fonts.googleapis.com/css?family=Rubik"
 	rel="stylesheet">
 <link href="${pageContext.request.contextPath}/resources/css/main.css"
@@ -84,23 +85,20 @@
 							style="vertical-align: bottom; border: 0px; padding: 0px">
 							<div class="collapse navbar-collapse navbar-right">
 								<ul class="nav navbar-nav" style="font-weight: bold">
-									<li style="margin-left: 0px"><a
-										href="${pageContext.request.contextPath}/admin/users">Home</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/admin/scorecardlist">Score
-											Card</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/admin/csrlist">CSR</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/admin/reports">Reports</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/admin/rebuttallist">Rebuttals</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/admin/contactus">My
-											Account</a></li>
-									<li><a
-										href="${pageContext.request.contextPath}/admin/jqueryform_validation_example">Help
-											Guide</a></li>
+									<li style="margin-left: 0px"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a></li>
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Score Card</a></li>
+									</sec:authorize>
+									
+									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports">Reports</a></li>
+									
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Mac User')">
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist">CSR</a></li>
+									</sec:authorize>
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">Rebuttal</a></li>
+									</sec:authorize>
+									<sec:authorize access="hasAuthority('Administrator')">
 									<li class="dropdown">
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>
@@ -109,6 +107,11 @@
 									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>
 									    </ul>
 									</li>
+									</sec:authorize>
+									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/contactus">My Account</a></li>	
+									<li><a href="#">Help Guide</a></li>									
+									
+									<li>&nbsp; &nbsp;</li>			
 								</ul>
 							</div>
 						</td>

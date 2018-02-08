@@ -219,7 +219,7 @@ public class RebuttalController {
 		return returnView;
 	}
 	
-	@RequestMapping(value = "/admin/edit-rebuttal/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/rebuttaledit/admin/{id}", method = RequestMethod.GET)
 	public String editrebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
 		Rebuttal rebuttal = resultsMap.get(id);
@@ -241,7 +241,7 @@ public class RebuttalController {
 		return "rebuttal";
 	}	
 	
-	@RequestMapping(value = "/admin/view-rebuttal/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/rebuttalview/admin/{id}", method = RequestMethod.GET)
 	public String viewRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTALS_REPORT_MAP");
 		Rebuttal rebuttal = resultsMap.get(id);

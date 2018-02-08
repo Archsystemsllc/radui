@@ -49,7 +49,7 @@ public class CsrController {
     @RequestMapping(value = "/admin/csr_upload", method = RequestMethod.POST)
     public String registration(Model model,@ModelAttribute("userForm") User userForm, BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         
-        //securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
+       securityService.autologin(userForm.getUserName(), userForm.getPasswordConfirm());
     	 model.addAttribute("userForm", new User());
         return "registration";
     }

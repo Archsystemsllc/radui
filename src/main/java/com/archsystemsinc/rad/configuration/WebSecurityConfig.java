@@ -30,7 +30,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
     	http.authorizeRequests() 
     	.antMatchers("/user/**").access("hasAuthority('Report Viewer')")
-        .antMatchers("/admin/**").access("hasAuthority('Administrator')")
+        .antMatchers("/administrator/**").access("hasAuthority('Administrator')")
+        .antMatchers("/quality_manager/**").access("hasAuthority('Quality Manager')")
+        .antMatchers("/cms_user/**").access("hasAuthority('CMS User')")
+        .antMatchers("/mac_admin/**").access("hasAuthority('MAC Admin')")
+        .antMatchers("/quality_monitor/**").access("hasAuthority('Quality Monitor')")
+        .antMatchers("/mac_user/**").access("hasAuthority('MAC User')")
         .antMatchers("/resources/**").permitAll()
         .anyRequest().authenticated()
         .and().formLogin().loginPage("/login").permitAll().successHandler(customSuccessHandler)        
