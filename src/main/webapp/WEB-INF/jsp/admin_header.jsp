@@ -86,7 +86,7 @@
 							<div class="collapse navbar-collapse navbar-right">
 								<ul class="nav navbar-nav" style="font-weight: bold">
 									<li style="margin-left: 0px"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a></li>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') ">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Score Card</a></li>
 									</sec:authorize>
 									
@@ -95,19 +95,23 @@
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Mac User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist">CSR</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">Rebuttal</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator')">
+								
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
 									<li class="dropdown">
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
-									      <li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
+										<sec:authorize access="hasAuthority('Administrator')">
+									      	<li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
+									     </sec:authorize>
 									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>
 									    </ul>
 									</li>
 									</sec:authorize>
+									
 									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/contactus">My Account</a></li>	
 									<li><a href="#">Help Guide</a></li>									
 									

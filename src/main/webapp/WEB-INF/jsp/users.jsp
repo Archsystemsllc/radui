@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -127,8 +128,10 @@ $(document).ready(function(){
 									                                <td><a class="${linkcolor }">${user.emailId}</a></td>
 									                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 									                                <td>
+									                                <sec:authorize access="hasAuthority('Administrator')">
 									                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}" title="Edit">Edit</a></span>
 									                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+									                                </sec:authorize>
 									                                </td>
 									                            </tr>
 									                        </c:forEach>

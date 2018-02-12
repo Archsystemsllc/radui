@@ -86,6 +86,7 @@
 								<div class="header">List of Scorecards</div>
 
 								<c:if test="${ScoreCardFilter == true}">
+								<form:input type = "hidden" path="userId" />
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
@@ -171,7 +172,7 @@
 											<div class="col-lg-10 form-group">
 
 												<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()}"													 
-													style="width:95%;font-size:95%;" export="true" pagesize="15" requestURI="">
+													style="width:95%;font-size:95%;" export="true" pagesize="15" requestURI="" >
 													<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;" />
 													<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;" />
 													<display:column property="qamStartdateTimeString" title="QM Start Date/Time" sortable="true" style="text-align:center;" />
@@ -181,9 +182,9 @@
 													<display:column title="Actions" style="text-align:center;"	media="html">
 														<span><a class="action-icons c-pending"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/${row.id}" title="View">View</a></span>
 														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
-														<span><a class="action-icons c-edit"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
+															<span><a class="action-icons c-edit"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
 														</sec:authorize>
-														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
+														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
 														<span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create">Create</a></span>
 														</sec:authorize>
 													</display:column>

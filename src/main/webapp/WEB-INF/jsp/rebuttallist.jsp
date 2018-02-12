@@ -4,6 +4,7 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -54,7 +55,7 @@
 									<tr><td colspan="3" width="95%" >
 					<div class="form_grid_12">
 					<display:table class="display hover stripe cell-border " id="rebuttalRow" name="${sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()}" 
-							  style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" requestURI="${pageContext.request.contextPath}/admin/rebuttallist">
+							  style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" requestURI="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;"/>
 							<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;"/>
 							<display:column property="macPCCNameTempValue" title="PCC/Location" sortable="true" style="text-align:center;"/>
@@ -64,12 +65,24 @@
 							<display:column property="rebuttalResult" title="Result" sortable="true" style="text-align:center;"/>
 							
 							<<display:column title="Actions" style="text-align:center;">
-								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-rebuttal/${rebuttalRow.id}" title="Edit">Edit</a></span>
-								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>								
+							<span><a class="action-icons c-pending"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-rebuttal/${rebuttalRow.id}" title="View">View</a></span>
+							<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-rebuttal/${rebuttalRow.id}" title="Edit">Edit</a></span>
+							</sec:authorize>
+							<sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="Create">Create</a></span>			
+							</sec:authorize>					
 							</display:column>
+							<display:setProperty name="export.excel.filename"	value="RebuttalReport.xls" />
+							<display:setProperty name="export.csv.filename"	value="RebuttalReport.csv" />
+							<display:setProperty name="export.pdf.filename"	value="RebuttalReport.pdf" />
+							<display:setProperty name="export.pdf" value="true" />
+							
 						</display:table>
 						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()) eq 0}">
-						   <span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/admin/new-rebuttal" title="Create">Create</a></span>	
+							<sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+						   		<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="Create">Create</a></span>	
+						  	</sec:authorize>
 						</c:if>	
 						</div>
 						</td>

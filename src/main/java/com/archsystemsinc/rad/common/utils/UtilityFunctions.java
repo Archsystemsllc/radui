@@ -42,7 +42,7 @@ public class UtilityFunctions {
 	private static final SimpleDateFormat usEstDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 
 	
-	public String convertToStingFromDate(Date dateValue) {
+	public String convertToStringFromDate(Date dateValue) {
 				
 		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
 		usEstDateFormat.setTimeZone(tzInAmerica);

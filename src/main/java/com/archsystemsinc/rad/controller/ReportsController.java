@@ -51,7 +51,9 @@ public class ReportsController {
 			 "/mac_admin/goBackMacJurisReport","/mac_user/goBackMacJurisReport"})		
 	public String goBackGetMacJuris(@ModelAttribute("reportsForm") ReportsForm reportsForm, final Model model,HttpSession session) {
 		log.debug("--> showAdminDashboard <--");
-		
+		HashMap<Integer,String> locationMap = null;
+		HashMap<Integer,String> jurisMap = null;
+		HashMap<Integer,String> programMap = null;
 		
 		model.addAttribute("reportsForm", reportsForm);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
@@ -59,24 +61,36 @@ public class ReportsController {
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		
-		if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
-			HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
-			model.addAttribute("programMapEdit", programMap);
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")) {
+			jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
 		} else {
-			
-			model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);
-			reportsForm.setJurisdictionName(reportsForm.getJurisId());
+			jurisMap = HomeController.JURISDICTION_MAP;
 		}
 		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
-			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
-			model.addAttribute("jurisMapEdit", jurisMap);
-		} 
+		model.addAttribute("jurisMapEdit", jurisMap);
 		
-		if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
-			HashMap<Integer,String> locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
-			model.addAttribute("locationMapEdit", locationMap);
-		} 
+		
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") 
+				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+			programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
+			
+		} else {
+			programMap = HomeController.ALL_PROGRAM_MAP;
+			
+		}
+		
+		model.addAttribute("programMapEdit", programMap);
+		
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") 
+				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")
+						&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
+			locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
+			
+		} else {
+			locationMap = HomeController.ALL_PCC_LOCATION_MAP;
+		}
+		
+		model.addAttribute("locationMapEdit", locationMap);
 		
 		
 		return "reports";

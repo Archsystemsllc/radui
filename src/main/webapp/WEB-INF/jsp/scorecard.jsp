@@ -379,7 +379,7 @@
 	</div>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/admin/saveorupdatescorecard" id="scorecardForm">
+		<form:form method="POST" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/saveorupdatescorecard" id="scorecardForm">
 		<!-- Hidden Fields -->
 		<form:input type = "hidden" path="id" />
 		<form:input type = "hidden" path="qamStartdateTime" />

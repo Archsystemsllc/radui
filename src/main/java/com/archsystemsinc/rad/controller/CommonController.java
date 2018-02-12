@@ -104,16 +104,15 @@ public class CommonController {
 		
 		HashMap<Integer,String> programMap = new HashMap<Integer,String>();
 		
-		if(!jurisIdString.equalsIgnoreCase("")) {
-			if(jurisIdString.equalsIgnoreCase("ALL")) {
+		if(!macIdString.equalsIgnoreCase("") && !jurisIdString.equalsIgnoreCase("")) {
+			if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL")) {
 				programMap = HomeController.ALL_PROGRAM_MAP;
-				
-			} else {
-				
+			} else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL")) {
+				programMap = HomeController.JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(jurisIdString));
+			} else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL")) {
 				programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString));
-			}
-			
-		}	
+			} 			
+		}		
 		
 		return programMap;
 	}
@@ -124,16 +123,15 @@ public class CommonController {
 		
 		HashMap<Integer,String> locationMap = new HashMap<Integer,String>();
 		
-		if(!programIdString.equalsIgnoreCase("")) {
-			if(programIdString.equalsIgnoreCase("ALL")) {
+		if(!macIdString.equalsIgnoreCase("") && !jurisIdString.equalsIgnoreCase("") && !programIdString.equalsIgnoreCase("")) {
+			if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL") && programIdString.equalsIgnoreCase("ALL")) {
 				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
-				
+			} else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+				locationMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString));
 			} else {
-				
-				locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString)+"_"+Integer.valueOf(programIdString));
+				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
 			}
-			
-		}	
+		}		
 		
 		return locationMap;
 	}

@@ -126,7 +126,7 @@ public class RadServiceApiClient {
 			log.debug("users::"+users);
 			
 		}catch(Exception ex) {
-			log.error("Errro while fetching users",ex);
+			log.error("Error while fetching users",ex);
 		}
 		log.debug("--> getAllUsers");
 		return users;

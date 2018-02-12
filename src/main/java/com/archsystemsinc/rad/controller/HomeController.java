@@ -12,11 +12,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import com.archsystemsinc.rad.model.MacInfo;
 import com.archsystemsinc.rad.model.MacProgJurisPccMapping;
 import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.service.UserService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -54,6 +58,9 @@ public class HomeController {
 	@Value("${rad.webservice.uri}")
     public String RAD_WS_URI2;
 	
+	@Autowired
+	private UserService userService;
+	
 	public static String RAD_WS_URI;
 	
 	public static Integer setupGlobalVarRanCount = 1;
@@ -68,12 +75,16 @@ public class HomeController {
 	public static HashMap<Integer,HashMap<Integer,String>> ROLE_MAP;
 	public static HashMap<Integer,String> PCC_LOC_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_MAP;
+	public static HashMap<Integer,HashMap<Integer,String>> JURISDICTION_PROGRAM_MAP;
 	public static HashMap<String,HashMap<Integer,String>> MAC_JURISDICTION_PROGRAM_PCC_MAP;
 	
 	public static HashMap<Integer, String> CALL_CATEGORY_MAP = null;
 	
 	public static HashMap<Integer,HashMap<Integer,String>> CALL_CATEGORY_SUB_CATEGORY_MAP = null;
 	
+	public static HashMap<Integer, String> USER_BASED_MAC_ID_DETAILS;
+	public static HashMap<Integer, String> USER_BASED_JURISDICTION_DETAILS;
+	public static HashMap<Integer, String> USER_BASED_PCC_LOCATION_DETAILS;
 	
 	 @RequestMapping(value = "/admin/dashboard")
 	 public String showAdminDashboard(Model model, HttpSession session) {
@@ -85,6 +96,11 @@ public class HomeController {
 		 if(MAC_ID_MAP == null) {
 			 setupStaticGlobalVariables();
 		  }
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String userName = auth.getName(); //get logged in username 
+		 User user = userService.findByUsername(userName);
+		 
+		 session.setAttribute("LoggedInUserForm", user);
 		  return "homepage";
 	} 
 	 
@@ -98,6 +114,11 @@ public class HomeController {
 		 if(MAC_ID_MAP == null) {
 			 setupStaticGlobalVariables();
 		  }
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String userName = auth.getName(); //get logged in username 
+		 User user = userService.findByUsername(userName);
+		 
+		 session.setAttribute("LoggedInUserForm", user);
 		  return "homepage";
 	} 
 	 
@@ -111,6 +132,11 @@ public class HomeController {
 		 if(MAC_ID_MAP == null) {
 			 setupStaticGlobalVariables();
 		  }
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String userName = auth.getName(); //get logged in username 
+		 User user = userService.findByUsername(userName);
+		 
+		 session.setAttribute("LoggedInUserForm", user);
 		  return "homepage";
 	} 
 	 
@@ -124,6 +150,11 @@ public class HomeController {
 		 if(MAC_ID_MAP == null) {
 			 setupStaticGlobalVariables();
 		  }
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String userName = auth.getName(); //get logged in username 
+		 User user = userService.findByUsername(userName);
+		 
+		 session.setAttribute("LoggedInUserForm", user);
 		  return "homepage";
 	} 
 	 
@@ -138,8 +169,14 @@ public class HomeController {
 			 setupStaticGlobalVariables();
 		  }
 		 
-		 setupSessionGlobalVariables(null,null);
-		  return "homepage";
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String userName = auth.getName(); //get logged in username 
+		 User user = userService.findByUsername(userName);
+		 
+		 session.setAttribute("LoggedInUserForm", user);
+		 
+		 setupSessionGlobalVariables(user);
+		 return "homepage";
 	} 
 	 
 	 
@@ -153,8 +190,14 @@ public class HomeController {
 		 if(MAC_ID_MAP == null) {
 			 setupStaticGlobalVariables();
 		  }
-		 setupSessionGlobalVariables(null,null);
-		  return "homepage";
+		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 String userName = auth.getName(); //get logged in username 
+		 User user = userService.findByUsername(userName);
+		 
+		 session.setAttribute("LoggedInUserForm", user);
+		 
+		 setupSessionGlobalVariables(user);
+		 return "homepage";
 	} 
 	 
 	 private void setupStaticGlobalVariables() {
@@ -189,9 +232,11 @@ public class HomeController {
 				
 				HashMap<Integer, String> jurisdictionMap = null;
 				
-				HashMap<Integer,HashMap<Integer,String>> mapJurisMap = new HashMap<Integer,HashMap<Integer,String>>();
+				HashMap<Integer,HashMap<Integer,String>> macJurisMap = new HashMap<Integer,HashMap<Integer,String>>();
 				
-				HashMap<String,HashMap<Integer,String>> mapJurisProgramMap = new HashMap<String,HashMap<Integer,String>>();
+				HashMap<String,HashMap<Integer,String>> macJurisProgramMap = new HashMap<String,HashMap<Integer,String>>();
+				
+				HashMap<Integer,HashMap<Integer,String>> jurisProgramMap = new HashMap<Integer,HashMap<Integer,String>>();
 				
 				HashMap<String,HashMap<Integer,String>> macJurisProgramLocationMap = new HashMap<String,HashMap<Integer,String>>();
 				
@@ -246,11 +291,13 @@ public class HomeController {
 					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "macPrgmJurisPccList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
 					
 					macProgJurisPccMappingList = mapper.readValue(webServiceExchange.getBody(), new TypeReference<List<MacProgJurisPccMapping>>(){});
+					
+					
 					for (MacProgJurisPccMapping macProgJurisPccMapping: macProgJurisPccMappingList) {					
 										
 						//MAC Jurisdiction Map Code
 						String jurisName = jurisdictionMap.get(macProgJurisPccMapping.getJurisdictionId());
-						HashMap<Integer,String> jurisTempMap = mapJurisMap.get(macProgJurisPccMapping.getMacId());
+						HashMap<Integer,String> jurisTempMap = macJurisMap.get(macProgJurisPccMapping.getMacId());
 						if(jurisTempMap == null) {
 							jurisTempMap = new HashMap<Integer,String>();
 							jurisTempMap.put(macProgJurisPccMapping.getJurisdictionId(),jurisName);
@@ -258,12 +305,16 @@ public class HomeController {
 							jurisTempMap.put(macProgJurisPccMapping.getJurisdictionId(),jurisName);
 						}
 						
-						mapJurisMap.put(macProgJurisPccMapping.getMacId(), jurisTempMap);
+						macJurisMap.put(macProgJurisPccMapping.getMacId(), jurisTempMap);
 						
 						//MAC Jurisdiction Program Map Code
 						String programName = programMap.get(macProgJurisPccMapping.getProgramId());
 						String macId_jurisId_Key = macProgJurisPccMapping.getMacId()+"_"+macProgJurisPccMapping.getJurisdictionId();
-						HashMap<Integer,String> programTempMap = mapJurisProgramMap.get(macId_jurisId_Key);
+						Integer allMacjurisId_Key = macProgJurisPccMapping.getJurisdictionId();
+						
+						HashMap<Integer,String> programTempMap = macJurisProgramMap.get(macId_jurisId_Key);
+						HashMap<Integer,String> allMacProgramTempMap = jurisProgramMap.get(allMacjurisId_Key);
+						
 						if(programTempMap == null) {
 							programTempMap = new HashMap<Integer,String>();
 							programTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
@@ -271,7 +322,16 @@ public class HomeController {
 							programTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
 						}
 						
-						mapJurisProgramMap.put(macId_jurisId_Key, programTempMap);		
+						if(allMacProgramTempMap == null) {
+							allMacProgramTempMap = new HashMap<Integer,String>();
+							allMacProgramTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
+						} else {
+							allMacProgramTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
+						}
+						
+						macJurisProgramMap.put(macId_jurisId_Key, programTempMap);		
+						
+						jurisProgramMap.put(allMacjurisId_Key, allMacProgramTempMap);		
 						
 						//MAC Jurisdiction Program Location Map Code
 						
@@ -305,8 +365,9 @@ public class HomeController {
 					CALL_CATEGORY_SUB_CATEGORY_MAP = callCatSubCatMap;
 					
 					MAC_OBJECT_MAP = macObjectMap;
-					MAC_JURISDICTION_MAP = mapJurisMap;
-					MAC_JURISDICTION_PROGRAM_MAP = mapJurisProgramMap;
+					MAC_JURISDICTION_MAP = macJurisMap;
+					MAC_JURISDICTION_PROGRAM_MAP = macJurisProgramMap;
+					JURISDICTION_PROGRAM_MAP = jurisProgramMap;
 					MAC_JURISDICTION_PROGRAM_PCC_MAP = macJurisProgramLocationMap;
 					
 				} catch (JsonParseException e) {
@@ -322,162 +383,34 @@ public class HomeController {
 		}
 	 
 	 
-	 private void setupSessionGlobalVariables(Integer macId, Integer jurisdictionId) {
-			//System.out.println("Setup Run Count"+setupGlobalVarRanCount);/
-		 
-				/*ResponseEntity<String> webServiceExchange = null;			
+	 	private void setupSessionGlobalVariables(User user) {
+			
+			//Mac Id Setup
+			HashMap<Integer, String> userBasedMacIdMap = new HashMap<Integer, String> ();
+			
+			String macName = MAC_ID_MAP.get(user.getMacId().intValue());
+			
+			userBasedMacIdMap.put(user.getMacId().intValue(), macName);
+			
+			USER_BASED_MAC_ID_DETAILS = userBasedMacIdMap;
+			
+			//Jurisdiction Id Setup
+			HashMap<Integer, String> userBasedJurisdictionMap = new HashMap<Integer, String> ();
+			
+			String jurisdictionName = JURISDICTION_MAP.get(user.getJurId().intValue());
+			
+			userBasedJurisdictionMap.put(user.getJurId().intValue(), jurisdictionName);
+			
+			USER_BASED_JURISDICTION_DETAILS = userBasedJurisdictionMap;
+			
+			//PCC Location Id Setup
+			HashMap<Integer, String> userBasedPccLocationMap = new HashMap<Integer, String> ();
+			
+			String pccLocationName = PCC_LOC_MAP.get(user.getPccId().intValue());
+			
+			userBasedPccLocationMap.put(user.getPccId().intValue(), pccLocationName);
+			
+			USER_BASED_PCC_LOCATION_DETAILS = userBasedPccLocationMap;
 				
-				ObjectMapper mapper = new ObjectMapper();
-				
-				List<MacProgJurisPccMapping> macProgJurisPccMappingList = null;
-				
-				HashMap<Integer, String> programMap = null;
-				
-				HashMap<Integer, String> pccLocationMap = null;
-				
-				HashMap<Integer, String> macIdMap = null;
-				
-				ArrayList<MacInfo> macInfoList = null;
-				
-				HashMap<Integer, String> jurisdictionMap = null;
-				
-				HashMap<Integer,HashMap<Integer,String>> mapJurisMap = new HashMap<Integer,HashMap<Integer,String>>();
-				
-				HashMap<String,HashMap<Integer,String>> mapJurisProgramMap = new HashMap<String,HashMap<Integer,String>>();
-				
-				HashMap<String,HashMap<Integer,String>> macJurisProgramLocationMap = new HashMap<String,HashMap<Integer,String>>();
-				
-				HashMap<Integer, MacInfo> macObjectMap = new HashMap<Integer, MacInfo>();
-				
-				HashMap<Integer, String> callCategoryMap = null;
-				
-				HashMap<Integer,HashMap<Integer,String>> callCatSubCatMap = null;
-				try {
-					
-					RAD_WS_URI = RAD_WS_URI2;
-					
-					//webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "pccLocationMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					pccLocationMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
-					
-					ALL_PCC_LOCATION_MAP = pccLocationMap;
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "programMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					programMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});
-					
-					//ALL_PROGRAM_MAP = programMap;
-					
-					//webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "jurisdictionMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					//macIdMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
-					
-					macIdMap = MAC_ID_MAP.get(macId);
-					
-					MAC_ID_MAP = macIdMap;
-					
-					jurisdictionMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});
-					
-					JURISDICTION_MAP = jurisdictionMap;
-					
-					//webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "macIdMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					
-					
-					//webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "orgMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					ORGANIZATION_MAP = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "roleMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					ROLE_MAP = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "pccLocationMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					PCC_LOC_MAP = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});	
-					
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "macList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					macInfoList = mapper.readValue(webServiceExchange.getBody(), new TypeReference<ArrayList<MacInfo>>(){});			
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "macPrgmJurisPccList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					macProgJurisPccMappingList = mapper.readValue(webServiceExchange.getBody(), new TypeReference<List<MacProgJurisPccMapping>>(){});
-					for (MacProgJurisPccMapping macProgJurisPccMapping: macProgJurisPccMappingList) {					
-										
-						//MAC Jurisdiction Map Code
-						String jurisName = jurisdictionMap.get(macProgJurisPccMapping.getJurisdictionId());
-						HashMap<Integer,String> jurisTempMap = mapJurisMap.get(macProgJurisPccMapping.getMacId());
-						if(jurisTempMap == null) {
-							jurisTempMap = new HashMap<Integer,String>();
-							jurisTempMap.put(macProgJurisPccMapping.getJurisdictionId(),jurisName);
-						} else {
-							jurisTempMap.put(macProgJurisPccMapping.getJurisdictionId(),jurisName);
-						}
-						
-						mapJurisMap.put(macProgJurisPccMapping.getMacId(), jurisTempMap);
-						
-						//MAC Jurisdiction Program Map Code
-						String programName = programMap.get(macProgJurisPccMapping.getProgramId());
-						String macId_jurisId_Key = macProgJurisPccMapping.getMacId()+"_"+macProgJurisPccMapping.getJurisdictionId();
-						HashMap<Integer,String> programTempMap = mapJurisProgramMap.get(macId_jurisId_Key);
-						if(programTempMap == null) {
-							programTempMap = new HashMap<Integer,String>();
-							programTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
-						} else {
-							programTempMap.put(macProgJurisPccMapping.getProgramId(),programName);
-						}
-						
-						mapJurisProgramMap.put(macId_jurisId_Key, programTempMap);		
-						
-						//MAC Jurisdiction Program Location Map Code
-						
-						String pccLocation = pccLocationMap.get(macProgJurisPccMapping.getPccId());
-						String macId_jurisId_programId_Key = macProgJurisPccMapping.getMacId()+"_"+macProgJurisPccMapping.getJurisdictionId()+"_"+macProgJurisPccMapping.getProgramId();
-						
-						HashMap<Integer,String> pccLocationTempMap = macJurisProgramLocationMap.get(macId_jurisId_programId_Key);
-						if(pccLocationTempMap == null) {
-							pccLocationTempMap = new HashMap<Integer,String>();
-							pccLocationTempMap.put(macProgJurisPccMapping.getPccId(),pccLocation);
-						} else {
-							pccLocationTempMap.put(macProgJurisPccMapping.getPccId(),pccLocation);
-						}
-						
-						macJurisProgramLocationMap.put(macId_jurisId_programId_Key, pccLocationTempMap);		
-					}
-					
-					for (MacInfo macInfo: macInfoList) {
-						macObjectMap.put(macInfo.getId().intValue(), macInfo);
-					}
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "callCategoryMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					callCategoryMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,String>>(){});
-					
-					webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "callSubcategoriesMap", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
-					
-					callCatSubCatMap = mapper.readValue(webServiceExchange.getBody(), new TypeReference<HashMap<Integer,HashMap<Integer,String>>>(){});
-					
-					CALL_CATEGORY_MAP = callCategoryMap;
-					CALL_CATEGORY_SUB_CATEGORY_MAP = callCatSubCatMap;
-					
-					MAC_OBJECT_MAP = macObjectMap;
-					MAC_JURISDICTION_MAP = mapJurisMap;
-					MAC_JURISDICTION_PROGRAM_MAP = mapJurisProgramMap;
-					MAC_JURISDICTION_PROGRAM_PCC_MAP = macJurisProgramLocationMap;
-					
-				} catch (JsonParseException e) {
-					
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					
-					e.printStackTrace();
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-				}*/
-		}
-	 
-	
-	
-	
+		}	
 }

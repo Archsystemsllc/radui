@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -133,36 +134,6 @@
    	        .append( "<div>" + item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level + "</div>" )
    	        .appendTo( ul );
    	    };
-    	
-    	/* $('#callMonitoringDate').datepicker({
-    		maxDate: 0,
-    		altField: "#callMonitoringDate_Alt",
-    		altFieldTimeOnly: false,
-    		altFormat: "yymmdd"
-    	});    	
-
-    	$('#callDuration').timepicker({
-    		timeFormat: 'HH:mm:ss',
-    		controlType: 'select',
-        	oneLine: true,
-        	hourMax: 4
-    	});    	
-
-    	$('#callTime').timepicker({
-    		timeFormat: 'hh:mm:ss TT',    		
-    		controlType: 'select',
-        	oneLine: true,
-        	altField: "#callTime_Alt",
-    		altFieldTimeOnly: false,
-    		altFormat: "HHmmss"
-    	});
-
-    	$('#callFailureTime,#accuracyCallFailureTime,#completenessCallFailureTime,#privacyCallFailureTime,#customerSkillsCallFailureTime').timepicker({
-    		timeFormat: 'HH:mm:ss',
-    		controlType: 'select',
-        	oneLine: true,
-        	hourMax: 4
-    	});  */
  	
 	});
 
@@ -347,7 +318,10 @@
 								<div class="header">View ScoreCard</div>	
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create"  type="submit">Edit</button></span>
+									<td>
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
+										<span><button class="btn btn-primary" id="create"  type="submit">Edit</button></span>
+									</sec:authorize>
 									<span><button class="btn btn-primary" id="close1" type="button">Close</button></span></td>
 							       </tr>
 							     </table>						

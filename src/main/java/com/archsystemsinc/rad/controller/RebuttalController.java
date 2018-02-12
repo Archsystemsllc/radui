@@ -17,6 +17,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,51 +50,70 @@ public class RebuttalController {
 	
 	@Autowired
 	CommonController commonController;
-    
-	@RequestMapping(value = "/admin/rebuttallist")
-	public String getRebuttalList(HttpServletRequest request,Model model) {
+	
+	
+	 @RequestMapping(value ={"/admin/rebuttallist", "/quality_manager/rebuttallist", "/cms_user/rebuttallist",
+			 "/mac_admin/rebuttallist","/mac_user/rebuttallist","/quality_monitor/rebuttallist"})		
+	public String getRebuttalList(HttpServletRequest request,Model model, Authentication authentication) {
 		log.debug("--> getRebuttalList Screen <--");
 		
-		String plainCreds = "qamadmin:123456";
+		/*String plainCreds = "qamadmin:123456";
 		byte[] plainCredsBytes = plainCreds.getBytes();
 		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
 		String base64Creds = new String(base64CredsBytes);
-		HashMap<Integer,Rebuttal> resultsMap = new HashMap<Integer,Rebuttal>();
+		
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", "application/json");
 		headers.add("Authorization", "Basic " + base64Creds);
 
 		headers.set("Content-Length", "35");
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.RAD_WS_URI + "rebuttallist", HttpMethod.GET,
-				new HttpEntity<String>(headers), String.class);
-		ObjectMapper mapper = new ObjectMapper();
-		List<Rebuttal> rebuttalList = null;
+		RestTemplate restTemplate = new RestTemplate();*/
+		/*ResponseEntity<String> exchange = restTemplate.exchange(HomeController.RAD_WS_URI + "rebuttallist", HttpMethod.GET,
+				new HttpEntity<String>(headers), String.class);*/
+		
+		HashMap<Integer,Rebuttal> resultsMap = new HashMap<Integer,Rebuttal>();
+		
+		List<Rebuttal> rebuttalTempList = null;
+		
+		Rebuttal rebuttalObject = new Rebuttal();
 		
 		try {
-			rebuttalList = mapper.readValue(exchange.getBody(), new TypeReference<List<Rebuttal>>(){});
+			String roles = authentication.getAuthorities().toString();
+			
+			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
+						
+				rebuttalObject.setMacId(userForm.getMacId().intValue());
+				rebuttalObject.setJurisId(userForm.getJurId().intValue());
+				
+			} 
+			
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(HomeController.RAD_WS_URI + "rebuttallist");
+			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttalObject, List.class);
+			ObjectMapper mapper = new ObjectMapper();
+			rebuttalTempList = responseEntity.getBody();
+			
+			List<Rebuttal> rebuttalList = mapper.convertValue(rebuttalTempList, new TypeReference<List<Rebuttal>>() { });
+			
+			//rebuttalList = mapper.readValue(exchange.getBody(), new TypeReference<List<Rebuttal>>(){});
 			for(Rebuttal rebuttal: rebuttalList) {
 				String macPCCNameTempValue = HomeController.PCC_LOC_MAP.get(rebuttal.getPccLocationId());
 				rebuttal.setMacPCCNameTempValue(macPCCNameTempValue);
 				resultsMap.put(rebuttal.getId(), rebuttal);
 			}
-		} catch (JsonParseException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_MAP", resultsMap);
 		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "rebuttallist";
 	}
-	
-	@RequestMapping(value = "/admin/new-rebuttal", method = RequestMethod.GET)
+	 
+	@RequestMapping(value ={"/admin/new-rebuttal", "/quality_manager/new-rebuttal", "/cms_user/new-rebuttal",
+			 "/mac_admin/new-rebuttal","/mac_user/new-rebuttal","/quality_monitor/new-rebuttal"}, method = RequestMethod.GET)	
 	public String newRebuttalGet(HttpServletRequest request,final Model model) {
 		
 		Rebuttal rebuttal = new Rebuttal();		
@@ -152,7 +172,8 @@ public class RebuttalController {
 		return failedMacRefList;
 	}
 	
-	@RequestMapping(value = "/admin/selectScoreCardFromMacRef", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/selectScoreCardFromMacRef", "/quality_manager/selectScoreCardFromMacRef", "/cms_user/selectScoreCardFromMacRef",
+			 "/mac_admin/selectScoreCardFromMacRef","/mac_user/selectScoreCardFromMacRef","/quality_monitor/selectScoreCardFromMacRef"}, method = RequestMethod.GET)	
 	@ResponseBody
 	public ScoreCard selectScoreCardFromMacRef(@RequestParam("scoreCardId") final Integer scoreCardId,final Model model, HttpSession session) {
 		
@@ -170,7 +191,8 @@ public class RebuttalController {
 		return scoreCard;
 	}
 	
-	@RequestMapping(value = "/admin/saveOrUpdateRebuttal", method = RequestMethod.POST)
+	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
+			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
 	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result,
 			final Model model) {
 
@@ -219,8 +241,9 @@ public class RebuttalController {
 		return returnView;
 	}
 	
-	@RequestMapping(value = "/rebuttaledit/admin/{id}", method = RequestMethod.GET)
-	public String editrebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
+	@RequestMapping(value ={"/admin/edit-rebuttal/{id}", "/quality_manager/edit-rebuttal/{id}", "/cms_user/edit-rebuttal/{id}",
+			 "/mac_admin/edit-rebuttal/{id}","/mac_user/edit-rebuttal/{id}","/quality_monitor/edit-rebuttal/{id}"}, method = RequestMethod.GET)		
+	public String editRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
 		Rebuttal rebuttal = resultsMap.get(id);
 		
@@ -241,10 +264,21 @@ public class RebuttalController {
 		return "rebuttal";
 	}	
 	
-	@RequestMapping(value = "/rebuttalview/admin/{id}", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/view-rebuttal/{id}", "/quality_manager/view-rebuttal/{id}", "/cms_user/view-rebuttal/{id}",
+			 "/mac_admin/view-rebuttal/{id}","/mac_user/view-rebuttal/{id}","/quality_monitor/view-rebuttal/{id}"}, method = RequestMethod.GET)		
 	public String viewRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
+		
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTALS_REPORT_MAP");
-		Rebuttal rebuttal = resultsMap.get(id);
+		
+		if (resultsMap == null ) {
+			resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
+		}
+		
+		Rebuttal rebuttal = null;
+		if (resultsMap != null) {
+			rebuttal = resultsMap.get(id);
+		}
+		
 		
 		if(rebuttal.getRebuttalStatus() == null) {
 			rebuttal.setRebuttalCompleteFlag("");
@@ -256,8 +290,6 @@ public class RebuttalController {
 		model.addAttribute("rebuttal", rebuttal);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		HashMap<Integer,String> pccLocationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(rebuttal.getMacId()+"_"+rebuttal.getJurisId()+"_"+rebuttal.getProgramId());
-		
-		
 		
 		model.addAttribute("programMapEdit", pccLocationMap);
 		return "rebuttalview";
