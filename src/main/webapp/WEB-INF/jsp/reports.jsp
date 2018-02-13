@@ -58,7 +58,7 @@
     	});  
 
     	
-    	var reportSelectValue=$('input:radio[name=mainReportSelect]:checked').val();
+    	 var reportSelectValue=$('input:radio[name=mainReportSelect]:checked').val();
     	
     	if (reportSelectValue == '') {    		
     		$('input:radio[name=mainReportSelect]')[0].checked = true;
@@ -73,11 +73,60 @@
         } else if (reportSelectValue == 'Rebuttal' ) {
         	$('#callCategoryTypeDiv').show();
     		$('#rebuttalStatusDiv').show();
-        } 
- 	
+        }  
+
+    	var mainReportSelect = $("input[name='mainReportSelect']:selected").val();
+
+    	
+            if (mainReportSelect=="ScoreCard") {
+            	$('#scoreCardTypeDiv').show();
+            	$('#callResultDiv').show();
+            	$('#complianceTypeDiv').hide();
+            	$('#callCategoryTypeDiv').hide();
+        		$('#rebuttalStatusDiv').hide();
+            } else if (mainReportSelect=="Compliance") {
+            	$('#scoreCardTypeDiv').hide();
+            	$('#callResultDiv').hide();
+            	$('#complianceTypeDiv').show();
+            	$('#callCategoryTypeDiv').hide();
+        		$('#rebuttalStatusDiv').hide();
+        		
+            } else if (mainReportSelect=="Rebuttal") {
+            	$('#scoreCardTypeDiv').hide();
+            	$('#callResultDiv').hide();
+            	$('#complianceTypeDiv').hide();
+            	$('#callCategoryTypeDiv').show();
+        		$('#rebuttalStatusDiv').show();
+            }
+
+          
+ 		var scoreCardType = $("select#scoreCardType").val();
+           if (scoreCardType=="Scoreable") {
+           	
+           	$('#callResultDiv').show();
+           } else if (scoreCardType=="Non-Scoreable") {
+           	
+           	$('#callResultDiv').hide();
+           } else if (scoreCardType=="Does Not Count") {
+           	
+           	$('#callResultDiv').hide();
+           }
+           
 	});
 
 	$(function(){
+
+
+		$("#toDateString").change(function () {
+		    var startDate = $("#fromDateString").val();
+		    var endDate = $("#toDateString").val();
+
+		    if ((Date.parse(startDate) >= Date.parse(endDate))) {
+		        alert("To Date should be greater than From Date");
+		        $("#fromDateString").val("");
+		        $("#toDateString").val("");
+		    }
+		});
 
 		$("input[name='mainReportSelect']").change(function(){
             var mainReportSelect = $(this).val();
@@ -122,8 +171,8 @@
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurisId").get(0).options.length = 0;	           
-      	      	 $("#jurisId").get(0).options[0] = new Option("Select Jurisdiction", "");
-      	      	 $("#jurisId").get(0).options[1] = new Option("Select All", "ALL");
+      	      	 $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+      	      	 $("#jurisId").get(0).options[1] = new Option("---Select All---", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -134,8 +183,8 @@
             $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
-      	      	 $("#programId").get(0).options[0] = new Option("Select Program", "");
-      	      	 $("#programId").get(0).options[1] = new Option("Select All", "ALL");
+      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -147,8 +196,8 @@
             $.getJSON("${pageContext.request.contextPath}/admin/selectLocation",{macId: $('#macId').val(),jurisId: $('#jurisId').val(),programId: $(this).val()}, function(data){
                 
                  $("#loc").get(0).options.length = 0;	           
-      	      	 $("#loc").get(0).options[0] = new Option("Select Location", "");
-      	      	 $("#loc").get(0).options[1] = new Option("Select All", "ALL");
+      	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
+      	      	 $("#loc").get(0).options[1] = new Option("---Select All---", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#loc").get(0).options[$("#loc").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -234,9 +283,9 @@
 			                        
 			                        <div class="row">
 			                            <div class="col-sm-6 form-group">			                                 
-											<form:radiobutton path="mainReportSelect" value="ScoreCard" />ScoreCard										                            
-										  	<form:radiobutton path="mainReportSelect" value="Compliance" />Compliance
-										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" />Rebuttal
+											<form:radiobutton path="mainReportSelect" value="ScoreCard" />&nbsp;ScoreCard &nbsp;										                            
+										  	<form:radiobutton path="mainReportSelect" value="Compliance" />&nbsp;Compliance &nbsp;
+										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" />&nbsp;Rebuttal &nbsp;
 			                            </div>
 			                        </div>
 			                        
@@ -285,7 +334,7 @@
 			                        
 			                          <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="generateReport" type="submit">Generate Repot</button></span>
+									<td><span><button class="btn btn-primary" id="generateReport" type="submit">Generate Report</button></span>
 									<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span></td>
 							       </tr>
 							</table>

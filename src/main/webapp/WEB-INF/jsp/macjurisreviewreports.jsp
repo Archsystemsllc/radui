@@ -102,7 +102,7 @@
 			                                 <label for="name"> ${reportsForm.fromDateString}</label>
 			                            </div>
 			                            <div class="col-lg-4 form-group">
-			                                <label for="name"> Report From Date:</label>
+			                                <label for="name"> Report To Date:</label>
 			                                 <label for="name"> ${reportsForm.toDateString}</label>
 			                            </div>
 			                        </div>
