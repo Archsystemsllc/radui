@@ -112,7 +112,7 @@
 									</li>
 									</sec:authorize>
 									
-									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/contactus">My Account</a></li>	
+									<li><a href="${pageContext.request.contextPath}/admin/myaccount">My Account</a></li>	
 									<li><a href="#">Help Guide</a></li>									
 									
 									<li>&nbsp; &nbsp;</li>			
