@@ -60,11 +60,19 @@
 			maxDate : 0
 		});
 
-		/* 
-		 $('#back').click(function(e) {	
-		 window.history.back();
-		 }); 
-		 */
+		
+		$("select#macId").change(function(){
+            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+                    {macId: $(this).val(), multipleInput: false}, function(data){
+               
+                 $("#jurId").get(0).options.length = 0;	           
+      	      	 $("#jurId").get(0).options[0] = new Option("---Select All---", "ALL");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
 
 	});
 </script>
@@ -90,7 +98,26 @@
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
-												<h2>Score Card Search Filters</h2>
+												<h2>Scorecard Search Filters</h2>
+												<div class="col-lg-4 form-group">
+													<label for="name"> MAC:</label>
+													<form:select path="macId" class="form-control required"
+														required="true">
+														<form:option value="0" label="ALL" />
+														<form:options items="${macMapEdit}" />
+													</form:select>
+												</div>
+												<div class="col-lg-4 form-group">
+													<label for="name"> Jurisdiction:</label>
+													<form:select path="jurId" class="form-control required"
+														id="jurId" required="true">
+														<form:option value="0" label="---Select All---" />
+														<form:options items="${jurisMapEdit}" />
+													</form:select>
+												</div>
+											</div>
+											<div class="row">
+												
 												<div class="col-lg-4 form-group">
 													<label for="name">Status:</label>
 													<form:select class="form-control" id="callResult"
@@ -107,16 +134,9 @@
 												</div>
 											</div>
 											<div class="row">
+												
 												<div class="col-lg-4 form-group">
-													<label for="name"> Jurisdiction:</label>
-													<form:select path="jurId" class="form-control required"
-														id="jurId" required="true">
-														<form:option value="0" label="ALL" />
-														<form:options items="${jurisMapEdit}" />
-													</form:select>
-												</div>
-												<div class="col-lg-4 form-group">
-													<label for="name">ScoreCard Type:</label>
+													<label for="name">Scorecard Type:</label>
 													<form:select class="form-control" id="scorecardType"
 														path="scorecardType" title="Select Score Card Type">
 														<form:option value="ALL" label="ALL" />
@@ -147,9 +167,14 @@
 												style="border-collapse: separate; border-spacing: 2px; valign: middle"
 												id='table1'>
 												<tr>
-													<td><span><button class="btn btn-primary"
-																id="filter" type="submit">Filter</button></span> <span><button
-																class="btn btn-primary" id="reset" type="reset">Reset</button></span></td>
+													<td>
+													<span><button class="btn btn-primary" id="filter" type="submit">Filter</button></span> 
+													<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span>
+													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
+													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="New"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
+													</sec:authorize>
+												</td>
+												
 												</tr>
 											</table>
 										</div>
@@ -158,8 +183,7 @@
 								<c:if test="${ReportFlag == true}">
 									<div class="row" style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
-											<span><a
-												href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession"><button
+											<span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create"><button
 														class="btn btn-primary" id="back" type="button">Back</button></a></span>
 										</div>
 									</div>
@@ -173,20 +197,20 @@
 
 												<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()}"													 
 													style="width:95%;font-size:95%;" export="true" pagesize="15" requestURI="" >
+													<display:column property="macName"	title="MAC" sortable="true"	style="text-align:center;" />
+													<display:column property="jurisdictionName"	title="Jurisdiction" sortable="true"	style="text-align:center;" />
 													<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;" />
 													<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;" />
 													<display:column property="qamStartdateTimeString" title="QM Start Date/Time" sortable="true" style="text-align:center;" />
 													<display:column property="scorecardType"	title="Scorecard Type" sortable="true"	style="text-align:center;" />
 													<display:column property="callResult" title="Status"	sortable="true" style="text-align:center;" />
-													<display:column property="jurisdictionName"	title="Jurisdiction" sortable="true"	style="text-align:center;" />
+													
 													<display:column title="Actions" style="text-align:center;"	media="html">
 														<span><a class="action-icons c-pending"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/${row.id}" title="View">View</a></span>
 														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
 															<span><a class="action-icons c-edit"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
 														</sec:authorize>
-														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
-														<span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create">Create</a></span>
-														</sec:authorize>
+														
 													</display:column>
 													<display:setProperty name="export.excel.filename"	value="ScorecardReport.xls" />
 													<display:setProperty name="export.csv.filename"	value="ScorecardReport.csv" />

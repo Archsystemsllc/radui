@@ -392,10 +392,16 @@
 						<div class="content">
 							
 							<div class="table-users" style="width: 80%">
-								<div class="header">Save/Update ScoreCard</div>	
+								<div class="header">Save/Update Scorecard</div>	
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create"  type="submit">Save/Update</button></span>
+									<td>
+									<c:if test="${scorecard.id == 0}">
+										<span><button class="btn btn-primary" id="create"  type="submit">Save</button></span>
+									</c:if>
+									<c:if test="${scorecard.id > 0}">
+										<span><button class="btn btn-primary" id="create"  type="submit">Update</button></span>
+									</c:if>
 									<span><button class="btn btn-primary" id="close1" type="button">Close</button></span></td>
 							       </tr>
 							     </table>						
@@ -417,15 +423,15 @@
 			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> ScoreCard Type:</label></br>
+			                                <label for="email"> Scorecard Type:</label></br>
 			                                <c:if test="${scorecardType==null}">
-											   <form:radiobutton path="scorecardType" value="Scoreable" checked="checked"/>Scoreable
+											   <form:radiobutton path="scorecardType" value="Scoreable" checked="checked"/>&nbsp;Scoreable&nbsp;
 											</c:if>	
 											<c:if test="${scorecardType!=null}">
-											   <form:radiobutton path="scorecardType" value="Scoreable" />Scoreable
+											   <form:radiobutton path="scorecardType" value="Scoreable" />&nbsp;Scoreable&nbsp;
 											</c:if>			                                
-										  	&nbsp;<form:radiobutton path="scorecardType" value="Non-Scoreable" />Non-Scoreable
-										  	&nbsp;<form:radiobutton path="scorecardType" value="Does Not Count" />Does Not Count
+										  	&nbsp;<form:radiobutton path="scorecardType" value="Non-Scoreable" />&nbsp;Non-Scoreable&nbsp;
+										  	&nbsp;<form:radiobutton path="scorecardType" value="Does Not Count" />&nbsp;Does Not Count&nbsp;
 			                            </div>
 			                        </div>
 			                         <div class="row">
@@ -572,9 +578,9 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected,please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" />Yes&nbsp;
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" />No
+			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" />&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvAccInfo" value="No" />&nbsp;No
 			                            </div>			                           
 			                        </div>
 			                        <div class="row" id="accuracyCallFailureBlock">
@@ -591,9 +597,9 @@
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected,please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"  />Yes&nbsp;
-										  	<form:radiobutton path="csrPrvCompInfo" value="No" />No
+			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected, please enter reason in text box below:</label>
+			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"  />&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvCompInfo" value="No" />&nbsp;No
 			                            </div>
 			                           
 			                        </div> 
@@ -618,9 +624,9 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected,please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes" />Yes&nbsp;
-										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>No
+			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected, please select the reason below:</label>
+			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes" />&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>&nbsp;No
 			                            </div>		                           
 			                        </div>   
 			                         <div class="row" id="privacyCallFailureBlock">
@@ -650,9 +656,9 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected,please select the reason below:</label>
-			                                <form:radiobutton path="csrWasCourteous" value="Yes"/>Yes&nbsp;
-										  <form:radiobutton path="csrWasCourteous" value="No"/>No
+			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected, please select the reason below:</label>
+			                                <form:radiobutton path="csrWasCourteous" value="Yes"/>&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrWasCourteous" value="No"/>&nbsp;No
 			                            </div>		                           
 			                        </div>   
 			                         <div class="row" id="customerSkillsCallFailureBlock">
@@ -694,19 +700,7 @@
 			                             
 			                            </div>
 			                        </div>
-			                        <%-- <div class="row" id="callFailureReasonDiv">
-			                            <div class="col-lg-6 form-group">
-			                                <label for="name">Call Failure Reason:</label>
-			                                <select class="form-control" class="form-control" id="failReason" name="failReason"
-											title="Select one of the Failure Reason">
-												
-											</select>
-			                            </div>
-			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "callFailureTime" path="callFailureTime" />
-			                            </div>
-			                        </div> --%>
+			                       
 			                         <div class="row" id="failReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Call Failure Reason Comments:</label>
@@ -738,7 +732,12 @@
 				            </div>		
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create" type="submit">Save/Update</button></span>
+									<td><c:if test="${scorecard.id == 0}">
+										<span><button class="btn btn-primary" id="create"  type="submit">Save</button></span>
+									</c:if>
+									<c:if test="${scorecard.id > 0}">
+										<span><button class="btn btn-primary" id="create"  type="submit">Update</button></span>
+									</c:if>
 									<span><button class="btn btn-primary" id="close2" type="button">Close</button></span></td>
 							       </tr>
 							</table>

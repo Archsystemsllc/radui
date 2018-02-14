@@ -126,8 +126,7 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
 													<display:column property="scorablePass" title="Scoreable Pass Count" sortable="true" style="text-align:center;"/>													
 												
@@ -148,6 +147,8 @@
 													<display:column title="Does Not Count Percent" sortable="true" style="text-align:center;" >
 														${row.doesNotCount_Percent}%
 													</display:column>	
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
@@ -170,8 +171,7 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
 													<display:column property="scorablePass" title="Scoreable Pass Count" sortable="true" style="text-align:center;"/>													
 													<display:column title="Scoreable Pass Percent" sortable="true" style="text-align:center;" >
@@ -181,6 +181,8 @@
 													<display:column title="Scoreable Fail Percent" sortable="true" style="text-align:center;" >
 														${row.scorableFailPercent}%
 													</display:column>	
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
@@ -203,13 +205,14 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
 													<display:column property="scorablePass" title="Scoreable Pass Count" sortable="true" style="text-align:center;"/>			
 													<display:column title="Scoreable Pass Percent" sortable="true" style="text-align:center;" >
 														${row.scorablePassPercent}%
 													</display:column>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
@@ -232,13 +235,14 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
 													<display:column property="scorableFail" title="Scoreable Fail Count" sortable="true" style="text-align:center;"/>	
 													<display:column title="Scoreable Fail Percent" sortable="true" style="text-align:center;" >
 														${row.scorableFailPercent}%
 													</display:column>	
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
@@ -261,12 +265,13 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>
 													<display:column title="Non Scoreable Percent" sortable="true" style="text-align:center;" >
 														${row.nonScorablePercent}%
 													</display:column>	
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
@@ -289,14 +294,14 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													
 													<display:column property="doesNotCount_Number" title="Does Not Count" sortable="true" style="text-align:center;"/>
 													<display:column title="Does Not Count Percent" sortable="true" style="text-align:center;" >
 														${row.doesNotCount_Percent}%
 													</display:column>	
-													
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
@@ -316,10 +321,11 @@
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
-													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
-													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													
 													<display:column property="monthYear" title="Month, Year" sortable="true" style="text-align:center;"/>
 													<display:column property="complianceStatus" title="Compliance Status" sortable="true" style="text-align:center;"/>
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="ComplianceReport.xls" />
 													<display:setProperty name="export.pdf.filename" value="ComplianceReport.pdf" />
 													<display:setProperty name="export.csv.filename" value="ComplianceReport.csv" />
@@ -342,9 +348,10 @@
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf excel csv"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													
+													<display:column property="scorableCount" title="Number of Rebuttals" sortable="true" style="text-align:center;"/>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:column property="scorableCount" title="Number of Rebuttals" sortable="true" style="text-align:center;"/>
 													<display:setProperty name="export.excel.filename" value="Rebuttal.xls" />
 													<display:setProperty name="export.pdf.filename" value="Rebuttal.pdf" />
 													<display:setProperty name="export.csv.filename" value="Rebuttal.csv" />

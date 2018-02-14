@@ -113,6 +113,8 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	//Temporary Variables
 	private String jurisdictionName;	
 	
+	private String macName;	
+	
 	private String callCategoryName;
 	
 	private HashMap<Integer,String> pccLocationMap;
@@ -137,6 +139,15 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String programIdReportSearchString;
 	
+	
+	
+	public String getMacName() {
+		return macName;
+	}
+
+	public void setMacName(String macName) {
+		this.macName = macName;
+	}
 
 	public String getMacIdReportSearchString() {
 		return macIdReportSearchString;

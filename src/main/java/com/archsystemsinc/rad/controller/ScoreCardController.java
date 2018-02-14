@@ -62,11 +62,13 @@ public class ScoreCardController {
 			
 			scoreCardNew.setMacId(userForm.getMacId().intValue());
 			scoreCardNew.setJurId(userForm.getJurId().intValue());
+			model.addAttribute("macMapEdit", HomeController.USER_BASED_MAC_ID_DETAILS);
 			HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
 			model.addAttribute("jurisMapEdit", jurisMap);
 		} else {
-			HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
-			model.addAttribute("jurisMapEdit", jurisMap);
+			model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
+			//HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
+			//model.addAttribute("jurisMapEdit", jurisMap);
 		}
 		
 		if(roles.contains("Quality Monitor")) {
@@ -108,9 +110,11 @@ public class ScoreCardController {
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
 				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");
 				scoreCard.setMacId(userForm.getMacId().intValue());				
+				model.addAttribute("macMapEdit", HomeController.USER_BASED_MAC_ID_DETAILS);
 				HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
 				model.addAttribute("jurisMapEdit", jurisMap);
 			} else {
+				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
 				HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
 				model.addAttribute("jurisMapEdit", jurisMap);
 			}
@@ -145,6 +149,7 @@ public class ScoreCardController {
 			for(ScoreCard scoreCardTemp: scoreCardList) {
 				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCardTemp.getQamStartdateTime());
 				scoreCardTemp.setQamStartdateTimeString(qamStartdateTimeString);
+				scoreCardTemp.setMacName(HomeController.MAC_ID_MAP.get(scoreCardTemp.getMacId()));
 				scoreCardTemp.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCardTemp.getJurId()));
 				finalResultsMap.put(scoreCardTemp.getId(), scoreCardTemp);
 			}		

@@ -51,11 +51,26 @@
       
                                  <form action="scorecardsave" method="post" enctype="multipart/form-data">
                                  <!--  Section 1 -->
+                                 <table style="border-collapse: separate; border-spacing: 2px; valign: middle"
+												id='table1'>
+									<tr>
+										<td>
+										<!-- <span><button class="btn btn-primary" id="filter" type="submit">Filter</button></span> 
+										<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span> -->
+										<sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+										<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="New">
+											<button class="btn btn-primary" id="addRebuttal" type="button">Add Rebuttal</button></a></span> 
+										</sec:authorize>
+									</td>
+									
+									</tr>
+								</table>
 								<table style="border-collapse: separate; border-spacing: 2px;" id='table1'>
 									<tr><td colspan="3" width="95%" >
 					<div class="form_grid_12">
 					<display:table class="display hover stripe cell-border " id="rebuttalRow" name="${sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()}" 
 							  style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" requestURI="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">
+							<display:column property="macName" title="MAC" sortable="true" style="text-align:center;"/>
 							<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;"/>
 							<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;"/>
 							<display:column property="macPCCNameTempValue" title="PCC/Location" sortable="true" style="text-align:center;"/>
@@ -69,9 +84,7 @@
 							<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-rebuttal/${rebuttalRow.id}" title="Edit">Edit</a></span>
 							</sec:authorize>
-							<sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User')">
-								<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="Create">Create</a></span>			
-							</sec:authorize>					
+											
 							</display:column>
 							<display:setProperty name="export.excel.filename"	value="RebuttalReport.xls" />
 							<display:setProperty name="export.csv.filename"	value="RebuttalReport.csv" />
@@ -80,9 +93,7 @@
 							
 						</display:table>
 						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_REBUTTAL_MAP.values()) eq 0}">
-							<sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User')">
-						   		<span><a class="action-icons c-approve" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="Create">Create</a></span>	
-						  	</sec:authorize>
+							
 						</c:if>	
 						</div>
 						</td>

@@ -86,20 +86,20 @@
 							<div class="collapse navbar-collapse navbar-right">
 								<ul class="nav navbar-nav" style="font-weight: bold">
 									<li style="margin-left: 0px"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a></li>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') ">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Score Card</a></li>
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Scorecard</a></li>
 									</sec:authorize>
 									
 									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports">Reports</a></li>
 									
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Mac User')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist">CSR</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User') or hasAuthority('Quality Monitor')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">Rebuttal</a></li>
 									</sec:authorize>
 								
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
+									<sec:authorize access="hasAuthority('Administrator')">
 									<li class="dropdown">
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>

@@ -36,14 +36,12 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-6">
-				<img
-					src="${pageContext.request.contextPath}/resources/images/Arch_logo.png" style="width:20%;height:20%">
-				&nbsp;&nbsp;Copyright &copy; - 2017 Arch Systems, LLC. All Rights Reserved.
+				
 			</div>
 			<div class="col-sm-6">
 				<ul class="pull-right" style="margin-top: 14px">
 					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/dashboard --%>">Home</a></li>
-					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/aboutus --%>">About Us</a></li>
+					
 					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/contactus --%>">Contact Us</a></li>
 				</ul>
 			</div>

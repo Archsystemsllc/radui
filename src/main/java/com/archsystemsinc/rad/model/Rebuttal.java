@@ -1,6 +1,7 @@
 package com.archsystemsinc.rad.model;
 
 import java.io.File;
+import java.util.Date;
 
 public class Rebuttal  {	
 	
@@ -93,8 +94,80 @@ public class Rebuttal  {
 	
 	private String macPCCNameTempValue;
 	
+	private String filterFromDateString;
+	
+	private String filterToDateString;
+	
+	private Date filterFromDate;
+	
+	private Date filterToDate;
+	
+	private Integer filterMacId;
+	
+	private String macName;
 	
 	
+	
+	
+	public String getMacName() {
+		return macName;
+	}
+
+
+	public void setMacName(String macName) {
+		this.macName = macName;
+	}
+
+
+	public Integer getFilterMacId() {
+		return filterMacId;
+	}
+
+
+	public void setFilterMacId(Integer filterMacId) {
+		this.filterMacId = filterMacId;
+	}
+
+
+	public Date getFilterFromDate() {
+		return filterFromDate;
+	}
+
+
+	public void setFilterFromDate(Date filterFromDate) {
+		this.filterFromDate = filterFromDate;
+	}
+
+
+	public Date getFilterToDate() {
+		return filterToDate;
+	}
+
+
+	public void setFilterToDate(Date filterToDate) {
+		this.filterToDate = filterToDate;
+	}
+
+
+	public String getFilterFromDateString() {
+		return filterFromDateString;
+	}
+
+
+	public void setFilterFromDateString(String filterFromDateString) {
+		this.filterFromDateString = filterFromDateString;
+	}
+
+
+	public String getFilterToDateString() {
+		return filterToDateString;
+	}
+
+
+	public void setFilterToDateString(String filterToDateString) {
+		this.filterToDateString = filterToDateString;
+	}
+
 
 	public String getRebuttalCallCategory() {
 		return rebuttalCallCategory;

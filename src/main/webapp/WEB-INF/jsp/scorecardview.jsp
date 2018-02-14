@@ -302,7 +302,7 @@
 	</div>
 
 	<table id="mid">
-		<form:form method="GET" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/${id}" id="scorecardForm">
+		<form:form method="GET" modelAttribute="scorecard" class="form-signin" action="#" id="scorecardForm">
 		<!-- Hidden Fields -->
 		<form:input type = "hidden" path="id" />
 		<form:input type = "hidden" path="qamStartdateTime" />
@@ -315,14 +315,10 @@
 						<div class="content">
 							
 							<div class="table-users" style="width: 80%">
-								<div class="header">View ScoreCard</div>	
+								<div class="header">View Scorecard</div>	
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
-										<span><button class="btn btn-primary" id="create"  type="submit">Edit</button></span>
-									</sec:authorize>
-									<span><button class="btn btn-primary" id="close1" type="button">Close</button></span></td>
+										<td><span><button class="btn btn-primary" id="close1" type="button">Back</button></span></td>
 							       </tr>
 							     </table>						
       							 <div class="row " style="margin-top: 10px">
@@ -343,7 +339,7 @@
 			                                <form:input type = "text" class="form-control" path="qamFullName" readonly="true"/>			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> ScoreCard Type:</label></br>
+			                                <label for="email"> Scorecard Type:</label></br>
 			                                <form:input type = "text" class="form-control" path="scorecardType" readonly="true"/>	
 			                                
 			                            </div>
@@ -492,7 +488,7 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected,please enter reason in text box below:</label>
+			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
 			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" readonly="true" disabled="disabled" />Yes&nbsp;
 										  	<form:radiobutton path="csrPrvAccInfo" value="No" readonly="true" disabled="disabled" />No
 			                            </div>			                           
@@ -511,7 +507,7 @@
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected,please enter reason in text box below:</label>
+			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected, please enter reason in text box below:</label>
 			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"  readonly="true"/>Yes&nbsp;
 										  	<form:radiobutton path="csrPrvCompInfo" value="No" readonly="true"/>No
 			                            </div>
@@ -538,7 +534,7 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected,please select the reason below:</label>
+			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected, please select the reason below:</label>
 			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes" readonly="true"/>Yes&nbsp;
 										  <form:radiobutton path="csrFallPrivacyProv" value="No" readonly="true"/>No
 			                            </div>		                           
@@ -570,7 +566,7 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected,please select the reason below:</label>
+			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected, please select the reason below:</label>
 			                                <form:radiobutton path="csrWasCourteous" value="Yes" readonly="true"/>Yes&nbsp;
 										  <form:radiobutton path="csrWasCourteous" value="No" readonly="true"/>No
 			                            </div>		                           
@@ -646,8 +642,7 @@
 				            </div>		
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create" type="submit">Edit</button></span>
-									<span><button class="btn btn-primary" id="close2" type="button">Close</button></span></td>
+									<td><span><button class="btn btn-primary" id="close1" type="button">Back</button></span></td>
 							       </tr>
 							</table>
 								<!-- </div> -->
