@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,20 @@ public class UserController {
 		userDefaults(model);
 		return "createusers";
 	}
+	
+	// My Account Get
+	
+	@RequestMapping("/admin/myaccount")
+	public String myaccount(Model model,HttpSession session) {
+		User blank = new User();
+		Role br = new Role();
+		blank.setRole(br);
+		blank = (User) session.getAttribute("LoggedInUserForm");
+		
+		model.addAttribute("userForm", blank);
+		userDefaults(model);
+		return "myaccount";
+	}
 
 	/**
 	 * 
@@ -133,6 +148,8 @@ public class UserController {
 		return "listofusers";
 
 	}
+	
+	
 
 	//TODO:Need to remove this
 	/**
