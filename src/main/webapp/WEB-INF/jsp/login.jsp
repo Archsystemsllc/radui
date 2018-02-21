@@ -83,7 +83,27 @@
 
 							</form>
 						</div>
+						<div>
 					</div>
+					
+					</div>
+			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at qam@cms.hhs.gov.</div>
+
+<div style="padding-left:224px;padding-bottom:20px;">Disclaimer: This web site is not hosted on a Centers for Medicare & Medicaid Services (CMS) web server.</div>
+
+
+<div style="padding-bottom:20px;border:1px solid black;padding-leftt:10px;"><b>NOTICE - By logging into this system:</b>
+<ul style="padding-top:10px;padding-right:5px;">
+<li>You are accessing a U.S. Government information system. This information system is provided for U.S. Government-authorized use only.</li>
+<li>Unauthorized or improper use of this system may result in disciplinary action, as well as civil and criminal penalties.</li>
+<li>By using this information system, you understand and consent to the following;
+ <ul>
+ <li>You have no reasonable expectation of privacy regarding any communication or data transiting or stored on this information system. At any time, and for any lawful Government purpose, the Government may monitor, intercept, and search and seize any communication or data transiting or stored on this information system.</li>
+ <li>Any communication or data transiting or stored in this information system may be disclosed or used for any lawful Government purpose.</li>
+</ul>
+<li>Authorized use of the system is limited to functions described in CMS IOM 100-09. Users must adhere to CMS Information Security Policies, Standards, and Procedures.</li> 
+	</ul>
+	</div>			
 				</div>
 			</div>
 		</div>
