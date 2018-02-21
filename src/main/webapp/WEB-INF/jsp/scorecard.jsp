@@ -36,13 +36,19 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 
+<style type="text/css">
+	.red {  color:red;  }
+</style>
+
 <script type="text/javascript">
 
 	$(document).ready(function () {
-
-    	var username="qamadmin";
-  	   	var password="123456";
-    	
+		//Required Fields Logic
+		$('.required').each(function(){
+		       $(this).prev('label').after("<span class='red'>*</span>");
+		});
+		
+    	//Set Default Values    	
     	$('#alertMsg').text('');
     	$('#nonScoreableReasonCommentsDiv').hide();
     	$('#section4HeaderDiv').hide();
@@ -71,6 +77,10 @@
 		if(csrWasCourteousFlag=="No") {
 			$("#customerSkillsCallFailureBlock").show();	
 		}
+
+		//Auto Complete CSF Full Name Functionality
+		var username="qamadmin";
+  	   	var password="123456";
     	    	
     	$("#csrFullName" ).autocomplete({
     	      minLength: 0,
@@ -133,6 +143,8 @@
    	        .append( "<div>" + item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level + "</div>" )
    	        .appendTo( ul );
    	    };
+
+   	    //Dates Initialisation Functionality
     	
     	$('#callMonitoringDate').datepicker({
     		maxDate: 0,
@@ -166,25 +178,28 @@
  	
 	});
 
-	$(function(){		 
-		
+	$(function(){		
+
+		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
             $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurId").get(0).options.length = 0;	           
-      	      	 $("#jurId").get(0).options[0] = new Option("Select Jurisdiction", "");
+      	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);
       	  	    		
       	  	    	});  	   
                });
         });
+
+		//Select Program Functionality
 		$("select#jurId").change(function(){
             $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
-      	      	 $("#programId").get(0).options[0] = new Option("Select Program", "");
+      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -192,12 +207,13 @@
                });
         });
 
+		//Select Call Category Functionality
 		$("select#callCategoryId").change(function(){
 			
             $.getJSON("${pageContext.request.contextPath}/admin/selectCallSubcategories",{categoryId: $('#callCategoryId').val()}, function(data){
                 
                  $("#callSubCategoryId").get(0).options.length = 0;	           
-      	      	 $("#callSubCategoryId").get(0).options[0] = new Option("Select Sub Category", "");
+      	      	 $("#callSubCategoryId").get(0).options[0] = new Option("---Select Sub Category---", "");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#callSubCategoryId").get(0).options[$("#callSubCategoryId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -205,7 +221,8 @@
                });
         });
 
-		 $('#close1,#close2').click(function(e) {	
+		//Back Button Functionality
+		$('#close1,#close2').click(function(e) {	
 			 e.preventDefault();		
 	          $("#dialog-confirm" ).dialog({
 	              resizable: false,
@@ -224,7 +241,7 @@
             });
 	     }); 
 
-      //Secton 1 - Option 1
+      	//Secton 1 - Option 1
 
 		$("input[name='scorecardType']").change(function(){		
 			
@@ -234,13 +251,19 @@
 				$("#section4Div").hide();	
 				$("#section5Div").hide();
 				$("#section6Div").hide();	
-				//$("#callResultDiv").hide();	
+				
 				$("#callFailureReasonDiv").hide();
 				$("#failReasonCommentsDiv").hide();	
 				$('#section7HeaderDiv').hide();		
 				$("#nonScoreableReasonCommentsDiv").show();	
 				$('#section4HeaderDiv').show();		
-				$("#section4HeaderDiv_DoesNotCount").hide();	
+				$("#section4HeaderDiv_DoesNotCount").hide();
+							
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);				
+				
 				
 			} else if(selected_value=="Scoreable") {
 				$("#section4Div").show();	
@@ -253,19 +276,29 @@
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",true);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",true);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",true);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",true);	
 								
 			}  else if(selected_value=="Does Not Count") {
 				
 				$("#section4Div").hide();	
 				$("#section5Div").hide();
 				$("#section6Div").hide();	
-				//$("#callResultDiv").hide();	
+				
 				$("#callFailureReasonDiv").hide();
 				$("#failReasonCommentsDiv").hide();	
 				$('#section7HeaderDiv').hide();	
 				$('#section4HeaderDiv').hide()	
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);	
 								
 			} 
 			setCallResult();	 		
@@ -280,9 +313,11 @@
 			if(selected_value=="No") {
 				$("#accuracyCallFailureBlock").show();	
 				$("#accuracyCallFailureReason").focus();
+				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",true);				
 				setCallResult();	
 			} else if(selected_value=="Yes") {
 				$("#accuracyCallFailureBlock").hide();	
+				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",false);				
 				setCallResult();					
 			}    		
         });
@@ -295,10 +330,12 @@
 			if(selected_value=="No") {
 				
 				$("#completenessCallFailureBlock").show();	
-				$("#completenessCallFailureReason").focus();		
+				$("#completenessCallFailureReason").focus();
+				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",true);						
 				setCallResult();	
 			} else if(selected_value=="Yes") {
 				$("#completenessCallFailureBlock").hide();	
+				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",false);	
 				setCallResult();	
 			}    		
         });
@@ -311,11 +348,13 @@
 			if(selected_value=="No") {
 				
 				$("#privacyCallFailureBlock").show();	
-		 	    $("#privacyCallFailureReason").focus();  		
+		 	    $("#privacyCallFailureReason").focus();  
+		 	    $('#privacyCallFailureReason,#privacyCallFailureTime').attr("required",true);			
 		 	    setCallResult();	
 				
 			} else if(selected_value=="Yes") {
-				$("#privacyCallFailureBlock").hide();					
+				$("#privacyCallFailureBlock").hide();
+				 $('#privacyCallFailureReason,#privacyCallFailureTime').attr("required",false);						
 				setCallResult();	
 			}    		
         });
@@ -329,15 +368,18 @@
 				
 				$("#customerSkillsCallFailureBlock").show();
 				$("#customerSkillsCallFailureReason").focus();
+				$('#customerSkillsCallFailureReason,#customerSkillsCallFailureTime').attr("required",true);	
 				setCallResult();
 							
 			} else if(selected_value=="Yes") {				
 				
 				$("#customerSkillsCallFailureBlock").hide();
+				$('#customerSkillsCallFailureReason,#customerSkillsCallFailureTime').attr("required",false);	
 				setCallResult();
 			}    		
         });
 
+		//Select Call Result Functionality
 		function setCallResult() {
 			$("#callResult").val("");
         	var csrWasCourteous_value = $("input[name='csrWasCourteous']:checked").val();	
@@ -369,7 +411,10 @@
            } 
         }
 	});
+	
 </script>
+
+
 
 </head>
 <body>
@@ -419,7 +464,7 @@
 				                   
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="name"> QM Name/QM ID:</label>
+			                                <label for="qamFullName"> QM Name/QM ID: </label>
 			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -456,9 +501,9 @@
 				                    
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="name"> Call Monitoring Date:</label>
-			                                <input type="hidden" id="callMonitoringDate_Alt"></input>
+			                                <label for="callMonitoringDate"> Call Monitoring Date:</label>
 			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true"/>
+			                            	<input type="hidden" id="callMonitoringDate_Alt"></input>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> </label>
@@ -468,7 +513,7 @@
 				                   
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="name"> MAC:</label>
+			                                <label for="macId"> MAC:</label>
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true">
 										   <form:option value="" label="---Select MAC---"/>
@@ -477,7 +522,7 @@
 										
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> Jurisdiction:</label>
+			                                <label for="jurId"> Jurisdiction:</label>
 			                             
 										
 										<form:select path="jurId" class="form-control required" id="jurId" required="true">
@@ -488,7 +533,7 @@
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="name"> Program:</label>
+			                                <label for="programId"> Program:</label>
 			                             
 										<form:select path="programId" class="form-control required" id="programId"  required="true">
 										   <form:option value="" label="---Select Program---"/>
@@ -496,7 +541,7 @@
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> LOB:</label>
+			                                <label for="lob"> LOB:</label>
 			                                <form:select path="lob" class="form-control required" id="lob" required="true">
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
@@ -517,43 +562,27 @@
 				                    
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="name"> Call Time:</label>
-			                                 <input type="hidden" id="callTime_Alt"></input>
+			                                <label for="callTime"> Call Time:</label>			                                 
 			                                <form:input class="form-control required" type = "text" name = "callTime" path="callTime" required="true"/>
+			                                <input type="hidden" id="callTime_Alt"></input>
 			                            </div>
 			                             <div class="col-lg-6 form-group">
-			                                <label for="name"> Call Duration:</label>
+			                                <label for="callDuration"> Call Duration:</label>
 			                                <form:input class="form-control required"  type = "text" name = "callDuration" path="callDuration" required="true"/>
 			                            </div>
 			                        </div>
 				                   
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="name"> CSR Full Name:</label>
+			                                <label for="csrFullName"> CSR Full Name:</label>
 			                                <form:input class="form-control required" type = "text" name = "csrFullName" path="csrFullName" required="true"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                            	<label for="name"> CSR Level:</label>
-			                                <form:input class="form-control required" type = "text" name = "csrLevel" path="csrLevel"  readonly="true"/>	
+			                            	<label for="csrLevel"> CSR Level:</label>
+			                                <form:input class="form-control" type = "text" name = "csrLevel" path="csrLevel"  readonly="true"/>	
 			                            </div>
 			                        </div>
-			                        <div class="row">
-			                            <div class="col-lg-6 form-group">
-			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategoryId" class="form-control required" id="callCategoryId" required="true">
-											   	<form:option value="" label="--- Select Call Category---"/>
-											  	<form:options items="${callCategoryMap}" />										  	
-											</form:select> 			                                
-			                            </div>
-			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="callSubCategoryId" class="form-control required" id="callSubCategoryId" required="true">
-											   	<form:option value="" label="--- Select Call Sub Category---"/>											   	
-											   	<form:options items="${subCategorylMapEdit}" />												  						  	
-											</form:select> 
-			                            </div>
-			                        </div>             
-			                        <div class="row">
+			                         <div class="row">
 			                        <div class="col-lg-6 form-group">
 			                                <label for="email"> Call Language: </label>
 			                                <form:select path="callLanguage" class="form-control required" id="callLanguage" required="true">
@@ -565,9 +594,26 @@
 										</div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="macCallReferenceNumber"> MAC Call Reference ID:</label>
-			                                <form:input class="form-control required" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true"/>
+			                                <form:input class="form-control" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true"/>
 			                               </div>
 			                        </div>
+			                        <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                             <label for="email"> Call Category:</label>
+			                              <form:select path="callCategoryId" class="form-control required" id="callCategoryId" required="true">
+											   	<form:option value="" label="---Select Call Category---"/>
+											  	<form:options items="${callCategoryMap}" />										  	
+											</form:select> 			                                
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                <label for="email"> Call Sub Category:</label>
+			                                <form:select path="callSubCategoryId" class="form-control required" id="callSubCategoryId" required="true">
+											   	<form:option value="" label="---Select Call Sub Category---"/>											   	
+											   	<form:options items="${subCategorylMapEdit}" />												  						  	
+											</form:select> 
+			                            </div>
+			                        </div>             
+			                       
 				                </div>
 				            </div>
 				            
@@ -578,27 +624,27 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" />&nbsp;Yes&nbsp;
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" />&nbsp;No
+			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" required="true"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" required="true"/>&nbsp;No
 			                            </div>			                           
 			                        </div>
 			                        <div class="row" id="accuracyCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureReason">Accuracy Call Failure Reason: </label>
-			                                 <form:input class="form-control" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" />
+			                                 <form:input class="form-control required" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason"  />
 			                               
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureTime">Accuracy Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime" />
+			                                <form:input class="form-control required" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime"  />
 			                               </div>
 			                        </div>
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected, please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"  />&nbsp;Yes&nbsp;
+			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true"/>&nbsp;Yes&nbsp;
 										  	<form:radiobutton path="csrPrvCompInfo" value="No" />&nbsp;No
 			                            </div>
 			                           
@@ -606,12 +652,12 @@
 			                         <div class="row" id="completenessCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureReason">Completeness Call Failure Reason: </label>
-			                                 <form:input class="form-control" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason" />
+			                                 <form:input class="form-control required" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason"  />
 			                               
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureTime">Completeness Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime" />
+			                                <form:input class="form-control required" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime"  />
 			                               </div>
 			                        </div>
 				                    
@@ -625,14 +671,14 @@
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected, please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes" />&nbsp;Yes&nbsp;
+			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true"/>&nbsp;Yes&nbsp;
 										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>&nbsp;No
 			                            </div>		                           
 			                        </div>   
 			                         <div class="row" id="privacyCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="privacyCallFailureReason">Privacy Call Failure Reason: </label>
-			                                 <form:select class="form-control" id="privacyCallFailureReason" path="privacyCallFailureReason" title="Select one of the Failure Reason">
+			                                 <form:select class="form-control required" id="privacyCallFailureReason" path="privacyCallFailureReason" title="Select one of the Failure Reason" >
 			                                 	<form:option value="" label="Select Privacy Failure Reason"/>
 			                                 	<form:option value="PII and/or PHI were released, but the caller was not authorized to receive the information"/>
 			                                 	<form:option value="PII and/or PHI were not released, but the caller requested and was authorized to receive the information"/>
@@ -643,7 +689,7 @@
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="privacyCallFailureTime">Privacy Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "privacyCallFailureTime" path="privacyCallFailureTime" />
+			                                <form:input class="form-control required" type = "text" name = "privacyCallFailureTime" path="privacyCallFailureTime"/>
 			                               </div>
 			                        </div>      
 				                    
@@ -657,14 +703,14 @@
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected, please select the reason below:</label>
-			                                <form:radiobutton path="csrWasCourteous" value="Yes"/>&nbsp;Yes&nbsp;
+			                                <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" required="true"/>&nbsp;Yes&nbsp;
 										  <form:radiobutton path="csrWasCourteous" value="No"/>&nbsp;No
 			                            </div>		                           
 			                        </div>   
 			                         <div class="row" id="customerSkillsCallFailureBlock">
 			                       	 <div class="col-lg-5 form-group">
 			                                <label for="customerSkillsCallFailureReason">Customer Skills Call Failure Reason: </label>
-			                                 <form:select class="form-control" id="customerSkillsCallFailureReason" path="customerSkillsCallFailureReason" title="Select one of the Failure Reason">
+			                                 <form:select class="form-control required" id="customerSkillsCallFailureReason" path="customerSkillsCallFailureReason" title="Select one of the Failure Reason"  >
 			                                 	<form:option value="" label="Select Customer Skills Call Failure Reason"/>
 			                                 	<form:option value="Inappropriately interrupting the caller"/>
 			                                 	<form:option value="Using profanity"/>
@@ -677,7 +723,7 @@
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="customerSkillsCallFailureTime">Customer Skills Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "customerSkillsCallFailureTime" path="customerSkillsCallFailureTime" />
+			                                <form:input class="form-control required" type = "text" name = "customerSkillsCallFailureTime" path="customerSkillsCallFailureTime"/>
 			                               </div>
 			                        </div>            
 				                    
@@ -694,7 +740,7 @@
 			                            <div class="col-lg-6 form-group" >
 			                                <label for="name"> Call Result:</label>
 			                                
-											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true"/>
+											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" />
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                             
@@ -704,13 +750,13 @@
 			                         <div class="row" id="failReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Call Failure Reason Comments:</label>
-			                                <form:textarea class="form-control" type = "textarea" name = "failReasonComments" path="failReasonComments" />
+			                                <form:textarea class="form-control required" type = "textarea" name = "failReasonComments" path="failReasonComments" />
 			                            </div>		                           
 			                        </div>
 			                        <div class="row" id="nonScoreableReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Non-Scoreable Reason:</label>
-			                                <form:select class="form-control" id="nonScoreableReason" path="nonScoreableReason" title="Select one of the Reason">
+			                                <form:select class="form-control required" id="nonScoreableReason" path="nonScoreableReason" title="Select one of the Reason" >
 			                                 	<form:option value="" label="Select Non-Scoreable Reason"/>
 			                                 	<form:option value="Recorded file disconnected unexpectedly"/>
 			                                 	<form:option value="Recorded file was inaudible/not viewable and deemed corrupted"/>

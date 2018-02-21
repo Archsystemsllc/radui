@@ -180,12 +180,12 @@ public class RebuttalController {
 	 
 	@RequestMapping(value ={"/admin/new-rebuttal", "/quality_manager/new-rebuttal", "/cms_user/new-rebuttal",
 			 "/mac_admin/new-rebuttal","/mac_user/new-rebuttal","/quality_monitor/new-rebuttal"}, method = RequestMethod.GET)	
-	public String newRebuttalGet(HttpServletRequest request,final Model model) {
+	public String newRebuttalGet(HttpServletRequest request,final Model model, Authentication authentication) {
 		
 		Rebuttal rebuttal = new Rebuttal();		
 		model.addAttribute("rebuttal", rebuttal);
 		
-		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request);
+		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);
 		
 		failedMacRefList = utilityFunctions.sortByValues(failedMacRefList);
 		model.addAttribute("macReferenceFailedList",failedMacRefList);
@@ -194,44 +194,50 @@ public class RebuttalController {
 		return "rebuttal";
 	}
 	
-	private HashMap<Integer,String> setMacRefInSession(HttpServletRequest request) {
+	private HashMap<Integer,String> setMacRefInSession( HttpServletRequest request, Authentication authentication) {
 		
-		String plainCreds = "qamadmin:123456";
-		byte[] plainCredsBytes = plainCreds.getBytes();
-		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-		String base64Creds = new String(base64CredsBytes);
-		HashMap<Integer,ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
+		
+		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
 		
 		HashMap<Integer,String> failedMacRefList = new HashMap<Integer,String>();
 		
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Accept", "application/json");
-		headers.add("Authorization", "Basic " + base64Creds);
-
-		headers.set("Content-Length", "35");
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> exchange = restTemplate.exchange(HomeController.RAD_WS_URI + "retrieveMacCallRefFailList", HttpMethod.GET,
-				new HttpEntity<String>(headers), String.class);
-		ObjectMapper mapper = new ObjectMapper();
+		Rebuttal rebuttal = new Rebuttal();
+		
+		ScoreCard scoreCardTemp = new ScoreCard();
+		List<ScoreCard> resultsMapTemp = null;
 		List<ScoreCard> failedScorecardList = null;
 		
 		try {
-			failedScorecardList = mapper.readValue(exchange.getBody(), new TypeReference<List<ScoreCard>>(){});
+			String roles = authentication.getAuthorities().toString();
+			
+			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
+						
+				rebuttal.setMacId(userForm.getMacId().intValue());
+				rebuttal.setJurisId(userForm.getJurId().intValue());
+				scoreCardTemp.setMacId(userForm.getMacId().intValue());
+				scoreCardTemp.setJurId(userForm.getJurId().intValue());
+				
+			} 
+			
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(HomeController.RAD_WS_URI + "retrieveMacCallRefFailList");
+			
+			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardTemp, List.class);
+			ObjectMapper mapper = new ObjectMapper();
+			resultsMapTemp = responseEntity.getBody();
+			failedScorecardList = mapper.convertValue(resultsMapTemp, new TypeReference<List<ScoreCard>>() { });
+			
+			//failedScorecardList = mapper.readValue(exchange.getBody(), new TypeReference<List<ScoreCard>>(){});
 			for(ScoreCard scoreCard: failedScorecardList) {
 				resultsMap.put(scoreCard.getId(), scoreCard);
 				failedMacRefList.put(scoreCard.getId(), scoreCard.getMacCallReferenceNumber());
 				
 			}
-		} catch (JsonParseException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
 		request.getSession().setAttribute("MAC_REF_FAILED_LIST", failedMacRefList);
 		
 		request.getSession().setAttribute("MAC_REF_FAILED_MAP", resultsMap);
@@ -260,7 +266,7 @@ public class RebuttalController {
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
 			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
 	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result,
-			final Model model) {
+			final Model model, HttpSession session) {
 
 		String returnView = "";
 		log.debug("--> saverebuttal <--");
@@ -292,7 +298,10 @@ public class RebuttalController {
 		} 
 		
 		rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"\n"+rebuttal.getDescriptionCommentsAppend());
-
+		
+		 
+		User user =  (User) session.getAttribute("LoggedInUserForm");
+		rebuttal.setUserId(user.getId().intValue());
 		try {
 			ResponseEntity<Rebuttal> response = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
 					Rebuttal.class);

@@ -20,7 +20,9 @@ public class CsrListController {
 	 * @return
 	 */
 
-	@RequestMapping(value = "/admin/csrlist")
+	
+	@RequestMapping(value ={"/admin/csrlist", "/quality_manager/csrlist", "/cms_user/csrlist",
+			 "/mac_admin/csrlist","/mac_user/csrlist","/quality_monitor/csrlist"})	
 	public String viewCSRList(Model model, HttpSession session) {
 		log.debug("--> showAdminDashboard <--");
 		

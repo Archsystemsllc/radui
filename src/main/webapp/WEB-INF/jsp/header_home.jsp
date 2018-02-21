@@ -80,13 +80,13 @@
 					<!--<a class="navbar-brand" href="page0.html">-->
 					<div class="col-sm-8">
 						<a href="https://www.cms.gov/" target="_blank"><img
-							src="${pageContext.request.contextPath}/resources/images/logo.png"
+							src="${pageContext.request.contextPath}/resources/images/cms_site-logo.png"
 							alt="logo" height="100px"
 							style="display: block; margin: 0 auto; width: 80%"></a>
 					</div>
 					<%-- <div class="col-sm-8">
 						<img
-							src="${pageContext.request.contextPath}/resources/images/ADDA.png"
+							src="${pageContext.request.contextPath}/resources/images/cms_site-logo.png"
 							alt="logo" height="100px"
 							style="display: block; margin: auto; width: 100%;">
 					</div> --%>

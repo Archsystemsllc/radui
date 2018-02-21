@@ -115,7 +115,13 @@ public class ScoreCardController {
 				model.addAttribute("jurisMapEdit", jurisMap);
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
-				HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
+				HashMap<Integer,String> jurisMap = null;
+				if(scoreCard.getMacId()==0) {
+					jurisMap = HomeController.JURISDICTION_MAP;
+				} else {
+					jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCard.getMacId());
+				}
+				
 				model.addAttribute("jurisMapEdit", jurisMap);
 			}
 			

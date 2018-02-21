@@ -32,10 +32,16 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 
-
+<style type="text/css">
+	.red {  color:red;  }
+</style>
 <script type="text/javascript">
 
 	$(document).ready(function () {
+
+		$('.required').each(function(){
+		       $(this).prev('label').after("<span class='red'>*</span>");
+		});
 
 		$("#dialog-confirm").hide();
 		$("#complete-confirm").hide();
@@ -251,7 +257,13 @@
 								<div class="header">Save/Update Rebuttal</div>	
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create">Save/Update</button></span>
+									<td>
+									<c:if test="${rebuttal.id == 0}">
+										<span><button class="btn btn-primary" id="create"  type="submit">Save</button></span>
+									</c:if>
+									<c:if test="${rebuttal.id > 0}">
+										<span><button class="btn btn-primary" id="update"  type="submit">Update</button></span>
+									</c:if>
 									<span><button class="btn btn-primary" id="close1" type="button">Close</button></span></td>
 							       </tr>
 							     </table>						
@@ -267,7 +279,7 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="macReferenceId"> MAC Call Reference ID:</label>
 			                                <c:if test="${rebuttal.id == 0}">
-			                                <form:select path="macReferenceId" class="form-control" id="macReferenceId" required="true">	
+			                                <form:select path="macReferenceId" class="form-control required" id="macReferenceId" required="true">	
 			                                	<form:option value="" >---Select Mac Call Reference ID---</form:option>										   	
 											  	<form:options items="${macReferenceFailedList}" />
 											</form:select> 
@@ -281,7 +293,7 @@
 			                            </div>
 			                           <div class="col-sm-6 form-group">
 			                                <label for="contactPerson">PCC Contact Person:</label>
-			                                <form:select path="contactPerson" class="form-control" id="contactPerson" required="true">
+			                                <form:select path="contactPerson" class="form-control required" id="contactPerson" required="true">
 											   	<form:option value="" label="---Select Contact---"/>
 											  	<form:option value="Contact 1" />
 											  	<form:option value="Contact 2" />
@@ -293,7 +305,7 @@
 			                         <div class="row">
 			                             <div class="col-sm-6 form-group">
 			                                <label for="name"> PCC/Location:</label>
-			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" >
+			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
 			                                	<form:option value="" label="---Select PCC/Location---"/>
 			                                	<form:options items="${programMapEdit}" />
 											</form:select> 
@@ -425,7 +437,13 @@
 				            </div>		
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="create">Save/Update</button></span>
+									<td>
+									<c:if test="${rebuttal.id == 0}">
+										<span><button class="btn btn-primary" id="create"  type="submit">Save</button></span>
+									</c:if>
+									<c:if test="${rebuttal.id > 0}">
+										<span><button class="btn btn-primary" id="update"  type="submit">Update</button></span>
+									</c:if>
 									<span><button class="btn btn-primary" id="close2" type="button">Close</button></span></td>
 							       </tr>
 							</table>

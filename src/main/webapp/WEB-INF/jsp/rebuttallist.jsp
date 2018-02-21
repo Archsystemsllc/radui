@@ -57,7 +57,7 @@
 										<td>
 										<!-- <span><button class="btn btn-primary" id="filter" type="submit">Filter</button></span> 
 										<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span> -->
-										<sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User')">
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 										<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="New">
 											<button class="btn btn-primary" id="addRebuttal" type="button">Add Rebuttal</button></a></span> 
 										</sec:authorize>
