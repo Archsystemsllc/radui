@@ -108,7 +108,6 @@ public class Rebuttal  {
 	
 	private String lob;
 	
-	
 	public String getLob() {
 		return lob;
 	}
