@@ -106,9 +106,19 @@ public class Rebuttal  {
 	
 	private String macName;
 	
+	private String lob;
 	
 	
-	
+	public String getLob() {
+		return lob;
+	}
+
+
+	public void setLob(String lob) {
+		this.lob = lob;
+	}
+
+
 	public String getMacName() {
 		return macName;
 	}
