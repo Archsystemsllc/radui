@@ -39,6 +39,8 @@
 <!-- [if lt IE 9] -->
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+
 <!--     [endif] -->
 
 </head>
@@ -58,7 +60,7 @@
 								<div class="navbar-brand" style="display: inline">
 									<!--<a class="navbar-brand" href="page0.html">-->
 									<a href="https://www.cms.gov/" target="_blank"><img
-										src="${pageContext.request.contextPath}/resources/images/cms_site-logo.png"
+										src="${pageContext.request.contextPath}/resources/images/logo.png"
 										alt="logo" height="100px" style="float: left; width: 60%"></a>
 
 								</div>
@@ -85,12 +87,12 @@
 						<td
 							style="vertical-align: bottom; border: 0px; padding: 0px">
 							<div class="collapse navbar-collapse navbar-right">
-								<ul class="nav navbar-nav" style="font-weight: bold">
-									<li style="margin-left: 0px"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a></li>
+								<ul class="nav navbar-nav" style="font-weight: bold" id="navlist">
+									<li style="margin-left: 0px"><a class="active" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a></li>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Scorecard</a></li>
 									</sec:authorize>
-									
+										
 									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports">Reports</a></li>
 									
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')">

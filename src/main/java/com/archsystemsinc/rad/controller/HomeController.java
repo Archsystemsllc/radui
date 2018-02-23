@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
 import com.archsystemsinc.rad.model.MacInfo;
@@ -85,6 +86,20 @@ public class HomeController {
 	public static HashMap<Integer, String> USER_BASED_MAC_ID_DETAILS;
 	public static HashMap<Integer, String> USER_BASED_JURISDICTION_DETAILS;
 	public static HashMap<Integer, String> USER_BASED_PCC_LOCATION_DETAILS;
+	
+	/**
+     * This method provides the functionalities for the User Registration.
+     * 
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/admin/privacy", method = RequestMethod.GET)
+    public String privacy(Model model) {
+       
+       
+        return "privacy";
+    }
+    
 	
 	 @RequestMapping(value = "/admin/dashboard")
 	 public String showAdminDashboard(Model model, HttpSession session) {

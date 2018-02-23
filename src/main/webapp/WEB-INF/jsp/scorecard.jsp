@@ -459,7 +459,7 @@
 										</c:if>
 				                      </div>
 									</div>
-				                    <h2>Section 1 - QAM Info</h2> 
+				                    <h2>Section 1 - QAM Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   
 				                    <div class="row">
@@ -624,7 +624,7 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
+			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected , please enter reason in text box below:</label>
 			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" required="true"/>&nbsp;Yes&nbsp;
 										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" required="true"/>&nbsp;No
 			                            </div>			                           
@@ -643,7 +643,7 @@
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected, please enter reason in text box below:</label>
+			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected , please enter reason in text box below:</label>
 			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true"/>&nbsp;Yes&nbsp;
 										  	<form:radiobutton path="csrPrvCompInfo" value="No" />&nbsp;No
 			                            </div>
@@ -670,7 +670,7 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected, please select the reason below:</label>
+			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected , please select the reason below:</label>
 			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true"/>&nbsp;Yes&nbsp;
 										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>&nbsp;No
 			                            </div>		                           
@@ -702,7 +702,7 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected, please select the reason below:</label>
+			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected , please select the reason below:</label>
 			                                <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" required="true"/>&nbsp;Yes&nbsp;
 										  <form:radiobutton path="csrWasCourteous" value="No"/>&nbsp;No
 			                            </div>		                           

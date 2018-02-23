@@ -426,7 +426,7 @@
 					                <c:if test="${rebuttal.id != 0}">
 					                 <div class="row">
 			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Saved Description/Comments:</label>
+			                                <label for="name">Saved Reason for Rebuttals/QM Comments:</label>
 			                                <form:textarea class="required form-control" type = "textarea" name = "descriptionComments" path="descriptionComments" readonly="true"/>
 			                            </div>		                           
 			                        </div>    
@@ -434,7 +434,7 @@
 			                        
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Description/Comments:</label>
+			                                <label for="name">Reason for Rebuttals/QM Comments:</label>
 			                                <form:textarea class="required form-control" type = "textarea" name = "descriptionCommentsAppend" path="descriptionCommentsAppend" required="true"/>
 			                            </div>		                           
 			                        </div>       

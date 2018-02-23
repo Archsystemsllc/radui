@@ -104,10 +104,10 @@
 						<div class="navbar-brand" style="display: inline">
 							<!--<a class="navbar-brand" href="page0.html">-->
 								<a href="https://www.cms.gov/" target="_blank"><img
-								src="${pageContext.request.contextPath}/resources/images/cms_site-logo.png"
+								src="${pageContext.request.contextPath}/resources/images/logo.png"
 								alt="logo" height="100px" style="float: left; width: 40%"></a>
 							<img
-								src="${pageContext.request.contextPath}/resources/images/cms_site-logo.png"
+								src="${pageContext.request.contextPath}/resources/images/logo.png"
 								alt="logo" height="100px" style="float: right; width: 45%;">
 						</div>
 

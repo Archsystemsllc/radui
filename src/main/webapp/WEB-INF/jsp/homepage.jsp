@@ -74,12 +74,10 @@
 	h=screen.height-357;
 	document.getElementById('mid').style.minHeight=h+'px';
 	$(document).ready(function () {
-				 $('.nav > li').eq(0).addClass('active');			 
+				 $('.nav > li').eq(0).addClass('active');	
+				 
 	});	
-	$('.anchor').click(function(){
-	    $('.active').removeClass('active');
-	    $(this).addClass('active');
-	});
+	
 	</script>
 </body>
 </html>
