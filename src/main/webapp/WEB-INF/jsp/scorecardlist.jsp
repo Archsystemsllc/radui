@@ -183,8 +183,8 @@
 								<c:if test="${ReportFlag == true}">
 									<div class="row" style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
-											<span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create"><button
-														class="btn btn-primary" id="back" type="button">Back</button></a></span>
+											<!-- <span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create"> -->
+											<button class="btn btn-primary" id="back" type="button">Back</button></a></span>
 										</div>
 									</div>
 								</c:if>
@@ -220,9 +220,9 @@
 												</display:table>
 												<c:if
 													test="${fn:length(sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()) eq 0}">
-													<span><a class="action-icons c-approve"
+													<!-- <span><a class="action-icons c-approve"
 														href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard"
-														title="Create">Create</a></span>
+														title="Create">Create</a></span> -->
 												</c:if>
 											</div>
 										</div>

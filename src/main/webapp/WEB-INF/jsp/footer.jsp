@@ -41,8 +41,8 @@
 			<div class="col-sm-6">
 				<ul class="pull-right" style="margin-top: 14px">
 					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/dashboard --%>">Home</a></li>
-					
-					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/contactus --%>">Contact Us</a></li>
+					<li><a href="/admin/privacy.jsp">Privacy,Security and Disclaimer</a></li>
+					<li><a href="mailto:qamadmin@archsystemsinc.com">Contact Us</a></li>
 				</ul>
 			</div>
 		</div>

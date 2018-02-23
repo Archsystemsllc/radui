@@ -113,7 +113,7 @@
 									</li>
 									</sec:authorize>
 									
-									<li class="anchor"><a class="anchor" href="${pageContext.request.contextPath}/admin/myaccount">My Account</a></li>	
+									<li><a href="${pageContext.request.contextPath}/admin/myaccount">My Account</a></li>	
 									<li class="anchor"><a href="#">Help Guide</a></li>									
 									
 									<li>&nbsp; &nbsp;</li>			
