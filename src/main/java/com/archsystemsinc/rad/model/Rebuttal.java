@@ -108,6 +108,20 @@ public class Rebuttal  {
 	
 	private String lob;
 	
+	private String jurisName;
+	
+	
+	
+	public String getJurisName() {
+		return jurisName;
+	}
+
+
+	public void setJurisName(String jurisName) {
+		this.jurisName = jurisName;
+	}
+
+
 	public String getLob() {
 		return lob;
 	}
