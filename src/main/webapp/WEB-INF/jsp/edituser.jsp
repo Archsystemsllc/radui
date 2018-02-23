@@ -50,6 +50,19 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 
+<style type="text/css">
+	.red {  color:red;  }
+</style>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		//Required Fields Logic
+		$('.required').each(function(){
+		       $(this).prev('label').after("<span class='red'>*</span>");
+		});
+	});
+</script>
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
@@ -77,7 +90,7 @@
 										</tr>
 									</table>
 
-									<div class="row">
+									<div class="row" style="margin-top: 10px">
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="userName"> User Name:</label> 
 											 <spring:bind path="userName">
@@ -93,7 +106,7 @@
 											<label for="password"> Password:</label> 
 											 <spring:bind path="password">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="password" class="form-control" placeholder=""></form:input>
+								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
 								                <form:errors path="password"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -103,7 +116,7 @@
 											<label for="passwordConfirm"> Confirm your password:</label> 
 											<spring:bind path="passwordConfirm">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="passwordConfirm" class="form-control"
+								                <form:input type="password" path="passwordConfirm" class="form-control required"
 								                            placeholder=""></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
 								            </div>
@@ -113,7 +126,7 @@
 											<label for="firstName"> First Name:</label> 
 											<spring:bind path="firstName">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="firstName" class="form-control" placeholder=""
+								                <form:input type="text" path="firstName" class="form-control required" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="firstName"></form:errors>
 								            </div>
@@ -122,7 +135,7 @@
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="middleName"> Middle Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="middleName" class="form-control" placeholder=""
+								                <form:input type="text" path="middleName" class="form-control required" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="middleName"></form:errors>
 								            </div>
@@ -131,7 +144,7 @@
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="lastName"> Last Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="lastName" class="form-control" placeholder=""
+								                <form:input type="text" path="lastName" class="form-control required" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="lastName"></form:errors>
 								            </div>
@@ -140,7 +153,7 @@
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="emailId"> Email Id:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="emailId" class="form-control" placeholder=""
+								                <form:input type="text" path="emailId" class="form-control required" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="emailId"></form:errors>
 								            </div>

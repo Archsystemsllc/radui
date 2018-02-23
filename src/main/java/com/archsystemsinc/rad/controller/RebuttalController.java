@@ -303,6 +303,8 @@ public class RebuttalController {
 		User user =  (User) session.getAttribute("LoggedInUserForm");
 		rebuttal.setUserId(user.getId().intValue());
 		try {
+			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
+			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
 			ResponseEntity<Rebuttal> response = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
 					Rebuttal.class);
 			

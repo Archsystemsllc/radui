@@ -77,12 +77,12 @@
 										</tr>
 									</table>
 
-									<div class="row">
+									<div class="row"  style="margin-top: 10px">
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="userName"> User Name:</label> 
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="userName" class="form-control" placeholder=""
+								                <form:input type="text" path="userName" class="form-control required" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="userName"></form:errors>
 								            </div>
@@ -93,7 +93,7 @@
 											<label for="password"> Password:</label> 
 											 <spring:bind path="password">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="password" class="form-control" placeholder=""></form:input>
+								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
 								                <form:errors path="password"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -102,7 +102,7 @@
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="passwordConfirm"> Confirm your password:</label> 
 											<spring:bind path="passwordConfirm">
-											<div class="form-group ${status.error ? 'has-error' : ''}">
+											<div class="form-control ${status.error ? 'has-error' : ''}">
 								                <form:input type="password" path="passwordConfirm" class="form-control"
 								                            placeholder=""></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
@@ -112,7 +112,7 @@
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="firstName"> First Name:</label> 
 											<spring:bind path="firstName">
-											<div class="form-group ${status.error ? 'has-error' : ''}">
+											<div class="form-control ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="firstName" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="firstName"></form:errors>
@@ -121,7 +121,7 @@
 										</div>
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="middleName"> Middle Name:</label> 
-											 <div class="form-group ${status.error ? 'has-error' : ''}">
+											 <div class="form-control ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="middleName" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="middleName"></form:errors>
@@ -130,7 +130,7 @@
 										
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="lastName"> Last Name:</label> 
-											 <div class="form-group ${status.error ? 'has-error' : ''}">
+											 <div class="form-control required ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="lastName" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="lastName"></form:errors>
@@ -139,7 +139,7 @@
 										
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="emailId"> Email Id:</label> 
-											 <div class="form-group ${status.error ? 'has-error' : ''}">
+											 <div class="form-control required ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="emailId" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
 								                <form:errors path="emailId"></form:errors>

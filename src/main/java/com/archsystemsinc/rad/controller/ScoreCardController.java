@@ -351,6 +351,8 @@ public class ScoreCardController {
 				scoreCard.setQamEnddateTimeString(qamEnddateTimeString);
 				scoreCard.setQamEnddateTime(qamEnddateTime);
 				scoreCard.setUserId(userFormSession.getId().intValue());
+				scoreCard.setMacName(HomeController.MAC_ID_MAP.get(scoreCard.getMacId()));
+				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
 				ResponseEntity<ScoreCard> response = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,ScoreCard.class);
 				
 			} catch (Exception e) {

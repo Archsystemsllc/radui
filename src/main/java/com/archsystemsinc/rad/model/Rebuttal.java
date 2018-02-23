@@ -106,31 +106,9 @@ public class Rebuttal  {
 	
 	private String macName;
 	
-	private String lob;
-	
-	private String jurisName;
 	
 	
-	public String getJurisName() {
-		return jurisName;
-	}
-
-
-	public void setJurisName(String jurisName) {
-		this.jurisName = jurisName;
-	}
-
-
-	public String getLob() {
-		return lob;
-	}
-
-
-	public void setLob(String lob) {
-		this.lob = lob;
-	}
-
-
+	
 	public String getMacName() {
 		return macName;
 	}
