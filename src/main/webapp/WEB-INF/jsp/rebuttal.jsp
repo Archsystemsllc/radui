@@ -135,6 +135,9 @@
               		$("#macId").val(data.macId);
               		$("#jurisId").val(data.jurId);
               		$("#programId").val(data.programId);
+              		//$("#callCategory").val(data.callCategory.id);
+              		$("#lob").val(data.lob);
+              		
 
 					if(data.accuracyCallFailureReason != "") {
 						failureBlockDisplay = true;
@@ -349,14 +352,24 @@
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                         	</div>
-			                         	<div class="col-lg-6 form-group">
+			                         	<!-- <div class="col-lg-6 form-group">
 			                             <label for="email"> Rebuttal Call Category:</label>
 			                              <form:select path="callCategory" class="form-control required" id="callCategory" required="true">
 											   	<form:option value="" label="--- Select Rebuttal Call Category---"/>
 											   	<form:option value="1" label="QAM"/>
 											   	<form:option value="2" label="EDI"/>
 											</form:select> 			                                
-			                         	</div>
+			                         	</div> -->
+			                         	<div class="col-lg-6 form-group">
+			                                <label for="lob"> LOB:</label>
+			                                <form:select path="lob" class="form-control required" id="lob" required="true">
+											   	<form:option value="" label="---Select LOB---"/>
+											  	<form:option value="Appeals/Reopenings" />
+											  	<form:option value="Electronic Data Interchange (EDI)" />
+											  	<form:option value="Enrollments" />
+											  	<form:option value="General" />
+											</form:select> 
+			                            </div>
 			                         </div>
 			                         <div class="row">
 			                         	<c:if test="${rebuttal.id != 0}">
