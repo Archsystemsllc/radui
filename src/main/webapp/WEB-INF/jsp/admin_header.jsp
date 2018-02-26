@@ -73,12 +73,12 @@
 							</div></td>
 					</tr>
 					<tr>
-						<td style="float: right; border: 0px"><button type="button" alt="zoom in"
+						<td style="float: right; border: 0px"><button aria-label="zoom in button"
 								title="increase font size" class="btn btn-primary btn-xs"
 								onclick="increaseFontSizeBy1px()">
 								<i class="fa fa-search-plus"></i>
 							</button>
-							<button title="decrease font size" class="btn btn-primary btn-xs"
+							<button aria-label="zoom out button" title="decrease font size" class="btn btn-primary btn-xs"
 								onclick="decreaseFontSizeBy1px()">
 								<i class="fa fa-search-minus"></i>
 							</button></td>
