@@ -61,7 +61,7 @@
 									<!--<a class="navbar-brand" href="page0.html">-->
 									<a href="https://www.cms.gov/" target="_blank"><img
 										src="${pageContext.request.contextPath}/resources/images/logo.png"
-										alt="logo" height="100px" style="float: left; width: 60%"></a>
+										alt="CMS logo" height="100px" style="float: left; width: 60%" tilte="Click on CMS Logo to navigate to CMS webpage"></a>
 
 								</div>
 
@@ -73,7 +73,7 @@
 							</div></td>
 					</tr>
 					<tr>
-						<td style="float: right; border: 0px"><button
+						<td style="float: right; border: 0px"><button type="button" alt="zoom in"
 								title="increase font size" class="btn btn-primary btn-xs"
 								onclick="increaseFontSizeBy1px()">
 								<i class="fa fa-search-plus"></i>
