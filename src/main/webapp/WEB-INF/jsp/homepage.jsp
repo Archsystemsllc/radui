@@ -44,9 +44,9 @@
 						<li><h2
 								style="color: #fff; font-family: 'Rubik', sans-serif;">Description</h2></li>
 					</ul> -->
-					<p style="text-align: justify; font-family: 'Rubik', sans-serif;">
+					<!-- <p style="text-align: justify; font-family: 'Rubik', sans-serif;">
 						<br></br> <br></br>
-					</p>
+					</p> -->
 				</div>
 			</td>
 			<td style="vertical-align: top">
