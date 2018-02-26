@@ -107,7 +107,7 @@
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
-										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')"">
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									      	<li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
 									     </sec:authorize>
 									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>
