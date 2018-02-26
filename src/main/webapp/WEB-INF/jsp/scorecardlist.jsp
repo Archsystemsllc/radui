@@ -74,6 +74,11 @@
                });
         });
 
+		//Back Button Functionality
+		$('#back').click(function(e) {	
+			window.history.back();
+	    }); 
+
 	});
 </script>
 

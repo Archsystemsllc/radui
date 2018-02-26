@@ -192,7 +192,7 @@ public class RadServiceApiClient {
 			HttpHeaders headers = createServiceHeaders();
 			RestTemplate restTemplate = new RestTemplate();
 			
-			ResponseEntity<List> exchange = restTemplate.exchange(radservicesEndpoint + "findUser/"+userFilter.getLastName()+"/"+userFilter.getRoleId()+"/"+userFilter.getOrgId(), HttpMethod.GET,
+			ResponseEntity<List> exchange = restTemplate.exchange(radservicesEndpoint + "findUser/"+userFilter.getLastName()+"/"+userFilter.getRoleId()+"/"+userFilter.getOrgId()+"/"+userFilter.getMacId()+"/"+userFilter.getJurisId(), HttpMethod.GET,
 					new HttpEntity<String>(headers), List.class);
 			users = exchange.getBody();
 			log.debug("users::"+users);

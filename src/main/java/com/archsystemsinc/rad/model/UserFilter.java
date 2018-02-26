@@ -14,6 +14,26 @@ public class UserFilter {
 	private String roleId;
 	
 	private String orgId;
+	
+	public String getMacId() {
+		return macId;
+	}
+
+	public void setMacId(String macId) {
+		this.macId = macId;
+	}
+
+	public String getJurisId() {
+		return jurisId;
+	}
+
+	public void setJurisId(String jurisId) {
+		this.jurisId = jurisId;
+	}
+
+	private String macId;
+	
+	private String jurisId;
 
 	
 	@Override
@@ -25,6 +45,10 @@ public class UserFilter {
 		builder.append(roleId);
 		builder.append(", orgId=");
 		builder.append(orgId);
+		builder.append(", macId=");
+		builder.append(macId);
+		builder.append(", jurisId=");
+		builder.append(jurisId);
 		builder.append("]");
 		return builder.toString();
 	}

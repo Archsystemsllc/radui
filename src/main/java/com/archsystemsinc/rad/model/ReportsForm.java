@@ -1,5 +1,6 @@
 package com.archsystemsinc.rad.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -44,7 +45,18 @@ public class ReportsForm {
     
     private String callCategoryType;
     
-    private String rebuttalStatus;    
+    private String rebuttalStatus;   
+    
+    private ArrayList<Integer> jurIdList;
+    
+
+	public ArrayList<Integer> getJurIdList() {
+		return jurIdList;
+	}
+
+	public void setJurIdList(ArrayList<Integer> jurIdList) {
+		this.jurIdList = jurIdList;
+	}
 
 	public String getComplianceReportType() {
 		return complianceReportType;

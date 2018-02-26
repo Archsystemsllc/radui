@@ -171,16 +171,22 @@
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurisId").get(0).options.length = 0;	           
-      	      	 $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
-      	      	 $("#jurisId").get(0).options[1] = new Option("---Select All---", "ALL");
+      	      	 $("#jurisId").get(0).options[0] = new Option("---Select All---", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
       	  	    		
       	  	    	});  	   
                });
         });
-		$("select#jurisId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
+        
+		$("#jurisId").change(function(){
+			
+			 var selectedJurisdiction =""; 
+			 $("#jurisId :selected").each(function() {
+				 selectedJurisdiction+=($(this).attr('value'))+",";
+				});
+			
+            $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: selectedJurisdiction}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
       	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
@@ -193,7 +199,12 @@
         });
 
 		$("select#programId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectLocation",{macId: $('#macId').val(),jurisId: $('#jurisId').val(),programId: $(this).val()}, function(data){
+
+			var selectedJurisdiction =""; 
+			 $("#jurisId :selected").each(function() {
+				 selectedJurisdiction+=($(this).attr('value'))+",";
+				});
+            $.getJSON("${pageContext.request.contextPath}/admin/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val()}, function(data){
                 
                  $("#loc").get(0).options.length = 0;	           
       	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
@@ -243,9 +254,8 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> Jurisdiction:</label>
-										<form:select path="jurisId" class="form-control required" id="jurisId" required="true">
-										   <form:option value="" label="---Select Jurisdiction---"/>
-										    <form:option value="ALL" label="---Select All---"/>
+										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" multiple="true">
+										  
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>

@@ -92,9 +92,9 @@
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Scorecard</a></li>
 									</sec:authorize>
-										
-									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports">Reports</a></li>
-									
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports">Reports</a></li>
+									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist">CSR</a></li>
 									</sec:authorize>
@@ -102,12 +102,12 @@
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">Rebuttal</a></li>
 									</sec:authorize>
 								
-									<sec:authorize access="hasAuthority('Administrator')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									<li class="dropdown">
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
-										<sec:authorize access="hasAuthority('Administrator')">
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')"">
 									      	<li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
 									     </sec:authorize>
 									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>

@@ -3,6 +3,7 @@ package com.archsystemsinc.rad.controller;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -122,6 +123,8 @@ public class ReportsController {
 		ArrayList<ScoreCard> scoreCardList = scoreCardSessionMap.get(macIdString+"_"+jurIdString);
 		
 		for(ScoreCard scoreCard: scoreCardList) {
+			scoreCard.setMacName(macIdString);
+			scoreCard.setJurisdictionName(jurIdString);
 			if(searchString.equalsIgnoreCase("ALL")) {
 				resultsMap.put(scoreCard.getId(), scoreCard);
 			} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
@@ -199,8 +202,18 @@ public class ReportsController {
 			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			
 			if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
-				String jurisdictionName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
+				
+				String[] jurisIds = reportsForm.getJurisId().split(",");
+				
+				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
+				String jurisdictionName = "";
+				for (String jurisIdSingleValue: jurisIds) {
+					jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+					jurisdictionName += HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue)) + " ";
+				}
+				reportsForm.setJurIdList(jurisIdArrayList);			
 				reportsForm.setJurisdictionName(jurisdictionName);
+				reportsForm.setJurisId("");
 			} else {
 				reportsForm.setJurisdictionName(reportsForm.getJurisId());
 			}

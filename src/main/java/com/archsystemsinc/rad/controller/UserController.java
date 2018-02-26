@@ -1,5 +1,8 @@
 package com.archsystemsinc.rad.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -138,12 +142,27 @@ public class UserController {
 	}
 
 	@RequestMapping("/admin/listofusers")
-	public String listofusers(Model model) {
+	public String listofusers(Model model, Authentication authentication, HttpSession session) {
 		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
 		model.addAttribute("userFilterForm", new UserFilter());
 		model.addAttribute("roleIds", HomeController.ROLE_MAP);
 		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
-		model.addAttribute("users", userService.findAll());
+		List<User> userList = null;
+		
+		String roles = authentication.getAuthorities().toString();
+		User userForm = (User) session.getAttribute("LoggedInUserForm");
+		
+		if(roles.contains("MAC Admin") ) {
+			
+			UserFilter userFilter = new UserFilter();
+			userFilter.setMacId(userForm.getMacId().toString());
+			userFilter.setJurisId(userForm.getJurId().toString());
+			
+			userList = userService.findUsers(userFilter);
+		} else {
+			userList =  userService.findAll();
+		}
+		model.addAttribute("users", userList);
 		log.debug("<-- List Users");
 		return "listofusers";
 

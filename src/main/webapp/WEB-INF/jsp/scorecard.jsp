@@ -395,6 +395,9 @@
             	) {
             	
         			$("#callResult").val("Fail");
+        			$("#failReasonCommentsDiv").show();
+        			$('#failReasonComments').attr("required",true);	
+        			
         	} 
 
         	if (( scorecardType_value == "Scoreable" ) 
@@ -403,11 +406,15 @@
                 	) {
             		
             		$("#callResult").val("Pass");
+            		$("#failReasonCommentsDiv").hide();
+            		$('#failReasonComments').attr("required",false);	
         	}
 
         	if ((scorecardType_value == "Non-Scoreable" || scorecardType_value == "Does Not Count")) {
 
         		$("#callResult").val("N/A");
+        		$("#failReasonCommentsDiv").hide();
+        		$('#failReasonComments').attr("required",false);	
            } 
         }
 	});

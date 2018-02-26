@@ -80,4 +80,6 @@ public class UserServiceImpl implements UserService {
 	public List<User> findUsers(UserFilter userFilter) {
 		return radServiceApiClient.findUsers(userFilter);
 	}
+
+	
 }

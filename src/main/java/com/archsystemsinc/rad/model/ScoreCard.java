@@ -1,8 +1,8 @@
 package com.archsystemsinc.rad.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
 
 public class ScoreCard  implements Comparable<ScoreCard>{
 	
@@ -139,8 +139,27 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String programIdReportSearchString;
 	
+	private ArrayList<Integer> jurIdList;	
+	
+	private ArrayList<Integer> macIdList;
 	
 	
+	public ArrayList<Integer> getJurIdList() {
+		return jurIdList;
+	}
+
+	public void setJurIdList(ArrayList<Integer> jurIdList) {
+		this.jurIdList = jurIdList;
+	}
+
+	public ArrayList<Integer> getMacIdList() {
+		return macIdList;
+	}
+
+	public void setMacIdList(ArrayList<Integer> macIdList) {
+		this.macIdList = macIdList;
+	}
+
 	public String getMacName() {
 		return macName;
 	}
