@@ -81,7 +81,7 @@
 					<div class="col-sm-8">
 						<a href="https://www.cms.gov/" target="_blank"><img
 							src="${pageContext.request.contextPath}/resources/images/logo.png"
-							alt="CMS logo" height="100px" title="Click on CMS Logo navigates to CMS Webpage"
+							alt="CMS logo" height="100px" title="Click on CMS Logo to navigate to CMS Webpage"
 							style="display: block; margin: 0 auto; width: 80%"></a>
 					</div>
 					<%-- <div class="col-sm-8">
@@ -114,7 +114,10 @@
 			</ul> --%>
 		</div>
 	</div>
-	<!--/.container--> </nav> <!--/nav--> </header>
+	<!--/.container--> 
+	</nav>
+	<!--/nav--> 
+	</header>
 	<script>
 		function increaseFontSizeBy1px() {
 			var font = parseInt($('#b').css('font-size'));

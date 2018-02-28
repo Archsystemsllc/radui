@@ -87,7 +87,7 @@
 
 							</div>
 						</td>
-						<td style="border: 0px;"><div class="social">
+						<td style="border: 0px;"><div class="social" style="color:black">
 								Welcome ${pageContext.request.userPrincipal.name} | <a
 									href="${pageContext.request.contextPath}/logout">Logout</a>
 							</div></td>

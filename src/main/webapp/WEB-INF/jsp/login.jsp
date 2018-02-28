@@ -57,39 +57,36 @@
 								class="form-signin">
 								<!-- <h2 style="text-align: center;">PQRS - Interactive Map</h2>
 								<br> -->
-								<h1 class='app-title'>
-									Login<br> <br>
+								<h1 class='app-title'>Login<br> <br>
 								</h1>
 								<div class="form-group ${error != null ? 'has-error' : ''}">
 									<span>${message}</span>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span> -->
 									<label for="username">Username</label>
 									<input style="margin: 0px" name="username" id="username" type="text"
-										class="form-control" placeholder="Username" autofocus="true" />
+										class="form-control" placeholder="Username" autofocus="true" title="Please fill out this field"/>
 									<!-- </div> -->
 									<br>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
 									<label for="password">Password</label>
 									<input style="margin: 0px" name="password" id="password" type="password"
-										class="form-control" placeholder="Password" />
+										class="form-control" placeholder="Password" title="Please fill out this field"/>
 									<!-- </div> -->
 									<span>${error}</span> <input type="hidden"
 										name="${_csrf.parameterName}" value="${_csrf.token}" /> <br>
 								</div>
-								<button class="btn btn-lg btn-primary btn-block" type="submit">Log
+								<button class="btn btn-lg btn-primary btn-block" type="submit" title="Login Button">Log
 									In</button>
 								<%-- <h4 class="text-center">
 							<a href="${contextPath}/registration">Create an account</a>
 						</h4> --%>
-
-
 							</form>
 						</div>
 						<div>
 					</div>
 					
 					</div>
-			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at qam@cms.hhs.gov.</div>
+			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qam@cms.hhs.gov">qam@cms.hhs.gov</a>.</div>
 
 <div style="padding-left:224px;padding-bottom:20px;">Disclaimer: This web site is not hosted on a Centers for Medicare & Medicaid Services (CMS) web server.</div>
 
