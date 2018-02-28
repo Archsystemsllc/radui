@@ -81,7 +81,7 @@
 									<!--<a class="navbar-brand" href="page0.html">-->
 									<a href="https://www.cms.gov/" target="_blank"><img
 										src="${pageContext.request.contextPath}/resources/images/logo.png"
-										alt="CMS logo" height="100px" style="float: left; width: 60%" tilte="Click on CMS Logo to navigate to CMS webpage"></a>
+										alt="CMS logo" height="100px" style="float: left; width: 60%" title="Click on CMS Logo to navigate to CMS webpage"></a>
 
 								</div>
 

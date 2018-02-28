@@ -81,7 +81,7 @@
 					<div class="col-sm-8">
 						<a href="https://www.cms.gov/" target="_blank"><img
 							src="${pageContext.request.contextPath}/resources/images/logo.png"
-							alt="logo" height="100px"
+							alt="CMS logo" height="100px" title="Click on CMS Logo navigates to CMS Webpage"
 							style="display: block; margin: 0 auto; width: 80%"></a>
 					</div>
 					<%-- <div class="col-sm-8">
