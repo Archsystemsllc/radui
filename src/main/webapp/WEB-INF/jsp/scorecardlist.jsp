@@ -9,7 +9,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM - ScoreCard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
@@ -103,7 +103,7 @@
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
-												<h2>Scorecard Search Filters</h2>
+												<h1>Scorecard Search Filters</h1>
 												<div class="col-lg-4 form-group">
 													<label for="name"> MAC:</label>
 													<form:select path="macId" class="form-control required"

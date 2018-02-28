@@ -63,12 +63,14 @@
 								<div class="form-group ${error != null ? 'has-error' : ''}">
 									<span>${message}</span>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span> -->
-									<input style="margin: 0px" name="username" type="text"
+									<label for="username">Username</label>
+									<input style="margin: 0px" name="username" id="username" type="text"
 										class="form-control" placeholder="Username" autofocus="true" />
 									<!-- </div> -->
 									<br>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
-									<input style="margin: 0px" name="password" type="password"
+									<label for="password">Password</label>
+									<input style="margin: 0px" name="password" id="password" type="password"
 										class="form-control" placeholder="Password" />
 									<!-- </div> -->
 									<span>${error}</span> <input type="hidden"
