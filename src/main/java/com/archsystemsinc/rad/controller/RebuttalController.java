@@ -30,12 +30,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 
 import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
+import com.archsystemsinc.rad.model.UserFilter;
+import com.archsystemsinc.rad.service.UserService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -51,6 +54,9 @@ public class RebuttalController {
 	
 	@Autowired
 	CommonController commonController;
+	
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value ={"/admin/rebuttalfilter", "/quality_manager/rebuttalfilter", "/cms_user/rebuttalfilter",
 			 "/mac_admin/rebuttalfilter","/mac_user/rebuttalfilter","/quality_monitor/rebuttalfilter"})		
@@ -81,16 +87,6 @@ public class RebuttalController {
 				rebuttal.setJurisId(userForm.getJurId().intValue());
 				
 			} 
-			
-			/*if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");
-				rebuttal.setFilterMacId(userForm.getMacId().intValue());				
-				HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
-				model.addAttribute("jurisMapEdit", jurisMap);
-			} else {
-				HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
-				model.addAttribute("jurisMapEdit", jurisMap);
-			}*/
 			
 			resultsMap = retrieveRebuttalList(rebuttal);
 		} catch (Exception e) {
@@ -180,14 +176,28 @@ public class RebuttalController {
 	 
 	@RequestMapping(value ={"/admin/new-rebuttal", "/quality_manager/new-rebuttal", "/cms_user/new-rebuttal",
 			 "/mac_admin/new-rebuttal","/mac_user/new-rebuttal","/quality_monitor/new-rebuttal"}, method = RequestMethod.GET)	
-	public String newRebuttalGet(HttpServletRequest request,final Model model, Authentication authentication) {
+	public String newRebuttalGet(HttpServletRequest request,final Model model, Authentication authentication, HttpSession session) {
 		
 		Rebuttal rebuttal = new Rebuttal();		
 		model.addAttribute("rebuttal", rebuttal);
 		
 		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);
 		
+		UserFilter userFilter = new UserFilter();
+		HashMap<Integer,String> pccContactPersonMap = new HashMap<Integer,String>();
+		
+		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+		userFilter.setMacId(userFormSession.getMacId().toString());
+		userFilter.setJurisId(userFormSession.getJurId().toString());
+		userFilter.setRoleId(UIGenericConstants.MAC_USER_ROLE);
+		List<User> usersList = userService.findUsers(userFilter);
+		
+		for(User userTemp: usersList) {
+			pccContactPersonMap.put(userTemp.getId().intValue(), userTemp.getLastName()+" "+userTemp.getFirstName());
+		}
+		
 		failedMacRefList = utilityFunctions.sortByValues(failedMacRefList);
+		model.addAttribute("pccContactPersonMap",pccContactPersonMap);
 		model.addAttribute("macReferenceFailedList",failedMacRefList);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		

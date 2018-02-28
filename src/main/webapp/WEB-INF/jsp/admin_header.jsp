@@ -42,12 +42,32 @@
 
 
 <!--     [endif] -->
+<script type="text/javascript">
+    var timeoutHandle = null;
+    function startTimer(timeoutCount) {
+        if (timeoutCount == 0) {
+            window.location.href = '${pageContext.request.contextPath}/logout';
+        } else if (timeoutCount < 600) {
+        	var minutes = Math.floor((timeoutCount * 3000)/1000 / 60);
+        	var seconds = (timeoutCount * 3000)/1000 - (minutes *60);
+            document.getElementById('sessionTimer').innerHTML = 'Session Timeout: ' +minutes +':'+seconds;
+        }
+        timeoutHandle = setTimeout(function () { startTimer(timeoutCount-1);}, '3000');
+    }
+    function refreshTimer() {
+        killTimer(timeoutHandle);
+        startTimer(3);
+    }
+  </script>
 
 </head>
-<body id="b">
+<body id="b" onload="startTimer(600)">
 	<header id="header"> <nav class="navbar navbar-inverse"
 		role="banner">
 	<div>
+		<div class="row">
+		<div id="sessionTimer" align="right" style="padding-right: 30px; color: red" ></div>
+		</div>
 		<div class="row">
 			<div class="col-md-12">
 				<table>
@@ -61,7 +81,7 @@
 									<!--<a class="navbar-brand" href="page0.html">-->
 									<a href="https://www.cms.gov/" target="_blank"><img
 										src="${pageContext.request.contextPath}/resources/images/logo.png"
-										alt="logo" height="100px" style="float: left; width: 60%"></a>
+										alt="CMS logo" height="100px" style="float: left; width: 60%" tilte="Click on CMS Logo to navigate to CMS webpage"></a>
 
 								</div>
 
@@ -73,12 +93,12 @@
 							</div></td>
 					</tr>
 					<tr>
-						<td style="float: right; border: 0px"><button
+						<td style="float: right; border: 0px"><button aria-label="zoom in button"
 								title="increase font size" class="btn btn-primary btn-xs"
 								onclick="increaseFontSizeBy1px()">
 								<i class="fa fa-search-plus"></i>
 							</button>
-							<button title="decrease font size" class="btn btn-primary btn-xs"
+							<button aria-label="zoom out button" title="decrease font size" class="btn btn-primary btn-xs"
 								onclick="decreaseFontSizeBy1px()">
 								<i class="fa fa-search-minus"></i>
 							</button></td>
@@ -107,7 +127,7 @@
 										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
-										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')"">
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									      	<li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
 									     </sec:authorize>
 									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>

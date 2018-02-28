@@ -206,13 +206,17 @@ public class ReportsController {
 				String[] jurisIds = reportsForm.getJurisId().split(",");
 				
 				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
-				String jurisdictionName = "";
+				ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
+				String jurisdictionNamesValues = "";
 				for (String jurisIdSingleValue: jurisIds) {
 					jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
-					jurisdictionName += HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue)) + " ";
+					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+					jurisdictionNameArrayList.add(jurisdictionTempName);
+					jurisdictionNamesValues += jurisdictionTempName+ " ";
 				}
 				reportsForm.setJurIdList(jurisIdArrayList);			
-				reportsForm.setJurisdictionName(jurisdictionName);
+				reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+				reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
 				reportsForm.setJurisId("");
 			} else {
 				reportsForm.setJurisdictionName(reportsForm.getJurisId());

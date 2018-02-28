@@ -3,6 +3,7 @@
  */
 package com.archsystemsinc.rad.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -21,6 +22,24 @@ public class CsrLog {
 	
 	private Integer macId;
 	private String jurisdiction;
+	
+	//Temporary Variables
+	private ArrayList<String> jurisdictionNameList;	
+	private ArrayList<Integer> macIdList;
+	
+	
+	public ArrayList<String> getJurisdictionNameList() {
+		return jurisdictionNameList;
+	}
+	public void setJurisdictionNameList(ArrayList<String> jurisdictionNameList) {
+		this.jurisdictionNameList = jurisdictionNameList;
+	}
+	public ArrayList<Integer> getMacIdList() {
+		return macIdList;
+	}
+	public void setMacIdList(ArrayList<Integer> macIdList) {
+		this.macIdList = macIdList;
+	}
 	public Long getId() {
 		return id;
 	}

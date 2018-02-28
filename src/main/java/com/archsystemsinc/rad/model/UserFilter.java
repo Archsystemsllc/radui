@@ -15,26 +15,9 @@ public class UserFilter {
 	
 	private String orgId;
 	
-	public String getMacId() {
-		return macId;
-	}
-
-	public void setMacId(String macId) {
-		this.macId = macId;
-	}
-
-	public String getJurisId() {
-		return jurisId;
-	}
-
-	public void setJurisId(String jurisId) {
-		this.jurisId = jurisId;
-	}
-
 	private String macId;
 	
 	private String jurisId;
-
 	
 	@Override
 	public String toString() {
@@ -52,6 +35,23 @@ public class UserFilter {
 		builder.append("]");
 		return builder.toString();
 	}
+	
+	public String getMacId() {
+		return macId;
+	}
+
+	public void setMacId(String macId) {
+		this.macId = macId;
+	}
+
+	public String getJurisId() {
+		return jurisId;
+	}
+
+	public void setJurisId(String jurisId) {
+		this.jurisId = jurisId;
+	}
+
 
 	public String getLastName() {
 		return lastName;

@@ -111,7 +111,6 @@
            	
            	$('#callResultDiv').hide();
            }
-           
 	});
 
 	$(function(){
@@ -218,9 +217,8 @@
 		
      });		
 </script>
-
 </head>
-<body>
+<body  >
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
@@ -235,7 +233,8 @@
 							<div class="table-users" style="width: 80%">
 								<div class="header">Search Report Screen</div>	
 								<br/>
-								
+								<div id="sessionTimer" align="center" style="" ></div>
+								<br/>
 				             <div class="row " >
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   

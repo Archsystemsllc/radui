@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.model.UserFilter;
@@ -156,8 +157,7 @@ public class UserController {
 			
 			UserFilter userFilter = new UserFilter();
 			userFilter.setMacId(userForm.getMacId().toString());
-			userFilter.setJurisId(userForm.getJurId().toString());
-			
+			userFilter.setJurisId(userForm.getJurId().toString());		
 			userList = userService.findUsers(userFilter);
 		} else {
 			userList =  userService.findAll();

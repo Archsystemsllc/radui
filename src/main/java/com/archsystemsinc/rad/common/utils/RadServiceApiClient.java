@@ -19,9 +19,14 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+import com.archsystemsinc.rad.controller.HomeController;
 import com.archsystemsinc.rad.model.Role;
+import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.model.UserFilter;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author 
@@ -188,13 +193,16 @@ public class RadServiceApiClient {
 	public List<User> findUsers(UserFilter userFilter) {
 		log.debug("--> getUser");
 		List<User> users = null;
+		List<User> usersTempObject = null;
 		try {
 			HttpHeaders headers = createServiceHeaders();
 			RestTemplate restTemplate = new RestTemplate();
 			
 			ResponseEntity<List> exchange = restTemplate.exchange(radservicesEndpoint + "findUser/"+userFilter.getLastName()+"/"+userFilter.getRoleId()+"/"+userFilter.getOrgId()+"/"+userFilter.getMacId()+"/"+userFilter.getJurisId(), HttpMethod.GET,
 					new HttpEntity<String>(headers), List.class);
-			users = exchange.getBody();
+			usersTempObject = exchange.getBody();
+			ObjectMapper mapper = new ObjectMapper();
+			users = mapper.convertValue(usersTempObject, new TypeReference<List<User>>() { });
 			log.debug("users::"+users);
 			
 		}catch(Exception ex) {

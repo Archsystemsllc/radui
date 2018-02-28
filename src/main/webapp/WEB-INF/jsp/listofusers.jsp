@@ -86,7 +86,7 @@
 										<div class="col-md-3 col-md-offset-1 form-container">
 											<label for="roleId"> Role:</label> 
 											<form:select path="roleId"
-													class="form-control" id="roleId" required="true">
+													class="form-control" id="roleId">
 													<option value="" label="--- Select Role---" />
 													<form:options items="${roleIds}" />
 												</form:select>
@@ -96,7 +96,7 @@
 											
 											 <form:select path="orgId"
 													 class="form-control" id="organizationId"
-													required="true">
+													>
 													<option value="" label="--- Select Org---" />
 													<form:options items="${orgIds}" />
 												</form:select>

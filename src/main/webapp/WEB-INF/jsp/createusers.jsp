@@ -49,6 +49,32 @@
 	src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+	
+<script type="text/javascript">
+
+$(function(){
+	$("select#organizationLookupId").change(function(){
+		alert($(this).val());
+		 var selectedOrgnization = $(this).val();
+		 if(selectedOrgnization==1) {	
+			 $('#macId,#jurId,#pccId').attr("required",false);
+			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();	
+			 
+			 	
+		 } else if(selectedOrgnization==2) {	
+			 $('#macId,#jurId,#pccId').attr("required",false);
+			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();
+			 	
+		 } else if(selectedOrgnization==3) {	
+			 $('#macId,#jurId,#pccId').attr("required",true);
+			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").show();
+			 	
+		 }
+	    
+	});
+
+});
+</script>
 
 </head>
 <body>
@@ -161,7 +187,7 @@
 													<form:options items="${orgIds}" />
 												</form:select>
 										</div>
-										<div class="col-md-6 col-md-offset-1 form-container">
+										<div class="col-md-6 col-md-offset-1 form-container" id="macIdBlock">
 										<label for="name"> MAC:</label>
 										
 										<form:select path="macId"
@@ -170,7 +196,7 @@
 													<form:options items="${macIds}" />
 												</form:select>
 										</div>
-										<div class="col-md-6 col-md-offset-1 form-container">
+										<div class="col-md-6 col-md-offset-1 form-container" id="jurIdBlock">
 													<label for="email"> Jurisdiction:</label>
 													<form:select path="jurId"
 													class="form-control required" id="jurId" required="true">
@@ -178,7 +204,7 @@
 													<form:options items="${jurIds}" />
 												</form:select>
 										</div>
-										<div class="col-md-6 col-md-offset-1 form-container" style ="padding-bottom: 40px;">
+										<div class="col-md-6 col-md-offset-1 form-container" style ="padding-bottom: 40px;" id="pccIdBlock">
 										<label for="pccLocation"> PCC Location:</label>
 										<form:select path="pccId"
 													class="form-control required" id="pccId" required="true">
@@ -189,7 +215,7 @@
 												</form:select>
 										</div>
 
-										<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}"/>
+										<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}" style ="padding-top: 40px;"/>
 										
 										<div class="col-md-8 col-md-offset-1 form-container">
 											<button class=" btn btn-primary">Submit</button>

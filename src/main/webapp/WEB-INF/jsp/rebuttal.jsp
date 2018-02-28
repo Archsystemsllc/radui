@@ -61,8 +61,6 @@
 		
     	var failureBlockDisplay = false;
 
-    	//alert("reason::"+$("#accuracyCallFailureReason").val())
-
     	if (id != 0) {
     		              
     		if($("#accuracyCallFailureReason").val() != null ) {
@@ -91,9 +89,8 @@
     	}
     	
     	var completeFormFlag =  $('#rebuttalCompleteFlag').val();
-		//alert("Rebuttal Form Flag:"+completeFormFlag);
-    	if(completeFormFlag == "Yes") {
-        	//alert("Inside Disabe");
+		
+    	if(completeFormFlag == "Yes") {        	
     		$("#rebuttalForm :input").prop("disabled", true);
         }
     	
@@ -135,7 +132,8 @@
               		$("#macId").val(data.macId);
               		$("#jurisId").val(data.jurId);
               		$("#programId").val(data.programId);
-              		//$("#callCategory").val(data.callCategory.id);
+              		//Issue#15 Fix
+              		$("#callCategory").val(data.callCategoryId);
               		$("#lob").val(data.lob);
               		
 
@@ -297,11 +295,8 @@
 			                           <div class="col-sm-6 form-group">
 			                                <label for="contactPerson">PCC Contact Person:</label>
 			                                <form:select path="contactPerson" class="form-control required" id="contactPerson" required="true">
-											   	<form:option value="" label="---Select Contact---"/>
-											  	<form:option value="Contact 1" />
-											  	<form:option value="Contact 2" />
-											  	<form:option value="Contact 3" />
-											  	<form:option value="Contact 4" />
+											   	<form:option value="" label="---Select PCC Contact---"/>
+											  <form:options items="${pccContactPersonMap}" />
 											</form:select> 
 			                            </div>
 			                        </div>

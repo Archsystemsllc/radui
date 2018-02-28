@@ -49,6 +49,26 @@ public class ReportsForm {
     
     private ArrayList<Integer> jurIdList;
     
+    private ArrayList<String> jurisdictionNameList;
+    
+    private String jurisdictionNameValues;
+
+	
+	public ArrayList<String> getJurisdictionNameList() {
+		return jurisdictionNameList;
+	}
+
+	public void setJurisdictionNameList(ArrayList<String> jurisdictionNameList) {
+		this.jurisdictionNameList = jurisdictionNameList;
+	}
+
+	public String getJurisdictionNameValues() {
+		return jurisdictionNameValues;
+	}
+
+	public void setJurisdictionNameValues(String jurisdictionNameValues) {
+		this.jurisdictionNameValues = jurisdictionNameValues;
+	}
 
 	public ArrayList<Integer> getJurIdList() {
 		return jurIdList;
