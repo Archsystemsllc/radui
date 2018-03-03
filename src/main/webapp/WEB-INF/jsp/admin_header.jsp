@@ -115,7 +115,8 @@
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">
+
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="CSR Page">CSR</a></li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User') or hasAuthority('Quality Monitor')">
