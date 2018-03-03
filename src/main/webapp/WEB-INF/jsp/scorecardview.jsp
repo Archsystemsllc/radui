@@ -144,7 +144,7 @@
 		
 		 $('#close1,#close2').click(function(e) {	
 			 e.preventDefault();		
-			 window.history.back();
+			 window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/gobackscorecardfilter";
 	     }); 
 
       //Secton 1 - Option 1

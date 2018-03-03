@@ -3,7 +3,6 @@ package com.archsystemsinc.rad.controller;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,22 +16,22 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
-
 import com.archsystemsinc.rad.model.CsrLog;
 import com.archsystemsinc.rad.model.MacInfo;
 import com.archsystemsinc.rad.model.QamMacByJurisdictionReviewReport;
 import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ReportsForm;
 import com.archsystemsinc.rad.model.ScoreCard;
+import com.archsystemsinc.rad.model.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -100,13 +99,31 @@ public class ReportsController {
 	
 	 @RequestMapping(value ={"/admin/reports", "/quality_manager/reports", "/cms_user/reports",
 			 "/mac_admin/reports","/mac_user/reports"})		
-	public String viewReports(Model model, HttpSession session) {
+	public String viewReports(Model model, HttpSession session, Authentication authentication) {
 		log.debug("--> viewReports <--");
 		
 		ReportsForm reportsForm = new ReportsForm();
 		reportsForm.setMainReportSelect("ScoreCard");
 		model.addAttribute("reportsForm", reportsForm);
-		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		String roles = authentication.getAuthorities().toString();
+		
+		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+			
+			model.addAttribute("macIdMap", HomeController.USER_BASED_MAC_ID_DETAILS);
+			
+			HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
+			model.addAttribute("jurisMapEdit", jurisMap);	
+			
+			for (Integer macIdKey: HomeController.USER_BASED_MAC_ID_DETAILS.keySet()) {
+				reportsForm.setMacId(macIdKey.toString());
+			}
+			
+			
+		} else {
+			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
+			
+		}	
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);

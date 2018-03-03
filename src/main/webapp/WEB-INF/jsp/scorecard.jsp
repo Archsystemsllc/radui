@@ -182,7 +182,7 @@
 
 		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurId").get(0).options.length = 0;	           
@@ -196,7 +196,7 @@
 
 		//Select Program Functionality
 		$("select#jurId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
       	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
@@ -210,7 +210,7 @@
 		//Select Call Category Functionality
 		$("select#callCategoryId").change(function(){
 			
-            $.getJSON("${pageContext.request.contextPath}/admin/selectCallSubcategories",{categoryId: $('#callCategoryId').val()}, function(data){
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubcategories",{categoryId: $('#callCategoryId').val()}, function(data){
                 
                  $("#callSubCategoryId").get(0).options.length = 0;	           
       	      	 $("#callSubCategoryId").get(0).options[0] = new Option("---Select Sub Category---", "");
@@ -232,7 +232,7 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");
-	              	 	window.history.back();
+	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/gobackscorecardfilter";
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 

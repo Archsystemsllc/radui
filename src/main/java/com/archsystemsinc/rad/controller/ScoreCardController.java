@@ -66,9 +66,7 @@ public class ScoreCardController {
 			HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
 			model.addAttribute("jurisMapEdit", jurisMap);
 		} else {
-			model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
-			//HashMap<Integer,String> jurisMap = HomeController.JURISDICTION_MAP;
-			//model.addAttribute("jurisMapEdit", jurisMap);
+			model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);			
 		}
 		
 		if(roles.contains("Quality Monitor")) {
@@ -79,11 +77,13 @@ public class ScoreCardController {
 		model.addAttribute("scorecard", scoreCardNew);
 		model.addAttribute("ScoreCardFilter",true);
 		
-		
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARD_FILTER", scoreCardNew);
 		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
 		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "scorecardlist";
 	}
+	 
+	 
 	
 	 @RequestMapping(value ={"/admin/scorecardfilter", "/quality_manager/scorecardfilter", "/cms_user/scorecardfilter",
 			 "/mac_admin/scorecardfilter","/mac_user/scorecardfilter","/quality_monitor/scorecardfilter"})		
@@ -132,6 +132,53 @@ public class ScoreCardController {
 		}
 		model.addAttribute("scorecard",scoreCard);
 		model.addAttribute("ScoreCardFilter",true);
+		
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARD_FILTER", scoreCard);
+				
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
+		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
+		
+		return "scorecardlist";
+	}
+	 
+	 @RequestMapping(value ={"/admin/gobackscorecardfilter", "/quality_manager/gobackscorecardfilter", "/cms_user/gobackscorecardfilter",
+			 "/mac_admin/gobackscorecardfilter","/mac_user/gobackscorecardfilter","/quality_monitor/gobackscorecardfilter"}, method = RequestMethod.GET)		
+	public String goBackScoreCardFilter(
+			final Model model,HttpServletRequest request, Authentication authentication) {
+		log.debug("--> getScorecardList Screen <--");
+		ScoreCard scoreCardFromSession = (ScoreCard) request.getSession().getAttribute("SESSION_SCOPE_SCORECARD_FILTER");
+		HashMap<Integer, ScoreCard> resultsMap = null;
+		try {		
+			
+			String roles = authentication.getAuthorities().toString();
+			
+			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");
+				
+				model.addAttribute("macMapEdit", HomeController.USER_BASED_MAC_ID_DETAILS);
+				HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
+				model.addAttribute("jurisMapEdit", jurisMap);
+			} else {
+				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
+				HashMap<Integer,String> jurisMap = null;
+				if(scoreCardFromSession.getMacId() == null || scoreCardFromSession.getMacId()==0) {
+					jurisMap = HomeController.JURISDICTION_MAP;
+				} else {
+					jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCardFromSession.getMacId());
+				}
+				
+				model.addAttribute("jurisMapEdit", jurisMap);
+			}
+			
+			resultsMap = retrieveScoreCardList(scoreCardFromSession);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		model.addAttribute("scorecard",scoreCardFromSession);
+		model.addAttribute("ScoreCardFilter",true);
+		
+		request.getSession().setAttribute("SESSION_SCOPE_SCORECARD_FILTER", scoreCardFromSession);
 				
 		request.getSession().setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
 		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
