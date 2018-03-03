@@ -55,10 +55,17 @@
     	$("#privacyCallFailureBlock").hide();	
     	$("#customerSkillsCallFailureBlock").hide();
 
+    	//Failure Reason Comments Attributes
+    	$("#failReasonCommentsDiv").hide();
+    	$('#failReasonComments').attr("required",false);	
+
+    	
+
 	    var csrPrvAccInfoFlag="${scorecard.csrPrvAccInfo}";
 	    var csrPrvCompInfoFlag="${scorecard.csrPrvCompInfo}";
 	    var csrFallPrivacyProvFlag="${scorecard.csrFallPrivacyProv}";
 	    var csrWasCourteousFlag="${scorecard.csrWasCourteous}";
+	    var callResultFlag = "${scorecard.callResult}";
 
 	    if(csrPrvAccInfoFlag=="No") {
 			$("#accuracyCallFailureBlock").show();	
@@ -71,6 +78,9 @@
 		}
 		if(csrWasCourteousFlag=="No") {
 			$("#customerSkillsCallFailureBlock").show();	
+		}
+		if(callResultFlag=="Fail") {			
+			$("#failReasonCommentsDiv").show();
 		}
     	    	
     	$("#csrFullName" ).autocomplete({
