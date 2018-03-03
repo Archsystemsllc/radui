@@ -66,7 +66,7 @@
 		role="banner">
 	<div>
 		<div class="row">
-		<div id="sessionTimer" align="right" style="padding-right: 30px; color: red" ></div>
+		<div id="sessionTimer" align="right" style="padding-right: 30px; color: blue" ></div>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
@@ -81,13 +81,13 @@
 									<!--<a class="navbar-brand" href="page0.html">-->
 									<a href="https://www.cms.gov/" target="_blank"><img
 										src="${pageContext.request.contextPath}/resources/images/logo.png"
-										alt="CMS logo" height="100px" style="float: left; width: 60%" tilte="Click on CMS Logo to navigate to CMS webpage"></a>
+										alt="CMS logo" height="100px" style="float: left; width: 60%" title="Click on CMS Logo to navigate to CMS webpage"></a>
 
 								</div>
 
 							</div>
 						</td>
-						<td style="border: 0px;"><div class="social">
+						<td style="border: 0px;"><div class="social" style="color:black">
 								Welcome ${pageContext.request.userPrincipal.name} | <a
 									href="${pageContext.request.contextPath}/logout">Logout</a>
 							</div></td>
@@ -108,35 +108,35 @@
 							style="vertical-align: bottom; border: 0px; padding: 0px">
 							<div class="collapse navbar-collapse navbar-right">
 								<ul class="nav navbar-nav" style="font-weight: bold" id="navlist">
-									<li style="margin-left: 0px"><a class="active" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a></li>
+									<li style="margin-left: 0px"><a class="active" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist">Scorecard</a></li>
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports">Reports</a></li>
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist">CSR</a></li>
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="CSR Page">CSR</a></li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User') or hasAuthority('Quality Monitor')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist">Rebuttal</a></li>
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist" title="Rebuttal Page">Rebuttal</a></li>
 									</sec:authorize>
 								
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									<li class="dropdown">
-										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#">User Management</a>
+										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
-									      	<li><a href="${pageContext.request.contextPath}/admin/createusers">Create Users</a></li>
+									      	<li><a href="${pageContext.request.contextPath}/admin/createusers" title="Create Users Page">Create Users</a></li>
 									     </sec:authorize>
-									      <li><a href="${pageContext.request.contextPath}/admin/listofusers">List Users</a></li>
+									      <li><a href="${pageContext.request.contextPath}/admin/listofusers" title="List of Users Page">List Users</a></li>
 									    </ul>
 									</li>
 									</sec:authorize>
 									
-									<li><a href="${pageContext.request.contextPath}/admin/myaccount">My Account</a></li>	
-									<li class="anchor"><a href="#">Help Guide</a></li>									
+									<li><a href="${pageContext.request.contextPath}/admin/myaccount" title="My Account Page">My Account</a></li>	
+									<li class="anchor"><a href="#" title="Help Guide Page">Help Guide</a></li>									
 									
 									<li>&nbsp; &nbsp;</li>			
 								</ul>

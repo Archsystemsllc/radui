@@ -9,7 +9,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM - ScoreCard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
@@ -107,7 +107,7 @@
 												<div class="col-lg-4 form-group">
 													<label for="name"> MAC:</label>
 													<form:select path="macId" class="form-control required"
-														required="true">
+														required="true" title="Select Mac ID">
 														<form:option value="0" label="ALL" />
 														<form:options items="${macMapEdit}" />
 													</form:select>
@@ -115,7 +115,7 @@
 												<div class="col-lg-4 form-group">
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurId" class="form-control required"
-														id="jurId" required="true">
+														id="jurId" required="true" title="Select Jurisdiction">
 														<form:option value="0" label="---Select All---" />
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
@@ -135,7 +135,7 @@
 												<div class="col-lg-4 form-group">
 													<label for="name"> QM Name/QM ID:</label>
 													<form:input type="text" class="form-control"
-														id="qamFullName" name="qamFullName" path="qamFullName" />
+														id="qamFullName" name="qamFullName" path="qamFullName" title="Select QM Name/QM ID" />
 												</div>
 											</div>
 											<div class="row">
@@ -156,12 +156,12 @@
 													<label for="name"> From Date:</label>
 
 													<form:input type="text" class="form-control"
-														path="filterFromDateString" />
+														path="filterFromDateString" title="Select From Date" />
 												</div>
 												<div class="col-lg-4 form-group">
 													<label for="email"> To Date:</label>
 													<form:input type="text" class="form-control"
-														path="filterToDateString" />
+														path="filterToDateString" title="Select To Date" />
 												</div>
 											</div>
 										</div>
