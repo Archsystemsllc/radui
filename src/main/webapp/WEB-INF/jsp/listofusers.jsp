@@ -8,7 +8,7 @@
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM - listofUsers</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
@@ -81,12 +81,12 @@
 									<div class="row">
 										<div class="col-sm-3 form-group">
 											<label for="lastName"> Last Name:</label> 
-											<form:input type="text" path="lastName" class="form-control" />
+											<form:input type="text" path="lastName" class="form-control" title="Enter Last Name"/>
 										</div>
 										<div class="col-md-3 col-md-offset-1 form-container">
 											<label for="roleId"> Role:</label> 
 											<form:select path="roleId"
-													class="form-control" id="roleId">
+													class="form-control" id="roleId" title="Select Role ID From the List">
 													<option value="" label="--- Select Role---" />
 													<form:options items="${roleIds}" />
 												</form:select>
@@ -95,7 +95,7 @@
 											<label for="organizationId"> Organization:</label>
 											
 											 <form:select path="orgId"
-													 class="form-control" id="organizationId"
+													 class="form-control" id="organizationId" title="Select Organization from the List"
 													>
 													<option value="" label="--- Select Org---" />
 													<form:options items="${orgIds}" />
@@ -104,7 +104,7 @@
 									</div>
 									<div class="row">
 										<div class="col-sm-3 form-group">
-											<button class=" btn btn-primary">Submit</button>
+											<button class=" btn btn-primary" title="Select Submit button">Submit</button>
 										</div>
 									</div>
 									</form:form>
@@ -124,30 +124,30 @@
 									<table id="usersTable">
 										<thead>
 											<tr>
-											<td>
+											<th>
 													User Id
-												</td>
-												<td>
+												</th>
+												<th>
 													FirstName
-												</td>
-												<td>
+												</th>
+												<th>
 													MiddleName
-												</td>
-												<td>
+												</th>
+												<th>
 													LastName
-												</td>
-												<td>
+												</th>
+												<th>
 													Organization
-												</td>
-												<td>
+												</th>
+												<th>
 													Role
-												</td>
-												<td>
+												</th>
+												<th>
 													User Access
-												</td>
-												<td>
+												</th>
+												<th>
 													Action
-												</td>
+												</th>
 											</tr>
 										</thead>
 										 <tbody>
@@ -162,8 +162,8 @@
 					                                 <td><a class="${linkcolor }">${user.role.roleName}</a></td>
 					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 					                                <td>
-					                                    <span><a class="action-icons c-edit" href="edit-user/${user.id}" title="Edit">Edit</a></span>
-					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+					                                    <span><a class="action-icons c-edit" href="edit-user/${user.id}" title="Edit User">Edit</a></span>
+					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete User" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
 					                                </td>
 					                            </tr>
 					                        </c:forEach>
