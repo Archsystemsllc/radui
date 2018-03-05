@@ -8,7 +8,7 @@
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM - CreateUsers</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
@@ -146,7 +146,7 @@ $(function(){
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="userName" class="form-control required" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Please fill out Username field"></form:input>
 								                <form:errors path="userName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -161,7 +161,7 @@ $(function(){
 											 <spring:bind path="password">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
-								                <form:errors path="password"></form:errors>
+								                <form:errors path="password" title="Please fill out password field"></form:errors>
 								            </div>
 								            </spring:bind>
 			                            </div>
@@ -170,7 +170,7 @@ $(function(){
 											<spring:bind path="passwordConfirm">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="password" path="passwordConfirm" class="form-control"
-								                            placeholder=""></form:input>
+								                            placeholder="" title="Please fill out confirm password field"></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -183,7 +183,7 @@ $(function(){
 											<spring:bind path="firstName">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="firstName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Please fill out First Name field"></form:input>
 								                <form:errors path="firstName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -192,7 +192,7 @@ $(function(){
 			                                <label for="middleName"> Middle Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="middleName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Please fill out Middle Name field"></form:input>
 								                <form:errors path="middleName"></form:errors>
 			                            	</div>
 			                        	</div>
@@ -205,7 +205,7 @@ $(function(){
 											 <div class="form-group  ${status.error ? 'has-error' : ''}">
 											
 								                <form:input type="text" path="lastName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Please fill out Last Name Field"></form:input>
 								                <form:errors path="lastName"></form:errors>
 								            </div>
 								           </spring:bind>
@@ -214,7 +214,7 @@ $(function(){
 			                                <label for="emailId"> Email Id:</label> 
 											 <div class="form-group required ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="emailId" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Please fill out email id Field"></form:input>
 								                <form:errors path="emailId"></form:errors>
 								            </div>
 			                        	</div>				                    
@@ -223,14 +223,14 @@ $(function(){
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> Role:</label>
 											<form:select path="role.id"
-													class="form-control required" id="roleId" required="true">
+													class="form-control required" id="roleId" required="true" title="Select one role from the list">
 													<form:option value="" label="---Select Role---" />
 													<form:options items="${roleIds}" />
 												</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
-													class="form-control required" id="organizationLookupId" required="true">
+													class="form-control required" id="organizationLookupId" required="true" title="Select one organization from the list">
 													<form:option value="" label="---Select Organization---" />
 													<form:options items="${orgIds}" />
 												</form:select>
@@ -241,7 +241,7 @@ $(function(){
 			                            <div class="col-lg-6 form-group" id="macIdBlock">
 			                          
 										<label for="name"> MAC:</label>
-			                                <form:select path="macId" id="macId" class="form-control required">
+			                                <form:select path="macId" id="macId" class="form-control required" title="Select one Medicare Administrative Contractor ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
 											   <form:options items="${macIds}" />
 											</form:select> 	
@@ -249,7 +249,7 @@ $(function(){
 			                            <div class="col-lg-6 form-group"  id="jurIdBlock">
 			                            
 			                           	<label for="jurId"> Jurisdiction:</label>
-			                               <form:select path="jurId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true">
+			                               <form:select path="jurId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one or multiple jurisdiction from the list">
 										   <form:option value="" label="---Select Jurisdiction---"/>								   
 										</form:select>	
 			                        	</div>				                    
@@ -258,7 +258,7 @@ $(function(){
 			                            <div class="col-lg-6 form-group" id="pccIdBlock">
 			                          
 										<label for="pccId"> PCC Location:</label>
-										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true">
+										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" title="Select one PCC Location from the list">
 										   <form:option value="" label="---Select PCC Location---"/>								   
 										</form:select>	
 			                            </div>
@@ -269,7 +269,7 @@ $(function(){
 				                	
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
-			                            <button class=" btn btn-primary">Submit</button>
+			                            <button class=" btn btn-primary" title="Select Submit Button to Create New User">Submit</button>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	

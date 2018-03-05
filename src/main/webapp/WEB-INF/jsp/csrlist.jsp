@@ -8,7 +8,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>CSR List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
@@ -531,7 +531,7 @@ $(function() {
 				                    <div class="row">
 			                              <div class="col-lg-6 form-group">
 			                                <a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx">Download Sample CSR Template</a>
+												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template">Download Sample CSR Template</a>
 			                             </div>
 			                        </div>
 			                      </div>
@@ -542,7 +542,7 @@ $(function() {
 				                    <div class="row">
 				                    	<div class="col-lg-6 form-group">
 			                                <form:checkbox
-												path="keepCurrentListCB" value="keepCurrentListCB" id="keepCurrentListCB"/>
+												path="keepCurrentListCB" value="keepCurrentListCB" id="keepCurrentListCB" title="Select to Keep Current List"/>
 												<label for="keepCurrentListCB">&nbsp;Keep Current List</label>
 			                            </div>
 			                        </div>
@@ -551,7 +551,7 @@ $(function() {
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group" id="macIdK_Div">
 			                             <label for="name"> MAC:</label>
-			                                <form:select path="macIdK" id="macIdK" class="form-control required">
+			                                <form:select path="macIdK" id="macIdK" class="form-control required" title="Select one MAC ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
 											   <form:options items="${macIdMap}" />
 											</form:select> 	
@@ -577,7 +577,7 @@ $(function() {
 			                            <div class="col-lg-6 form-group">
 			                                <label for="file">CSR List Upload: </label>
 										<input type="hidden" id="userId" name="userId" value="1"/>
-										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;">
+										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload CSR List from Local">
 										</input>
 			                            </div>
 			                          </div>
@@ -586,20 +586,20 @@ $(function() {
 				                     <div class="row">
 			                             <div class="col-lg-6 form-group">
 			                              <label for="name"> MAC:</label>
-			                                <form:select path="macIdU" class="form-control" id="macIdU">
+			                                <form:select path="macIdU" class="form-control" id="macIdU" title="Select one MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> Jurisdiction:</label>
-			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU">
+			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU" title="Select one Jurisdiction from the list">
 										   		<form:option value="" label="---Select Jurisdiction---"/>
 											</form:select>
 											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" type="submit" name="uploadCsr" id="uploadCsr">Upload File</button>
+			                               	<button class="btn btn-primary" type="submit" name="uploadCsr" id="uploadCsr" title="Select Upload File button to upload CSR List">Upload File</button>
 			                            </div>
 			                        </div>
 				                </div>
@@ -613,16 +613,16 @@ $(function() {
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> From Date:</label>
-			                            	<form:input class="form-control"  type="text" path="fromDate" placeholder="From Date"/>
+			                            	<form:input class="form-control"  type="text" path="fromDate" placeholder="From Date" title="Select From Date from the Calendar"/>
 			                            </div>
 			                             <div class="col-lg-6 form-group">
 			                              <label for="name"> To Date:</label>
-			                             	<form:input class="form-control"  type="text" path="toDate" placeholder="To Date"/>
+			                             	<form:input class="form-control"  type="text" path="toDate" placeholder="To Date" title="Select To Date from the Calendar"/>
 			                            </div>
 			                            
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> MAC:</label>
-			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple">
+			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple" title="Select one or multiple MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:option value="ALL" label="Select ALL" />
 										   <form:options items="${macIdMap}" />
@@ -630,13 +630,13 @@ $(function() {
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> Jurisdiction:</label>
-			                               	<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple">
+			                               	<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple" title="Select one or multiple Jurisdiction from the list">
 										   <form:option value="" label="---Select Jurisdiction---" />
 										   <form:option value="ALL" label="Select ALL" />
 										</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" id="searchCsr">Search CSR</button>
+			                               	<button class="btn btn-primary" id="searchCsr" title="Select Search CSR button to get the CSR list">Search CSR</button>
 			                            </div>
 			                        </div>
 				                </div>

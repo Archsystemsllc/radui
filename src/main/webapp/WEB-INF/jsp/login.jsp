@@ -51,7 +51,7 @@
 	
 <br>
 <br>
-	<h2 align="center">Welcome to Quality Assurance Monitoring</h2>
+	<h2 align="center">Welcome to Quality Assurance Monitoring System!</h2>
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="log_in">

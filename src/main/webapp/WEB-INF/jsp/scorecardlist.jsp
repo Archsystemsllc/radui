@@ -149,7 +149,7 @@ $(document).ready(function(){
 												<div class="col-lg-4 form-group">
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurisIdReportSearchString" class="form-control required"
-														id="jurId" required="true" title="Select one Jurisdiction from the List" multiple="true">
+														id="jurId" required="true" title="Select one or multiple Jurisdiction from the List" multiple="true">
 														
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
@@ -285,7 +285,6 @@ $(document).ready(function(){
 										            <th style="text-align: left">Jurisdiction</th>
 										            <th style="text-align: left">MAC Call Reference ID</th>
 										            <th style="text-align: left">QM Name/ID</th>
-										            <th style="text-align: left">QM Start Date/Time</th>
 										            <th style="text-align: left">Scorecard Type</th>
 										            <th style="text-align: left">Status</th> 
 										            

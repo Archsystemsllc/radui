@@ -498,7 +498,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamFullName"> QM Name/QM ID: </label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true" title="Enter QM Name/QM ID in this field"/>			                                
+			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> Scorecard Type:</label></br>
@@ -516,11 +516,11 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> QM Start Date/Time:</label>
 			                                <input type="hidden" id="DatePickerHidden" />
-			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true" title="Enter QM Start Date/Time"/>
+			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true" title="Choose Quality Manager Start Date/Time from the Calendar"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> QM End Date/Time:</label>
-			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true" title="Enter QM End Date/Time"/>
+			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true" title="Choose Quality Manager End Date/Time from the Calendar"/>
 			                            </div>
 			                        </div>
 				                    
@@ -535,7 +535,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="callMonitoringDate"> Call Monitoring Date:</label>
-			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true" title="Select Call Monitoring Date from the Calendar"/>
+			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true" title="Choose Call Monitoring Date from the Calendar"/>
 			                            	<input type="hidden" id="callMonitoringDate_Alt"></input>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -548,7 +548,7 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="macId"> MAC:</label>
 			                               
-										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one MAC Id from the List">
+										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medicare Administrative Contractor Id from the List">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 									
@@ -618,7 +618,7 @@
 			                         <div class="row">
 			                        <div class="col-lg-6 form-group">
 			                                <label for="email"> Call Language: </label>
-			                                <form:select path="callLanguage" class="form-control required" id="callLanguage" required="true" title="Enter Required Call Language">
+			                                <form:select path="callLanguage" class="form-control required" id="callLanguage" required="true" title="Choose Required Call Language from the List">
 											   	<form:option value="" label="--- Select Language---"/>
 											  	<form:option value="English" />
 											  	<form:option value="Spanish" />											  	
@@ -773,7 +773,7 @@
 			                            <div class="col-lg-6 form-group" >
 			                                <label for="name"> Call Result:</label>
 			                                
-											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" title="Call Result Field"/>
+											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" title="Enter Call Result"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                             
@@ -803,7 +803,7 @@
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Additional Comments Box:</label>
-			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" title="If required, Enter Additional Comments" />
+			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" title="Enter Additional Comments" />
 			                            </div>		                           
 			                        </div>       
 				                    
