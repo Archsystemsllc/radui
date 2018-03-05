@@ -89,17 +89,18 @@
 						</td>
 						<td style="border: 0px;"><div class="social" style="color:black">
 								Welcome ${pageContext.request.userPrincipal.name} | <a
-									href="${pageContext.request.contextPath}/logout">Logout</a>			</div>
+									href="${pageContext.request.contextPath}/logout" title="Logout button">Logout</a>			
+									</div>
 							
 						</td>
 					</tr>
 					<tr>
-						<td style="float: right; border: 0px"><button aria-label="zoom in button"
+						<td style="float: right; border: 0px"><button aria-label="zoom in"
 								title="increase font size" class="btn btn-primary btn-xs"
 								onclick="increaseFontSizeBy1px()">
 								<i class="fa fa-search-plus"></i>
 							</button>
-							<button aria-label="zoom out button" title="decrease font size" class="btn btn-primary btn-xs"
+							<button aria-label="zoom out" title="decrease font size" class="btn btn-primary btn-xs"
 								onclick="decreaseFontSizeBy1px()">
 								<i class="fa fa-search-minus"></i>
 							</button>
@@ -108,7 +109,7 @@
 					</tr>
 					<tr>
 						<td style="float: right; border: 0px">							
-							<div id="sessionTimer" align="right" style="color: blue" ></div>
+							<div id="sessionTimer" align="right" style="color: blue"></div>
 						</td>
 					</tr>
 					<tr>
@@ -125,7 +126,7 @@
 									</sec:authorize>
 
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="CSR Page">CSR</a></li>
+										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a></li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User') or hasAuthority('Quality Monitor')">
 										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist" title="Rebuttal Page">Rebuttal</a></li>

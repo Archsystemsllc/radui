@@ -96,7 +96,7 @@
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="userName" class="form-control" placeholder=""
-								                            autofocus="true" readonly="true"></form:input>
+								                            autofocus="true" readonly="true" title="Edit Username field"></form:input>
 								                <form:errors path="userName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -106,7 +106,7 @@
 											<label for="password"> Password:</label> 
 											 <spring:bind path="password">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
+								                <form:input type="password" path="password" class="form-control required" placeholder="" title="Edit Password field"></form:input>
 								                <form:errors path="password"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -117,7 +117,7 @@
 											<spring:bind path="passwordConfirm">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="password" path="passwordConfirm" class="form-control required"
-								                            placeholder=""></form:input>
+								                            placeholder="" title="Edit Confirm Password field"></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -127,7 +127,7 @@
 											<spring:bind path="firstName">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="firstName" class="form-control required" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Edit First Name field"></form:input>
 								                <form:errors path="firstName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -136,7 +136,7 @@
 											<label for="middleName"> Middle Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="middleName" class="form-control required" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Edit Middle Name Field" Username field"></form:input>
 								                <form:errors path="middleName"></form:errors>
 								            </div>
 										</div>
@@ -145,7 +145,7 @@
 											<label for="lastName"> Last Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="lastName" class="form-control required" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Edit Last Name field"></form:input>
 								                <form:errors path="lastName"></form:errors>
 								            </div>
 										</div>
@@ -154,7 +154,7 @@
 											<label for="emailId"> Email Id:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="emailId" class="form-control required" placeholder=""
-								                            autofocus="true"></form:input>
+								                            autofocus="true" title="Edit Email ID field"></form:input>
 								                <form:errors path="emailId"></form:errors>
 								            </div>
 										</div>
@@ -162,14 +162,14 @@
 											<label for="name"> Role:</label>
 											<form:select path="role.id"
 													class="form-control required" id="roleId" required="true">
-													<option value="" label="--- Select Role---" />
+													<option value="" label="--- Select Role---"  title="Select one role from the list"/>
 													<form:options items="${roleIds}" />
 												</form:select>
 											 
 										</div>
 										<div class="col-md-6 col-md-offset-1 form-container">
 											<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
-													class="form-control required" id="organizationLookupId" required="true">
+													class="form-control required" id="organizationLookupId" required="true" title="Select one role from the Organization">
 													<option value="" label="--- Select Role---" />
 													<form:options items="${orgIds}" />
 												</form:select>
@@ -178,7 +178,7 @@
 										<label for="name"> MAC:</label>
 										
 										<form:select path="macId"
-													class="form-control required" id="macId" required="true">
+													class="form-control required" id="macId" required="true" title="Select one MAC Id from list">
 													<option value="" label="--- Select MAC---" />
 													<form:options items="${macIds}" />
 												</form:select>
@@ -186,7 +186,7 @@
 										<div class="col-md-6 col-md-offset-1 form-container">
 													<label for="email"> Jurisdiction:</label>
 													<form:select path="jurId"
-													class="form-control required" id="jurId" required="true" multiple="true">
+													class="form-control required" id="jurId" required="true" multiple="true" title="Select one Jurisdiction from list">
 													<option value="" label="--- Select Jurisidiction---" />
 													<form:options items="${jurIds}" />
 												</form:select>
@@ -194,7 +194,7 @@
 										<div class="col-md-6 col-md-offset-1 form-container" style ="padding-bottom: 40px;">
 										<label for="pccLocation"> PCC Location:</label>
 										<form:select path="pccId"
-													class="form-control required" id="pccId" required="true">
+													class="form-control required" id="pccId" required="true" title="Select one PCC Location from list">
 													<option value="" label="--- Select PCC Location---" />
 													<form:options items="${pccIds}" />
 													
@@ -210,7 +210,7 @@
 										
 										
 										<div class="col-md-8 col-md-offset-1 form-container">
-											<button class=" btn btn-primary">Submit</button>
+											<button class=" btn btn-primary" title="Select submit button to update the user details">Submit</button>
 										</div>
 									
 										</div>

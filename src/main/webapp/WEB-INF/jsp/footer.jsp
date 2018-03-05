@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Insert title here</title>
+<title>Footer</title>
 <%-- <link
 	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet"> --%>
@@ -40,9 +40,9 @@
 			</div>
 			<div class="col-sm-6">
 				<ul class="pull-right" style="margin-top: 14px">
-					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/dashboard --%>">Home</a></li>
-					<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/privacy">Privacy,Security and Disclaimer</a></li>
-					<li><a href="mailto:qamadmin@archsystemsinc.com">Contact Us</a></li>
+					<li><a href="#<%-- ${pageContext.request.contextPath}/admin/dashboard --%>" title="Home Page">Home</a></li>
+					<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/privacy" title="Privacy, Security and Disclaimer Page">Privacy,Security and Disclaimer</a></li>
+					<li><a href="mailto:qamadmin@archsystemsinc.com" title="Contact Us Page">Contact Us</a></li>
 				</ul>
 			</div>
 		</div>
