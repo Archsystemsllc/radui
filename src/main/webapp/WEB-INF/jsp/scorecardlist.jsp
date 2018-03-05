@@ -11,7 +11,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - ScoreCard</title>
+<title>QAM - ScoreCard List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -141,7 +141,7 @@ $(document).ready(function(){
 												<div class="col-lg-4 form-group">
 													<label for="name"> MAC:</label>
 													<form:select path="macId" class="form-control required"
-														required="true" title="Select Mac ID">
+														required="true" title="Select one Medicare Administrative Contractor ID from the List">
 														<form:option value="0" label="ALL" />
 														<form:options items="${macMapEdit}" />
 													</form:select>
@@ -149,7 +149,7 @@ $(document).ready(function(){
 												<div class="col-lg-4 form-group">
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurisIdReportSearchString" class="form-control required"
-														id="jurId" required="true" title="Select Jurisdiction" multiple="true">
+														id="jurId" required="true" title="Select one Jurisdiction from the List" multiple="true">
 														
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
@@ -160,7 +160,7 @@ $(document).ready(function(){
 												<div class="col-lg-4 form-group">
 													<label for="name">Status:</label>
 													<form:select class="form-control" id="callResult"
-														path="callResult" title="Select Call Result">
+														path="callResult" title="Select one Status from the List">
 														<form:option value="ALL" label="ALL" />
 														<form:option value="Pass" />
 														<form:option value="Fail" />
@@ -169,7 +169,7 @@ $(document).ready(function(){
 												<div class="col-lg-4 form-group">
 													<label for="name"> QM Name/QM ID:</label>
 													<form:input type="text" class="form-control"
-														id="qamFullName" name="qamFullName" path="qamFullName" title="Select QM Name/QM ID" />
+														id="qamFullName" name="qamFullName" path="qamFullName" title="Enter Qualtiy Monitor Name/ID" />
 												</div>
 											</div>
 											<div class="row">
@@ -177,7 +177,7 @@ $(document).ready(function(){
 												<div class="col-lg-4 form-group">
 													<label for="name">Scorecard Type:</label>
 													<form:select class="form-control" id="scorecardType"
-														path="scorecardType" title="Select Score Card Type">
+														path="scorecardType" title="Select one Score Card Type from the List">
 														<form:option value="ALL" label="ALL" />
 														<form:option value="Scoreable" />
 														<form:option value="Non-Scoreable" />
@@ -190,12 +190,12 @@ $(document).ready(function(){
 													<label for="name"> From Date:</label>
 
 													<form:input type="text" class="form-control"
-														path="filterFromDateString" title="Select From Date" />
+														path="filterFromDateString" title="Choose From Date from the Calendar" />
 												</div>
 												<div class="col-lg-4 form-group">
 													<label for="email"> To Date:</label>
 													<form:input type="text" class="form-control"
-														path="filterToDateString" title="Select To Date" />
+														path="filterToDateString" title="Choose To Date from the Calendar" />
 												</div>
 											</div>
 										</div>
@@ -207,10 +207,10 @@ $(document).ready(function(){
 												id='table1'>
 												<tr>
 													<td>
-													<span><button class="btn btn-primary" id="filter" type="submit">Filter</button></span> 
-													<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span>
+													<span><button class="btn btn-primary" id="filter" type="submit" title="Select Filter button to Filter the results">Filter</button></span> 
+													<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to Reset the results">Reset</button></span>
 													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
-													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="New"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
+													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Select Add Scorecard button to add new scorecard"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
 													</sec:authorize>
 												</td>
 												
