@@ -113,7 +113,7 @@
 
 	$(function(){
 		$("select#macReferenceId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectScoreCardFromMacRef",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectScoreCardFromMacRef",                    
                     {scoreCardId: $(this).val()}, function(data){     
 
                     var failureBlockDisplay = false;                

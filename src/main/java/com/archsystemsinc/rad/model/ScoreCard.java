@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+
 public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private int id;
@@ -110,6 +111,22 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String customerSkillsCallFailureTime;
 	
+	//New Fields
+	
+	private String qamCalibrationStatus;
+	
+	
+	private String cmsCalibrationStatus;
+	
+	
+	private Date qamCalibrationUpdateDateTime;
+	
+	
+	private Date cmsCalibrationUpdateDateTime;
+	
+	
+	private Date scoreCardStatusUpdateDateTime;
+	
 	//Temporary Variables
 	private String jurisdictionName;	
 	
@@ -144,6 +161,48 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private ArrayList<Integer> macIdList;
 	
 	
+	
+	public String getQamCalibrationStatus() {
+		return qamCalibrationStatus;
+	}
+
+	public void setQamCalibrationStatus(String qamCalibrationStatus) {
+		this.qamCalibrationStatus = qamCalibrationStatus;
+	}
+
+	public Date getQamCalibrationUpdateDateTime() {
+		return qamCalibrationUpdateDateTime;
+	}
+
+	public void setQamCalibrationUpdateDateTime(Date qamCalibrationUpdateDateTime) {
+		this.qamCalibrationUpdateDateTime = qamCalibrationUpdateDateTime;
+	}
+
+	public String getCmsCalibrationStatus() {
+		return cmsCalibrationStatus;
+	}
+
+	public void setCmsCalibrationStatus(String cmsCalibrationStatus) {
+		this.cmsCalibrationStatus = cmsCalibrationStatus;
+	}
+
+	
+	public Date getCmsCalibrationUpdateDateTime() {
+		return cmsCalibrationUpdateDateTime;
+	}
+
+	public void setCmsCalibrationUpdateDateTime(Date cmsCalibrationUpdateDateTime) {
+		this.cmsCalibrationUpdateDateTime = cmsCalibrationUpdateDateTime;
+	}
+
+	public Date getScoreCardStatusUpdateDateTime() {
+		return scoreCardStatusUpdateDateTime;
+	}
+
+	public void setScoreCardStatusUpdateDateTime(Date scoreCardStatusUpdateDateTime) {
+		this.scoreCardStatusUpdateDateTime = scoreCardStatusUpdateDateTime;
+	}
+
 	public ArrayList<Integer> getJurIdList() {
 		return jurIdList;
 	}
@@ -573,13 +632,6 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	}
 
 
-
-	public Integer getJurId() {
-		return jurId;
-	}
-
-
-
 	public String getFailReason() {
 		return failReason;
 	}
@@ -588,11 +640,15 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 		this.failReason = failReason;
 	}
 
+	
+
+	public Integer getJurId() {
+		return jurId;
+	}
+
 	public void setJurId(Integer jurId) {
 		this.jurId = jurId;
 	}
-
-
 
 	public String getMacCallReferenceNumber() {
 		return macCallReferenceNumber;

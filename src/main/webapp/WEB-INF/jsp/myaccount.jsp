@@ -57,7 +57,7 @@
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
- <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/createUser" class="form-signin">
+ <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createUser" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 

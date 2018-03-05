@@ -47,7 +47,7 @@
     function startTimer(timeoutCount) {
         if (timeoutCount == 0) {
             window.location.href = '${pageContext.request.contextPath}/logout';
-        } else if (timeoutCount < 600) {
+        } else if (timeoutCount <= 600) {
         	var minutes = Math.floor((timeoutCount * 3000)/1000 / 60);
         	var seconds = (timeoutCount * 3000)/1000 - (minutes *60);
             document.getElementById('sessionTimer').innerHTML = 'Session Timeout: ' +minutes +':'+seconds;
@@ -66,7 +66,7 @@
 		role="banner">
 	<div>
 		<div class="row">
-		<div id="sessionTimer" align="right" style="padding-right: 30px; color: blue" ></div>
+		
 		</div>
 		<div class="row">
 			<div class="col-md-12">
@@ -89,8 +89,9 @@
 						</td>
 						<td style="border: 0px;"><div class="social" style="color:black">
 								Welcome ${pageContext.request.userPrincipal.name} | <a
-									href="${pageContext.request.contextPath}/logout">Logout</a>
-							</div></td>
+									href="${pageContext.request.contextPath}/logout">Logout</a>			</div>
+							
+						</td>
 					</tr>
 					<tr>
 						<td style="float: right; border: 0px"><button aria-label="zoom in button"
@@ -101,7 +102,14 @@
 							<button aria-label="zoom out button" title="decrease font size" class="btn btn-primary btn-xs"
 								onclick="decreaseFontSizeBy1px()">
 								<i class="fa fa-search-minus"></i>
-							</button></td>
+							</button>
+							
+						</td>
+					</tr>
+					<tr>
+						<td style="float: right; border: 0px">							
+							<div id="sessionTimer" align="right" style="color: blue" ></div>
+						</td>
 					</tr>
 					<tr>
 						<td
@@ -129,14 +137,14 @@
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
-									      	<li><a href="${pageContext.request.contextPath}/admin/createusers" title="Create Users Page">Create Users</a></li>
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createusers" title="Create Users Page">Create Users</a></li>
 									     </sec:authorize>
-									      <li><a href="${pageContext.request.contextPath}/admin/listofusers" title="List of Users Page">List Users</a></li>
+									      <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers" title="List of Users Page">List Users</a></li>
 									    </ul>
 									</li>
 									</sec:authorize>
 									
-									<li><a href="${pageContext.request.contextPath}/admin/myaccount" title="My Account Page">My Account</a></li>	
+									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount" title="My Account Page">My Account</a></li>	
 									<li class="anchor"><a href="#" title="Help Guide Page">Help Guide</a></li>									
 									
 									<li>&nbsp; &nbsp;</li>			

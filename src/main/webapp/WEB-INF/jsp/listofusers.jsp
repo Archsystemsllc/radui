@@ -69,7 +69,7 @@
 							<div class="panel panel-primary table-users" style="width: 75%; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1); border: 1px solid #327a81;">
 								<div class="panel-heading" style="background-color: #327a81;">List of Users</div>
 								<div class="panel-body" style="background-color: white;">
-<form:form method="GET" modelAttribute="userFilterForm" action="${pageContext.request.contextPath}/admin/userFilter">
+<form:form method="GET" modelAttribute="userFilterForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/userFilter">
 
 									<table
 										style="border-collapse: separate; border-spacing: 2px; valign: middle"
@@ -163,7 +163,7 @@
 					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 					                                <td>
 					                                    <span><a class="action-icons c-edit" href="edit-user/${user.id}" title="Edit">Edit</a></span>
-					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
 					                                </td>
 					                            </tr>
 					                        </c:forEach>

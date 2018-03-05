@@ -40,7 +40,7 @@ public class User {
 	
 
 	
-	private Long jurId;
+	private String jurId;
 	private Long orgId;
 	private Date lastLoggedinDate;
 	
@@ -135,12 +135,7 @@ public class User {
 	public void setStatus(Long status) {
 		this.status = status;
 	}
-	public Long getJurId() {
-		return jurId;
-	}
-	public void setJurId(Long jurId) {
-		this.jurId = jurId;
-	}
+	
 	public Long getOrgId() {
 		return orgId;
 	}
@@ -148,7 +143,12 @@ public class User {
 		this.orgId = orgId;
 	}
 	
-	
+	public String getJurId() {
+		return jurId;
+	}
+	public void setJurId(String jurId) {
+		this.jurId = jurId;
+	}
 	public OrganizationLookup getOrganizationLookup() {
 		return organizationLookup;
 	}

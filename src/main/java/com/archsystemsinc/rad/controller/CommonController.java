@@ -56,7 +56,8 @@ public class CommonController {
 		
 	}
 	
-	@RequestMapping(value = "/admin/selectJuris", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/selectJuris", "/quality_manager/selectJuris", "/cms_user/selectJuris",
+			 "/mac_admin/selectJuris","/mac_user/selectJuris"}, method = RequestMethod.GET)	
 	@ResponseBody
 	public HashMap<Integer,String> selectJuris(@RequestParam("macId") final String macIdString, @RequestParam("multipleInput") final boolean multipleInputFlag) {
 		
@@ -92,7 +93,8 @@ public class CommonController {
 		return jurisFinalMap;
 	}
 	
-	@RequestMapping(value = "/admin/selectProgram", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/selectProgram", "/quality_manager/selectProgram", "/cms_user/selectProgram",
+			 "/mac_admin/selectProgram","/mac_user/selectProgram"}, method = RequestMethod.GET)	
 	@ResponseBody
 	public HashMap<Integer,String> selectProgram(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString) {
 		
@@ -160,7 +162,8 @@ public class CommonController {
 		return programMap;
 	}
 	
-	@RequestMapping(value = "/admin/selectLocation", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/selectLocation", "/quality_manager/selectLocation", "/cms_user/selectLocation",
+			 "/mac_admin/selectLocation","/mac_user/selectLocation"}, method = RequestMethod.GET)	
 	@ResponseBody
 	public HashMap<Integer,String> selectLocation(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString,@RequestParam("programId") final String programIdString) {
 		
@@ -365,7 +368,8 @@ public class CommonController {
 		return locationMap;
 	}
 	
-	@RequestMapping(value = "/admin/selectCallSubcategories", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/selectCallSubcategories", "/quality_manager/selectCallSubcategories", "/cms_user/selectCallSubcategories",
+			 "/mac_admin/selectCallSubcategories","/mac_user/selectCallSubcategories"}, method = RequestMethod.GET)	
 	@ResponseBody
 	public HashMap<Integer,String> selectCallSubCategories(@RequestParam("categoryId") final Integer categoryId) {
 		

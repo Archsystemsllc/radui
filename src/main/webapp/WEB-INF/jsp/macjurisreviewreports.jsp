@@ -47,7 +47,7 @@
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/goBackMacJurisReport" id="reportsForm" >
+		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/goBackMacJurisReport" id="reportsForm" >
 			<tr>
 				<td style="vertical-align: top">
 
@@ -122,7 +122,7 @@
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" >
 													
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/AlL" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/AlL" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
@@ -167,7 +167,7 @@
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableOnly" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableOnly" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
@@ -201,7 +201,7 @@
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreablePass" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreablePass" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
@@ -231,7 +231,7 @@
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableFail" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/ScoreableFail" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
@@ -261,7 +261,7 @@
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/Non-Scoreable" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/Non-Scoreable" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
@@ -290,7 +290,7 @@
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/DoesNotCount" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/DoesNotCount" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
@@ -344,7 +344,7 @@
 				                                <display:table class="display hover stripe cell-border " id="row" name="${REBUTTAL_REPORT.values()}" 
 													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list">
 													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
-														<span><a href="${pageContext.request.contextPath}/admin/rebuttal-report-drilldown/${row.macName}/${row.jurisdictionName}/${reportsForm.callCategoryType}/${reportsForm.rebuttalStatus}" >${row.macName}</a></span>
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttal-report-drilldown/${row.macName}/${row.jurisdictionName}/${reportsForm.callCategoryType}/${reportsForm.rebuttalStatus}" >${row.macName}</a></span>
 													</display:column>
 													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf excel csv"/>
 													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>

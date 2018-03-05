@@ -36,19 +36,16 @@ public class CsrListController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 			
-			model.addAttribute("macIdMap", HomeController.USER_BASED_MAC_ID_DETAILS);
-			
-			HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
-			model.addAttribute("jurisMapEdit", jurisMap);			
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
 			
 		} else {
 			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
 			
 		}		
 		
-		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
+		//session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "csrlist";
 	}
 }

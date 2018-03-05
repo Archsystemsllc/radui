@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class ReportsForm {  
     
-    private String macId;   
+    private Integer macId;   
     
     private String userId;
     
@@ -167,11 +167,11 @@ public class ReportsForm {
 		this.compliance = compliance;
 	}
 
-	public String getMacId() {
+	public Integer getMacId() {
 		return macId;
 	}
 
-	public void setMacId(String macId) {
+	public void setMacId(Integer macId) {
 		this.macId = macId;
 	}
 

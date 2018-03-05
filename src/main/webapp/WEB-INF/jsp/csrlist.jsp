@@ -400,7 +400,7 @@ $(function() {
         }); 
 
         $("select#macIdK").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurisdictionK").get(0).options.length = 0;	           
@@ -418,7 +418,7 @@ $(function() {
         	  selectedMacs += $( this ).val() + ",";
           });
          
-         $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+         $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                  {macId: selectedMacs, multipleInput: true}, function(data){
             
               $("#jurisdictionS").get(0).options.length = 0;	
@@ -433,7 +433,7 @@ $(function() {
         .change();
 
         $("select#macIdU").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurisdictionU").get(0).options.length = 0;	           

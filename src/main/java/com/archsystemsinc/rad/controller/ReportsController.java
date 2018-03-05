@@ -61,7 +61,7 @@ public class ReportsController {
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")) {
+		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0) {
 			jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
 		} else {
 			jurisMap = HomeController.JURISDICTION_MAP;
@@ -70,7 +70,7 @@ public class ReportsController {
 		model.addAttribute("jurisMapEdit", jurisMap);
 		
 		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") 
+		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 
 				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
 			programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
 			
@@ -81,7 +81,7 @@ public class ReportsController {
 		
 		model.addAttribute("programMapEdit", programMap);
 		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") 
+		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 
 				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")
 						&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
 			locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
@@ -108,7 +108,7 @@ public class ReportsController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+			/*User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 			
 			model.addAttribute("macIdMap", HomeController.USER_BASED_MAC_ID_DETAILS);
 			
@@ -117,7 +117,14 @@ public class ReportsController {
 			
 			for (Integer macIdKey: HomeController.USER_BASED_MAC_ID_DETAILS.keySet()) {
 				reportsForm.setMacId(macIdKey.toString());
-			}
+			}*/
+			
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+			//reportsForm.setJurisId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);		
+			
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
+			
 			
 			
 		} else {
@@ -239,12 +246,10 @@ public class ReportsController {
 				reportsForm.setJurisdictionName(reportsForm.getJurisId());
 			}
 			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+			if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 ) {
 				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 				reportsForm.setMacName(macName);
-			} else {
-				reportsForm.setMacName(reportsForm.getMacId());
-			}
+			} 
 			
 			if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
 				String programName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
@@ -387,12 +392,10 @@ public class ReportsController {
 				reportsForm.setJurisdictionName(reportsForm.getJurisId());
 			}
 			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+			if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 ) {
 				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 				reportsForm.setMacName(macName);
-			} else {
-				reportsForm.setMacName(reportsForm.getMacId());
-			}
+			} 
 			
 			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = new TreeMap<String, QamMacByJurisdictionReviewReport>(
 	                new Comparator<String>() {

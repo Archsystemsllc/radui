@@ -12,42 +12,36 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM - ScoreCard</title>
-<link href="${pageContext.request.contextPath}/resources/css/table.css"
-	rel="stylesheet" />
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+<link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/button.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/js/radjavascript.js" />
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
 <link rel="stylesheet" href="/resources/demos/style.css" />
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.33.3/es6-shim.min.js"
-	type=""></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js"
-	type=""></script>
-
-<script src="https://code.jquery.com/jquery-1.12.4.js" type=""></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type=""></script>
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 <!-- CSS for Bootstrap -->
-<link
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	rel="stylesheet"></link>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <!-- JQuery -->
-<script src="http://code.jquery.com/jquery-latest.js" type=""></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
-	type=""></script>
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
-<script src="https://code.jquery.com/jquery-1.12.4.js" type=""></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type=""></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -62,7 +56,7 @@
 
 		
 		$("select#macId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurId").get(0).options.length = 0;	           
@@ -82,6 +76,46 @@
 	});
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	var data =eval('${scoreCardList}');
+	//var data=$.parseJSON("${scoreCardList}");
+	//alert("Testing");
+	var role = $('#userRole').val();
+	//alert("Role is:"+role);
+	var scoreCardListTable = $('#scoreCardLists').DataTable( {
+	"aaData": data,
+	"aoColumns": [
+	{ "mData": "macName"},
+	{ "mData": "jurisdictionName"},
+	{ "mData": "macCallReferenceNumber"},
+	{ "mData": "qamFullName"},
+	{ "mData": "qamStartdateTimeString"},
+	{ "mData": "scorecardType"},
+	{ "mData": "callResult"},
+	{ "mData": "id"}
+	],
+    "columnDefs": [ 
+        { 
+           "render" : function(data, type, row) {
+			var linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/"+data+"' title='View'>View</a></span>";
+			if (role == 'Administrator' || role == 'Quality Manager' || role == 'Quality Monitor' || role == 'MAC Admin') {
+				var linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/"+data+"' title='Edit'>Edit</a></span>";
+			}
+                       
+            return linkData;		
+             
+        },
+	   "targets" : 7
+	   },
+	 ],
+	   "paging" : true,
+	   "pageLength" : 5,
+	    "ordering" : true,
+	});
+});
+</script>
+
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
@@ -97,7 +131,7 @@
 
 							<div class="table-users" style="width: 80%">
 								<div class="header">List of Scorecards</div>
-
+								<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
 								<c:if test="${ScoreCardFilter == true}">
 								<form:input type = "hidden" path="userId" />
 									<div class="row " style="margin-top: 10px">
@@ -114,9 +148,9 @@
 												</div>
 												<div class="col-lg-4 form-group">
 													<label for="name"> Jurisdiction:</label>
-													<form:select path="jurId" class="form-control required"
-														id="jurId" required="true" title="Select Jurisdiction">
-														<form:option value="0" label="---Select All---" />
+													<form:select path="jurisIdReportSearchString" class="form-control required"
+														id="jurId" required="true" title="Select Jurisdiction" multiple="true">
+														
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
 												</div>
@@ -193,7 +227,7 @@
 										</div>
 									</div>
 								</c:if>
-								<div class="row " style="margin-top: 10px">
+								<%-- <div class="row " style="margin-top: 10px">
 									<!--  Section 1 -->
 									<div class="col-lg-12 col-lg-offset-1 form-container">
 
@@ -221,6 +255,9 @@
 													<display:setProperty name="export.csv.filename"	value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf.filename"	value="ScorecardReport.pdf" />
 													<display:setProperty name="export.pdf" value="true" />
+													
+													
+													
 
 												</display:table>
 												<c:if
@@ -232,7 +269,38 @@
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> --%>
+								
+								<div class="row" id="scorecardlistdatatablediv">
+				                <div class="col-lg-12 col-lg-offset-1 form-container">
+				                   
+				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                   
+			                         <div class="row" id="scorecardlistdatatable">
+			                            <div class="col-lg-10 form-group">
+			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreCardLists" style="width: 90%">
+						                    <thead>
+										        <tr>
+										            <th style="text-align: left">MAC</th>
+										            <th style="text-align: left">Jurisdiction</th>
+										            <th style="text-align: left">MAC Call Reference ID</th>
+										            <th style="text-align: left">QM Name/ID</th>
+										            <th style="text-align: left">QM Start Date/Time</th>
+										            <th style="text-align: left">Scorecard Type</th>
+										            <th style="text-align: left">Status</th> 
+										            
+										            <th style="text-align: left">Actions</th>
+										           
+										        </tr>
+										    </thead>
+						                    <tbody>  
+						                    </tbody>
+						                </table> 
+			                            </div>		                           
+			                        </div>         
+				                    
+				                </div>
+				            </div>
 							</div>
 						</div>
 					</div>

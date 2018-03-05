@@ -54,7 +54,7 @@
 
 $(function(){
 	$("select#organizationLookupId").change(function(){
-		alert($(this).val());
+		//alert($(this).val());
 		 var selectedOrgnization = $(this).val();
 		 if(selectedOrgnization==1) {	
 			 $('#macId,#jurId,#pccId').attr("required",false);
@@ -69,10 +69,37 @@ $(function(){
 			 $('#macId,#jurId,#pccId').attr("required",true);
 			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").show();
 			 	
-		 }
-	    
+		 }	    
 	});
-
+	
+	$("select#macId").change(function(){
+		 alert("Mac ID"+$(this).val());
+           $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+                   {macId: $(this).val(), multipleInput: false}, function(data){
+              
+                $("#jurId").get(0).options.length = 0;	           
+     	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+     	  	    	$.each(data, function (key,obj) {
+     	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);     	  	    		
+     	  	    	});  	   
+              });
+       });
+       
+	$("#jurId").change(function(){			
+			 var selectedJurisdiction =""; 
+			 $("#jurId :selected").each(function() {
+				 selectedJurisdiction+=($(this).attr('value'))+",";
+				});			
+           $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: $('#macId').val(),jurisId: selectedJurisdiction}, function(data){
+               
+                $("#pccId").get(0).options.length = 0;	           
+     	      	 $("#pccId").get(0).options[0] = new Option("---Select Program---", "");
+     	      	 
+     	  	    	$.each(data, function (key,obj) {
+     	  	    		$("#pccId").get(0).options[$("#pccId").get(0).options.length] = new Option(obj, key);     	  	    		
+     	  	    	});  	   
+              });
+       });
 });
 </script>
 
@@ -80,10 +107,8 @@ $(function(){
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div>
-		<table id="mid">
-			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
- --%>
- <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/createUser" class="form-signin">
+		<table id="mid">			
+ 			<form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createUser" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -102,8 +127,160 @@ $(function(){
 										<tr>
 										</tr>
 									</table>
+									
+							<div class="row " style="margin-top: 10px">
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                <div class="row">
+				                      <div style="color: red;font-size: 18px;"  class="col-lg-12 form-group">
+				                      <c:if test="${not empty ValidationFailure}">
+										${ValidationFailure}
+										</c:if>
+				                      </div>
+									</div>
+				                  <!--   <h2>User Information</h2>  -->
+				                    <!-- <p> Please provide your feedback below: </p> -->
+				                   
+				                    <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="userName"> User Name:</label> 
+											 <spring:bind path="userName">
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="userName" class="form-control required" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="userName"></form:errors>
+								            </div>
+								            </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               
+			                            </div>
+			                        </div>
+			                         <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                               <label for="password"> Password:</label> 
+											 <spring:bind path="password">
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
+								                <form:errors path="password"></form:errors>
+								            </div>
+								            </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                <label for="passwordConfirm"> Confirm your password:</label> 
+											<spring:bind path="passwordConfirm">
+											<div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="password" path="passwordConfirm" class="form-control"
+								                            placeholder=""></form:input>
+								                <form:errors path="passwordConfirm"></form:errors>
+								            </div>
+								            </spring:bind>
+			                            </div>
+			                        </div>
+			                        
+			                        <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                              <label for="firstName"> First Name:</label> 
+											<spring:bind path="firstName">
+											<div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="firstName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="firstName"></form:errors>
+								            </div>
+								            </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                <label for="middleName"> Middle Name:</label> 
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="middleName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="middleName"></form:errors>
+			                            	</div>
+			                        	</div>
+				                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group">
+			                              <label for="lastName"> Last Name:</label> 
+			                               <spring:bind path="firstName">
+											 <div class="form-group  ${status.error ? 'has-error' : ''}">
+											
+								                <form:input type="text" path="lastName" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="lastName"></form:errors>
+								            </div>
+								           </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                <label for="emailId"> Email Id:</label> 
+											 <div class="form-group required ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="emailId" class="form-control" placeholder=""
+								                            autofocus="true"></form:input>
+								                <form:errors path="emailId"></form:errors>
+								            </div>
+			                        	</div>				                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> Role:</label>
+											<form:select path="role.id"
+													class="form-control required" id="roleId" required="true">
+													<form:option value="" label="---Select Role---" />
+													<form:options items="${roleIds}" />
+												</form:select>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                            	<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
+													class="form-control required" id="organizationLookupId" required="true">
+													<form:option value="" label="---Select Organization---" />
+													<form:options items="${orgIds}" />
+												</form:select>
+			                                
+			                        	</div>				                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group" id="macIdBlock">
+			                          
+										<label for="name"> MAC:</label>
+			                                <form:select path="macId" id="macId" class="form-control required">
+											   <form:option value="" label="---Select MAC---"/>
+											   <form:options items="${macIds}" />
+											</form:select> 	
+			                            </div>
+			                            <div class="col-lg-6 form-group"  id="jurIdBlock">
+			                            
+			                           	<label for="jurId"> Jurisdiction:</label>
+			                               <form:select path="jurId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true">
+										   <form:option value="" label="---Select Jurisdiction---"/>								   
+										</form:select>	
+			                        	</div>				                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group" id="pccIdBlock">
+			                          
+										<label for="pccId"> PCC Location:</label>
+										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true">
+										   <form:option value="" label="---Select PCC Location---"/>								   
+										</form:select>	
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                            	<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}" style ="padding-top: 40px;"/>
+			                        	</div>				                    
+				                	</div>
+				                	
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group">
+			                            <button class=" btn btn-primary">Submit</button>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                            	
+			                        	</div>				                    
+				                	</div>
+				            </div>
+									
+									
+									
 
-									<div class="row"  style="margin-top: 10px">
+									<%-- <div class="row"  style="margin-top: 10px">
 										<div class="col-sm-6 col-md-offset-1 form-group">
 											<label for="userName"> User Name:</label> 
 											 <spring:bind path="userName">
@@ -221,7 +398,7 @@ $(function(){
 											<button class=" btn btn-primary">Submit</button>
 										</div>
 									
-										</div>
+										</div> --%>
 									</div>
 								</div>
 							</div>

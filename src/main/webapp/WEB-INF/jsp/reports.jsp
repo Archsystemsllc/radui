@@ -166,7 +166,7 @@
         });
 
 		$("select#macId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectJuris",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurisId").get(0).options.length = 0;	           
@@ -185,7 +185,7 @@
 				 selectedJurisdiction+=($(this).attr('value'))+",";
 				});
 			
-            $.getJSON("${pageContext.request.contextPath}/admin/selectProgram",{macId: $('#macId').val(),jurisId: selectedJurisdiction}, function(data){
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: $('#macId').val(),jurisId: selectedJurisdiction}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
       	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
@@ -203,7 +203,7 @@
 			 $("#jurisId :selected").each(function() {
 				 selectedJurisdiction+=($(this).attr('value'))+",";
 				});
-            $.getJSON("${pageContext.request.contextPath}/admin/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val()}, function(data){
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val()}, function(data){
                 
                  $("#loc").get(0).options.length = 0;	           
       	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
@@ -222,7 +222,7 @@
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsFormId">
+		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReport" id="reportsFormId">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -246,13 +246,13 @@
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:option value="ALL" label="---Select All---"/>
+										   <form:option value="0" label="---Select All---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 									
 										
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> Jurisdiction:</label>
+			                                <label for="jurisId"> Jurisdiction:</label>
 										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" multiple="true">
 										  
 										   <form:options items="${jurisMapEdit}" />

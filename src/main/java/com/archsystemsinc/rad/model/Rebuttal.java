@@ -1,6 +1,7 @@
 package com.archsystemsinc.rad.model;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Rebuttal  {	
@@ -110,8 +111,19 @@ public class Rebuttal  {
 	
 	private String jurisName;
 	
+	private ArrayList<Integer> jurisIdList;
 	
 	
+	public ArrayList<Integer> getJurisIdList() {
+		return jurisIdList;
+	}
+
+
+	public void setJurisIdList(ArrayList<Integer> jurisIdList) {
+		this.jurisIdList = jurisIdList;
+	}
+
+
 	public String getJurisName() {
 		return jurisName;
 	}

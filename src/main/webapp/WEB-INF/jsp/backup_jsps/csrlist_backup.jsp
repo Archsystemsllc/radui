@@ -551,7 +551,7 @@ $(document).on('click',".viewLink",function (){
 <script src="scripts/jquery.dataTables.min.js" type="text/javascript"></script>
 </head>
 <body>
-	<jsp:include page="admin_header.jsp"></jsp:include>
+	<%-- <jsp:include page="admin_header.jsp"></jsp:include> --%>
 	<div id="dialog-confirm" title="Current CSR List Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Are you sure you want to keep the current CSR list?</p>
 	</div>
@@ -706,7 +706,7 @@ $(document).on('click',".viewLink",function (){
 			</tr>
 		</form:form>
 	</table>
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 	
 </body>
 </html>

@@ -53,7 +53,7 @@
 
 </head>
 <body>
-	<jsp:include page="admin_header.jsp" />
+	<%-- <jsp:include page="admin_header.jsp" /> --%>
 	<table id="mid">
 		<tr>
 			<td
@@ -235,7 +235,7 @@
 		</tr>
 
 	</table>
-	<jsp:include page="footer.jsp" />
+	<%-- <jsp:include page="footer.jsp" /> --%>
 	<script type="text/javascript">
 	var h;
 	h=screen.height-357;

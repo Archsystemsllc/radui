@@ -62,7 +62,9 @@
 		//Failure Reason Comments Attributes
     	$("#failReasonCommentsDiv").hide();
     	$('#failReasonComments').attr("required",false);	
-
+		//Section 8 Div
+		//$("#Section8Div").hide();
+		
     	
 
 	    var csrPrvAccInfoFlag="${scorecard.csrPrvAccInfo}";
@@ -86,6 +88,20 @@
 		if(callResultFlag=="Fail") {			
 			$("#failReasonCommentsDiv").show();
 		}
+
+
+		//Assigning Values Based on User Role
+		var role = $('#userRole').val();
+
+		if (role == 'Administrator') {
+			$('#cmsCalibrationStatus').attr("readonly",false);
+			$('#cmsCalibrationStatus').attr("required",true);
+			
+		} else if (role == 'Quality Manager') {
+			$('#macCalibrationStatus').attr("readonly",false);
+			$('#macCalibrationStatus').attr("required",true);
+		}
+			
 
 		//Auto Complete CSF Full Name Functionality
 		var username="qamadmin";
@@ -445,6 +461,7 @@
 		<form:input type = "hidden" path="id" />
 		<form:input type = "hidden" path="qamStartdateTime" />
 		<form:input type = "hidden" path="qamEnddateTime" />
+		<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
 			<tr>
 				<td style="vertical-align: top">
 
@@ -791,7 +808,59 @@
 			                        </div>       
 				                    
 				                </div>
-				            </div>		
+				            </div>
+				            <div class="row " id="Section8Div">
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                    <h2>Section 8 - Calibration Module</h2> 
+				                    <div class="row">
+			                            
+			                            <div class="col-lg-6 form-group">
+			                               
+			                                <label for="scoreCardStatusUpdateDateTime">User Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="scoreCardStatusUpdateDateTime" readonly="true"/>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                            </div>
+			                        </div>
+				                    
+				                    <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="qamCalibrationStatus">QAM Admin Calibration Status:</label>
+			                                 <form:select path="qamCalibrationStatus" class="form-control required"  readonly="true">
+											   	<form:option value="" label="---Select---"/>											   	
+											   	<form:option value="Pass" label="Pass" />	
+											   	<form:option value="Fail" label="Fail" />											  						  	
+											</form:select> 
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               
+			                                <label for="qamCalibrationUpdateDateTime">QAM Admin Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" readonly="true"/>
+			                            
+			                                
+			                            </div>
+			                        </div>
+			                         <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="cmsCalibrationStatus">CMS Calibration Status:</label>
+			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  readonly="true">
+											   	<form:option value="" label="---Select---"/>											   	
+											   	<form:option value="Pass" label="Pass" />	
+											   	<form:option value="Fail" label="Fail" />											  						  	
+											</form:select> 
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                
+			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" readonly="true"/>
+			                            
+			                                
+			                            </div>
+			                        </div>
+			                       
+				                    
+				                </div>
+				            </div>
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><c:if test="${scorecard.id == 0}">

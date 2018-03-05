@@ -44,8 +44,14 @@ public class UserValidator implements Validator {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
         }
         
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "NotEmpty");
         if (user.getFirstName().length() < 4 || user.getFirstName().length() > 32) {
             errors.rejectValue("firstName", "Size.userForm.firstName");
+        }
+        
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "NotEmpty");
+        if (user.getLastName().length() < 4 || user.getLastName().length() > 32) {
+            errors.rejectValue("lastName", "Size.userForm.lastName");
         }
         
     }

@@ -137,7 +137,7 @@ $().ready(function() {
 </style>
 </head>
 <body>
-	<jsp:include page="admin_header.jsp"></jsp:include>
+	<%-- <jsp:include page="admin_header.jsp"></jsp:include> --%>
 	<form class="cmxform" id="commentForm" method="get" action="">
 <fieldset>
 <legend>Please provide your name, email address (won't be published) and a comment</legend>
@@ -459,6 +459,6 @@ $().ready(function() {
 			</tr>
 		</form:form>
 	</table>
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 </body>
 </html>

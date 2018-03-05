@@ -116,7 +116,7 @@
 
 	$(function(){
 		$("select#macReferenceId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/admin/selectScoreCardFromMacRef",                    
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectScoreCardFromMacRef",                    
                     {scoreCardId: $(this).val()}, function(data){     
 
                     var failureBlockDisplay = false;                
@@ -185,7 +185,7 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");	              		
-	              		window.location.href= '${pageContext.request.contextPath}/admin/rebuttallist';          	 	
+	              		window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist';          	 	
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 
@@ -246,7 +246,7 @@
 	
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="rebuttal" class="form-signin" action="${pageContext.request.contextPath}/admin/saveOrUpdateRebuttal" id="rebuttalForm">
+		<form:form method="POST" modelAttribute="rebuttal" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/saveOrUpdateRebuttal" id="rebuttalForm">
 			<tr>
 				<td style="vertical-align: top">
 

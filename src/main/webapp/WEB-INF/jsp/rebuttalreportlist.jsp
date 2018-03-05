@@ -49,7 +49,7 @@
 								<div class="header">Rebuttal Report List</div>	
 								<div class="row"  style="margin-top: 10px">
 								<div class="col-lg-12 col-lg-offset-1 form-container">
-									<span><a href="${pageContext.request.contextPath}/admin/getMacJurisReportFromSession"><button class="btn btn-primary" id="back" type="button" >Back</button></a></span>
+									<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession"><button class="btn btn-primary" id="back" type="button" >Back</button></a></span>
 										
 									</div>
 								</div>						
@@ -70,7 +70,7 @@
 							
 							
 							<<display:column title="Actions" style="text-align:center;">
-								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/view-rebuttal/${rebuttalRow.id}" title="View">View</a></span>
+								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-rebuttal/${rebuttalRow.id}" title="View">View</a></span>
 															
 							</display:column>
 							<display:setProperty name="export.excel.filename" value="Rebuttal.xls" />

@@ -127,6 +127,8 @@ public class UserController {
 			return "createusers";
 		}else{
 			try {
+				String jurIdDBValue = userForm.getJurId().replace(UIGenericConstants.UI_JURISDICTION_SEPERATOR, UIGenericConstants.DB_JURISDICTION_SEPERATOR) +  UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+				userForm.setJurId(jurIdDBValue);
 				userService.save(userForm);
 				redirectAttributes.addFlashAttribute("success",
 						"success.register.user");
@@ -253,6 +255,8 @@ public class UserController {
 
 		}
 		try {
+			String jurIdDBValue = userForm.getJurId().replace(UIGenericConstants.UI_JURISDICTION_SEPERATOR, UIGenericConstants.DB_JURISDICTION_SEPERATOR) +  UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+			userForm.setJurId(jurIdDBValue);
 			userService.update(userForm);
 			redirectAttributes.addFlashAttribute("success", "success.edit.user");
 		} catch (Exception e) {
@@ -289,10 +293,16 @@ public class UserController {
 			final Model model, User user) {
 		log.debug("--> editUser:"+id);
 		final User userByID = userService.findById(id);
+		String jurIdUiValue = userByID.getJurId().replace(UIGenericConstants.DB_JURISDICTION_SEPERATOR, UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+		userByID.setJurId(jurIdUiValue.substring(0,jurIdUiValue.length()-1));
 		userByID.setPasswordFromdb(userByID.getPassword());
 		userByID.setPasswordConfirm(userByID.getPassword());
 		model.addAttribute("userForm", userByID);
+		
 		userDefaults(model);
+		
+		
+		
 		log.debug("<-- editUser");
 		return "edituser";
 	}

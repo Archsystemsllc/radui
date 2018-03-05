@@ -70,7 +70,7 @@
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
- <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/admin/edit-user" class="form-signin">
+ <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-user" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -186,7 +186,7 @@
 										<div class="col-md-6 col-md-offset-1 form-container">
 													<label for="email"> Jurisdiction:</label>
 													<form:select path="jurId"
-													class="form-control required" id="jurId" required="true">
+													class="form-control required" id="jurId" required="true" multiple="true">
 													<option value="" label="--- Select Jurisidiction---" />
 													<form:options items="${jurIds}" />
 												</form:select>

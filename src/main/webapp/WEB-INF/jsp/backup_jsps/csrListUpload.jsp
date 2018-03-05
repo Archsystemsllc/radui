@@ -140,11 +140,11 @@ background: url("${pageContext.request.contextPath}/resources/images/loading3.gi
 <!-- Farheen : 08/29/2017 Based on the Role header is assigned to the user -->
 <sec:authorize
 		access="hasAuthority('Administrator')">
-		<jsp:include page="admin_header.jsp"></jsp:include>
+		<%-- <jsp:include page="admin_header.jsp"></jsp:include> --%>
 	</sec:authorize>
 		<sec:authorize
 		access="hasAuthority('Report Viewer')">
-	<jsp:include page="header.jsp"></jsp:include>
+	<%-- <jsp:include page="header.jsp"></jsp:include> --%>
 	</sec:authorize>
 
 	<table id="mid">
@@ -480,6 +480,6 @@ background: url("${pageContext.request.contextPath}/resources/images/loading3.gi
 			  pdf.save("Hypothesis3.pdf");
 			}, false); 
 	</script>
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 </body>
 </html>

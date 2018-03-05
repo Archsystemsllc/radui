@@ -81,10 +81,10 @@ public class RebuttalController {
 			String roles = authentication.getAuthorities().toString();
 			
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
+				//User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
 						
-				rebuttal.setMacId(userForm.getMacId().intValue());
-				rebuttal.setJurisId(userForm.getJurId().intValue());
+				rebuttal.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				
 				
 			} 
 			
@@ -142,10 +142,21 @@ public class RebuttalController {
 			String roles = authentication.getAuthorities().toString();
 			
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
+				rebuttalObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				String jurisIdList = HomeController.LOGGED_IN_USER_JURISDICTION_IDS;		
+				
+				if(jurisIdList != null && !jurisIdList.equalsIgnoreCase("")) {
+					ArrayList<Integer> jurisdictionArrayList = new ArrayList<Integer>();
+					
+					String[] jurisIds = jurisIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+					
+					for (String jurisIdSingleValue: jurisIds) {
 						
-				rebuttalObject.setMacId(userForm.getMacId().intValue());
-				rebuttalObject.setJurisId(userForm.getJurId().intValue());
+						jurisdictionArrayList.add(Integer.valueOf(jurisIdSingleValue));
+					}
+					
+					rebuttalObject.setJurisIdList(jurisdictionArrayList);
+				}
 				
 			} 
 			
@@ -221,12 +232,9 @@ public class RebuttalController {
 			String roles = authentication.getAuthorities().toString();
 			
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-				User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
-						
-				rebuttal.setMacId(userForm.getMacId().intValue());
-				rebuttal.setJurisId(userForm.getJurId().intValue());
-				scoreCardTemp.setMacId(userForm.getMacId().intValue());
-				scoreCardTemp.setJurId(userForm.getJurId().intValue());
+				rebuttal.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				//scoreCardTemp.setJurId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);
 				
 			} 
 			

@@ -33,11 +33,12 @@
 		<jsp:include page="header.jsp"></jsp:include>
 	</c:if> --%>
 
-<!-- Farheen Begum 08/29/2017 Report Viewer Page -->
-<sec:authorize
-access="hasAuthority('Report Viewer')">
-<jsp:include page="header.jsp"></jsp:include>
+
+	<sec:authorize
+		access="hasAuthority('Administrator')">
+		<%-- <jsp:include page="admin_header.jsp"></jsp:include> --%>
 	</sec:authorize>
+
 
 	<table id="mid">
 
@@ -297,6 +298,6 @@ access="hasAuthority('Report Viewer')">
 		</tr>
 	</table>
 
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 </body>
 </html>

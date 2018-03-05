@@ -344,7 +344,7 @@
 
 </head>
 <body>
-	<jsp:include page="admin_header.jsp"></jsp:include>
+	<%-- <jsp:include page="admin_header.jsp"></jsp:include> --%>
 
 	<table id="mid">
 		<form:form method="POST" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/admin/saveorupdatescorecard" id="scorecardForm">
@@ -641,6 +641,6 @@
 			</tr>
 		</form:form>
 	</table>
-	<jsp:include page="footer.jsp"></jsp:include>
+	<%-- <jsp:include page="footer.jsp"></jsp:include> --%>
 </body>
 </html>

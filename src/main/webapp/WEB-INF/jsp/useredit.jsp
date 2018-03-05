@@ -62,9 +62,9 @@
 							<div class="header">Edit User : <c:out value='${user.name }'/></div>
 							
 							<div id="breadcrumb">
-							        <a href="${pageContext.request.contextPath}/admin/dashboard">Home</a> 
+							        <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a> 
 							        <span> >> </span>
-							        <a href="${pageContext.request.contextPath}/admin/users">Users</a> 
+							        <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/users">Users</a> 
 							        <span> >> </span>
 							        <a href="#" style="text-decoration: none;">Edit User</a>
 							</div>
@@ -77,7 +77,7 @@
 							                </div>
 							                <div class="widget_content">
 							                    <form:form modelAttribute="userForm" class="form-signin"
-							                               action="${pageContext.request.contextPath}/admin/edit-user/" method="post">
+							                               action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-user/" method="post">
 							                        
 							                        <table style="border: thin solid black">
 							                        	<tr>

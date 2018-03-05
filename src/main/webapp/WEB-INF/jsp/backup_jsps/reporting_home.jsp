@@ -58,7 +58,7 @@
 	rel="stylesheet"> --%>
 </head>
 <body ng-app="myApp" class="ng-cloak">
-	<jsp:include page="header.jsp" />
+	<%-- <jsp:include page="header.jsp" /> --%>
 	
 	<div ng-controller="DemoController as dctrl">
 	
@@ -115,6 +115,6 @@
 			</div>
 		</div>
 	</div>
-	<jsp:include page="footer.jsp" />
+	<%-- <jsp:include page="footer.jsp" /> --%>
 </body>
 </html>

@@ -86,12 +86,12 @@ $(document).ready(function(){
 						<div class="table-users" style="width: 80%">
 							<div class="header">Users List</div>
 							<div id="breadcrumb">
-						    	<a href="${pageContext.request.contextPath}/admin/dashboard">Home</a> 
+						    	<a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a> 
 						        <span> >> </span>
 						        <a href="#" style="text-decoration: none;">Users</a>
 							</div>
 							<div style="float: right;">
-								<span><a href="${pageContext.request.contextPath}/admin/registration" title="Create">Create New User</a></span>
+								<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/registration" title="Create">Create New User</a></span>
 							</div>
 							<div id="content">
 									    <div class="grid_container">
@@ -129,8 +129,8 @@ $(document).ready(function(){
 									                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 									                                <td>
 									                                <sec:authorize access="hasAuthority('Administrator')">
-									                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/admin/edit-user/${user.id}" title="Edit">Edit</a></span>
-									                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/admin/delete-user/${user.id}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
+									                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-user/${user.id}" title="Edit">Edit</a></span>
+									                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/${user.id}" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
 									                                </sec:authorize>
 									                                </td>
 									                            </tr>
