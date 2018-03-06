@@ -59,6 +59,7 @@ public class ScoreCardController {
 		
 		String roles = authentication.getAuthorities().toString();
 		User userForm = (User) session.getAttribute("LoggedInUserForm");
+		model.addAttribute("menu_highlight", "scorecard");
 		
 		try {
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
@@ -105,6 +106,7 @@ public class ScoreCardController {
 			final Model model,HttpServletRequest request, Authentication authentication) {
 		log.debug("--> getScorecardList Screen <--");
 		HashMap<Integer, ScoreCard> resultsMap = null;
+		model.addAttribute("menu_highlight", "scorecard");
 		try {		
 			
 			if(!scoreCard.getFilterFromDateString().equalsIgnoreCase("")) {
@@ -164,6 +166,7 @@ public class ScoreCardController {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardFromSession = (ScoreCard) request.getSession().getAttribute("SESSION_SCOPE_SCORECARD_FILTER");
 		HashMap<Integer, ScoreCard> resultsMap = null;
+		model.addAttribute("menu_highlight", "scorecard");
 		try {		
 			
 			String roles = authentication.getAuthorities().toString();
@@ -205,6 +208,7 @@ public class ScoreCardController {
 		
 		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
 		HashMap<Integer, ScoreCard> finalResultsMap = new HashMap<Integer, ScoreCard> ();
+		
 		try {
 		
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
@@ -251,6 +255,8 @@ public class ScoreCardController {
 		 
 		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
 		User userForm = (User) session.getAttribute("LoggedInUserForm");
+		
+		model.addAttribute("menu_highlight", "scorecard");
 		ScoreCard scoreCard = resultsMap.get(id);
 		
 		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
@@ -299,6 +305,7 @@ public class ScoreCardController {
 		
 		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
 		User userForm = (User) session.getAttribute("LoggedInUserForm");
+		model.addAttribute("menu_highlight", "scorecard");
 		ScoreCard scoreCard = resultsMap.get(id);
 		
 		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
@@ -347,6 +354,8 @@ public class ScoreCardController {
 	    String name = auth.getName(); //get logged in username 
 		scoreCard.setQamFullName(name);
 		
+		model.addAttribute("menu_highlight", "scorecard");
+		
 		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
 		
 		scoreCard.setQamStartdateTimeString(qamStartdateTime);
@@ -377,6 +386,7 @@ public class ScoreCardController {
 		
 		String roles = authentication.getAuthorities().toString();
 		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+		model.addAttribute("menu_highlight", "scorecard");
 		
 		String validationResult = validateScoreCard(scoreCard);
 		

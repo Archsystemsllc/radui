@@ -113,7 +113,6 @@ $(function() {
     var password="123456";
     // Ajax call for file uploaling
     var ajaxReq = $.ajax({
-      //url : 'http://radservices.us-east-1.elasticbeanstalk.com/api/uploadCsrList',
       url : "${WEB_SERVICE_URL}uploadCsrList",
       type : 'POST',
       data : formData,

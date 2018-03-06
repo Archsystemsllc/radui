@@ -117,24 +117,24 @@
 							style="vertical-align: bottom; border: 0px; padding: 0px">
 							<div class="collapse navbar-collapse navbar-right">
 								<ul class="nav navbar-nav" style="font-weight: bold" id="navlist">
-									<li style="margin-left: 0px"><a class="active" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
+									<li style="margin-left: 0px"><a class="${menu_highlight == 'home' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist" title="Scorecard Page">Scorecard</a></li>
+										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a></li>
+										<li><a class="${menu_highlight == 'reports' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a></li>
 									</sec:authorize>
 
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a></li>
+										<li><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a></li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User') or hasAuthority('Quality Monitor')">
-										<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist" title="Rebuttal Page">Rebuttal</a></li>
+										<li><a class="${menu_highlight == 'rebuttal' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist" title="Rebuttal Page">Rebuttal</a></li>
 									</sec:authorize>
 								
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									<li class="dropdown">
-										<a class="dropdown-toggle" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
+										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
@@ -145,7 +145,7 @@
 									</li>
 									</sec:authorize>
 									
-									<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount" title="My Account Page">My Account</a></li>	
+									<li><a class="${menu_highlight == 'my_account' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount" title="My Account Page">My Account</a></li>	
 									<li class="anchor"><a href="#" title="Help Guide Page">Help Guide</a></li>									
 									
 									<li>&nbsp; &nbsp;</li>			

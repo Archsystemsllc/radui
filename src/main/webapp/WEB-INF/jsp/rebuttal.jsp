@@ -51,6 +51,8 @@
 		$("#privacyCallFailureReasonDiv").hide();
 		$("#customerSkillsCallFailureReasonDiv").hide();
 		$("#rebuttalResult").hide();
+		$("#datePostedDiv").hide();
+		
 		
     	var username="qamadmin";
   	   	var password="123456";
@@ -62,7 +64,9 @@
     	var failureBlockDisplay = false;
 
     	if (id != 0) {
-    		              
+
+    		$("#datePostedDiv").show();
+    		       
     		if($("#accuracyCallFailureReason").val() != null ) {
 				failureBlockDisplay = true;				
 				$("#accuracyCallFailureReasonDiv").show();
@@ -246,7 +250,7 @@
 	
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="rebuttal" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/saveOrUpdateRebuttal" id="rebuttalForm">
+		<form:form method="POST" modelAttribute="rebuttal" enctype="multipart/form-data"  class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/saveOrUpdateRebuttal" id="rebuttalForm">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -314,19 +318,7 @@
 			                            </div>
 			                        </div>
 			                        
-			                        <div class="row">
-			                              <div class="col-sm-6 form-group">
-			                                <label for="name"> Date Posted:</label>
-			                                <form:input type = "text" class="form-control" id="datePosted" name = "datePosted" path="datePosted" readonly="true"/>
-			                            </div>
-			                         <div class="col-sm-6 form-group">
-			                                <label for="name"> QM Name/ID:</label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
-			                                <form:input type = "hidden" name = "id" path="id" />
-			                            </div>
-			                        </div>
-			                        
-			                        <div class="row">
+			                         <div class="row">
 			                              
 			                          <div class="col-sm-6 form-group">
 			                                <label for="name"> Call Time:</label>
@@ -337,27 +329,17 @@
 			                                <form:input type = "text" class="form-control" id="callDate" name = "callDate" path="callDate" readonly="true"/>
 			                            </div>
 			                        </div>
-			                        
-			                        <div class="row">
-			                              
+			                         <div class="row">			                              
 			                            <div class="col-lg-6 form-group">
 			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" required="true">
+			                              <form:select path="callCategory" class="form-control required" id="callCategory" readonly="true">
 											   	<form:option value="" label="--- Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                         	</div>
-			                         	<!-- <div class="col-lg-6 form-group">
-			                             <label for="email"> Rebuttal Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" required="true">
-											   	<form:option value="" label="--- Select Rebuttal Call Category---"/>
-											   	<form:option value="1" label="QAM"/>
-											   	<form:option value="2" label="EDI"/>
-											</form:select> 			                                
-			                         	</div> -->
 			                         	<div class="col-lg-6 form-group">
 			                                <label for="lob"> LOB:</label>
-			                                <form:select path="lob" class="form-control required" id="lob" required="true">
+			                                <form:select path="lob" class="form-control required" id="lob" readonly="true">
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
 											  	<form:option value="Electronic Data Interchange (EDI)" />
@@ -366,6 +348,23 @@
 											</form:select> 
 			                            </div>
 			                         </div>
+			                        
+			                        <div class="row">
+			                             
+			                         	<div class="col-sm-6 form-group">
+			                                <label for="name"> QM Name/ID:</label>
+			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
+			                                <form:input type = "hidden" name = "id" path="id" />
+			                            </div>
+			                            <div class="col-sm-6 form-group" id="datePostedDiv">
+			                                <label for="name"> Date Posted:</label>
+			                                <form:input type = "text" class="form-control" id="datePosted" name = "datePosted" path="datePosted" readonly="true"/>
+			                            </div>
+			                        </div>
+			                        
+			                       
+			                        
+			                       
 			                         <div class="row">
 			                         	<c:if test="${rebuttal.id != 0}">
 			                         	 <div class="col-sm-6 form-group">
@@ -436,8 +435,9 @@
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name">Attachments:</label>			                                
-			                               <input class="form-control" id="file" type="file" name="uploadAttachment" style="box-sizing: content-box;" >
-										</input>
+			                               
+			                                <form:input type="file" path="rebuttalFileObject" id="rebuttalFileObject" class="form-control input-sm"/>
+										
 			                            </div>		                           
 			                        </div>       
 				                    

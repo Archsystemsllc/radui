@@ -290,10 +290,22 @@ public class ReportsController {
 				
 				finalSortedMap.putAll(finalResultsMap);
 				
-				if(reportsForm.getScoreCardType().equalsIgnoreCase("")) {
-					model.addAttribute("AllScoreCardReport",true);
+				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+					model.addAttribute("AllScoreCardReport_All",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
-					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records");
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (All Records)");
+					
+					
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
+					model.addAttribute("AllScoreCardReport_Pass",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Pass Records)");
+					
+					
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
+					model.addAttribute("AllScoreCardReport_Fail",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Fail Records)");
 					
 					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
@@ -422,10 +434,22 @@ public class ReportsController {
 				
 				finalSortedMap.putAll(finalResultsMap);
 				
-				if(reportsForm.getScoreCardType().equalsIgnoreCase("")) {
-					model.addAttribute("AllScoreCardReport",true);
+				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+					model.addAttribute("AllScoreCardReport_All",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
-					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records");
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (All Records)");
+					
+					
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
+					model.addAttribute("AllScoreCardReport_Pass",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Pass Records)");
+					
+					
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
+					model.addAttribute("AllScoreCardReport_Fail",true);
+					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Fail Records)");
 					
 					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {

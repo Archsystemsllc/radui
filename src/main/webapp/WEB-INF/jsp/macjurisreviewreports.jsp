@@ -115,7 +115,7 @@
 					                <div class="col-md-14 col-md-offset-1 form-container">
 					                    <h2>${ReportTitle}</h2> 
 					                  	
-				                        <c:if test="${AllScoreCardReport == true}">
+				                        <c:if test="${AllScoreCardReport_All == true}">
 				                         <div class="row">
 				                            <div class="col-sm-12 form-group">
 				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
@@ -133,6 +133,90 @@
 													<display:column title="Scoreable Pass Percent" sortable="true" style="text-align:center;" >
 														${row.scorablePassPercent}%
 													</display:column>												
+													<display:column property="scorableFail" title="Scoreable Fail Count" sortable="true" style="text-align:center;"/>													
+													
+													<display:column title="Scoreable Fail Percent" sortable="true" style="text-align:center;" >
+														${row.scorableFailPercent}%
+													</display:column>	
+													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>													
+													
+													<display:column title="Non Scoreable Percent" sortable="true" style="text-align:center;" >
+														${row.nonScorablePercent}%
+													</display:column>
+													<display:column property="doesNotCount_Number" title="Does Not Count" sortable="true" style="text-align:center;"/>
+													<display:column title="Does Not Count Percent" sortable="true" style="text-align:center;" >
+														${row.doesNotCount_Percent}%
+													</display:column>	
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.pdf" value="true" />
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+				                        </c:if>
+				                        <c:if test="${AllScoreCardReport_Pass == true}">
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" >
+													
+													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/AlL" >${row.macName}</a></span>
+													</display:column>
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													
+													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
+													<display:column property="scorablePass" title="Scoreable Pass Count" sortable="true" style="text-align:center;"/>													
+												
+													<display:column title="Scoreable Pass Percent" sortable="true" style="text-align:center;" >
+														${row.scorablePassPercent}%
+													</display:column>												
+													
+													<display:column property="nonScorableCount" title="Non Scoreable Count" sortable="true" style="text-align:center;"/>													
+													
+													<display:column title="Non Scoreable Percent" sortable="true" style="text-align:center;" >
+														${row.nonScorablePercent}%
+													</display:column>
+													<display:column property="doesNotCount_Number" title="Does Not Count" sortable="true" style="text-align:center;"/>
+													<display:column title="Does Not Count Percent" sortable="true" style="text-align:center;" >
+														${row.doesNotCount_Percent}%
+													</display:column>	
+													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
+													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
+													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.pdf" value="true" />
+														
+												</display:table>
+												<c:if test="${fn:length(MAC_JURIS_REPORT.values()) eq 0}">
+												   <span>No Data Found</span>	
+												</c:if>	
+				                            </div>		                           
+				                        </div>  
+				                        </c:if>
+				                        <c:if test="${AllScoreCardReport_Fail == true}">
+				                         <div class="row">
+				                            <div class="col-sm-12 form-group">
+				                                <display:table class="display hover stripe cell-border " id="row" name="${MAC_JURIS_REPORT.values()}" 
+													requestURI="" keepStatus="true" clearStatus="${storepage == 'clear'}" style="width:95%;font-size:85%;" export="true" pagesize="15" sort="list" >
+													
+													<display:column title="MAC" sortable="true" style="text-align:center;" media="html">
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/${row.macName}/${row.jurisdictionName}/AlL" >${row.macName}</a></span>
+													</display:column>
+													<display:column property="macName" title="MAC" sortable="true" style="text-align:center;" media="pdf csv excel"/>
+													<display:column property="jurisdictionName" title="Jurisdiction" sortable="true" style="text-align:center;"/>
+													
+													<display:column property="scorableCount" title="Scoreable Count" sortable="true" style="text-align:center;"/>
+																			
 													<display:column property="scorableFail" title="Scoreable Fail Count" sortable="true" style="text-align:center;"/>													
 													
 													<display:column title="Scoreable Fail Percent" sortable="true" style="text-align:center;" >

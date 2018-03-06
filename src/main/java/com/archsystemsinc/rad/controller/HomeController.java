@@ -109,6 +109,7 @@ public class HomeController {
 			RAD_WS_URI = radServicesEndPoint;
 			  User form = new User();
 			  model.addAttribute("userForm", form);
+			  model.addAttribute("menu_highlight", "home");
 			  
 			  session.setAttribute("SS_USER_FOLDER","admin");
 			 if(MAC_ID_MAP == null) {
@@ -137,6 +138,7 @@ public class HomeController {
 			RAD_WS_URI = radServicesEndPoint;
 			  User form = new User();
 			  model.addAttribute("userForm", form);
+			  model.addAttribute("menu_highlight", "home");
 			 
 			  session.setAttribute("SS_USER_FOLDER","quality_manager");
 			 if(MAC_ID_MAP == null) {
@@ -162,6 +164,7 @@ public class HomeController {
 		  RAD_WS_URI = radServicesEndPoint;
 		  User form = new User();
 		  model.addAttribute("userForm", form);
+		  model.addAttribute("menu_highlight", "home");
 		 
 		  session.setAttribute("SS_USER_FOLDER","cms_user");
 		 if(MAC_ID_MAP == null) {
@@ -184,6 +187,7 @@ public class HomeController {
 		  RAD_WS_URI = radServicesEndPoint;
 		  User form = new User();
 		  model.addAttribute("userForm", form);
+		  model.addAttribute("menu_highlight", "home");
 		  
 		  session.setAttribute("SS_USER_FOLDER","quality_monitor");
 		 if(MAC_ID_MAP == null) {
@@ -205,6 +209,7 @@ public class HomeController {
 		  RAD_WS_URI = radServicesEndPoint;
 		  User form = new User();
 		  model.addAttribute("userForm", form);
+		  model.addAttribute("menu_highlight", "home");
 		  
 		  session.setAttribute("SS_USER_FOLDER","mac_admin");
 		 if(MAC_ID_MAP == null) {
@@ -228,6 +233,7 @@ public class HomeController {
 		  RAD_WS_URI = radServicesEndPoint;
 		  User form = new User();
 		  model.addAttribute("userForm", form);
+		  model.addAttribute("menu_highlight", "home");
 		  
 		  session.setAttribute("SS_USER_FOLDER","mac_user");
 		 if(MAC_ID_MAP == null) {

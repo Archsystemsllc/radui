@@ -1,5 +1,6 @@
 package com.archsystemsinc.rad.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -14,12 +15,7 @@ public class User {
 	private String passwordConfirm;
 	private String passwordFromdb;
 	
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
+	
 	private Role role;
 	private OrganizationLookup organizationLookup;
 	private String createdBy;
@@ -45,6 +41,31 @@ public class User {
 	private Date lastLoggedinDate;
 	
 	
+	//Temporary Variables
+	
+	private ArrayList<String> jurIdList;
+	
+	private String roleString;
+	
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+	
+	public String getRoleString() {
+		return roleString;
+	}
+	public void setRoleString(String roleString) {
+		this.roleString = roleString;
+	}
+	public ArrayList<String> getJurIdList() {
+		return jurIdList;
+	}
+	public void setJurIdList(ArrayList<String> jurIdList) {
+		this.jurIdList = jurIdList;
+	}
 	public Date getLastLoggedinDate() {
 		return lastLoggedinDate;
 	}

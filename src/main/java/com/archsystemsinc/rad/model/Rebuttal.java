@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Rebuttal  {	
 	
 	private int id;
@@ -113,7 +115,72 @@ public class Rebuttal  {
 	
 	private ArrayList<Integer> jurisIdList;
 	
+	private byte[] rebuttalFileAttachment;
 	
+
+	private String fileName;
+	
+
+	private String fileDescription;
+	
+
+	private String fileType;
+	
+	private MultipartFile rebuttalFileObject;
+	
+	
+	
+	
+	public MultipartFile getRebuttalFileObject() {
+		return rebuttalFileObject;
+	}
+
+
+	public void setRebuttalFileObject(MultipartFile rebuttalFileObject) {
+		this.rebuttalFileObject = rebuttalFileObject;
+	}
+
+
+	public String getFileName() {
+		return fileName;
+	}
+
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+
+	public String getFileDescription() {
+		return fileDescription;
+	}
+
+
+	public void setFileDescription(String fileDescription) {
+		this.fileDescription = fileDescription;
+	}
+
+
+	public String getFileType() {
+		return fileType;
+	}
+
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+
+	public byte[] getRebuttalFileAttachment() {
+		return rebuttalFileAttachment;
+	}
+
+
+	public void setRebuttalFileAttachment(byte[] rebuttalFileAttachment) {
+		this.rebuttalFileAttachment = rebuttalFileAttachment;
+	}
+
+
 	public ArrayList<Integer> getJurisIdList() {
 		return jurisIdList;
 	}
