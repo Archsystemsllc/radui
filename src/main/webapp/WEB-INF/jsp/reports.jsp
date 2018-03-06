@@ -244,7 +244,7 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> MAC:</label>
 			                               
-										<form:select path="macId" class="form-control required" id="macId" required="true">
+										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:option value="0" label="---Select All---"/>
 										   <form:options items="${macIdMap}" />
@@ -253,7 +253,7 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="jurisId"> Jurisdiction:</label>
-										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" multiple="true">
+										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
 										  
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
@@ -262,7 +262,7 @@
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Program:</label>
-										<form:select path="programId" class="form-control required" id="programId" required="true" >
+										<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
 										   <form:option value="" label="---Select Program---"/>
 										    <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${programMapEdit}" />
@@ -270,7 +270,7 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> PCC/Location:</label>
-			                                <form:select path="loc" class="form-control required" id="loc" >
+			                                <form:select path="loc" class="form-control required" id="loc" title="Select one Provider Contact Centers/Location from the List">
 			                                	<form:option value="" label="---Select PCC/Location---"/>
 											   <form:option value="ALL" label="---Select All---"/>
 										   		<form:options items="${locationMapEdit}" />
@@ -282,11 +282,11 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> From Date:</label>
 			                             
-										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" required="true"/>
+										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" required="true" title="Choose From Date from the Calendar"/>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> To Date:</label>
-			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"  required="true"/>
+			                                <label for="email"> To Date:</label>P
+			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List"/>
 			                            </div>
 			                        </div>
 			                        
@@ -301,7 +301,7 @@
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
 			                                <label for="scoreCardType"> ScoreCard Type:</label> 
-										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" >
+										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" title="Select one ScoreCard Type from the List" >
 											   	<form:option value="" label="ALL"/>
 											  	<form:option value="Scoreable" />
 											  	<form:option value="Non-Scoreable" />
@@ -310,7 +310,7 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="complianceTypeDiv">
 			                                <label for="complianceReportType"> Compliance Type:</label> 
-										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" >
+										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" title="Select one Compliance Type from the List" >
 											   	<form:option value="" label="ALL"/>
 											  	<form:option value="Compliant" />
 											  	<form:option value="Non-Compliant" /> 	
@@ -318,7 +318,7 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="callResultDiv">
 			                            <label for="callResult"> Call Result:</label> 
-			                                <form:select path="callResult" class="form-control required" id="callResult" >
+			                                <form:select path="callResult" class="form-control required" id="callResult" title="Select one Call Result from the List" >
 											   	<form:option value="All" Label="Both Pass and Fail"/>
 											  	<form:option value="Pass" />
 											  	<form:option value="Fail" />											  										  	
@@ -326,14 +326,14 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="callCategoryTypeDiv">
 			                            <label for="callCategoryType"> Call Category:</label> 
-			                               <form:select path="callCategoryType" class="form-control" id="callCategoryType" >
+			                               <form:select path="callCategoryType" class="form-control" id="callCategoryType" title="Select one Call Category Type from the List">
 											   	<form:option value="ALL" label="ALL"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 		
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="rebuttalStatusDiv">
 			                            <label for="rebuttalStatus"> Rebuttal Status:</label> 
-			                                <form:select path="rebuttalStatus" class="form-control required" id="rebuttalStatus" >
+			                                <form:select path="rebuttalStatus" class="form-control required" id="rebuttalStatus" title="Select one Rebuttal Status from the List">
 											   	<form:option value="All" Label="ALL"/>
 											  	<form:option value="Completed" />
 											  	<form:option value="Pending" />											  										  	
@@ -343,8 +343,8 @@
 			                        
 			                          <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="generateReport" type="submit">Generate Report</button></span>
-									<span><button class="btn btn-primary" id="reset" type="reset">Reset</button></span></td>
+									<td><span><button class="btn btn-primary" id="generateReport" type="submit" title="Select Generate Report button to Generate Report">Generate Report</button></span>
+									<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to reset the Form">Reset</button></span></td>
 							       </tr>
 							</table>
 				                    

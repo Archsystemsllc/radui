@@ -14,7 +14,7 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<title>Log in - ADDA</title>
+<title>Log in - QAM</title>
 <link href="${contextPath}/resources/css/bootstrap.min.css"
 	rel="stylesheet">
 <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -48,6 +48,10 @@
 <body id="b"  style="height:100%">
 	<jsp:include page="header_home.jsp" />
 	<div class="container" id="mid">
+	
+<br>
+<br>
+	<h2 align="center">Welcome to Quality Assurance Monitoring System!</h2>
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="log_in">
@@ -57,20 +61,20 @@
 								class="form-signin">
 								<!-- <h2 style="text-align: center;">PQRS - Interactive Map</h2>
 								<br> -->
-								<h1 class='app-title'>Login<br> <br>
-								</h1>
+								<h2 class='app-title'>Login<br> <br>
+								</h2>
 								<div class="form-group ${error != null ? 'has-error' : ''}">
 									<span>${message}</span>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span> -->
 									<label for="username">Username</label>
 									<input style="margin: 0px" name="username" id="username" type="text"
-										class="form-control" placeholder="Username" autofocus="true" title="Please fill out this field"/>
+										class="form-control" placeholder="Username" autofocus="true" title="Please fill out User Name field"/>
 									<!-- </div> -->
 									<br>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
 									<label for="password">Password</label>
 									<input style="margin: 0px" name="password" id="password" type="password"
-										class="form-control" placeholder="Password" title="Please fill out this field"/>
+										class="form-control" placeholder="Password" title="Please fill out Password field"/>
 									<!-- </div> -->
 									<span>${error}</span> <input type="hidden"
 										name="${_csrf.parameterName}" value="${_csrf.token}" /> <br>
@@ -86,12 +90,12 @@
 					</div>
 					
 					</div>
-			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qam@cms.hhs.gov">qam@cms.hhs.gov</a>.</div>
+			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qam@cms.hhs.gov" title="Email Address qam@cms.hhs.gov"><strong><u>qam@cms.hhs.gov</u></strong></a>.</div>
 
 <div style="padding-left:224px;padding-bottom:20px;">Disclaimer: This web site is not hosted on a Centers for Medicare & Medicaid Services (CMS) web server.</div>
 
 
-<div style="padding-bottom:20px;border:1px solid black;padding-leftt:10px;"><b>NOTICE - By logging into this system:</b>
+<div style="padding-bottom:20px;border:1px solid black;padding-leftt:10px;"><strong>NOTICE - By logging into this system:</strong></b>
 <ul style="padding-top:10px;padding-right:5px;">
 <li>You are accessing a U.S. Government information system. This information system is provided for U.S. Government-authorized use only.</li>
 <li>Unauthorized or improper use of this system may result in disciplinary action, as well as civil and criminal penalties.</li>

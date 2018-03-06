@@ -9,7 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - ScoreCard</title>
+<title>QAM - Add New ScoreCard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -498,29 +498,29 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamFullName"> QM Name/QM ID: </label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>			                                
+			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> Scorecard Type:</label></br>
 			                                <c:if test="${scorecardType==null}">
-											   <form:radiobutton path="scorecardType" value="Scoreable" checked="checked"/>&nbsp;Scoreable&nbsp;
+											   <form:radiobutton path="scorecardType" value="Scoreable" checked="checked" title="Scoreable Radio button"/>&nbsp;Scoreable&nbsp;
 											</c:if>	
 											<c:if test="${scorecardType!=null}">
 											   <form:radiobutton path="scorecardType" value="Scoreable" />&nbsp;Scoreable&nbsp;
 											</c:if>			                                
-										  	&nbsp;<form:radiobutton path="scorecardType" value="Non-Scoreable" />&nbsp;Non-Scoreable&nbsp;
-										  	&nbsp;<form:radiobutton path="scorecardType" value="Does Not Count" />&nbsp;Does Not Count&nbsp;
+										  	&nbsp;<form:radiobutton path="scorecardType" value="Non-Scoreable" title="Non Scoreable radio button"/>&nbsp;Non-Scoreable&nbsp;
+										  	&nbsp;<form:radiobutton path="scorecardType" value="Does Not Count" title="Does not count radio button"/>&nbsp;Does Not Count&nbsp;
 			                            </div>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> QM Start Date/Time:</label>
 			                                <input type="hidden" id="DatePickerHidden" />
-			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true"/>
+			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true" title="Choose Quality Manager Start Date/Time from the Calendar"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> QM End Date/Time:</label>
-			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true"/>
+			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true" title="Choose Quality Manager End Date/Time from the Calendar"/>
 			                            </div>
 			                        </div>
 				                    
@@ -535,7 +535,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="callMonitoringDate"> Call Monitoring Date:</label>
-			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true"/>
+			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true" title="Choose Call Monitoring Date from the Calendar"/>
 			                            	<input type="hidden" id="callMonitoringDate_Alt"></input>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -548,7 +548,7 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="macId"> MAC:</label>
 			                               
-										<form:select path="macId" class="form-control required" id="macId" required="true">
+										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medicare Administrative Contractor Id from the List">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 									
@@ -558,7 +558,7 @@
 			                                <label for="jurId"> Jurisdiction:</label>
 			                             
 										
-										<form:select path="jurId" class="form-control required" id="jurId" required="true">
+										<form:select path="jurId" class="form-control required" id="jurId" required="true" title="Select one Jurisdiction from the List">
 										   <form:option value="" label="---Select Jurisdiction---"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
@@ -568,14 +568,14 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="programId"> Program:</label>
 			                             
-										<form:select path="programId" class="form-control required" id="programId"  required="true">
+										<form:select path="programId" class="form-control required" id="programId"  required="true" title="Select one Program from the List">
 										   <form:option value="" label="---Select Program---"/>
 										   <form:options items="${programMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="lob"> LOB:</label>
-			                                <form:select path="lob" class="form-control required" id="lob" required="true">
+			                                <form:select path="lob" class="form-control required" id="lob" required="true" title="Select one Line of Business from the List">
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
 											  	<form:option value="Electronic Data Interchange (EDI)" />
@@ -596,29 +596,29 @@
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="callTime"> Call Time:</label>			                                 
-			                                <form:input class="form-control required" type = "text" name = "callTime" path="callTime" required="true"/>
+			                                <form:input class="form-control required" type = "text" name = "callTime" path="callTime" required="true" title="Choose Call Time"/>
 			                                <input type="hidden" id="callTime_Alt"></input>
 			                            </div>
 			                             <div class="col-lg-6 form-group">
 			                                <label for="callDuration"> Call Duration:</label>
-			                                <form:input class="form-control required"  type = "text" name = "callDuration" path="callDuration" required="true"/>
+			                                <form:input class="form-control required"  type = "text" name = "callDuration" path="callDuration" required="true" title="Choose Call Duration"/>
 			                            </div>
 			                        </div>
 				                   
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="csrFullName"> CSR Full Name:</label>
-			                                <form:input class="form-control required" type = "text" name = "csrFullName" path="csrFullName" required="true"/>
+			                                <form:input class="form-control required" type = "text" name = "csrFullName" path="csrFullName" required="true" title="Enter Customer Service Associative Full Name"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	<label for="csrLevel"> CSR Level:</label>
-			                                <form:input class="form-control" type = "text" name = "csrLevel" path="csrLevel"  readonly="true"/>	
+			                                <form:input class="form-control" type = "text" name = "csrLevel" path="csrLevel"  readonly="true" title="Enter Customer Service Representaive Level"/>	
 			                            </div>
 			                        </div>
 			                         <div class="row">
 			                        <div class="col-lg-6 form-group">
 			                                <label for="email"> Call Language: </label>
-			                                <form:select path="callLanguage" class="form-control required" id="callLanguage" required="true">
+			                                <form:select path="callLanguage" class="form-control required" id="callLanguage" required="true" title="Choose Required Call Language from the List">
 											   	<form:option value="" label="--- Select Language---"/>
 											  	<form:option value="English" />
 											  	<form:option value="Spanish" />											  	
@@ -627,20 +627,20 @@
 										</div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="macCallReferenceNumber"> MAC Call Reference ID:</label>
-			                                <form:input class="form-control" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true"/>
+			                                <form:input class="form-control" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true" title="Enter Medicare Administrative Contractor Reference ID"/>
 			                               </div>
 			                        </div>
 			                        <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategoryId" class="form-control required" id="callCategoryId" required="true">
+			                              <form:select path="callCategoryId" class="form-control required" id="callCategoryId" required="true" title="Select one required Call Category from the List">
 											   	<form:option value="" label="---Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="callSubCategoryId" class="form-control required" id="callSubCategoryId" required="true">
+			                                <form:select path="callSubCategoryId" class="form-control required" id="callSubCategoryId" required="true" title="Select one required Call Sub Category from the List">
 											   	<form:option value="" label="---Select Call Sub Category---"/>											   	
 											   	<form:options items="${subCategorylMapEdit}" />												  						  	
 											</form:select> 
@@ -658,39 +658,39 @@
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected , please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" required="true"/>&nbsp;Yes&nbsp;
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" required="true"/>&nbsp;No
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" required="true" title="Select Radiobutton Yes, if accurate information was provided"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" required="true" title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
 			                            </div>			                           
 			                        </div>
 			                        <div class="row" id="accuracyCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureReason">Accuracy Call Failure Reason: </label>
-			                                 <form:input class="form-control required" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason"  />
+			                                 <form:input class="form-control required" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureTime">Accuracy Call Failure Time:</label>
-			                                <form:input class="form-control required" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime"  />
+			                                <form:input class="form-control required" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime" title="Choose time for the Accuracy Time Failure" />
 			                               </div>
 			                        </div>
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected , please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true"/>&nbsp;Yes&nbsp;
-										  	<form:radiobutton path="csrPrvCompInfo" value="No" />&nbsp;No
+			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true" title="Select Radiobutton Yes, if complete information was provided"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvCompInfo" value="No" title="Select Radiobutton No, if complete information was not provided"/>&nbsp;No
 			                            </div>
 			                           
 			                        </div> 
 			                         <div class="row" id="completenessCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureReason">Completeness Call Failure Reason: </label>
-			                                 <form:input class="form-control required" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason"  />
+			                                 <form:input class="form-control required" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureTime">Completeness Call Failure Time:</label>
-			                                <form:input class="form-control required" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime"  />
+			                                <form:input class="form-control required" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime" title="Choose time for the Accuracy Time Failure"/>
 			                               </div>
 			                        </div>
 				                    
@@ -773,7 +773,7 @@
 			                            <div class="col-lg-6 form-group" >
 			                                <label for="name"> Call Result:</label>
 			                                
-											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" />
+											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" title="Enter Call Result"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                             
@@ -783,7 +783,7 @@
 			                         <div class="row" id="failReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Call Failure Reason Comments:</label>
-			                                <form:textarea class="form-control required" type = "textarea" name = "failReasonComments" path="failReasonComments" />
+			                                <form:textarea class="form-control required" type = "textarea" name = "failReasonComments" path="failReasonComments" title="Enter Call Failure Reason" />
 			                            </div>		                           
 			                        </div>
 			                        <div class="row" id="nonScoreableReasonCommentsDiv">
@@ -803,7 +803,7 @@
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Additional Comments Box:</label>
-			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" />
+			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" title="Enter Additional Comments" />
 			                            </div>		                           
 			                        </div>       
 				                    
@@ -817,7 +817,7 @@
 			                            <div class="col-lg-6 form-group">
 			                               
 			                                <label for="scoreCardStatusUpdateDateTime">User Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="scoreCardStatusUpdateDateTime" readonly="true"/>
+			                                <form:input class="form-control required" type ="text" path="scoreCardStatusUpdateDateTime" readonly="true" title="Choose User Calibration Update Date from the Calendar"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            </div>
@@ -826,7 +826,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamCalibrationStatus">QAM Admin Calibration Status:</label>
-			                                 <form:select path="qamCalibrationStatus" class="form-control required"  readonly="true">
+			                                 <form:select path="qamCalibrationStatus" class="form-control required"  readonly="true" title="Select QAM Admin Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
 											   	<form:option value="Pass" label="Pass" />	
 											   	<form:option value="Fail" label="Fail" />											  						  	
@@ -835,7 +835,7 @@
 			                            <div class="col-lg-6 form-group">
 			                               
 			                                <label for="qamCalibrationUpdateDateTime">QAM Admin Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" readonly="true"/>
+			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" readonly="true" title="Choose QAM Admin Calibration Update Date from the Calendar"/>
 			                            
 			                                
 			                            </div>
@@ -843,7 +843,7 @@
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="cmsCalibrationStatus">CMS Calibration Status:</label>
-			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  readonly="true">
+			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  readonly="true" title="Select CMS Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
 											   	<form:option value="Pass" label="Pass" />	
 											   	<form:option value="Fail" label="Fail" />											  						  	
@@ -852,7 +852,7 @@
 			                            <div class="col-lg-6 form-group">
 			                                
 			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" readonly="true"/>
+			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" readonly="true" title="Choose CMS Calibration Update Date from the Calendar"/>
 			                            
 			                                
 			                            </div>
@@ -864,12 +864,12 @@
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><c:if test="${scorecard.id == 0}">
-										<span><button class="btn btn-primary" id="create"  type="submit">Save</button></span>
+										<span><button class="btn btn-primary" id="create"  type="submit" title="Select Save button to Save Scorecard details">Save</button></span>
 									</c:if>
 									<c:if test="${scorecard.id > 0}">
-										<span><button class="btn btn-primary" id="create"  type="submit">Update</button></span>
+										<span><button class="btn btn-primary" id="create"  type="submit" title="Select update button to update Scorecard details">Update</button></span>
 									</c:if>
-									<span><button class="btn btn-primary" id="close2" type="button">Close</button></span></td>
+									<span><button class="btn btn-primary" id="close2" type="button" title="Select Close button to navigate to Scorecard List ">Close</button></span></td>
 							       </tr>
 							</table>
 								<!-- </div> -->

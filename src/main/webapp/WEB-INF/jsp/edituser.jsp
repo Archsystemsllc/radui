@@ -183,8 +183,10 @@
 			                                <label for="userName"> User Name:</label> 
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="userName" class="form-control required" placeholder=""
-								                            autofocus="true"></form:input>
+
+								                <form:input type="text" path="userName" class="form-control" placeholder=""
+								                            autofocus="true" readonly="true" title="Edit Username field"></form:input>
+
 								                <form:errors path="userName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -198,7 +200,7 @@
 			                               <label for="password"> Password:</label> 
 											 <spring:bind path="password">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
+								                <form:input type="password" path="password" class="form-control required" placeholder="" title="Edit Password field"></form:input>
 								                <form:errors path="password"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -207,8 +209,9 @@
 			                                <label for="passwordConfirm"> Confirm your password:</label> 
 											<spring:bind path="passwordConfirm">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="passwordConfirm" class="form-control"
-								                            placeholder=""></form:input>
+
+								                <form:input type="password" path="passwordConfirm" class="form-control required"
+								                            placeholder="" title="Edit Confirm Password field"></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -219,8 +222,10 @@
 			                              <label for="firstName"> First Name:</label> 
 											<spring:bind path="firstName">
 											<div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="firstName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+
+								                <form:input type="text" path="firstName" class="form-control required" placeholder=""
+								                            autofocus="true" title="Edit First Name field"></form:input>
+
 								                <form:errors path="firstName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -228,57 +233,56 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="middleName"> Middle Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="middleName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+
+								                <form:input type="text" path="middleName" class="form-control required" placeholder=""
+								                            autofocus="true" title="Edit Middle Name Field"></form:input>
 								                <form:errors path="middleName"></form:errors>
 			                            	</div>
-			                        	</div>
-				                    
+			                        	</div>				                    
 				                	</div>
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
 			                              <label for="lastName"> Last Name:</label> 
-			                               <spring:bind path="firstName">
-											 <div class="form-group  ${status.error ? 'has-error' : ''}">
-											
-								                <form:input type="text" path="lastName" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
+			                              <spring:bind path="firstName">
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="lastName" class="form-control required" placeholder=""
+								                            autofocus="true" title="Edit Last Name field"></form:input>
 								                <form:errors path="lastName"></form:errors>
 								            </div>
 								           </spring:bind>
-			                            </div>
+										</div>													           
 			                            <div class="col-lg-6 form-group">
 			                                <label for="emailId">Email Address:</label> 
 											 <div class="form-group required ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="emailId" class="form-control" placeholder=""
-								                            autofocus="true"></form:input>
-								                <form:errors path="emailId"></form:errors>
-								            </div>
-			                        	</div>				                    
+								                <form:input type="text" path="emailId" class="form-control required" placeholder=""
+								                            autofocus="true" title="Edit Email ID field"></form:input>
+												<form:errors path="emailId"></form:errors>
+											</div>												                    
+				                		</div>
 				                	</div>
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> Role:</label>
 											<form:select path="role.id"
-													class="form-control required" id="roleId" required="true">
-													<form:option value="" label="---Select Role---" />
+													class="form-control required" id="roleId" required="true">												
+													<option value="" label="--- Select Role---"  title="Select one role from the list"/>
 													<form:options items="${roleIds}" />
-												</form:select>
+											</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                            	<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
-													class="form-control required" id="organizationLookupId" required="true">
+			                            	<label for="organization"> Organization:</label> 
+			                            	<form:select path="organizationLookup.id"
+													class="form-control required" id="organizationLookupId" required="true" title="Select one role from the Organization">
+													
 													<form:option value="" label="---Select Organization---" />
 													<form:options items="${orgIds}" />
 												</form:select>
-			                                
 			                        	</div>				                    
 				                	</div>
 				                	<div class="row">
-			                            <div class="col-lg-6 form-group" id="macIdBlock">
-			                          
+			                            <div class="col-lg-6 form-group" id="macIdBlock">			                          
 										<label for="name"> MAC:</label>
-			                                <form:select path="macId" id="macId" class="form-control required">
+			                                <form:select path="macId" id="macId" class="form-control required" required="true" title="Select one MAC Id from list">
 											   <form:option value="" label="---Select MAC---"/>
 											   <form:options items="${macIds}" />
 											</form:select> 	
@@ -286,7 +290,7 @@
 			                            <div class="col-lg-6 form-group"  id="jurIdBlock">
 			                            
 			                           	<label for="jurId"> Jurisdiction:</label>
-			                               <form:select path="jurId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true">
+			                               <form:select path="jurId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one Jurisdiction from list">
 										   <form:option value="" label="---Select Jurisdiction---"/>								   
 										</form:select>	
 			                        	</div>				                    
@@ -295,7 +299,7 @@
 			                            <div class="col-lg-6 form-group" id="pccIdBlock">
 			                          
 										<label for="pccId"> PCC Location:</label>
-										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true">
+										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" required="true" title="Select one PCC Location from list">
 										   <form:option value="" label="---Select PCC Location---"/>								   
 										</form:select>	
 			                            </div>
@@ -311,14 +315,19 @@
 			                            <div class="col-lg-6 form-group">
 			                            	
 			                        	</div>				                    
-				                	</div>
-									
+				                	</div>							
+										
+                                    <form:input type="hidden" path="PasswordFromdb" value="${PasswordFromdb}"/>
+                                    
+									<form:input type="hidden" path="id" value="${id}"/>
+									<form:input type="hidden" path="updatedBy" value="${pageContext.request.userPrincipal.name}"/>
+
 									   </div>
 									   </div>
+
 									</div>
 								</div>
-							</div>
-						</div>
+							
 				</td>
 			</tr>
 
