@@ -88,7 +88,7 @@
 							</sec:authorize>
 											
 							</display:column>
-							<display:setProperty name="export.excel.filename"	value="RebuttalReport.xls" />
+							<display:setProperty name="export.excel.filename"	value="RebuttalReport.xls"/>
 							<display:setProperty name="export.csv.filename"	value="RebuttalReport.csv" />
 							<display:setProperty name="export.pdf.filename"	value="RebuttalReport.pdf" />
 							<display:setProperty name="export.pdf" value="true" />

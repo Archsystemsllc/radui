@@ -132,9 +132,10 @@ $(document).ready(function(){
 
 							<div class="table-users" style="width: 80%">
 								<div class="header">List of Scorecards</div>
-								<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
+							<!-- 	Removed Blank Space - 508 -->
+							<%-- 	<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
 								<c:if test="${ScoreCardFilter == true}">
-								<form:input type = "hidden" path="userId" />
+								<form:input type = "hidden" path="userId" /> --%>
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
@@ -219,7 +220,7 @@ $(document).ready(function(){
 											</table>
 										</div>
 									</div>
-								</c:if>
+							<%-- 	</c:if> --%>
 								<c:if test="${ReportFlag == true}">
 									<div class="row" style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
