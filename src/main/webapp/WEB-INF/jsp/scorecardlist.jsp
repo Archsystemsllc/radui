@@ -119,11 +119,12 @@ $(document).ready(function(){
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
+	<div role="main">
 	<table id="mid">
 		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardfilter"
 			id="scorecardfilterForm">
 			<tr>
-				<td style="vertical-align: top">
+				<td style="vertical-align: top" >
 
 					<div id="updates" class="boxed">
 
@@ -131,9 +132,10 @@ $(document).ready(function(){
 
 							<div class="table-users" style="width: 80%">
 								<div class="header">List of Scorecards</div>
-								<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
+							<!-- 	Removed Blank Space - 508 -->
+							<%-- 	<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
 								<c:if test="${ScoreCardFilter == true}">
-								<form:input type = "hidden" path="userId" />
+								<form:input type = "hidden" path="userId" /> --%>
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
@@ -218,7 +220,7 @@ $(document).ready(function(){
 											</table>
 										</div>
 									</div>
-								</c:if>
+							<%-- 	</c:if> --%>
 								<c:if test="${ReportFlag == true}">
 									<div class="row" style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
@@ -307,6 +309,7 @@ $(document).ready(function(){
 			</tr>
 		</form:form>
 	</table>
+	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

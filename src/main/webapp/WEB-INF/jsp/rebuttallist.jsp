@@ -37,7 +37,9 @@
 
 </head>
 <body>
+
 	<jsp:include page="admin_header.jsp"></jsp:include>
+		<div role="main">
 		<table id="mid">
 			<tr>
 				<td style="vertical-align: top">
@@ -86,7 +88,7 @@
 							</sec:authorize>
 											
 							</display:column>
-							<display:setProperty name="export.excel.filename"	value="RebuttalReport.xls" />
+							<display:setProperty name="export.excel.filename"	value="RebuttalReport.xls"/>
 							<display:setProperty name="export.csv.filename"	value="RebuttalReport.csv" />
 							<display:setProperty name="export.pdf.filename"	value="RebuttalReport.pdf" />
 							<display:setProperty name="export.pdf" value="true" />
@@ -103,6 +105,7 @@
 						</div>
 						</div>
 						</div></td></tr></table>
+						</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

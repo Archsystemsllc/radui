@@ -8,7 +8,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>CSR List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
@@ -479,6 +479,7 @@ $(function() {
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
+	<div role="main">
 	<div id="dialog-confirm" title="Current CSR List Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Are you sure you want to keep the current CSR list?</p>
 	</div>
@@ -528,6 +529,7 @@ Because a session cookie is never written to a drive, it is destroyed as soon as
 			</tr>
 		</form:form>
 	</table>
+	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

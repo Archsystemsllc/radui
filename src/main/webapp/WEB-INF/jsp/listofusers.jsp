@@ -55,7 +55,7 @@
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div>
+	<div role="main">
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
@@ -83,6 +83,7 @@
 											<label for="lastName"> Last Name:</label> 
 											<form:input type="text" path="lastName" class="form-control" title="Enter Last Name"/>
 										</div>
+										
 										<div class="col-md-3 col-md-offset-1 form-container">
 											<label for="roleId"> Role:</label> 
 											<form:select path="roleId"

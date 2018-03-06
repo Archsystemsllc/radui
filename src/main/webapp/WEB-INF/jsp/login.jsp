@@ -47,11 +47,10 @@
 
 <body id="b"  style="height:100%">
 	<jsp:include page="header_home.jsp" />
-	<div class="container" id="mid">
-	
-<br>
-<br>
-	<h2 align="center">Welcome to Quality Assurance Monitoring System!</h2>
+	<div class="container" id="mid" role="main">
+<!-- <br>
+<br> -->
+	<h2 align="center">Welcome to COMRAD!</h2>
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="log_in">
@@ -61,8 +60,7 @@
 								class="form-signin">
 								<!-- <h2 style="text-align: center;">PQRS - Interactive Map</h2>
 								<br> -->
-								<h2 class='app-title'>Login<br> <br>
-								</h2>
+								<h2 class='app-title'>Login</h2><!-- <br> <br> -->
 								<div class="form-group ${error != null ? 'has-error' : ''}">
 									<span>${message}</span>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span> -->
