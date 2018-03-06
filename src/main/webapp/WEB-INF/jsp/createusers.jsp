@@ -138,11 +138,12 @@ $(function(){
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div id="dialog-confirm" title="Close User Create Confirmation?">
+	<div role="main" id="dialog-confirm" title="Close User Create Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the User Create form without saving?</p>
 	</div>
 	<div>
-		<table id="mid">			
+		<table id="mid">	
+		
  			<form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createUser" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
@@ -439,6 +440,7 @@ $(function(){
 									</div>
 								</div>
 							</div>
+						</div>
 						</div>
 				</td>
 			</tr>

@@ -47,7 +47,7 @@
 
 <body id="b"  style="height:100%">
 	<jsp:include page="header_home.jsp" />
-	<div class="container" id="mid">
+	<div class="container" id="mid" role="main">
 	
 <br>
 <br>

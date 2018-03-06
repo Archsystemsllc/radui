@@ -7,7 +7,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM - Add New ScoreCard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
@@ -45,7 +45,7 @@
 	$(document).ready(function () {
 		//Required Fields Logic
 		$('.required').each(function(){
-		       $(this).prev('label').after("<span class='red'>*</span>");
+		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
 		});
 		
     	//Set Default Values    	
@@ -538,10 +538,10 @@
 			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true" title="Choose Call Monitoring Date from the Calendar"/>
 			                            	<input type="hidden" id="callMonitoringDate_Alt"></input>
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                      <!--       <div class="col-lg-6 form-group">
 			                                <label for="email"> </label>
 			                                
-			                            </div>
+			                            </div> -->
 			                        </div>
 				                   
 				                    <div class="row">
@@ -703,9 +703,9 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected , please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true"/>&nbsp;Yes&nbsp;
-										  <form:radiobutton path="csrFallPrivacyProv" value="No"/>&nbsp;No
+			                                <label for="csrPrivacyQ"> Did CSR follow privacy procedures? If 'No' was selected , please select the reason below:</label>
+			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true" id="csrPrivacyQ"/>&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrFallPrivacyProv" value="No" id="csrPrivacyQ"/>&nbsp;No
 			                            </div>		                           
 			                        </div>   
 			                         <div class="row" id="privacyCallFailureBlock">
@@ -735,9 +735,9 @@
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected , please select the reason below:</label>
-			                                <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" required="true"/>&nbsp;Yes&nbsp;
-										  <form:radiobutton path="csrWasCourteous" value="No"/>&nbsp;No
+			                                <label for="csrCourteousQ">Was the CSR courteous, friendly, and professional? If 'No' was selected , please select the reason below:</label>
+			                                <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" required="true" id="csrCourteousQ"/>&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrWasCourteous" value="No" id="csrCourteousQ"/>&nbsp;No
 			                            </div>		                           
 			                        </div>   
 			                         <div class="row" id="customerSkillsCallFailureBlock">

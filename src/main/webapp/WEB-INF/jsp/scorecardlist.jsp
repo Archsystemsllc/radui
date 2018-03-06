@@ -119,11 +119,12 @@ $(document).ready(function(){
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
+	<div role="main">
 	<table id="mid">
 		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardfilter"
 			id="scorecardfilterForm">
 			<tr>
-				<td style="vertical-align: top">
+				<td style="vertical-align: top" >
 
 					<div id="updates" class="boxed">
 
@@ -307,6 +308,7 @@ $(document).ready(function(){
 			</tr>
 		</form:form>
 	</table>
+	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

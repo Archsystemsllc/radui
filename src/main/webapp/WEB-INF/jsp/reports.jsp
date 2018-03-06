@@ -220,7 +220,7 @@
 </head>
 <body  >
 	<jsp:include page="admin_header.jsp"></jsp:include>
-
+	<div role="main">
 	<table id="mid">
 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReport" id="reportsFormId">
 			<tr>
@@ -232,9 +232,9 @@
 							
 							<div class="table-users" style="width: 80%">
 								<div class="header">Search Report Screen</div>	
-								<br/>
+								<!-- <br/>
 								<div id="sessionTimer" align="center" style="" ></div>
-								<br/>
+								<br/> -->
 				             <div class="row " >
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   
@@ -359,6 +359,7 @@
 			</tr>
 		</form:form>
 	</table>
+	</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

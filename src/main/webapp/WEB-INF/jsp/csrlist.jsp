@@ -493,7 +493,7 @@ $(function() {
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div id="dialog-confirm" title="Current CSR List Confirmation?">
+	<div role="main" id="dialog-confirm" title="Current CSR List Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Are you sure you want to keep the current CSR list?</p>
 	</div>
 	

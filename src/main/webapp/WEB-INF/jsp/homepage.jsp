@@ -39,7 +39,7 @@
 		<tr>
 			<td
 				style="background-color: #327a89; width: 30%; vertical-align: top; padding: 0px 25px">
-				<div style="color: #fff">
+				<div style="color: #fff"role="main">
 					<!-- <ul style="border-bottom: solid #fff 2px" type="square">
 						<li><h2
 								style="color: #fff; font-family: 'Rubik', sans-serif;">Description</h2></li>

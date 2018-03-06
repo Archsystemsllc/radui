@@ -53,7 +53,7 @@
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div>
+	<div role="main">
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>

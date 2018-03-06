@@ -37,7 +37,9 @@
 
 </head>
 <body>
+
 	<jsp:include page="admin_header.jsp"></jsp:include>
+		<div role="main">
 		<table id="mid">
 			<tr>
 				<td style="vertical-align: top">
@@ -103,6 +105,7 @@
 						</div>
 						</div>
 						</div></td></tr></table>
+						</div>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
