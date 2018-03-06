@@ -81,7 +81,7 @@
 							<display:column property="rebuttalStatus" title="Status" sortable="true" style="text-align:center;"/>
 							<display:column property="rebuttalResult" title="Result" sortable="true" style="text-align:center;"/>
 							
-							<<display:column title="Actions" style="text-align:center;">
+							<display:column title="Actions" style="text-align:center;">
 							<span><a class="action-icons c-pending"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-rebuttal/${rebuttalRow.id}" title="View Rebuttal List">View</a></span>
 							<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-rebuttal/${rebuttalRow.id}" title="Edit Rebuttal List">Edit</a></span>
