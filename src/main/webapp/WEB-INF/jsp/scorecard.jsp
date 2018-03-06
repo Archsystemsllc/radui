@@ -37,7 +37,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 
 <style type="text/css">
-	.red {  color:red;  }
+	.red {  color:#cd2026;  }
 </style>
 
 <script type="text/javascript">
