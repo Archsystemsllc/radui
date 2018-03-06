@@ -50,7 +50,7 @@
 	<div class="container" id="mid" role="main">
 <!-- <br>
 <br> -->
-	<h2 align="center">Welcome to Quality Assurance Monitoring System!</h2>
+	<h2 align="center">Welcome to COMRAD!</h2>
 		<div class="row">
 			<div class="col-xs-12">
 				<div id="log_in">
