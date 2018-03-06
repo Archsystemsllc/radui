@@ -65,8 +65,8 @@
 				</div>
 			</div>
 			<!--/.container-->
-		</div> --%> <!--/.top-bar--> <nav class="navbar navbar-inverse"
-		role="banner">
+		</div> --%> <!--/.top-bar--> 
+		<nav class="navbar navbar-inverse" role="banner">
 	<div class="container">
 		<div class="navbar-header" style="min-height: 110px;">
 			<!-- 	<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -105,14 +105,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="collapse navbar-collapse navbar-right">
-		<%-- 	<ul class="nav navbar-nav" style="padding-top:80px">
+<%-- 		<div class="collapse navbar-collapse navbar-right">
+			<ul class="nav navbar-nav" style="padding-top:80px">
 				<li class="active"><a
 					href="${pageContext.request.contextPath}/login">Home</a></li>
 				<li><a href="${pageContext.request.contextPath}/admin/dashboard">Hypothesis</a></li>
 				<li><a href="#">Contact Us</a></li>
-			</ul> --%>
-		</div>
+			</ul>
+		</div> --%>
 	</div>
 	<!--/.container--> 
 	</nav>
