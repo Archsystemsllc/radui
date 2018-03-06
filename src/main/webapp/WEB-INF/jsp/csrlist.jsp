@@ -558,8 +558,8 @@ $(function() {
 										
 			                            </div>
 			                            <div class="col-lg-6 form-group" id="jurisdictionK_Div">
-			                             <label for="name"> Jurisdiction:</label>
-			                               <form:select path="jurisdictionK"  id="jurisdictionK" class="form-control required" data-val="true">
+			                             <label for="jurisdictionName"> Jurisdiction:</label>
+			                               <form:select path="jurisdictionK"  id="jurisdictionK" class="form-control required" data-val="true" aria-label="jurisdictionName">
 										   <form:option value="" label="---Select Jurisdiction---"/>								   
 										</form:select>		
 			                            </div>

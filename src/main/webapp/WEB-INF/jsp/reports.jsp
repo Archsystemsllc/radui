@@ -8,9 +8,9 @@
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - ScoreCard</title>
+<title>QAM - Reports</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -285,16 +285,18 @@
 										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" required="true" title="Choose From Date from the Calendar"/>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> To Date:</label>P
+			                                <label for="email"> To Date:</label>
 			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List"/>
 			                            </div>
 			                        </div>
 			                        
 			                        <div class="row">
-			                            <div class="col-sm-6 form-group">			                                 
-											<form:radiobutton path="mainReportSelect" value="ScoreCard" />&nbsp;ScoreCard &nbsp;										                            
-										  	<form:radiobutton path="mainReportSelect" value="Compliance" />&nbsp;Compliance &nbsp;
-										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" />&nbsp;Rebuttal &nbsp;
+			                            <div class="col-sm-6 form-group">
+			                            <label for="reportType"> Report Type:</label>
+											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;ScoreCard &nbsp;										                            
+										  	<form:radiobutton path="mainReportSelect" value="Compliance" title="Choose Compliance"/>&nbsp;Compliance &nbsp;
+										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" title="Choose Rebuttal" />&nbsp;Rebuttal &nbsp;
+			                         	     
 			                            </div>
 			                        </div>
 			                        

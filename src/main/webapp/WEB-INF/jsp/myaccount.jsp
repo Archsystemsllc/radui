@@ -8,9 +8,9 @@
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - Create User</title>
+<title>QAM - My Account</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
 	rel="stylesheet" />
 <link rel="shortcut icon"
@@ -127,9 +127,9 @@
 								            </div>
 										</div>
 										<div class="col-md-6 col-md-offset-1 form-container">
-											<label for="name"> Role:</label>
+											<label for="roleTitle"> Role:</label>
 											<form:select path="role.id"
-													class="form-control required" id="roleId" required="true" readonly="true">
+													class="form-control required" id="roleId" required="true" readonly="true" title="Select one Role from the List">
 													<option value="" label="--- Select Role---" />
 													<form:options items="${roleIds}" />
 												</form:select>
@@ -137,7 +137,7 @@
 										</div>
 										<div class="col-md-6 col-md-offset-1 form-container">
 											<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
-													class="form-control required" id="organizationLookupId" required="true" readonly="true">
+													class="form-control required" id="organizationLookupId" required="true" readonly="true" title="Select one Organization from the List">
 													<option value="" label="--- Select Role---" />
 													<form:options items="${orgIds}" />
 												</form:select>
@@ -146,7 +146,7 @@
 										<label for="name"> MAC:</label>
 										
 										<form:select path="macId"
-													class="form-control required" id="macId" required="true" readonly="true">
+													class="form-control required" id="macId" required="true" readonly="true" title="Select one Medicare Administrative Contractor from List">
 													<option value="" label="--- Select MAC---" />
 													<form:options items="${macIds}" />
 												</form:select>
@@ -154,15 +154,15 @@
 										<div class="col-md-6 col-md-offset-1 form-container">
 													<label for="email"> Jurisdiction:</label>
 													<form:select path="jurId"
-													class="form-control required" id="jurId" required="true" readonly="true">
+													class="form-control required" id="jurId" required="true" readonly="true" title="Select one Jurisdiction from the List">
 													<option value="" label="--- Select Jurisidiction---" />
 													<form:options items="${jurIds}" />
 												</form:select>
 										</div>
-										<div class="col-md-6 col-md-offset-1 form-container" style ="padding-bottom: 40px;">
+										<div class="col-md-6 col-md-offset-1 form-container" style ="padding-bottom: 40px;" >
 										<label for="pccLocation"> PCC Location:</label>
 										<form:select path="pccId"
-													class="form-control required" id="pccId" required="true" readonly="true">
+													class="form-control required" id="pccId" required="true" readonly="true" title="Select one Product Contact Center Location from the List">
 													<option value="" label="--- Select PCC Location---"  />
 													<form:options items="${pccIds}" />
 													
