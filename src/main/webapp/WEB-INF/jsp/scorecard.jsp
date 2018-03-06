@@ -98,8 +98,8 @@
 			$('#cmsCalibrationStatus').attr("required",true);
 			
 		} else if (role == 'Quality Manager') {
-			$('#macCalibrationStatus').attr("readonly",false);
-			$('#macCalibrationStatus').attr("required",true);
+			$('#qamCalibrationStatus').attr("readonly",false);
+			$('#qamCalibrationStatus').attr("required",true);
 		}
 			
 

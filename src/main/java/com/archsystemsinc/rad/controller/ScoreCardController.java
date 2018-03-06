@@ -147,11 +147,7 @@ public class ScoreCardController {
 			e.printStackTrace();
 		}
 		model.addAttribute("scorecard",scoreCard);
-		model.addAttribute("ScoreCardFilter",true);
-		
-		
-       
-    
+		model.addAttribute("ScoreCardFilter",true);    
 		
 		request.getSession().setAttribute("SESSION_SCOPE_SCORECARD_FILTER", scoreCard);
 				
@@ -384,10 +380,12 @@ public class ScoreCardController {
 		
 		String validationResult = validateScoreCard(scoreCard);
 		
+		String loggedInUserRole = userFormSession.getRole().getRoleName();
+		
 		if(!validationResult.equalsIgnoreCase("Validation Succesfull")) {
 			
 			
-			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				
 				model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
@@ -414,7 +412,38 @@ public class ScoreCardController {
 			model.addAttribute("ValidationFailure", validationResult);
 			returnView = "scorecard";
 		} else {
+			
+			
 			try {
+				
+				HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
+				User userForm = (User) session.getAttribute("LoggedInUserForm");
+				ScoreCard existingScoreCard = resultsMap.get(scoreCard.getId());
+				
+				Date currentDateTime = new Date();
+				
+				if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.ADMIN_ROLE_STRING) && 
+						existingScoreCard != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
+					scoreCard.setCmsCalibrationUpdateDateTime(currentDateTime);
+					
+				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MANAGER_ROLE_STRING) && 
+						existingScoreCard != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus()) ) {
+					scoreCard.setQamCalibrationUpdateDateTime(currentDateTime);
+					
+				}  else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MONITOR_ROLE_STRING) && 
+						(existingScoreCard != null && !existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult()) || existingScoreCard == null)  ){
+					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
+					
+				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+					
+					
+				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.CMS_USER_ROLE_STRING)) {
+					
+					
+				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.MAC_ADMIN_ROLE_STRING)) {
+					
+					
+				}
 				
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 				String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateScoreCard");
@@ -423,7 +452,7 @@ public class ScoreCardController {
 				Date qamStartDateTime = utilityFunctions.convertToDateFromString(scoreCard.getQamStartdateTimeString());
 				scoreCard.setQamStartdateTime(qamStartDateTime);
 			     
-				String qamEnddateTimeString = utilityFunctions.convertToStringFromDate(new Date());
+				String qamEnddateTimeString = utilityFunctions.convertToStringFromDate(currentDateTime);
 				Date qamEnddateTime = utilityFunctions.convertToDateFromString(qamEnddateTimeString);
 				scoreCard.setQamEnddateTimeString(qamEnddateTimeString);
 				scoreCard.setQamEnddateTime(qamEnddateTime);

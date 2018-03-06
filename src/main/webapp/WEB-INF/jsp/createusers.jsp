@@ -50,7 +50,20 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	
+<style type="text/css">
+	.red {  color:red;  }
+</style>
+	
 <script type="text/javascript">
+
+$(document).ready(function () {
+	$("#dialog-confirm").hide();
+
+	$('.required').each(function(){
+	       $(this).prev('label').after("<span class='red'>*</span>");
+	});
+	
+});
 
 $(function(){
 	$("select#organizationLookupId").change(function(){
@@ -99,13 +112,35 @@ $(function(){
      	  	    		$("#pccId").get(0).options[$("#pccId").get(0).options.length] = new Option(obj, key);     	  	    		
      	  	    	});  	   
               });
-       });
+      });
+
+	 $('#close1').click(function(e) {	
+		 e.preventDefault();		
+          $("#dialog-confirm" ).dialog({
+              resizable: false,
+              height: "auto",
+              width: 400,
+              modal: true,	              
+              buttons: {
+                "Yes": function() {
+              		$( this ).dialog("close");	              		
+              		window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers';          	 	
+                },
+                Cancel: function() {                    
+                	$( this ).dialog("close"); 
+                }
+              }
+        });
+     }); 
 });
 </script>
 
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
+	<div id="dialog-confirm" title="Close User Create Confirmation?">
+  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the User Create form without saving?</p>
+	</div>
 	<div>
 		<table id="mid">			
  			<form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createUser" class="form-signin">
@@ -136,7 +171,7 @@ $(function(){
 										${ValidationFailure}
 										</c:if>
 				                      </div>
-									</div>
+								</div>
 				                  <!--   <h2>User Information</h2>  -->
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   
@@ -211,7 +246,7 @@ $(function(){
 								           </spring:bind>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                                <label for="emailId"> Email Id:</label> 
+			                                <label for="emailId">Email Address:</label> 
 											 <div class="form-group required ${status.error ? 'has-error' : ''}">
 								                <form:input type="text" path="emailId" class="form-control" placeholder=""
 								                            autofocus="true"></form:input>
@@ -270,6 +305,7 @@ $(function(){
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
 			                            <button class=" btn btn-primary">Submit</button>
+			                            <span><button class="btn btn-primary" id="close1" type="button">Close</button></span>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	

@@ -227,7 +227,7 @@
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div id="dialog-confirm" title="Close Scorecard Confirmation?">
+	<div id="dialog-confirm" title="Close Rebuttal Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the Rebuttal form without saving?</p>
 	</div>
 	<div id="complete-confirm" title="Complete Scorecard Confirmation?">
