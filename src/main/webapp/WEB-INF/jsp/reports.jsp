@@ -232,10 +232,9 @@
 							
 							<div class="table-users" style="width: 80%">
 								<div class="header">Search Report Screen</div>	
-								<!-- <br/>
-								<div id="sessionTimer" align="center" style="" ></div>
-								<br/> -->
-				             <div class="row " >
+								<br/>
+								
+				             <div class="row "  style="margin-top: 10px">
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->
@@ -254,7 +253,7 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="jurisId"> Jurisdiction:</label>
 										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
-										  
+										  <form:option value="0" label="---Select All---"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>

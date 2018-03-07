@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
@@ -105,12 +106,17 @@
 									</div>
 									<div class="row">
 										<div class="col-sm-3 form-group">
-											<button class=" btn btn-primary" title="Select Submit button">Submit</button>
+											<button class=" btn btn-primary" title="Select Search button">Search</button>
+											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
+													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createusers" title="Select Add User button to add new user"><button class="btn btn-primary" id="addUser" type="button">Add User</button></a></span> 
+													</sec:authorize>
 										</div>
 									</div>
 									</form:form>
 								</div>
 							</div>
+							
+							
 							<div align="center">
 							<c:if test="${not empty success}">
 			                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
@@ -125,28 +131,28 @@
 									<table id="usersTable">
 										<thead>
 											<tr>
-											<th>
+											<th style="text-align: left">
 													User Id
 												</th>
-												<th>
+												<th style="text-align: left">
 													FirstName
 												</th>
-												<th>
+												<th style="text-align: left">
 													MiddleName
 												</th>
-												<th>
+												<th style="text-align: left">
 													LastName
 												</th>
-												<th>
+												<th style="text-align: left">
 													Organization
 												</th>
-												<th>
+												<th style="text-align: left">
 													Role
 												</th>
-												<th>
+												<th style="text-align: left">
 													User Access
 												</th>
-												<th>
+												<th style="text-align: left">
 													Action
 												</th>
 											</tr>

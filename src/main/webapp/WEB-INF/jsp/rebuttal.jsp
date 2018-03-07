@@ -343,7 +343,7 @@
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
 											  	<form:option value="Electronic Data Interchange (EDI)" />
-											  	<form:option value="Enrollments" />
+											  	<form:option value="Enrollment" />
 											  	<form:option value="General" />
 											</form:select> 
 			                            </div>

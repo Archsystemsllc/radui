@@ -19,6 +19,7 @@
 
 <link rel="stylesheet" href="/resources/demos/style.css" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui-timepicker-addon.css" />
 <!-- CSS for Bootstrap -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
 
@@ -39,6 +40,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 
 <style type="text/css">
 	.red {  color:#cd2026;  }
@@ -583,7 +585,7 @@
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
 											  	<form:option value="Electronic Data Interchange (EDI)" />
-											  	<form:option value="Enrollments" />
+											  	<form:option value="Enrollment" />
 											  	<form:option value="General" />
 											</form:select> 
 			                            </div>

@@ -331,11 +331,11 @@ public class RadServiceApiClient {
 					RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
 			map.add("id", ""+user.getId());
+			map.add("userName", user.getUserName());
 			map.add("password", user.getPassword());
 			map.add("firstName", user.getFirstName());
 			map.add("lastName", user.getLastName());
 			map.add("middleName", user.getMiddleName());
-			map.add("emailId", user.getEmailId());
 			log.debug("user.getRole().getId()::"+user.getRole().getId());
 			map.add("role.id", ""+user.getRole().getId());
 			map.add("updatedBy", user.getUpdatedBy());

@@ -1,6 +1,7 @@
 package com.archsystemsinc.rad.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -123,11 +124,26 @@ public class UserController {
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", userForm);
+			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userForm.getMacId().intValue());
+			model.addAttribute("jurisMapEdit", jurisMap);	
+			HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+			for(Integer jurisId: jurisMap.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userForm.getMacId()+"_"+jurisId);
+				programMap.putAll(programTempMap);
+				programTempMap = null;
+			}		
+			
+			model.addAttribute("programMapEdit", programMap);
 			userDefaults(model);
 			return "createusers";
 		}else{
 			try {
-				String jurIdDBValue = userForm.getJurId().replace(UIGenericConstants.UI_JURISDICTION_SEPERATOR, UIGenericConstants.DB_JURISDICTION_SEPERATOR) +  UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+				
+				String jurIdDBValue = "";
+				for(String singleJurisIdValue: userForm.getJurisidictionId()) {
+					jurIdDBValue += singleJurisIdValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+				}
+				
 				userForm.setJurId(jurIdDBValue);
 				userService.save(userForm);
 				redirectAttributes.addFlashAttribute("success",
@@ -251,11 +267,25 @@ public class UserController {
 		userValidator.updateUserDetailsValidation(userForm, bindingResult);
 		if (bindingResult.hasErrors()) {
 			userDefaults(model);
+			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userForm.getMacId().intValue());
+			model.addAttribute("jurisMapEdit", jurisMap);	
+			HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+			for(Integer jurisId: jurisMap.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userForm.getMacId()+"_"+jurisId);
+				programMap.putAll(programTempMap);
+				programTempMap = null;
+			}		
+			
+			model.addAttribute("programMapEdit", programMap);
 			return "edituser";
 
 		}
 		try {
-			String jurIdDBValue = userForm.getJurId().replace(UIGenericConstants.UI_JURISDICTION_SEPERATOR, UIGenericConstants.DB_JURISDICTION_SEPERATOR) +  UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+			String jurIdDBValue = "";
+			for(String singleJurisIdValue: userForm.getJurisidictionId()) {
+				jurIdDBValue += singleJurisIdValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+			}
+			
 			userForm.setJurId(jurIdDBValue);
 			userService.update(userForm);
 			redirectAttributes.addFlashAttribute("success", "success.edit.user");
@@ -293,15 +323,28 @@ public class UserController {
 			final Model model, User user) {
 		log.debug("--> editUser:"+id);
 		final User userByID = userService.findById(id);
-		String jurIdUiValue = userByID.getJurId().replace(UIGenericConstants.DB_JURISDICTION_SEPERATOR, UIGenericConstants.UI_JURISDICTION_SEPERATOR);
-		userByID.setJurId(jurIdUiValue.substring(0,jurIdUiValue.length()-1));
+		
 		userByID.setPasswordFromdb(userByID.getPassword());
 		userByID.setPasswordConfirm(userByID.getPassword());
-		model.addAttribute("userForm", userByID);
+		
+		HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userByID.getMacId().intValue());
+		model.addAttribute("jurisMapEdit", jurisMap);	
+		HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+		for(Integer jurisId: jurisMap.keySet()) {
+			HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userByID.getMacId()+"_"+jurisId);
+			programMap.putAll(programTempMap);
+			programTempMap = null;
+		}		
+		
+		String[] jurIdDBValue = userByID.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);		
+		
+		userByID.setJurisidictionId(jurIdDBValue);
+		
+		model.addAttribute("programMapEdit", programMap);
 		
 		userDefaults(model);
 		
-		
+		model.addAttribute("userForm", userByID);
 		
 		log.debug("<-- editUser");
 		return "edituser";

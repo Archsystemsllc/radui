@@ -37,6 +37,8 @@ public class User {
 
 	
 	private String jurId;
+	
+	private String[] jurisidictionId;
 	private Long orgId;
 	private Date lastLoggedinDate;
 	
@@ -47,6 +49,15 @@ public class User {
 	
 	private String roleString;
 	
+	
+	
+	
+	public String[] getJurisidictionId() {
+		return jurisidictionId;
+	}
+	public void setJurisidictionId(String[] jurisidictionId) {
+		this.jurisidictionId = jurisidictionId;
+	}
 	public String getPasswordConfirm() {
 		return passwordConfirm;
 	}

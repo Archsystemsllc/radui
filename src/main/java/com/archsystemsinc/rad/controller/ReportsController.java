@@ -63,8 +63,10 @@ public class ReportsController {
 		
 		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0) {
 			jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
+			
 		} else {
 			jurisMap = HomeController.JURISDICTION_MAP;
+			
 		}
 		
 		model.addAttribute("jurisMapEdit", jurisMap);
@@ -346,7 +348,7 @@ public class ReportsController {
 				finalSortedMap.putAll(finalResultsMap);
 				model.addAttribute("COMPLIANCE_REPORT",finalSortedMap);
 				model.addAttribute("ComplianceReport",true);
-				model.addAttribute("ReportTitle","Compliance Report");
+				model.addAttribute("ReportTitle","Non-Compliance Report (ALL)");
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
 				

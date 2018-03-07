@@ -37,11 +37,11 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -109,9 +109,31 @@ $(document).ready(function(){
 	   "targets" : 7
 	   },
 	 ],
-	   "paging" : true,
-	   "pageLength" : 5,
-	    "ordering" : true,
+	 dom: 'Bfrtip',
+     buttons: [
+         {
+             extend: 'copyHtml5',
+             exportOptions: {
+                 columns: [ 0, ':visible' ]
+             }
+         },
+         {
+             extend: 'excelHtml5',
+             exportOptions: {
+                 columns: ':visible'
+             }
+         },
+         {
+             extend: 'pdfHtml5',
+             exportOptions: {
+                 columns: [ 0, 1, 2, 3, 4, 5 ]
+             }
+         },
+         'colvis'
+     ],
+	  "paging" : true,
+	  "pageLength" : 10,
+	   "ordering" : true,
 	});
 });
 </script>
@@ -133,9 +155,11 @@ $(document).ready(function(){
 							<div class="table-users" style="width: 80%">
 								<div class="header">List of Scorecards</div>
 							<!-- 	Removed Blank Space - 508 -->
-							<%-- 	<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
+							<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
 								<c:if test="${ScoreCardFilter == true}">
-								<form:input type = "hidden" path="userId" /> --%>
+									<form:input type = "hidden" path="userId" /> 
+								
+								
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
@@ -220,7 +244,7 @@ $(document).ready(function(){
 											</table>
 										</div>
 									</div>
-							<%-- 	</c:if> --%>
+							</c:if>
 								<c:if test="${ReportFlag == true}">
 									<div class="row" style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
@@ -287,9 +311,9 @@ $(document).ready(function(){
 										            <th style="text-align: left">Jurisdiction</th>
 										            <th style="text-align: left">MAC Call Reference ID</th>
 										            <th style="text-align: left">QM Name/ID</th>
+										            <th style="text-align: left">QM Start Date/Time</th> 
 										            <th style="text-align: left">Scorecard Type</th>
-										            <th style="text-align: left">Status</th> 
-										            
+										            <th style="text-align: left">Status</th>
 										            <th style="text-align: left">Actions</th>
 										           
 										        </tr>

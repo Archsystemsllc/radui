@@ -68,7 +68,7 @@
 
 	$(function(){
 		$("select#organizationLookupId").change(function(){
-			//alert($(this).val());
+			
 			 var selectedOrgnization = $(this).val();
 			 if(selectedOrgnization==1) {	
 				 $('#macId,#jurId,#pccId').attr("required",false);
@@ -87,7 +87,7 @@
 		});
 		
 		$("select#macId").change(function(){
-			 alert("Mac ID"+$(this).val());
+			 
 	           $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
 	                   {macId: $(this).val(), multipleInput: false}, function(data){
 	              
@@ -180,7 +180,7 @@
 										</div>
 										<div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="userName"> User Name:</label> 
+			                                <label for="userName"> User Name/Email Address:</label> 
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 
@@ -195,37 +195,36 @@
 			                               
 			                            </div>
 			                        	</div>
-										<div class="row">
+										
+			                        <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                               <label for="password"> Password:</label> 
 											 <spring:bind path="password">
-											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="password" class="form-control required" placeholder="" title="Edit Password field"></form:input>
-								                <form:errors path="password"></form:errors>
+											 <div class="required ${status.error ? 'has-error' : ''}">
+								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
+								                <form:errors path="password" title="Please fill out password field" required="true"></form:errors>
 								            </div>
 								            </spring:bind>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="passwordConfirm"> Confirm your password:</label> 
 											<spring:bind path="passwordConfirm">
-											<div class="form-group ${status.error ? 'has-error' : ''}">
-
-								                <form:input type="password" path="passwordConfirm" class="form-control required"
-								                            placeholder="" title="Edit Confirm Password field"></form:input>
+											<div class="required ${status.error ? 'has-error' : ''}">
+								                <form:input type="password" path="passwordConfirm" class="form-control"
+								                            placeholder="" title="Please fill out confirm password field" required="true"></form:input>
 								                <form:errors path="passwordConfirm"></form:errors>
 								            </div>
 								            </spring:bind>
 			                            </div>
 			                        </div>
+			                        
 			                        <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                              <label for="firstName"> First Name:</label> 
 											<spring:bind path="firstName">
-											<div class="form-group ${status.error ? 'has-error' : ''}">
-
-								                <form:input type="text" path="firstName" class="form-control required" placeholder=""
-								                            autofocus="true" title="Edit First Name field"></form:input>
-
+											<div class="required ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="firstName" class="form-control" placeholder=""
+								                            title="Please fill out First Name field" required="true"></form:input>
 								                <form:errors path="firstName"></form:errors>
 								            </div>
 								            </spring:bind>
@@ -233,56 +232,53 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="middleName"> Middle Name:</label> 
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
-
-								                <form:input type="text" path="middleName" class="form-control required" placeholder=""
-								                            autofocus="true" title="Edit Middle Name Field"></form:input>
+								                <form:input type="text" path="middleName" class="form-control" placeholder=""
+								                            title="Please fill out Middle Name field"></form:input>
 								                <form:errors path="middleName"></form:errors>
 			                            	</div>
-			                        	</div>				                    
+			                        	</div>
+				                    
 				                	</div>
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
 			                              <label for="lastName"> Last Name:</label> 
-			                              <spring:bind path="firstName">
-											 <div class="form-group ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="lastName" class="form-control required" placeholder=""
-								                            autofocus="true" title="Edit Last Name field"></form:input>
+			                               <spring:bind path="firstName">
+											 <div class="required  ${status.error ? 'has-error' : ''}">
+											
+								                <form:input type="text" path="lastName" class="form-control" placeholder=""
+								                            title="Please fill out Last Name Field" required="true"></form:input>
 								                <form:errors path="lastName"></form:errors>
 								            </div>
 								           </spring:bind>
-										</div>													           
-			                            <div class="col-lg-6 form-group">
-			                                <label for="emailId">Email Address:</label> 
-											 <div class="form-group required ${status.error ? 'has-error' : ''}">
-								                <form:input type="text" path="emailId" class="form-control required" placeholder=""
-								                            autofocus="true" title="Edit Email ID field"></form:input>
-												<form:errors path="emailId"></form:errors>
-											</div>												                    
-				                		</div>
-				                	</div>
-				                	<div class="row">
-			                            <div class="col-lg-6 form-group">
-			                             <label for="name"> Role:</label>
-											<form:select path="role.id"
-													class="form-control required" id="roleId" required="true">												
-													<option value="" label="--- Select Role---"  title="Select one role from the list"/>
-													<form:options items="${roleIds}" />
-											</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                            	<label for="organization"> Organization:</label> 
-			                            	<form:select path="organizationLookup.id"
-													class="form-control required" id="organizationLookupId" required="true" title="Select one role from the Organization">
-													
-													<form:option value="" label="---Select Organization---" />
-													<form:options items="${orgIds}" />
-												</form:select>
+			                               
 			                        	</div>				                    
 				                	</div>
 				                	<div class="row">
-			                            <div class="col-lg-6 form-group" id="macIdBlock">			                          
+				                		<div class="col-lg-6 form-group">
+			                            	<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
+													class="form-control required" id="organizationLookupId" required="true" title="Select one organization from the list">
+													<form:option value="" label="---Select Organization---" />
+													<form:options items="${orgIds}" />
+												</form:select>
+			                                
+			                        	</div>		
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> Role:</label>
+											<form:select path="role.id"
+													class="form-control required" id="roleId" required="true" title="Select one role from the list">
+													<form:option value="" label="---Select Role---" />
+													<form:options items="${roleIds}" />
+												</form:select>
+			                            </div>
+			                            		                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group" id="macIdBlock">
+			                          
 										<label for="name"> MAC:</label>
-			                                <form:select path="macId" id="macId" class="form-control required" required="true" title="Select one MAC Id from list">
+			                                <form:select path="macId" id="macId" class="form-control required" title="Select one Medicare Administrative Contractor ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
 											   <form:options items="${macIds}" />
 											</form:select> 	
@@ -290,8 +286,9 @@
 			                            <div class="col-lg-6 form-group"  id="jurIdBlock">
 			                            
 			                           	<label for="jurId"> Jurisdiction:</label>
-			                               <form:select path="jurId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one Jurisdiction from list">
-										   <form:option value="" label="---Select Jurisdiction---"/>								   
+			                               <form:select path="jurisidictionId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one or multiple jurisdiction from the list">
+										   <form:option value="" label="---Select Jurisdiction---"/>		
+										   <form:options items="${jurisMapEdit}" />						   
 										</form:select>	
 			                        	</div>				                    
 				                	</div>
@@ -300,7 +297,8 @@
 			                          
 										<label for="pccId"> PCC Location:</label>
 										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" required="true" title="Select one PCC Location from list">
-										   <form:option value="" label="---Select PCC Location---"/>								   
+										   <form:option value="" label="---Select PCC Location---"/>	
+										    <form:options items="${programMapEdit}" />									   
 										</form:select>	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -309,7 +307,7 @@
 				                	</div>
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
-			                            <button class=" btn btn-primary">Submit</button>
+			                            <button class=" btn btn-primary">Update</button>
 			                            <span><button class="btn btn-primary" id="close1" type="button">Close</button></span>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -327,7 +325,8 @@
 
 									</div>
 								</div>
-							
+							</div>
+							</div>
 				</td>
 			</tr>
 
