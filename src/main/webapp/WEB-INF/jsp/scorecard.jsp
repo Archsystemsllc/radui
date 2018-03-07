@@ -293,7 +293,9 @@
 				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
 				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
 				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);				
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+
+				$("#Section8Div").hide();				
 				
 				
 			} else if(selected_value=="Scoreable") {
@@ -312,6 +314,8 @@
 				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",true);
 				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",true);
 				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",true);	
+
+				$("#Section8Div").show();
 								
 			}  else if(selected_value=="Does Not Count") {
 				
@@ -329,7 +333,9 @@
 				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
 				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
 				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);	
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+
+				$("#Section8Div").hide();	
 								
 			} 
 			setCallResult();	 		

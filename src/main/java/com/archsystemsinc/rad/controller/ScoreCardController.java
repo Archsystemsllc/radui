@@ -56,7 +56,7 @@ public class ScoreCardController {
 	public String getScorecardList(HttpServletRequest request,Model model, Authentication authentication, HttpSession session) {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardNew = new ScoreCard();
-		
+		ScoreCard scoreCardFailObject = null;
 		String roles = authentication.getAuthorities().toString();
 		User userForm = (User) session.getAttribute("LoggedInUserForm");
 		model.addAttribute("menu_highlight", "scorecard");
@@ -64,11 +64,24 @@ public class ScoreCardController {
 		try {
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
 				
+				
+				
 				scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				scoreCardNew.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
 				
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
+				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+				
+				//Only Retrieving ScoreCard, which Passed or Failed (qam Montior, qam Manager, CMS)
+				scoreCardNew.setCallResult("Pass");
+				
+				scoreCardFailObject = new ScoreCard();
+				scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				scoreCardFailObject.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				scoreCardFailObject.setCallResult("Fail");
+				scoreCardFailObject.setQamCalibrationStatus("Fail");
+				scoreCardFailObject.setCmsCalibrationStatus("Fail");
+				
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);			
 			}
@@ -77,7 +90,7 @@ public class ScoreCardController {
 				scoreCardNew.setUserId(userForm.getId().intValue());
 			}
 			
-			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew);
+			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew,scoreCardFailObject);
 			ObjectMapper mapper = new ObjectMapper();
 			//Convert the result set to string and replace single character with spaces
 			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
@@ -106,6 +119,8 @@ public class ScoreCardController {
 			final Model model,HttpServletRequest request, Authentication authentication) {
 		log.debug("--> getScorecardList Screen <--");
 		HashMap<Integer, ScoreCard> resultsMap = null;
+		ScoreCard scoreCardFailObject = null;
+		
 		model.addAttribute("menu_highlight", "scorecard");
 		try {		
 			
@@ -128,7 +143,17 @@ public class ScoreCardController {
 				//scoreCard.setJurId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
 				
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
+				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+				
+				//Only Retrieving ScoreCard, which Passed or Failed (qam Montior, qam Manager, CMS)
+				scoreCard.setCallResult("Pass");
+				
+				scoreCardFailObject = new ScoreCard();
+				scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				scoreCardFailObject.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				scoreCardFailObject.setCallResult("Fail");
+				scoreCardFailObject.setQamCalibrationStatus("Fail");
+				scoreCardFailObject.setCmsCalibrationStatus("Fail");
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
 				HashMap<Integer,String> jurisMap = null;
@@ -141,7 +166,7 @@ public class ScoreCardController {
 				model.addAttribute("jurisMapEdit", jurisMap);
 			}
 			
-			resultsMap = retrieveScoreCardList(scoreCard);
+			resultsMap = retrieveScoreCardList(scoreCard, scoreCardFailObject);
 			ObjectMapper mapper = new ObjectMapper();
 	        model.addAttribute("scoreCardList", mapper.writeValueAsString(resultsMap.values()));
 		} catch (Exception e) {
@@ -166,6 +191,7 @@ public class ScoreCardController {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardFromSession = (ScoreCard) request.getSession().getAttribute("SESSION_SCOPE_SCORECARD_FILTER");
 		HashMap<Integer, ScoreCard> resultsMap = null;
+		ScoreCard scoreCardFailObject = null;
 		model.addAttribute("menu_highlight", "scorecard");
 		try {		
 			
@@ -175,6 +201,16 @@ public class ScoreCardController {
 							
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);		
+				
+				//Only Retrieving ScoreCard, which Passed or Failed (qam Montior, qam Manager, CMS)
+				scoreCardFromSession.setCallResult("Pass");
+				
+				scoreCardFailObject = new ScoreCard();
+				scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				scoreCardFailObject.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				scoreCardFailObject.setCallResult("Fail");
+				scoreCardFailObject.setQamCalibrationStatus("Fail");
+				scoreCardFailObject.setCmsCalibrationStatus("Fail");
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);
 				HashMap<Integer,String> jurisMap = null;
@@ -187,7 +223,7 @@ public class ScoreCardController {
 				model.addAttribute("jurisMapEdit", jurisMap);
 			}
 			
-			resultsMap = retrieveScoreCardList(scoreCardFromSession);
+			resultsMap = retrieveScoreCardList(scoreCardFromSession, scoreCardFailObject);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -203,7 +239,7 @@ public class ScoreCardController {
 		return "scorecardlist";
 	}
 	
-	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject) {	
+	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject, ScoreCard scoreCardFailObject) {	
 		log.debug("--> Enter retrieveScoreCardList <--");
 		
 		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
@@ -227,11 +263,30 @@ public class ScoreCardController {
 				scoreCardModelObject.setJurIdList(jurisdictionArrayList);
 			}
 			
-			
+			//Scorecard All List
 			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardModelObject, List.class);
 			ObjectMapper mapper = new ObjectMapper();
 			resultsMap = responseEntity.getBody();
 			List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap, new TypeReference<List<ScoreCard>>() { });
+			
+			
+			List<ScoreCard> scoreCardFailList = null;
+			//Scorecard Fail List
+			
+			if (scoreCardFailObject != null) {
+				BasicAuthRestTemplate basicAuthRestTemplate2 = new BasicAuthRestTemplate("qamadmin", "123456");
+				ResponseEntity<List> responseEntity2 = basicAuthRestTemplate2.postForEntity(ROOT_URI, scoreCardFailObject, List.class);
+				
+				resultsMap = responseEntity2.getBody();
+				scoreCardFailList = mapper.convertValue(resultsMap, new TypeReference<List<ScoreCard>>() { });
+				
+				if(scoreCardFailList!=null) {
+					if (scoreCardList == null) {
+						scoreCardList = new ArrayList<ScoreCard>();
+						scoreCardList.addAll(scoreCardFailList);
+					}
+				}
+			}
 			
 			for(ScoreCard scoreCardTemp: scoreCardList) {
 				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCardTemp.getQamStartdateTime());

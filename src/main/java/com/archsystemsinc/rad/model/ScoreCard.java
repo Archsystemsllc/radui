@@ -160,8 +160,17 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private ArrayList<Integer> macIdList;
 	
+	private ArrayList<String> macCallResultList;
 	
 	
+	public ArrayList<String> getMacCallResultList() {
+		return macCallResultList;
+	}
+
+	public void setMacCallResultList(ArrayList<String> macCallResultList) {
+		this.macCallResultList = macCallResultList;
+	}
+
 	public String getQamCalibrationStatus() {
 		return qamCalibrationStatus;
 	}
