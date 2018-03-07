@@ -243,7 +243,7 @@
 											  	<option value="">Select</option>
   												<option value="Scoring Modified">Scoring Modified</option>
   												<option value="Scoring Unchanged">Scoring Unchanged</option>
-  												<option value="CMS ELevated">CMS Elevated</option>
+  												<option value="CMS Elevated">CMS Elevated</option>
 											</select> 
 										</form>
 			                        	</div>
@@ -437,7 +437,9 @@
 			                                <label for="name">Attachments:</label>			                                
 			                               
 			                                <form:input type="file" path="rebuttalFileObject" id="rebuttalFileObject" class="form-control input-sm"/>
-										
+			                                <br/>
+			                                <label for="name">Note: Pleae don't include PHI/PII information in the attachment</label>		
+										 
 			                            </div>		                           
 			                        </div>       
 				                    

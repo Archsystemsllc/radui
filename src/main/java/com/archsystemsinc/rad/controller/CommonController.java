@@ -56,6 +56,28 @@ public class CommonController {
 		
 	}
 	
+	@RequestMapping(value ={"/admin/selectRole", "/quality_manager/selectRole", "/cms_user/selectRole",
+			 "/mac_admin/selectRole","/mac_user/selectRole","/quality_monitor/selectRole"}, method = RequestMethod.GET)	
+	@ResponseBody
+	public HashMap<Integer,String> selectRole(@RequestParam("organizationId") final Integer organizationId) {
+		
+		HashMap<Integer,String> roleMap = new HashMap<Integer, String>();		
+		
+		if(organizationId == 1) {
+			roleMap.put(1, "Administrator");
+			roleMap.put(3, "CMS User");
+		} else if(organizationId == 2) {
+			roleMap.put(1, "Administrator");
+			roleMap.put(2, "Quality Manager");
+			roleMap.put(5, "Quality Monitor");
+		} else if(organizationId == 3) {
+			roleMap.put(4, "MAC Admin");
+			roleMap.put(6, "MAC User");
+		}
+		
+		return roleMap;
+	}
+	
 	@RequestMapping(value ={"/admin/selectJuris", "/quality_manager/selectJuris", "/cms_user/selectJuris",
 			 "/mac_admin/selectJuris","/mac_user/selectJuris","/quality_monitor/selectJuris"}, method = RequestMethod.GET)	
 	@ResponseBody

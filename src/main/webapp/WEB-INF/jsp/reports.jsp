@@ -292,7 +292,7 @@
 			                        <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                            <label for="reportType"> Report Type:</label>
-											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;ScoreCard &nbsp;										                            
+											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;Scorecard &nbsp;										                            
 										  	<form:radiobutton path="mainReportSelect" value="Compliance" title="Choose Compliance"/>&nbsp;Compliance &nbsp;
 										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" title="Choose Rebuttal" />&nbsp;Rebuttal &nbsp;
 			                         	     
@@ -301,7 +301,7 @@
 			                        
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
-			                                <label for="scoreCardType"> ScoreCard Type:</label> 
+			                                <label for="scoreCardType"> Scorecard Type:</label> 
 										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" title="Select one ScoreCard Type from the List" >
 											   	<form:option value="" label="ALL"/>
 											  	<form:option value="Scoreable" />

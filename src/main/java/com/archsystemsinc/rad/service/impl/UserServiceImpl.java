@@ -45,6 +45,8 @@ public class UserServiceImpl implements UserService {
 		}
     	radServiceApiClient.updateUser(user);
     }
+    
+    
 
     @Override
     public User findByUsername(String userName) {

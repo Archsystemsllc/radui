@@ -83,7 +83,19 @@
 				 $('#macId,#jurId,#pccId').attr("required",true);
 				 $("#macIdBlock,#jurIdBlock,#pccIdBlock").show();
 				 	
-			 }	    
+			 }	
+
+			 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectRole",                    
+		                 {organizationId: $(this).val()}, function(data){
+		            
+		              $("#roleId").get(0).options.length = 0;	           
+		   	      	 $("#roleId").get(0).options[0] = new Option("---Select Role---", "");
+		   	  	    	$.each(data, function (key,obj) {
+		   	  	    		$("#roleId").get(0).options[$("#roleId").get(0).options.length] = new Option(obj, key);     	  	    		
+		   	  	    	});  	   
+		    });
+				
+			    
 		});
 		
 		$("select#macId").change(function(){

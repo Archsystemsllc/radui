@@ -3,6 +3,7 @@
  */
 package com.archsystemsinc.rad.common.utils;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
@@ -70,7 +71,7 @@ public class RadServiceApiClient {
 	 * @return
 	 * @throws Exception 
 	 */
-	public User getUser(String userName)  {
+	/*public User getUser(String userName)  {
 		log.debug("--> getUser");
 		User user = null;
 		try {
@@ -88,7 +89,29 @@ public class RadServiceApiClient {
 		}
 		log.debug("<-- getUser");
 		return user;
+	}*/
+	
+	public User getUser(String userName)  {
+		log.debug("--> getUser");
+		
+		User userResponse = null;
+		try {
+			User userSend = new User();
+			ObjectMapper mapper = new ObjectMapper();
+			userSend.setUserName(userName);
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(radservicesEndpoint + "findUser");
+			ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userSend,User.class);
+			
+			userResponse = response.getBody();
+		}catch(Exception ex) {
+			log.error("Errro while finding user, userName="+userName,ex);
+			userResponse = null;
+		}
+		log.debug("<-- getUser");
+		return userResponse;
 	}
+
 
 	
 	/**

@@ -10,7 +10,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - ScoreCard</title>
+<title>QAM - Scorecard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -149,9 +149,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 														
 												</display:table>
@@ -191,9 +191,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 														
 												</display:table>
@@ -233,9 +233,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 														
 												</display:table>
@@ -267,9 +267,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 															
 												</display:table>
@@ -297,9 +297,9 @@
 													</display:column>
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 														
 												</display:table>
@@ -327,9 +327,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 															
 												</display:table>
@@ -356,9 +356,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 														
 												</display:table>
@@ -386,9 +386,9 @@
 													</display:column>	
 													<display:column property="qamStartDate" title="QAM Start Date" sortable="true" style="text-align:center;"/>
 													<display:column property="qamEndDate" title="QAM End Date" sortable="true" style="text-align:center;"/>
-													<display:setProperty name="export.excel.filename" value="ScoreCardReport.xls" />
-													<display:setProperty name="export.pdf.filename" value="ScoreCardReport.pdf" />
-													<display:setProperty name="export.csv.filename" value="ScoreCardReport.csv" />
+													<display:setProperty name="export.excel.filename" value="ScorecardReport.xls" />
+													<display:setProperty name="export.pdf.filename" value="ScorecardReport.pdf" />
+													<display:setProperty name="export.csv.filename" value="ScorecardReport.csv" />
 													<display:setProperty name="export.pdf" value="true" />
 														
 												</display:table>

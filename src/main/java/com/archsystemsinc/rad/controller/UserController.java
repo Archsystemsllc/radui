@@ -53,7 +53,10 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/users", method = RequestMethod.GET)
+	
+	
+	@RequestMapping(value ={"/admin/users", "/quality_manager/users", "/cms_user/users",
+			 "/mac_admin/users","/mac_user/users","/quality_monitor/users"}, method = RequestMethod.GET)	
 	public String listUsers(Model model) {
 		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
 		model.addAttribute("userFilterForm", new UserFilter());
@@ -64,7 +67,9 @@ public class UserController {
 		return "listofusers";
 	}
 
-	@RequestMapping(value = "/admin/userFilter", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/userFilter", "/quality_manager/userFilter", "/cms_user/userFilter",
+			 "/mac_admin/userFilter","/mac_user/userFilter","/quality_monitor/userFilter"}, method = RequestMethod.GET)	
+	
 	public String filterUsers(Model model, UserFilter userFilter) {
 		log.debug("--> filterUsers::" + userFilter);
 
@@ -82,7 +87,7 @@ public class UserController {
 		return "listofusers";
 	}
 
-	@RequestMapping("/admin/createusers")
+	@RequestMapping(value ={"/admin/createusers", "/mac_admin/createusers"})
 	public String createusers(Model model) {
 		User blank = new User();
 		Role br = new Role();
@@ -93,8 +98,9 @@ public class UserController {
 	}
 	
 	// My Account Get
+	@RequestMapping(value ={"/admin/myaccount", "/quality_manager/myaccount", "/cms_user/myaccount",
+			 "/mac_admin/myaccount","/mac_user/myaccount","/quality_monitor/myaccount"})	
 	
-	@RequestMapping("/admin/myaccount")
 	public String myaccount(Model model,HttpSession session) {
 		User blank = new User();
 		Role br = new Role();
@@ -115,7 +121,8 @@ public class UserController {
 	 * @param bindingResult
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/createUser", method = RequestMethod.POST)
+	
+	@RequestMapping(value ={"/admin/createUser","/mac_admin/createUser"}, method = RequestMethod.POST)	
 	public String createUser(@ModelAttribute("userForm") User userForm,
 			BindingResult bindingResult,
 			final RedirectAttributes redirectAttributes, Model model) {
@@ -124,16 +131,20 @@ public class UserController {
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("userForm", userForm);
-			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userForm.getMacId().intValue());
-			model.addAttribute("jurisMapEdit", jurisMap);	
-			HashMap<Integer,String> programMap = new HashMap<Integer,String>();
-			for(Integer jurisId: jurisMap.keySet()) {
-				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userForm.getMacId()+"_"+jurisId);
-				programMap.putAll(programTempMap);
-				programTempMap = null;
-			}		
 			
-			model.addAttribute("programMapEdit", programMap);
+			if(userForm.getMacId() != null ) {
+				HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userForm.getMacId().intValue());
+				model.addAttribute("jurisMapEdit", jurisMap);	
+				HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+				for(Integer jurisId: jurisMap.keySet()) {
+					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userForm.getMacId()+"_"+jurisId);
+					programMap.putAll(programTempMap);
+					programTempMap = null;
+				}		
+				
+				model.addAttribute("programMapEdit", programMap);
+			}
+			
 			userDefaults(model);
 			return "createusers";
 		}else{
@@ -160,7 +171,9 @@ public class UserController {
 		return "redirect:listofusers";
 	}
 
-	@RequestMapping("/admin/listofusers")
+
+	@RequestMapping(value ={"/admin/listofusers", "/quality_manager/listofusers", "/cms_user/listofusers",
+			 "/mac_admin/listofusers","/mac_user/listofusers","/quality_monitor/listofusers"})	
 	public String listofusers(Model model, Authentication authentication, HttpSession session) {
 		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
 		model.addAttribute("userFilterForm", new UserFilter());
@@ -195,7 +208,9 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/registration", method = RequestMethod.GET)
+
+	@RequestMapping(value ={"/admin/registration", "/quality_manager/registration", "/cms_user/registration",
+			 "/mac_admin/registration","/mac_user/registration","/quality_monitor/registration"}, method = RequestMethod.GET)	
 	public String registration(Model model) {
 		log.debug("--> registration......");
 		User blank = new User();
@@ -221,7 +236,9 @@ public class UserController {
 	 * @param bindingResult
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/registration", method = RequestMethod.POST)
+
+	@RequestMapping(value ={"/admin/registration", "/quality_manager/registration", "/cms_user/registration",
+			 "/mac_admin/registration","/mac_user/registration","/quality_monitor/registration"}, method = RequestMethod.POST)	
 	public String registration(@ModelAttribute("userForm") User userForm,
 			BindingResult bindingResult,
 			final RedirectAttributes redirectAttributes, Model model) {
@@ -259,7 +276,8 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/edit-user", method = RequestMethod.POST)
+	@RequestMapping(value ={"/admin/edit-user", "/quality_manager/edit-user", "/cms_user/edit-user",
+			 "/mac_admin/edit-user","/mac_user/edit-user","/quality_monitor/edit-user"}, method = RequestMethod.POST)	
 	public String editUser(@ModelAttribute("userForm") User userForm,
 			BindingResult bindingResult,
 			final RedirectAttributes redirectAttributes, Model model) {
@@ -318,7 +336,9 @@ public class UserController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value = "/admin/edit-user/{id}", method = RequestMethod.GET)
+
+	@RequestMapping(value ={"/admin/edit-user/{id}", "/quality_manager/edit-user/{id}", "/cms_user/edit-user/{id}",
+			 "/mac_admin/edit-user/{id}","/mac_user/edit-user/{id}","/quality_monitor/edit-user/{id}"}, method = RequestMethod.GET)
 	public String editUser(@PathVariable("id") final Long id,
 			final Model model, User user) {
 		log.debug("--> editUser:"+id);
@@ -369,13 +389,15 @@ public class UserController {
 	 * @param redirectAttributes
 	 * @return the string to which the page to be redirected.
 	 */
-	@RequestMapping(value = "/admin/delete-user/{deletedBy}", method = RequestMethod.GET)
+	@RequestMapping(value ={"/admin/delete-user/{id}/{deletedBy}", "/quality_manager/delete-user/{id}/{deletedBy}", "/cms_user/delete-user/{id}/{deletedBy}",
+			 "/mac_admin/delete-user/{id}/{deletedBy}","/mac_user/delete-user/{id}/{deletedBy}","/quality_monitor/delete-user/{id}/{deletedBy}"}, method = RequestMethod.GET)
 	public String deleteUser(@PathVariable("id") final Long id,
 			@PathVariable("deletedBy") final String deletedBy,
-			final RedirectAttributes redirectAttributes) {
+			final RedirectAttributes redirectAttributes, HttpSession session) {
 		userService.deleteById(id, 2, deletedBy);
 		redirectAttributes.addFlashAttribute("success", "success.delete.user");
-		return "redirect:../admin/listofusers";
+		String ssUserFolder = (String) session.getAttribute("SS_USER_FOLDER");
+		return "redirect:/"+ssUserFolder+"/listofusers";
 	}
 
 	/**
