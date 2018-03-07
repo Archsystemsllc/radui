@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -25,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
+import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.Role;
+import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.model.UserFilter;
 import com.archsystemsinc.rad.service.UserService;
@@ -156,7 +159,13 @@ public class UserController {
 				}
 				
 				userForm.setJurId(jurIdDBValue);
-				userService.save(userForm);
+				userForm.setStatus(1l);
+				
+				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+				String ROOT_URI = new String(HomeController.RAD_WS_URI + "createUser");
+				ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userForm,User.class);
+				
+				//userService.save(userForm);
 				redirectAttributes.addFlashAttribute("success",
 						"success.register.user");
 			} catch (Exception e) {
