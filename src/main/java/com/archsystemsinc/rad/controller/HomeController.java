@@ -434,6 +434,7 @@ public class HomeController {
 	 	private void setupSessionGlobalVariables(User user) {
 			
 			//Mac Id Setup
+	 		if(user.getMacId() != null) { 
 			HashMap<Integer, String> userBasedMacIdMap = new HashMap<Integer, String> ();
 			
 			String macName = MAC_ID_MAP.get(user.getMacId().intValue());
@@ -472,6 +473,7 @@ public class HomeController {
 			userBasedPccLocationMap.put(user.getPccId().intValue(), pccLocationName);
 			
 			LOGGED_IN_USER_PCC_LOCATION_MAP = userBasedPccLocationMap;
+	 		}
 				
 		}	
 }
