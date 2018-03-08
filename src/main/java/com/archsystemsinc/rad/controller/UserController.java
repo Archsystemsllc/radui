@@ -356,20 +356,26 @@ public class UserController {
 		userByID.setPasswordFromdb(userByID.getPassword());
 		userByID.setPasswordConfirm(userByID.getPassword());
 		
-		HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userByID.getMacId().intValue());
-		model.addAttribute("jurisMapEdit", jurisMap);	
-		HashMap<Integer,String> programMap = new HashMap<Integer,String>();
-		for(Integer jurisId: jurisMap.keySet()) {
-			HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userByID.getMacId()+"_"+jurisId);
-			programMap.putAll(programTempMap);
-			programTempMap = null;
-		}		
+		if(userByID.getMacId() != null) {
+			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userByID.getMacId().intValue());
+			model.addAttribute("jurisMapEdit", jurisMap);	
+			HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+			for(Integer jurisId: jurisMap.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userByID.getMacId()+"_"+jurisId);
+				programMap.putAll(programTempMap);
+				programTempMap = null;
+			}		
+			
+			String[] jurIdDBValue = userByID.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);		
+			
+			userByID.setJurisidictionId(jurIdDBValue);
+			
+			model.addAttribute("programMapEdit", programMap);
+		}
 		
-		String[] jurIdDBValue = userByID.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);		
 		
-		userByID.setJurisidictionId(jurIdDBValue);
 		
-		model.addAttribute("programMapEdit", programMap);
+		
 		
 		userDefaults(model);
 		
