@@ -166,8 +166,10 @@
         });
 
 		$("select#macId").change(function(){
+			var macIdValue = $(this).val();
+			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                    {macId: $(this).val(), multipleInput: false}, function(data){
+                    {macId: macIdValue , multipleInput: false}, function(data){
                
                  $("#jurisId").get(0).options.length = 0;	           
       	      	 $("#jurisId").get(0).options[0] = new Option("---Select All---", "ALL");
@@ -179,13 +181,16 @@
         });
         
 		$("#jurisId").change(function(){
+
+			var macIdValue = $('#macId').val();
 			
-			 var selectedJurisdiction =""; 
-			 $("#jurisId :selected").each(function() {
+			var selectedJurisdiction =""; 
+			
+			$("#jurisId :selected").each(function() {
 				 selectedJurisdiction+=($(this).attr('value'))+",";
-				});
+				}); 
 			
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: $('#macId').val(),jurisId: selectedJurisdiction}, function(data){
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
       	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
@@ -245,15 +250,15 @@
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:option value="0" label="---Select All---"/>
+										   <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 									
 										
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="jurisId"> Jurisdiction:</label>
-										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
-										  <form:option value="0" label="---Select All---"/>
+			                                <label for="jurisdictionIds"> Jurisdiction:</label>
+										<form:select path="jurisdictionIds" class="form-control required" id="jurisId" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
+										  <form:option value="ALL" label="---Select All---"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>

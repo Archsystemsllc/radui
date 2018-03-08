@@ -49,19 +49,19 @@ public class ReportsController {
 	
 	 @RequestMapping(value ={"/admin/goBackMacJurisReport", "/quality_manager/goBackMacJurisReport", "/cms_user/goBackMacJurisReport",
 			 "/mac_admin/goBackMacJurisReport","/mac_user/goBackMacJurisReport"})		
-	public String goBackGetMacJuris(@ModelAttribute("reportsForm") ReportsForm reportsForm, final Model model,HttpSession session) {
+	public String goBackGetMacJuris(final Model model,HttpSession session) {
 		log.debug("--> showAdminDashboard <--");
 		HashMap<Integer,String> locationMap = null;
 		HashMap<Integer,String> jurisMap = null;
 		HashMap<Integer,String> programMap = null;
-		
+		ReportsForm reportsForm = (ReportsForm) session.getAttribute("ReportsFormSession");
 		model.addAttribute("reportsForm", reportsForm);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
 		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		
-		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0) {
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")) {
 			jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
 			
 		} else {
@@ -72,7 +72,7 @@ public class ReportsController {
 		model.addAttribute("jurisMapEdit", jurisMap);
 		
 		
-		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
 				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
 			programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
 			
@@ -83,7 +83,7 @@ public class ReportsController {
 		
 		model.addAttribute("programMapEdit", programMap);
 		
-		if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 
+		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
 				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")
 						&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
 			locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
@@ -121,7 +121,7 @@ public class ReportsController {
 				reportsForm.setMacId(macIdKey.toString());
 			}*/
 			
-			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
 			//reportsForm.setJurisId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);		
 			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
@@ -206,11 +206,12 @@ public class ReportsController {
 		
 		return "rebuttalreportlist";
 	}
+	 
 	
 	 @RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
 			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport"})			
-	public String getMacJurisReport(@ModelAttribute("reportsForm") ReportsForm reportsForm, HttpServletRequest request, final BindingResult result,
-			final Model model, HttpSession session) {
+	public String getMacJurisReport(@ModelAttribute("reportsForm") ReportsForm reportsForm,  final BindingResult result,
+			final Model model, HttpServletRequest request, HttpSession session) {
 
 		String returnView = "";
 		log.debug("--> getMacJurisReport <--");
@@ -227,14 +228,18 @@ public class ReportsController {
 			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
 			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			
-			if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+			if (reportsForm.getJurisdictionIds() != null ) {
 				
-				String[] jurisIds = reportsForm.getJurisId().split(",");
+				String[] jurisIds = reportsForm.getJurisdictionIds();
 				
 				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
 				ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
 				String jurisdictionNamesValues = "";
 				for (String jurisIdSingleValue: jurisIds) {
+					if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
+						reportsForm.setJurisdictionName("ALL");
+						break;
+					}
 					jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
 					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
 					jurisdictionNameArrayList.add(jurisdictionTempName);
@@ -244,14 +249,14 @@ public class ReportsController {
 				reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
 				reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
 				reportsForm.setJurisId("");
-			} else {
-				reportsForm.setJurisdictionName(reportsForm.getJurisId());
-			}
+			} 
 			
-			if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 ) {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
 				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 				reportsForm.setMacName(macName);
-			} 
+			} else {
+				reportsForm.setMacName("ALL");
+			}
 			
 			if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
 				String programName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
@@ -375,7 +380,7 @@ public class ReportsController {
 		model.addAttribute("reportsForm", reportsForm);
 		return "macjurisreviewreports";
 	}
-	
+
 
 	@RequestMapping(value ={"/admin/getMacJurisReportFromSession", "/quality_manager/getMacJurisReportFromSession", "/cms_user/getMacJurisReportFromSession",
 			 "/mac_admin/getMacJurisReportFromSession","/mac_user/getMacJurisReportFromSession"})			
@@ -399,14 +404,29 @@ public class ReportsController {
 			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
 			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			
-			if (!reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
-				String jurisdictionName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
-				reportsForm.setJurisdictionName(jurisdictionName);
+			if (reportsForm.getJurisdictionIds() != null && !reportsForm.getJurisdictionIds().toString().contains(("ALL"))) {
+				String[] jurisIds = reportsForm.getJurisdictionIds();
+				
+				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
+				ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
+				String jurisdictionNamesValues = "";
+				for (String jurisIdSingleValue: jurisIds) {
+					jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+					jurisdictionNameArrayList.add(jurisdictionTempName);
+					jurisdictionNamesValues += jurisdictionTempName+ " ";
+				}
+				
+				reportsForm.setJurIdList(jurisIdArrayList);			
+				reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+				reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
+				reportsForm.setJurisId("");
+				
 			} else {
-				reportsForm.setJurisdictionName(reportsForm.getJurisId());
+				reportsForm.setJurisdictionName("ALL");
 			}
 			
-			if (reportsForm.getMacId()!=null && reportsForm.getMacId()!=0 ) {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
 				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 				reportsForm.setMacName(macName);
 			} 

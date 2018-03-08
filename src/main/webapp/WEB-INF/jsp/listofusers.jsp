@@ -52,7 +52,30 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 	<script
 	src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
 
+
+$(function(){
+	$('#delete').click(function(e) {	
+		 e.preventDefault();		
+          $("#dialog-confirm" ).dialog({
+              resizable: false,
+              height: "auto",
+              width: 400,
+              modal: true,	              
+              buttons: {
+                "Yes": function() {
+              		$( this ).dialog("close");	              		
+              		window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers';          	 	
+                },
+                Cancel: function() {                    
+                	$( this ).dialog("close"); 
+                }
+              }
+        });
+     }); 
+});
+</script>
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>

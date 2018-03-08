@@ -91,7 +91,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value ={"/admin/createusers", "/mac_admin/createusers"})
-	public String createusers(Model model) {
+	public String createUsers(Model model) {
 		User blank = new User();
 		Role br = new Role();
 		blank.setRole(br);
