@@ -176,7 +176,7 @@ $(document).ready(function(){
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurisIdReportSearchString" class="form-control required"
 														id="jurId" required="true" title="Select one or multiple Jurisdiction from the List" multiple="true">
-														
+														<form:option value="" label="ALL" />
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
 												</div>

@@ -66,7 +66,7 @@ $(document).ready(function () {
 	var selectedOrganization="${userForm.organizationLookup.id}";
 	
 	var selectedRole="${userForm.role.id}";
-	alert(selectedRole);
+	
 	 if(selectedOrganization==1) {	
 		 $('#macId,#jurId,#pccId').attr("required",false);
 		 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();	

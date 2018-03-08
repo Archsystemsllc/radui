@@ -67,7 +67,9 @@ public class ScoreCardController {
 				
 				
 				scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				scoreCardNew.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				
+				String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+				scoreCardNew.setJurisIdReportSearchString(jurisIdStrings);				
 				
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
@@ -77,13 +79,14 @@ public class ScoreCardController {
 				
 				scoreCardFailObject = new ScoreCard();
 				scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				scoreCardFailObject.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);				
 				scoreCardFailObject.setCallResult("Fail");
 				scoreCardFailObject.setQamCalibrationStatus("Fail");
 				scoreCardFailObject.setCmsCalibrationStatus("Fail");
 				
 			} else {
-				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);			
+				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);		
+				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);			
 			}
 			
 			if(roles.contains("Quality Monitor")) {
@@ -145,12 +148,15 @@ public class ScoreCardController {
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 				
+				String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+				
+				
 				//Only Retrieving ScoreCard, which Passed or Failed (qam Montior, qam Manager, CMS)
 				scoreCard.setCallResult("Pass");
 				
 				scoreCardFailObject = new ScoreCard();
 				scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				scoreCardFailObject.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);				
 				scoreCardFailObject.setCallResult("Fail");
 				scoreCardFailObject.setQamCalibrationStatus("Fail");
 				scoreCardFailObject.setCmsCalibrationStatus("Fail");
@@ -168,7 +174,9 @@ public class ScoreCardController {
 			
 			resultsMap = retrieveScoreCardList(scoreCard, scoreCardFailObject);
 			ObjectMapper mapper = new ObjectMapper();
-	        model.addAttribute("scoreCardList", mapper.writeValueAsString(resultsMap.values()));
+	       
+			//Convert the result set to string and replace single character with spaces
+			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,14 +208,17 @@ public class ScoreCardController {
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
 							
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);		
+				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+				
+				String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+					
 				
 				//Only Retrieving ScoreCard, which Passed or Failed (qam Montior, qam Manager, CMS)
 				scoreCardFromSession.setCallResult("Pass");
 				
 				scoreCardFailObject = new ScoreCard();
 				scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				scoreCardFailObject.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+				scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);				
 				scoreCardFailObject.setCallResult("Fail");
 				scoreCardFailObject.setQamCalibrationStatus("Fail");
 				scoreCardFailObject.setCmsCalibrationStatus("Fail");
@@ -250,13 +261,15 @@ public class ScoreCardController {
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 			String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchScoreCard");
 			
-			if(scoreCardModelObject.getJurisIdReportSearchString() != null && !scoreCardModelObject.getJurisIdReportSearchString().equalsIgnoreCase("")) {
+			if(scoreCardModelObject.getJurisIdReportSearchString() != null && scoreCardModelObject.getJurisIdReportSearchString().length > 0) {
 				ArrayList<Integer> jurisdictionArrayList = new ArrayList<Integer>();
 				
-				String[] jurisIds = scoreCardModelObject.getJurisIdReportSearchString().split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+				String[] jurisIds = scoreCardModelObject.getJurisIdReportSearchString();
 				
 				for (String jurisIdSingleValue: jurisIds) {
-					
+					if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
+						break;
+					}
 					jurisdictionArrayList.add(Integer.valueOf(jurisIdSingleValue));
 				}
 				
@@ -327,7 +340,8 @@ public class ScoreCardController {
 		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
 			
 			scoreCard.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-			scoreCard.setJurisIdReportSearchString(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);				
+			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			scoreCard.setJurisIdReportSearchString(jurisIdStrings);				
 			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
