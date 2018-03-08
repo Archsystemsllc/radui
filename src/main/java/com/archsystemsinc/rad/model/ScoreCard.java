@@ -152,7 +152,7 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	//Temporatry Fields
 	private String macIdReportSearchString;	
 	
-	private String jurisIdReportSearchString;
+	private String[] jurisIdReportSearchString;
 	
 	private String programIdReportSearchString;
 	
@@ -244,11 +244,13 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 		this.macIdReportSearchString = macIdReportSearchString;
 	}
 
-	public String getJurisIdReportSearchString() {
+	
+
+	public String[] getJurisIdReportSearchString() {
 		return jurisIdReportSearchString;
 	}
 
-	public void setJurisIdReportSearchString(String jurisIdReportSearchString) {
+	public void setJurisIdReportSearchString(String[] jurisIdReportSearchString) {
 		this.jurisIdReportSearchString = jurisIdReportSearchString;
 	}
 
