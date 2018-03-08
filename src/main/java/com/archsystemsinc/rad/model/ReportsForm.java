@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class ReportsForm {  
     
-    private Integer macId;   
+    private String macId;   
     
     private String userId;
     
@@ -52,8 +52,17 @@ public class ReportsForm {
     private ArrayList<String> jurisdictionNameList;
     
     private String jurisdictionNameValues;
-
+    
+    private String[] jurisdictionIds;
 	
+	public String[] getJurisdictionIds() {
+		return jurisdictionIds;
+	}
+
+	public void setJurisdictionIds(String[] jurisdictionIds) {
+		this.jurisdictionIds = jurisdictionIds;
+	}
+
 	public ArrayList<String> getJurisdictionNameList() {
 		return jurisdictionNameList;
 	}
@@ -167,11 +176,11 @@ public class ReportsForm {
 		this.compliance = compliance;
 	}
 
-	public Integer getMacId() {
+	public String getMacId() {
 		return macId;
 	}
 
-	public void setMacId(Integer macId) {
+	public void setMacId(String macId) {
 		this.macId = macId;
 	}
 

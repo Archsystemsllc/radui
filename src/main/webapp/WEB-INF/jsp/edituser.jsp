@@ -63,30 +63,58 @@
 		});
 
 		$("#dialog-confirm").hide();
+
+		var selectedOrganization="${userForm.organizationLookup.id}";
+		var selectedRole="${userForm.role.id}";
 		
+		 if(selectedOrganization==1) {	
+			 $('#macId,#jurId,#pccId').attr("required",false);
+			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();	
+			 
+			 	
+		 } else if(selectedOrganization==2) {	
+			 $('#macId,#jurId,#pccId').attr("required",false);
+			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();
+			 	
+		 } else if(selectedOrganization==3) {	
+			 $('#macId,#jurId,#pccId').attr("required",true);
+			 $("#macIdBlock,#jurIdBlock,#pccIdBlock").show();
+			 	
+		 }	
+
+		 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectRole",                    
+	                {organizationId: selectedOrganization}, function(data){
+	           
+	             $("#roleId").get(0).options.length = 0;	           
+	  	      	 $("#roleId").get(0).options[0] = new Option("---Select Role---", "");
+	  	  	    	$.each(data, function (key,obj) {
+	  	  	    		$("#roleId").get(0).options[$("#roleId").get(0).options.length] = new Option(obj, key);     	  	    		
+	  	  	    	});  	   
+	   });	    
+		 $('#roleId').val(selectedRole);    
 	});
 
 	$(function(){
 		$("select#organizationLookupId").change(function(){
 			
-			 var selectedOrgnization = $(this).val();
-			 if(selectedOrgnization==1) {	
+			 var selectedOrganization = $(this).val();
+			 if(selectedOrganization==1) {	
 				 $('#macId,#jurId,#pccId').attr("required",false);
 				 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();	
 				 
 				 	
-			 } else if(selectedOrgnization==2) {	
+			 } else if(selectedOrganization==2) {	
 				 $('#macId,#jurId,#pccId').attr("required",false);
 				 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();
 				 	
-			 } else if(selectedOrgnization==3) {	
+			 } else if(selectedOrganization==3) {	
 				 $('#macId,#jurId,#pccId').attr("required",true);
 				 $("#macIdBlock,#jurIdBlock,#pccIdBlock").show();
 				 	
 			 }	
 
 			 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectRole",                    
-		                 {organizationId: $(this).val()}, function(data){
+		                 {organizationId: selectedOrganization}, function(data){
 		            
 		              $("#roleId").get(0).options.length = 0;	           
 		   	      	 $("#roleId").get(0).options[0] = new Option("---Select Role---", "");
@@ -192,7 +220,7 @@
 										</div>
 										<div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="userName"> User Name/Email Address:</label> 
+			                                <label for="userName"> Username/Email Address:</label> 
 											 <spring:bind path="userName">
 											 <div class="form-group ${status.error ? 'has-error' : ''}">
 
@@ -326,11 +354,7 @@
 			                            	
 			                        	</div>				                    
 				                	</div>							
-										
-                                    <form:input type="hidden" path="PasswordFromdb" value="${PasswordFromdb}"/>
                                     
-									<form:input type="hidden" path="id" value="${id}"/>
-									<form:input type="hidden" path="updatedBy" value="${pageContext.request.userPrincipal.name}"/>
 
 									   </div>
 									   </div>

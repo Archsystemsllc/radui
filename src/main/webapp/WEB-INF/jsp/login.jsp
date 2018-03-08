@@ -64,7 +64,7 @@
 								<div class="form-group ${error != null ? 'has-error' : ''}">
 									<span>${message}</span>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span> -->
-									<label for="username">Username</label>
+									<label for="username">Email Address</label>
 									<input style="margin: 0px" name="username" id="username" type="text"
 										class="form-control" placeholder="Username" autofocus="true" title="Please fill out User Name field"/>
 									<!-- </div> -->

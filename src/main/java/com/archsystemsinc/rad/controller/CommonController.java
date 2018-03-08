@@ -62,19 +62,19 @@ public class CommonController {
 	public HashMap<Integer,String> selectRole(@RequestParam("organizationId") final Integer organizationId) {
 		
 		HashMap<Integer,String> roleMap = new HashMap<Integer, String>();		
-		
-		if(organizationId == 1) {
-			roleMap.put(1, "Administrator");
-			roleMap.put(3, "CMS User");
-		} else if(organizationId == 2) {
-			roleMap.put(1, "Administrator");
-			roleMap.put(2, "Quality Manager");
-			roleMap.put(5, "Quality Monitor");
-		} else if(organizationId == 3) {
-			roleMap.put(4, "MAC Admin");
-			roleMap.put(6, "MAC User");
-		}
-		
+		if(organizationId != null) {
+			if(organizationId == 1) {
+				roleMap.put(1, "Administrator");
+				roleMap.put(3, "CMS User");
+			} else if(organizationId == 2) {
+				roleMap.put(1, "Administrator");
+				roleMap.put(2, "Quality Manager");
+				roleMap.put(5, "Quality Monitor");
+			} else if(organizationId == 3) {
+				roleMap.put(4, "MAC Admin");
+				roleMap.put(6, "MAC User");
+			}
+		}		
 		return roleMap;
 	}
 	
@@ -101,7 +101,7 @@ public class CommonController {
 			}
 		} else {
 			if(!macIdString.equalsIgnoreCase("")) {
-				if(macIdString.equalsIgnoreCase("ALL")) {
+				if(macIdString.equalsIgnoreCase("ALL") || macIdString.equalsIgnoreCase("0")) {
 					jurisFinalMap = HomeController.JURISDICTION_MAP;
 					
 				} else {
@@ -194,11 +194,11 @@ public class CommonController {
 		
 		if(!macIdString.equalsIgnoreCase("") && !jurisIdString.equalsIgnoreCase("") && !programIdString.equalsIgnoreCase("")) {
 			// ALL ALL ALL
-			if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
 				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
 			} 
 			//Value Value Value
-			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
 				
 				
 				String[] jurisIds = jurisIdString.split(",");
@@ -229,7 +229,7 @@ public class CommonController {
 				
 			} 
 			//Value All All
-			else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
 				HashMap jurisIdMapTemp = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 				locationMap = new HashMap<Integer,String>();
 				
@@ -246,7 +246,7 @@ public class CommonController {
 				}			
 			} 
 			//ALL ALL Value
-			else if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL") && !programIdString.equalsIgnoreCase("ALL")) {				
+			else if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {				
 				HashMap macIdMap = HomeController.MAC_ID_MAP;				
 				locationMap = new HashMap<Integer,String>();
 				for(Object macKey: macIdMap.keySet()) {					
@@ -261,7 +261,7 @@ public class CommonController {
 				}			
 			} 
 			//All Value All
-			else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
 				HashMap macIdMap = HomeController.MAC_ID_MAP;				
 				locationMap = new HashMap<Integer,String>();
 				for(Object macKey: macIdMap.keySet()) {	
@@ -304,7 +304,7 @@ public class CommonController {
 				
 			} 
 			//Value Value All
-			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
 				HashMap programMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString));	
 				locationMap = new HashMap<Integer,String>();
 				
@@ -339,7 +339,7 @@ public class CommonController {
 			
 			} 
 			//Value All Value
-			else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
 				HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));			
 				locationMap = new HashMap<Integer,String>();
 				
@@ -352,7 +352,7 @@ public class CommonController {
 			
 			} 
 			//All Value Value
-			else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+			else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
 				
 				HashMap macIdMap = HomeController.MAC_ID_MAP;				
 				locationMap = new HashMap<Integer,String>();
