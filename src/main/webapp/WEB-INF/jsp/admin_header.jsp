@@ -109,7 +109,7 @@
 					</tr>
 					<tr>
 						<td style="float: right; border: 0px">							
-							<div id="sessionTimer" align="right" style="color: blue"></div>
+							<div id="sessionTimer" align="right" style="color: #000080"></div>
 						</td>
 					</tr>
 					<tr>
