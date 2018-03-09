@@ -8,8 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class Rebuttal  {	
 	
+	
 	private int id;
 
+	private String agree;
 	
 	private String callDate;
 
@@ -90,6 +92,8 @@ public class Rebuttal  {
 	private String rebuttalCallCategory;
 	
 	//Temporaray Variables
+	
+	
 	
 	private String descriptionCommentsAppend;
 	
@@ -665,6 +669,18 @@ public class Rebuttal  {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+
+	public String getAgree() {
+		return agree;
+	}
+
+
+	public void setAgree(String agree) {
+		this.agree = agree;
 	}	
+	
+	
 
 }

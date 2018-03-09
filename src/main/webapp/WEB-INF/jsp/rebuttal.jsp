@@ -16,7 +16,6 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui-timepicker-addon.css" />
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
 
 <!-- CSS for Bootstrap -->
@@ -227,9 +226,42 @@
 	     }); 
 	});
 </script>
+<script>
+ function disableUpload() {
+  document.getElementById("rebuttalFileObject").disabled = true;
+ }
 
+  function activateButton(element) {
+	  var hiddenagree = document.getElementById("hiddenagree").getvalue;
+	  var rebuttalFileObject =  document.getElementById("rebuttalFileObject").getvalue;
+
+      if(element.checked) {
+    	  if(hiddenagree == null)
+    		  {   	  
+                 document.getElementById("rebuttalFileObject").disabled = false; 
+                 hiddenagree = false;
+    		  }
+    	  else
+    		  {
+    		  rebuttalFileobject = hiddenagree;
+    		  }
+       }
+       else  {
+    	   if(hiddenagree == null)
+ 		  {  
+             document.getElementById("rebuttalFileObject").disabled = true;
+              hiddenagree = true;
+ 		  }
+    	   else
+    		   {
+    		   rebuttalFileobject = hiddenagree;
+    		   }
+      }
+
+  }
+</script>
 </head>
-<body>
+<body onload="disableUpload()">
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div id="dialog-confirm" title="Close Rebuttal Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the Rebuttal form without saving?</p>
@@ -434,9 +466,11 @@
 			                        </div>       
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Attachments:</label>			                                
-			                               
-			                                <form:input type="file" path="rebuttalFileObject" id="rebuttalFileObject" class="form-control input-sm"/>
+			                                <label for="name">Attachments:</label>		
+			                                <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree that PHI/PII information is not included in the attachment.</input>	                                
+			                               <form:hidden path="agree" value=" " id="hiddenagree" ></form:hidden>
+			                                <form:input type="file" path="rebuttalFileObject" id="rebuttalFileObject" class="form-control input-sm"></form:input>
+			                                
 			                                <br/>
 			                                <label for="name">Note: Pleae don't include PHI/PII information in the attachment</label>		
 										 
