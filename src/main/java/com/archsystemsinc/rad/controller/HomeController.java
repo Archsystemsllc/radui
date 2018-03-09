@@ -106,7 +106,7 @@ public class HomeController {
 	 public String showAdminDashboard(Model model, HttpSession session) {
 		  log.debug("--> Enter showAdminDashboard <--");
 		  try {
-			RAD_WS_URI = radServicesEndPoint;
+			
 			  User form = new User();
 			  model.addAttribute("userForm", form);
 			  model.addAttribute("menu_highlight", "home");
@@ -119,10 +119,7 @@ public class HomeController {
 			 String userName = auth.getName(); //get logged in username 
 			 User user = userService.findByUsername(userName);
 			 
-			 session.setAttribute("LoggedInUserForm", user);
-			 session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
-			 
-			 setupSessionGlobalVariables(user);
+			 setupSessionGlobalVariables(user, session);
 			 
 		} catch (Exception e) {
 			log.error("--> Error in showAdminDashboard <--"+e.getMessage());
@@ -135,7 +132,7 @@ public class HomeController {
 	 public String showQualityManagerDashboard(Model model, HttpSession session) {
 		  log.debug("-->Enter showQualityManagerDashboard <--");
 		  try {
-			RAD_WS_URI = radServicesEndPoint;
+			
 			  User form = new User();
 			  model.addAttribute("userForm", form);
 			  model.addAttribute("menu_highlight", "home");
@@ -148,9 +145,8 @@ public class HomeController {
 			 String userName = auth.getName(); //get logged in username 
 			 User user = userService.findByUsername(userName);
 			 
-			 session.setAttribute("LoggedInUserForm", user);
-			 session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
-			 setupSessionGlobalVariables(user);
+			
+			 setupSessionGlobalVariables(user, session);
 		} catch (Exception e) {
 			log.error("--> Error in showQualityManagerDashboard <--"+e.getMessage());
 		}
@@ -161,7 +157,7 @@ public class HomeController {
 	 @RequestMapping(value = "/cms_user/dashboard")
 	 public String showCmsUserDashboard(Model model, HttpSession session) {
 		  log.debug("--> showCmsUserDashboard <--");
-		  RAD_WS_URI = radServicesEndPoint;
+		 
 		  User form = new User();
 		  model.addAttribute("userForm", form);
 		  model.addAttribute("menu_highlight", "home");
@@ -174,17 +170,16 @@ public class HomeController {
 		 String userName = auth.getName(); //get logged in username 
 		 User user = userService.findByUsername(userName);
 		 
-		 session.setAttribute("LoggedInUserForm", user);
-		 session.setAttribute("WEB_SERVICE_URL",RAD_WS_URI);
+		
 		 
-		 setupSessionGlobalVariables(user);
+		 setupSessionGlobalVariables(user, session);
 		  return "homepage";
 	} 
 	 
 	 @RequestMapping(value = "/quality_monitor/dashboard")
 	 public String showQualityMonitorDashboard(Model model, HttpSession session) {
 		  log.debug("--> showQualityMonitorDashboard <--");
-		  RAD_WS_URI = radServicesEndPoint;
+		 
 		  User form = new User();
 		  model.addAttribute("userForm", form);
 		  model.addAttribute("menu_highlight", "home");
@@ -195,18 +190,17 @@ public class HomeController {
 		  }
 		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		 String userName = auth.getName(); //get logged in username 
+		
 		 User user = userService.findByUsername(userName);
-		 session.setAttribute("WEB_SERVICE_URL",RAD_WS_URI);
-		 session.setAttribute("LoggedInUserForm", user);
 		 
-		 setupSessionGlobalVariables(user);
+		 setupSessionGlobalVariables(user, session);
 		 return "homepage";
 	} 
 	 
 	 @RequestMapping(value = "/mac_admin/dashboard")
 	 public String showMacAdminDashboard(Model model, HttpSession session) {
 		  log.debug("--> showMacAdminDashboard <--");
-		  RAD_WS_URI = radServicesEndPoint;
+		 
 		  User form = new User();
 		  model.addAttribute("userForm", form);
 		  model.addAttribute("menu_highlight", "home");
@@ -219,10 +213,7 @@ public class HomeController {
 		 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		 String userName = auth.getName(); //get logged in username 
 		 User user = userService.findByUsername(userName);
-		 session.setAttribute("WEB_SERVICE_URL",RAD_WS_URI);
-		 session.setAttribute("LoggedInUserForm", user);
-		 
-		 setupSessionGlobalVariables(user);
+		 setupSessionGlobalVariables(user, session);
 		 return "homepage";
 	} 
 	 
@@ -230,7 +221,7 @@ public class HomeController {
 	 @RequestMapping(value = "/mac_user/dashboard")
 	 public String showMacUserDashboard(Model model, HttpSession session) {
 		  log.debug("--> showMacUserDashboard <--");
-		  RAD_WS_URI = radServicesEndPoint;
+		 
 		  User form = new User();
 		  model.addAttribute("userForm", form);
 		  model.addAttribute("menu_highlight", "home");
@@ -243,9 +234,7 @@ public class HomeController {
 		 String userName = auth.getName(); //get logged in username 
 		 User user = userService.findByUsername(userName);
 		 
-		 session.setAttribute("LoggedInUserForm", user);
-		 session.setAttribute("WEB_SERVICE_URL",RAD_WS_URI);
-		 setupSessionGlobalVariables(user);
+		 setupSessionGlobalVariables(user,session);
 		 return "homepage";
 	} 
 	 
@@ -431,47 +420,57 @@ public class HomeController {
 				}
 		}
 	 
-	 	private void setupSessionGlobalVariables(User user) {
+	 	private void setupSessionGlobalVariables(User user, HttpSession session) {
 			
 			//Mac Id Setup
 			HashMap<Integer, String> userBasedMacIdMap = new HashMap<Integer, String> ();
-			
-			String macName = MAC_ID_MAP.get(user.getMacId().intValue());
-			
-			LOGGED_IN_USER_MAC_ID = user.getMacId().intValue();
-			
-			userBasedMacIdMap.put(user.getMacId().intValue(), macName);
-			
-			LOGGED_IN_USER_MAC_MAP = userBasedMacIdMap;
-			
-			//Jurisdiction Id Setup
 			HashMap<Integer, String> userBasedJurisdictionMap = new HashMap<Integer, String> ();
-			
-			String[] jurisIds = user.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
-			
+			HashMap<Integer, String> userBasedPccLocationMap = new HashMap<Integer, String> ();
 			
 			String jurisdictionNamesValues = "";
-			String jurIdList = "";
-			for (String jurisIdSingleValue: jurisIds) {
+			String jurIdList = "";			
+			
+			if(user.getMacId() != null) {
+				String macName = MAC_ID_MAP.get(user.getMacId().intValue());				
+				LOGGED_IN_USER_MAC_ID = user.getMacId().intValue();
 				
-				String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));				
-				jurisdictionNamesValues += jurisdictionTempName+ " ";
-				jurIdList = jurisIdSingleValue + UIGenericConstants.UI_JURISDICTION_SEPERATOR;
-				userBasedJurisdictionMap.put(Integer.valueOf(jurisIdSingleValue), jurisdictionTempName);
+				userBasedMacIdMap.put(user.getMacId().intValue(), macName);				
+				LOGGED_IN_USER_MAC_MAP = userBasedMacIdMap;
+				
+				//Jurisdiction Id Setup
+				
+				if(user.getJurId() != null) {
+					String[] jurisIds = user.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);				
+					
+					for (String jurisIdSingleValue: jurisIds) {
+						
+						String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));				
+						jurisdictionNamesValues += jurisdictionTempName+ " ";
+						jurIdList += jurisIdSingleValue + UIGenericConstants.UI_JURISDICTION_SEPERATOR;
+						userBasedJurisdictionMap.put(Integer.valueOf(jurisIdSingleValue), jurisdictionTempName);
+					}
+				}
+				
+				if(user.getPccId() != null) {
+					String pccLocationName = PCC_LOC_MAP.get(user.getPccId().intValue());					
+					userBasedPccLocationMap.put(user.getPccId().intValue(), pccLocationName);
+				}				
 			}
+			
 			
 			LOGGED_IN_USER_JURISDICTION_MAP = userBasedJurisdictionMap;
 			LOGGED_IN_USER_JURISDICTION_IDS = jurIdList;
 			LOGGED_IN_USER_JURISDICTION_NAMES =	jurisdictionNamesValues;
 			
-			//PCC Location Id Setup
-			HashMap<Integer, String> userBasedPccLocationMap = new HashMap<Integer, String> ();
-			
-			String pccLocationName = PCC_LOC_MAP.get(user.getPccId().intValue());
-			
-			userBasedPccLocationMap.put(user.getPccId().intValue(), pccLocationName);
-			
+			//PCC Location Id Setup		
 			LOGGED_IN_USER_PCC_LOCATION_MAP = userBasedPccLocationMap;
+			
+			//Setting Up Session Variables
+			 RAD_WS_URI = radServicesEndPoint;
+			session.setAttribute("LoggedInUserForm", user);
+			session.setAttribute("WEB_SERVICE_URL",RAD_WS_URI);
+			
+			session.setAttribute("SS_LOGGED_IN_USER_ROLE", user.getRole().getRoleName());
 				
 		}	
 }

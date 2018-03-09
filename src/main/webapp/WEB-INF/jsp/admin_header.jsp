@@ -121,7 +121,7 @@
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User')">
 										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('CMS User')">
 										<li><a class="${menu_highlight == 'reports' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a></li>
 									</sec:authorize>
 

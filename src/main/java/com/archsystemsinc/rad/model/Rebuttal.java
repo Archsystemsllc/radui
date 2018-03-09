@@ -29,7 +29,9 @@ public class Rebuttal  {
 	private int csrId;
 
 	
-	private String datePosted;
+	private String datePostedString;
+	
+	private Date datePosted;
 
 	private String description;
 
@@ -127,8 +129,6 @@ public class Rebuttal  {
 	private String fileType;
 	
 	private MultipartFile rebuttalFileObject;
-	
-	
 	
 	
 	public MultipartFile getRebuttalFileObject() {
@@ -586,14 +586,24 @@ public class Rebuttal  {
 	public void setCsrId(int csrId) {
 		this.csrId = csrId;
 	}
+	
+
+	public String getDatePostedString() {
+		return datePostedString;
+	}
 
 
-	public String getDatePosted() {
+	public void setDatePostedString(String datePostedString) {
+		this.datePostedString = datePostedString;
+	}
+
+
+	public Date getDatePosted() {
 		return datePosted;
 	}
 
 
-	public void setDatePosted(String datePosted) {
+	public void setDatePosted(Date datePosted) {
 		this.datePosted = datePosted;
 	}
 

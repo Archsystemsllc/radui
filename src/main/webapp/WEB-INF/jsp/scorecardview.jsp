@@ -342,7 +342,7 @@
 									</div>
 				                    <h2>Section 1 - QAM Info</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                   
+				                   <fieldset disabled>
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> QM Name/QM ID:</label>
@@ -365,7 +365,7 @@
 			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true"/>
 			                            </div>
 			                        </div>
-				                    
+				                    </fieldset>
 				                </div>
 				            </div>
 				            
@@ -373,7 +373,7 @@
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 2 - QAM Contract Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                    
+				                    <fieldset disabled>
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> Call Monitoring Date:</label>
@@ -426,7 +426,7 @@
 											</form:select> 
 			                            </div>
 			                        </div>
-				                    
+				                    </fieldset>
 				                </div>
 				            </div>
 				            
@@ -434,7 +434,7 @@
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 3 - QAM Call and CSR Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                    
+				                    <fieldset disabled>
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> Call Time:</label>
@@ -488,6 +488,7 @@
 			                                <form:input class="form-control required" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true"/>
 			                               </div>
 			                        </div>
+			                        </fieldset>
 				                </div>
 				            </div>
 				            
@@ -495,7 +496,7 @@
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    <h2>Section 4 - Knowledge Skills</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   
+				                   <fieldset disabled>
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
@@ -534,14 +535,14 @@
 			                                <form:input class="form-control" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime" readonly="true"/>
 			                               </div>
 			                        </div>
-				                    
+				                    </fieldset>
 				                </div>
 				            </div>	
 				            <div class="row" id="section5Div">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    <h2>Section 5 - Adherence to Privacy</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   
+				                   <fieldset disabled>
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected, please select the reason below:</label>
@@ -566,14 +567,14 @@
 			                                <form:input class="form-control" type = "text" name = "privacyCallFailureTime" path="privacyCallFailureTime" readonly="true"/>
 			                               </div>
 			                        </div>      
-				                    
+				                    </fieldset>
 				                </div>
 				            </div>
 				            <div class="row" id="section6Div">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    <h2>Section 6 - Customer Skills</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   
+				                   <fieldset disabled>
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected, please select the reason below:</label>
@@ -600,7 +601,7 @@
 			                                <form:input class="form-control" type = "text" name = "customerSkillsCallFailureTime" path="customerSkillsCallFailureTime" readonly="true"/>
 			                               </div>
 			                        </div>            
-				                    
+				                    </fieldset>
 				                </div>
 				            </div>
 				             <div class="row" >
@@ -609,7 +610,7 @@
 				                    <h2 id="section4HeaderDiv">Section 4 - Non-Scoreable Call Result</h2> 
 				                    <h2 id="section4HeaderDiv_DoesNotCount">Section 4 - Does Not Count Call Result</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                   
+				                   <fieldset disabled>
 				                    <div class="row" id="callResultDiv">
 			                            <div class="col-lg-6 form-group" >
 			                                <label for="name"> Call Result:</label>
@@ -647,7 +648,7 @@
 			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" readonly="true"/>
 			                            </div>		                           
 			                        </div>       
-				                    
+				                    </fieldset>
 				                </div>
 				            </div>		
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>

@@ -1,7 +1,8 @@
 package com.archsystemsinc.rad.common.utils;
 
 public class UIGenericConstants {
-
+	
+	public static final String MAC_ADMIN_ROLE = "4";
 	public static final String MAC_USER_ROLE = "6";
 	
 	public static final String UI_JURISDICTION_SEPERATOR = ",";
@@ -15,4 +16,6 @@ public class UIGenericConstants {
 	public static final String MAC_ADMIN_ROLE_STRING = "MAC Admin";
 	public static final String QUALITY_MONITOR_ROLE_STRING = "Quality Monitor";
 	public static final String MAC_USER_ROLE_STRING = "MAC User";
+	
+	public static final Long RECORD_STATUS_ACTIVE = 1l;
 }

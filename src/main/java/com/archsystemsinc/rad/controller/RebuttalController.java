@@ -207,32 +207,27 @@ public class RebuttalController {
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchUsers");
 		
-		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);
-		
 		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
-		
-		/*UserFilter userFilter = new UserFilter();		
-		
-		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
-		userFilter.setMacId(userFormSession.getMacId().toString());
-		userFilter.setJurisId(userFormSession.getJurId().toString());
-		userFilter.setRoleId(UIGenericConstants.MAC_USER_ROLE);
-		
-		userFilter.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
-		userFilter.set.setJurisId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);	*/	
-		
 		User userSearchObject = new User();
 		
-		userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
+		String roles = authentication.getAuthorities().toString();
 		
-		String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
-		
-		ArrayList<String> jurIdArrayList = new ArrayList<String>();
-		for (String jurisIdSingleValue: jurisIds) {
+		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
 			
-			jurIdArrayList.add(jurisIdSingleValue+UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			
+			ArrayList<String> jurIdArrayList = new ArrayList<String>();
+			for (String jurisIdSingleValue: jurisIds) {
+				
+				jurIdArrayList.add(jurisIdSingleValue+UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			}
+			userSearchObject.setJurIdList(jurIdArrayList);
 		}
-		userSearchObject.setJurIdList(jurIdArrayList);
+		
+		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);		
+		
+		userSearchObject.setStatus(UIGenericConstants.RECORD_STATUS_ACTIVE);
 		userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
 		
 		ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, userSearchObject, List.class);
@@ -266,24 +261,30 @@ public class RebuttalController {
 		List<ScoreCard> failedScorecardList = null;
 		
 		try {
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(HomeController.RAD_WS_URI + "retrieveMacCallRefFailList");
+			
 			String roles = authentication.getAuthorities().toString();
 			
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-				rebuttal.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				//scoreCardTemp.setJurId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);
 				
+				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				
+				String[] jurisIds = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+				
+				ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
+				for (String jurisIdSingleValue: jurisIds) {
+					
+					jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+				}				
+				scoreCardTemp.setJurIdList(jurIdArrayList);
 			} 
-			
-			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-			String ROOT_URI = new String(HomeController.RAD_WS_URI + "retrieveMacCallRefFailList");
 			
 			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardTemp, List.class);
 			ObjectMapper mapper = new ObjectMapper();
 			resultsMapTemp = responseEntity.getBody();
 			failedScorecardList = mapper.convertValue(resultsMapTemp, new TypeReference<List<ScoreCard>>() { });
 			
-			//failedScorecardList = mapper.readValue(exchange.getBody(), new TypeReference<List<ScoreCard>>(){});
 			for(ScoreCard scoreCard: failedScorecardList) {
 				resultsMap.put(scoreCard.getId(), scoreCard);
 				failedMacRefList.put(scoreCard.getId(), scoreCard.getMacCallReferenceNumber());
@@ -313,7 +314,7 @@ public class RebuttalController {
 		
 		scoreCard.setPccLocationMap(pccLocationMap);
 		
-		scoreCard.setCallCategoryName(callCategoryName);		
+		scoreCard.setCallCategoryName(callCategoryName);
 		
 		return scoreCard;
 	}
@@ -338,8 +339,9 @@ public class RebuttalController {
        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
        sdfAmerica.setTimeZone(tzInAmerica);
        String currentDateString = sdfAmerica.format(new Date());
+       
        if(rebuttal.getId()==0) {
-   		rebuttal.setDatePosted(currentDateString);
+   		rebuttal.setDatePosted(new Date() );
    		rebuttal.setCreatedDate(currentDateString);
        } else {
        	rebuttal.setUpdatedDate(currentDateString);
@@ -517,6 +519,8 @@ public class RebuttalController {
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
 		Rebuttal rebuttal = resultsMap.get(id);
 		
+		String datePostedString = utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted());
+		
 		if(rebuttal.getRebuttalStatus() == null) {
 			rebuttal.setRebuttalCompleteFlag("");
 		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Completed")) {
@@ -527,8 +531,6 @@ public class RebuttalController {
 		model.addAttribute("rebuttal", rebuttal);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		HashMap<Integer,String> pccLocationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(rebuttal.getMacId()+"_"+rebuttal.getJurisId()+"_"+rebuttal.getProgramId());
-		
-		
 		
 		model.addAttribute("programMapEdit", pccLocationMap);
 		return "rebuttal";

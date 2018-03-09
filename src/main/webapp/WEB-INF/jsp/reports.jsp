@@ -166,58 +166,70 @@
         });
 
 		$("select#macId").change(function(){
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+			
 			var macIdValue = $(this).val();
 			
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                    {macId: macIdValue , multipleInput: false}, function(data){
-               
-                 $("#jurisId").get(0).options.length = 0;	           
-      	      	 $("#jurisId").get(0).options[0] = new Option("---Select All---", "ALL");
-      	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
-      	  	    		
-      	  	    	});  	   
-               });
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+	                    {macId: macIdValue , multipleInput: false}, function(data){
+	               
+	                 $("#jurisId").get(0).options.length = 0;	           
+	      	      	 $("#jurisId").get(0).options[0] = new Option("---Select All---", "ALL");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    	});  	   
+	               });
+			}
         });
         
 		$("#jurisId").change(function(){
 
-			var macIdValue = $('#macId').val();
-			
-			var selectedJurisdiction =""; 
-			
-			$("#jurisId :selected").each(function() {
-				 selectedJurisdiction+=($(this).attr('value'))+",";
-				}); 
-			
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
-                
-                 $("#programId").get(0).options.length = 0;	           
-      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
-      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
-      	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
-      	  	    		
-      	  	    	});  	   
-               });
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+				var macIdValue = $('#macId').val();
+				
+				var selectedJurisdiction =""; 
+				
+				$("#jurisId :selected").each(function() {
+					 selectedJurisdiction+=($(this).attr('value'))+",";
+					}); 
+				
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
+	                
+	                 $("#programId").get(0).options.length = 0;	           
+	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    	});  	   
+	               });
+			} 
         });
 
 		$("select#programId").change(function(){
 
-			var selectedJurisdiction =""; 
-			 $("#jurisId :selected").each(function() {
-				 selectedJurisdiction+=($(this).attr('value'))+",";
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+				var selectedJurisdiction =""; 
+				 $("#jurisId :selected").each(function() {
+					 selectedJurisdiction+=($(this).attr('value'))+",";
 				});
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val()}, function(data){
-                
-                 $("#loc").get(0).options.length = 0;	           
-      	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
-      	      	 $("#loc").get(0).options[1] = new Option("---Select All---", "ALL");
-      	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#loc").get(0).options[$("#loc").get(0).options.length] = new Option(obj, key);
-      	  	    		
-      	  	    	});  	   
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val()}, function(data){
+	                
+	                 $("#loc").get(0).options.length = 0;	           
+	      	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
+	      	      	 $("#loc").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#loc").get(0).options[$("#loc").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    });  	   
                });
+			}
         });
 		
      });		
@@ -243,7 +255,7 @@
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                   
+				                   <input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> MAC:</label>

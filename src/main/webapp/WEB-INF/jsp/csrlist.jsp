@@ -307,6 +307,105 @@ $(function() {
       });
 
  	});	
+
+	$("select#macIdK").change(function(){
+		var userRole = $('#userRole').val();
+		
+		if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+			
+	        $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+	                {macId: $(this).val(), multipleInput: false}, function(data){
+	           
+	             $("#jurisdictionK").get(0).options.length = 0;	           
+	  	      	 $("#jurisdictionK").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+	  	  	    	$.each(data, function (key,obj) {
+	  	  	    		$("#jurisdictionK").get(0).options[$("#jurisdictionK").get(0).options.length] = new Option(obj, key);
+	  	  	    		
+	  	  	    });  	   
+           });
+		}
+    });
+
+    $("#macIdS").change(function () {
+
+		var userRole = $('#userRole').val();
+		
+		if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+	      var selectedMacs = "";
+	      $( "#macIdS option:selected" ).each(function() {
+	    	  selectedMacs += $( this ).val() + ",";
+	      });
+	     
+	     $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+	             {macId: selectedMacs, multipleInput: true}, function(data){
+	        
+	          $("#jurisdictionS").get(0).options.length = 0;	
+	          $("#jurisdictionS").get(0).options[0] = new Option("---Select Jurisdiction---", "");           
+		      	 $("#jurisdictionS").get(0).options[1] = new Option("Select ALL", "ALL");
+		  	    	$.each(data, function (key,obj) {
+		  	    		$("#jurisdictionS").get(0).options[$("#jurisdictionS").get(0).options.length] = new Option(obj, key);
+		  	    		
+		  	    	});  	   
+	        });
+		}
+    });
+    //.change();
+
+    $("select#macIdU").change(function(){
+		var userRole = $('#userRole').val();
+		
+		if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+	        $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+	                {macId: $(this).val(), multipleInput: false}, function(data){
+	           
+	             $("#jurisdictionU").get(0).options.length = 0;	           
+	             $("#jurisdictionU").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+	  	  	    	$.each(data, function (key,obj) {
+	  	  	    		$("#jurisdictionU").get(0).options[$("#jurisdictionU").get(0).options.length] = new Option(obj, key);
+	  	  	    		
+	  	  	    	});  	   
+	           });
+		}
+    });
+    
+    $('#keepCurrentListCB').click(function() {
+    	$('#alertMsg').text('');
+        if( $(this).is(':checked')) {            
+        	
+            $( "#dialog-confirm" ).dialog({
+                resizable: false,
+                height: "auto",
+                width: 400,
+                modal: true,
+                
+                buttons: {
+                  "Yes": function() {
+                	$( this ).dialog( "close" );
+                    $("#keepPreviousListButton").show();
+                    $("#macIdK_Div").show();	
+                    $("#jurisdictionK_Div").show();	
+                    $('#progressBar_Hideme').hide();
+                    $('#table1 .hideme').hide();
+                                        
+                  },
+                  Cancel: function() {                    
+                    $("#keepPreviousListButton").hide();
+                    $("#macIdK_Div").hide();
+                    $("#jurisdictionK_Div").hide();	
+                    $('#table1 .hideme').show();
+                    $('input[id=keepCurrentListCB]').attr('checked', false);
+                    $( this ).dialog( "close" );
+                  }                  
+                }	            
+              });
+            
+        } else {
+            $("#keepPreviousListButton").hide();
+            $("#macIdK_Div").hide();
+            $("#jurisdictionK_Div").hide();
+            $('#table1 .hideme').show();
+        }
+    }); 
 });
 </script>
 <script type="text/javascript">
@@ -398,92 +497,7 @@ $(function() {
             });    
         }); 
 
-        $("select#macIdK").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                    {macId: $(this).val(), multipleInput: false}, function(data){
-               
-                 $("#jurisdictionK").get(0).options.length = 0;	           
-      	      	 $("#jurisdictionK").get(0).options[0] = new Option("---Select Jurisdiction---", "");
-      	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#jurisdictionK").get(0).options[$("#jurisdictionK").get(0).options.length] = new Option(obj, key);
-      	  	    		
-      	  	    	});  	   
-               });
-        });
-
-        $("#macIdS").change(function () {
-          var selectedMacs = "";
-          $( "#macIdS option:selected" ).each(function() {
-        	  selectedMacs += $( this ).val() + ",";
-          });
-         
-         $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                 {macId: selectedMacs, multipleInput: true}, function(data){
-            
-              $("#jurisdictionS").get(0).options.length = 0;	
-              $("#jurisdictionS").get(0).options[0] = new Option("---Select Jurisdiction---", "");           
-    	      	 $("#jurisdictionS").get(0).options[1] = new Option("Select ALL", "ALL");
-    	  	    	$.each(data, function (key,obj) {
-    	  	    		$("#jurisdictionS").get(0).options[$("#jurisdictionS").get(0).options.length] = new Option(obj, key);
-    	  	    		
-    	  	    	});  	   
-            });
-        })
-        .change();
-
-        $("select#macIdU").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                    {macId: $(this).val(), multipleInput: false}, function(data){
-               
-                 $("#jurisdictionU").get(0).options.length = 0;	           
-                 $("#jurisdictionU").get(0).options[0] = new Option("---Select Jurisdiction---", "");
-      	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#jurisdictionU").get(0).options[$("#jurisdictionU").get(0).options.length] = new Option(obj, key);
-      	  	    		
-      	  	    	});  	   
-               });
-        });
         
-        $('#keepCurrentListCB').click(function() {
-        	$('#alertMsg').text('');
-            if( $(this).is(':checked')) {            
-            	
-                $( "#dialog-confirm" ).dialog({
-                    resizable: false,
-                    height: "auto",
-                    width: 400,
-                    modal: true,
-                    
-                    buttons: {
-                      "Yes": function() {
-                    	$( this ).dialog( "close" );
-                        $("#keepPreviousListButton").show();
-                        $("#macIdK_Div").show();	
-                        $("#jurisdictionK_Div").show();	
-                        $('#progressBar_Hideme').hide();
-                        $('#table1 .hideme').hide();
-                                            
-                      },
-                      Cancel: function() {                    
-                        $("#keepPreviousListButton").hide();
-                        $("#macIdK_Div").hide();
-                        $("#jurisdictionK_Div").hide();	
-                        $('#table1 .hideme').show();
-                        $('input[id=keepCurrentListCB]').attr('checked', false);
-                        $( this ).dialog( "close" );
-                      }
-                      
-                    }
-    	            
-                  });
-                
-            } else {
-                $("#keepPreviousListButton").hide();
-                $("#macIdK_Div").hide();
-                $("#jurisdictionK_Div").hide();
-                $('#table1 .hideme').show();
-            }
-        }); 
  	  
 	});
     
@@ -531,6 +545,7 @@ $(function() {
 			                              <div class="col-lg-6 form-group">
 			                                <a class="${linkcolor }"
 												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template">Download Sample CSR Template</a>
+											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			                             </div>
 			                        </div>
 			                      </div>
@@ -559,7 +574,8 @@ $(function() {
 			                            <div class="col-lg-6 form-group" id="jurisdictionK_Div">
 			                             <label for="jurisdictionName"> Jurisdiction:</label>
 			                               <form:select path="jurisdictionK"  id="jurisdictionK" class="form-control required" data-val="true" aria-label="jurisdictionName">
-										   <form:option value="" label="---Select Jurisdiction---"/>								   
+										   <form:option value="" label="---Select Jurisdiction---"/>
+										    <form:options items="${jurisMapEdit}" />								   
 										</form:select>		
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -594,6 +610,7 @@ $(function() {
 			                             <label for="name"> Jurisdiction:</label>
 			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU" title="Select one Jurisdiction from the list">
 										   		<form:option value="" label="---Select Jurisdiction---"/>
+										   		 <form:options items="${jurisMapEdit}" />	
 											</form:select>
 											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
 			                            </div>
@@ -632,6 +649,7 @@ $(function() {
 			                               	<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple" title="Select one or multiple Jurisdiction from the list">
 										   <form:option value="" label="---Select Jurisdiction---" />
 										   <form:option value="ALL" label="Select ALL" />
+										    <form:options items="${jurisMapEdit}" />	
 										</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">

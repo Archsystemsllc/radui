@@ -121,7 +121,16 @@
 	$(function(){
 		$("select#macReferenceId").change(function(){
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectScoreCardFromMacRef",                    
-                    {scoreCardId: $(this).val()}, function(data){     
+                    {scoreCardId: $(this).val()}, function(data){   
+
+                   	//Assigning Values Based on User Role
+               		var role = $('#userRole').val();
+
+               		if (role == 'MAC Admin' || role == 'MAC User') {
+               			$("#qamFullName").val('****');          			
+               		} else {
+               			$("#qamFullName").val(data.qamFullName);
+                   	}
 
                     var failureBlockDisplay = false;                
               		
@@ -297,27 +306,10 @@
 											</c:if>
 			                            </div>
 			                           <div class="col-sm-6 form-group">
-			                                <label for="contactPerson">PCC Contact Person:</label>
-			                                <form:select path="contactPerson" class="form-control required" id="contactPerson" required="true">
-											   	<form:option value="" label="---Select PCC Contact---"/>
-											  <form:options items="${pccContactPersonMap}" />
-											</form:select> 
-			                            </div>
-			                        </div>
-			                         <div class="row">
-			                             <div class="col-sm-6 form-group">
-			                                <label for="name"> PCC/Location:</label>
-			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
-			                                	<form:option value="" label="---Select PCC/Location---"/>
-			                                	<form:options items="${programMapEdit}" />
-											</form:select> 
-			                            </div>
-			                           <div class="col-sm-6 form-group">
 			                                <label for="name"> CSR Full Name:</label>
 			                                <form:input class="form-control" type = "text" name = "csrFullName" path="csrFullName" readonly="true"/>
-			                            </div>
+			                            </div>			                           
 			                        </div>
-			                        
 			                         <div class="row">
 			                              
 			                          <div class="col-sm-6 form-group">
@@ -332,14 +324,14 @@
 			                         <div class="row">			                              
 			                            <div class="col-lg-6 form-group">
 			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" readonly="true">
+			                              <form:select path="callCategory" class="form-control" id="callCategory" readonly="true">
 											   	<form:option value="" label="--- Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                         	</div>
 			                         	<div class="col-lg-6 form-group">
 			                                <label for="lob"> LOB:</label>
-			                                <form:select path="lob" class="form-control required" id="lob" readonly="true">
+			                                <form:select path="lob" class="form-control" id="lob" readonly="true">
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
 											  	<form:option value="Electronic Data Interchange (EDI)" />
@@ -347,8 +339,7 @@
 											  	<form:option value="General" />
 											</form:select> 
 			                            </div>
-			                         </div>
-			                        
+			                         </div>			                        
 			                        <div class="row">
 			                             
 			                         	<div class="col-sm-6 form-group">
@@ -358,10 +349,25 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="datePostedDiv">
 			                                <label for="name"> Date Posted:</label>
-			                                <form:input type = "text" class="form-control" id="datePosted" name = "datePosted" path="datePosted" readonly="true"/>
+			                                <form:input type = "text" class="form-control" id="datePostedString" name = "datePostedString" path="datePostedString" readonly="true"/>
 			                            </div>
 			                        </div>
-			                        
+			                         <div class="row">
+			                             <div class="col-sm-6 form-group">
+			                                <label for="name"> PCC/Location:</label>
+			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
+			                                	<form:option value="" label="---Select PCC/Location---"/>
+			                                	<form:options items="${programMapEdit}" />
+											</form:select> 
+			                            </div>
+			                            <div class="col-sm-6 form-group">
+			                             <label for="contactPerson">PCC Contact Person:</label>
+			                                <form:select path="contactPerson" class="form-control required" id="contactPerson" required="true">
+											   	<form:option value="" label="---Select PCC Contact---"/>
+											  <form:options items="${pccContactPersonMap}" />
+											</form:select> 
+			                            </div>
+			                        </div>
 			                       
 			                        
 			                       

@@ -235,7 +235,7 @@ $(document).ready(function(){
 													<td>
 													<span><button class="btn btn-primary" id="filter" type="submit" title="Select Filter button to Filter the results">Filter</button></span> 
 													<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to Reset the results">Reset</button></span>
-													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
+													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
 													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Select Add Scorecard button to add new scorecard"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
 													</sec:authorize>
 												</td>

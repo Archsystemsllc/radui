@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.CsrLog;
 import com.archsystemsinc.rad.model.MacInfo;
@@ -49,7 +50,7 @@ public class ReportsController {
 	
 	 @RequestMapping(value ={"/admin/goBackMacJurisReport", "/quality_manager/goBackMacJurisReport", "/cms_user/goBackMacJurisReport",
 			 "/mac_admin/goBackMacJurisReport","/mac_user/goBackMacJurisReport"})		
-	public String goBackGetMacJuris(final Model model,HttpSession session) {
+	public String goBackGetMacJuris(final Model model,HttpSession session, Authentication authentication) {
 		log.debug("--> showAdminDashboard <--");
 		HashMap<Integer,String> locationMap = null;
 		HashMap<Integer,String> jurisMap = null;
@@ -59,40 +60,70 @@ public class ReportsController {
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
-		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
+		String roles = authentication.getAuthorities().toString();
 		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")) {
-			jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
+		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+			
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			
+			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			programMap = new HashMap<Integer, String> ();
+			locationMap = new HashMap<Integer, String> ();
+			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+				if (programTempMap == null) continue;
+				
+				programMap.putAll(programTempMap);
+				for(Integer programIdSingle: programTempMap.keySet()) {
+					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+					if (locationTempMap == null) continue;
+					locationMap.putAll(locationTempMap);
+					locationTempMap = null;
+				}
+				
+				programTempMap = null;
+			}
+			model.addAttribute("programMapEdit", programMap);	
+			model.addAttribute("locationMapEdit", locationMap);	
+			
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
 			
 		} else {
-			jurisMap = HomeController.JURISDICTION_MAP;
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")) {
+				jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
+				
+			} else {
+				jurisMap = HomeController.JURISDICTION_MAP;
+				
+			}
 			
+			model.addAttribute("jurisMapEdit", jurisMap);
+			
+			
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
+					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+				programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
+				
+			} else {
+				programMap = HomeController.ALL_PROGRAM_MAP;
+				
+			}
+			
+			model.addAttribute("programMapEdit", programMap);
+			
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
+					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")
+							&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
+				locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
+				
+			} else {
+				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
+			}
+			
+			model.addAttribute("locationMapEdit", locationMap);
 		}
-		
-		model.addAttribute("jurisMapEdit", jurisMap);
-		
-		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
-				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
-			programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
-			
-		} else {
-			programMap = HomeController.ALL_PROGRAM_MAP;
-			
-		}
-		
-		model.addAttribute("programMapEdit", programMap);
-		
-		if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
-				&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")
-						&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
-			locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
-			
-		} else {
-			locationMap = HomeController.ALL_PCC_LOCATION_MAP;
-		}
-		
-		model.addAttribute("locationMapEdit", locationMap);
 		
 		
 		return "reports";
@@ -110,24 +141,32 @@ public class ReportsController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-			/*User userFormSession = (User) session.getAttribute("LoggedInUserForm");
-			
-			model.addAttribute("macIdMap", HomeController.USER_BASED_MAC_ID_DETAILS);
-			
-			HashMap<Integer,String> jurisMap = HomeController.USER_BASED_JURISDICTION_DETAILS;
-			model.addAttribute("jurisMapEdit", jurisMap);	
-			
-			for (Integer macIdKey: HomeController.USER_BASED_MAC_ID_DETAILS.keySet()) {
-				reportsForm.setMacId(macIdKey.toString());
-			}*/
-			
-			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
-			//reportsForm.setJurisId(HomeController.LOGGED_IN_USER_JURISDICTION_IDS);		
+			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 			
+			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+			HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
+			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+				if (programTempMap == null) continue;
+				
+				programMap.putAll(programTempMap);
+				for(Integer programIdSingle: programTempMap.keySet()) {
+					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+					if (locationTempMap == null) continue;
+					locationMap.putAll(locationTempMap);
+					locationTempMap = null;
+				}
+				
+				programTempMap = null;
+			}
+			model.addAttribute("programMapEdit", programMap);	
+			model.addAttribute("locationMapEdit", locationMap);	
 			
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
 			
 		} else {
 			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
@@ -135,7 +174,7 @@ public class ReportsController {
 		}	
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
-		session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
+		
 		return "reports";
 	}
 	
@@ -259,7 +298,7 @@ public class ReportsController {
 			}
 			
 			if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
-				String programName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
+				String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
 				reportsForm.setProgramName(programName);
 			} else {
 				reportsForm.setProgramName(reportsForm.getProgramId());

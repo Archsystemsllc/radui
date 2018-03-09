@@ -33,6 +33,8 @@ import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.model.UserFilter;
 import com.archsystemsinc.rad.service.UserService;
 import com.archsystemsinc.rad.ui.validator.UserValidator;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
 /**
@@ -186,23 +188,78 @@ public class UserController {
 	public String listofusers(Model model, Authentication authentication, HttpSession session) {
 		log.debug("--> List Users::" + HomeController.ORGANIZATION_MAP);
 		model.addAttribute("userFilterForm", new UserFilter());
-		model.addAttribute("roleIds", HomeController.ROLE_MAP);
-		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
-		List<User> userList = null;
+		
+		List<User> finalUserList = null;
+		
+		List<User> macUserList = null;
+		
+		List<User> macAdminList = null;
 		
 		String roles = authentication.getAuthorities().toString();
-		User userForm = (User) session.getAttribute("LoggedInUserForm");
+		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 		
-		if(roles.contains("MAC Admin") ) {
+		List<User> resultsMap = new ArrayList<User> ();
+		
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchUsers");
+		
+		User userSearchObject = new User();
+		userSearchObject.setStatus(UIGenericConstants.RECORD_STATUS_ACTIVE);
+		
+		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
 			
-			UserFilter userFilter = new UserFilter();
-			userFilter.setMacId(userForm.getMacId().toString());
-			userFilter.setJurisId(userForm.getJurId().toString());		
-			userList = userService.findUsers(userFilter);
+			String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			
+			ArrayList<String> jurIdArrayList = new ArrayList<String>();
+			for (String jurisIdSingleValue: jurisIds) {
+				
+				jurIdArrayList.add(jurisIdSingleValue+UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			}
+			userSearchObject.setJurIdList(jurIdArrayList);
+			
+			
+			userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
+			
+			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, userSearchObject, List.class);
+			ObjectMapper mapper = new ObjectMapper();
+			resultsMap = responseEntity.getBody();
+			macUserList = mapper.convertValue(resultsMap, new TypeReference<List<User>>() { });
+			
+			userSearchObject.setRoleString(UIGenericConstants.MAC_ADMIN_ROLE);
+			
+			responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, userSearchObject, List.class);
+			resultsMap = responseEntity.getBody();
+			macAdminList = mapper.convertValue(resultsMap, new TypeReference<List<User>>() { });
+			
+			finalUserList = new ArrayList<User> ();
+			
+			if (macUserList != null && macUserList.size() >0) {
+				finalUserList.addAll(macUserList);
+			}
+			
+			if (macAdminList != null && macAdminList.size() >0) {
+				finalUserList.addAll(macAdminList);
+			}
+			
+			HashMap<Integer,String> roleMap = new HashMap<Integer, String>();	
+			
+			roleMap.put(4, "MAC Admin");
+			roleMap.put(6, "MAC User");			
+			
+			model.addAttribute("roleIds", roleMap);
+			
+			HashMap<Integer,String> organizationMap = new HashMap<Integer, String>();	
+			organizationMap.put(3,  "MAC");
+			model.addAttribute("orgIds", organizationMap);
+			
+			
 		} else {
-			userList =  userService.findAll();
+			finalUserList =  userService.findAll();
+			model.addAttribute("roleIds", HomeController.ROLE_MAP);
+			model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 		}
-		model.addAttribute("users", userList);
+		model.addAttribute("users", finalUserList);
 		log.debug("<-- List Users");
 		return "listofusers";
 

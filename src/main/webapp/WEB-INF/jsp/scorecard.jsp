@@ -213,6 +213,7 @@
 
 		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
+			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
