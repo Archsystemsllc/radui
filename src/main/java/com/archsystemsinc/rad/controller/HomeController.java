@@ -100,6 +100,17 @@ public class HomeController {
        
         return "privacy";
     }
+    /**
+     * Resources
+     * @param model
+     * @return
+     */
+    
+    @RequestMapping(value = "/admin/resources", method = RequestMethod.GET)
+    public String resources(Model model) {       
+       
+        return "resources";
+    }
     
 	
 	 @RequestMapping(value = "/admin/dashboard")

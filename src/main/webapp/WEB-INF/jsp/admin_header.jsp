@@ -121,9 +121,22 @@
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User') or hasAuthority('CMS User')">
 										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
-										<li><a class="${menu_highlight == 'reports' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a></li>
+									
+									<!--  Menu for the Reports -->
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('CMS User')">
+									<li class="dropdown">
+										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Menu">Reports</a>
+										<span class="caret"></span>
+										<ul class="dropdown-menu">
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
+									      	<li><a href="${pageContext.request.contextPath}/resources/documents/contractorinfo.docx" title="Create Users Page">Contractor Information</a></li>
+									     </sec:authorize>
+									
+									    </ul>
+									</li>
 									</sec:authorize>
+									<!-- Menu for the Reports -->
+									
 
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
 										<li><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a></li>
@@ -146,7 +159,7 @@
 									</sec:authorize>
 									
 									<li><a class="${menu_highlight == 'my_account' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount" title="My Account Page">My Account</a></li>	
-									<li class="anchor"><a href="#" title="Help Guide Page">Help Guide</a></li>									
+									<li><a class="${menu_highlight == 'resources' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/resources" title="Resources">Resources</a></li>									
 									
 									<li>&nbsp; &nbsp;</li>			
 								</ul>
