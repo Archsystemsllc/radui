@@ -100,6 +100,17 @@ public class HomeController {
        
         return "privacy";
     }
+    /**
+     * Resources
+     * @param model
+     * @return
+     */
+    
+    @RequestMapping(value = "/admin/resources", method = RequestMethod.GET)
+    public String resources(Model model) {       
+       
+        return "resources";
+    }
     
 	
 	 @RequestMapping(value = "/admin/dashboard")
@@ -423,6 +434,7 @@ public class HomeController {
 	 	private void setupSessionGlobalVariables(User user, HttpSession session) {
 			
 			//Mac Id Setup
+	 		if(user.getMacId() != null) { 
 			HashMap<Integer, String> userBasedMacIdMap = new HashMap<Integer, String> ();
 			HashMap<Integer, String> userBasedJurisdictionMap = new HashMap<Integer, String> ();
 			HashMap<Integer, String> userBasedPccLocationMap = new HashMap<Integer, String> ();
@@ -464,7 +476,7 @@ public class HomeController {
 			
 			//PCC Location Id Setup		
 			LOGGED_IN_USER_PCC_LOCATION_MAP = userBasedPccLocationMap;
-			
+
 			//Setting Up Session Variables
 			 RAD_WS_URI = radServicesEndPoint;
 			session.setAttribute("LoggedInUserForm", user);
@@ -473,4 +485,5 @@ public class HomeController {
 			session.setAttribute("SS_LOGGED_IN_USER_ROLE", user.getRole().getRoleName());
 				
 		}	
+	 	}
 }

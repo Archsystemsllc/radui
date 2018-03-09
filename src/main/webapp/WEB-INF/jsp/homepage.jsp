@@ -38,18 +38,7 @@
 	<div role="main">
 	<table id="mid">
 		<tr>
-			<td
-				style="background-color: #327a89; width: 30%; vertical-align: top; padding: 0px 25px">
-			<!-- 	<div style="color: #fff">
-					<ul style="border-bottom: solid #fff 2px" type="square">
-						<li><h2
-								style="color: #fff; font-family: 'Rubik', sans-serif;">Description</h2></li>
-					</ul>
-					<p style="text-align: justify; font-family: 'Rubik', sans-serif;">
-						<br></br> <br></br>
-					</p>
-				</div> -->
-			</td>
+
 			<td style="vertical-align: top">
 
 				<div id="updates" class="boxed">

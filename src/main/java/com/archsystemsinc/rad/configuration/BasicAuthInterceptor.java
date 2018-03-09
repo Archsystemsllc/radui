@@ -7,15 +7,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class BasicAuthInterceptor implements ClientHttpRequestInterceptor {
 
     private String username;
     private String password;
-
+    
+    private static String username1;
     public BasicAuthInterceptor(String username, String password) {
         this.username = username;
         this.password = password;
+        username1 =username;
     }    
 
     public static String encodeCredentialsForBasicAuth(String username, String password) {
@@ -30,4 +33,12 @@ public class BasicAuthInterceptor implements ClientHttpRequestInterceptor {
 
         return clientHttpRequestExecution.execute(httpRequest, bytes);
 	}
+	
+	 public static boolean isUserLogged() {
+	        try {
+	            return !SecurityContextHolder.getContext().getAuthentication().getName().equals(username1);
+	        } catch (Exception e) {
+	            return false;
+	        }
+	    }
 }
