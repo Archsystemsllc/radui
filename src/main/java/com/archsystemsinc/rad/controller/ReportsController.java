@@ -33,6 +33,7 @@ import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ReportsForm;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -55,6 +56,7 @@ public class ReportsController {
 		HashMap<Integer,String> locationMap = null;
 		HashMap<Integer,String> jurisMap = null;
 		HashMap<Integer,String> programMap = null;
+		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
 		ReportsForm reportsForm = (ReportsForm) session.getAttribute("ReportsFormSession");
 		model.addAttribute("reportsForm", reportsForm);
 		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
@@ -68,10 +70,11 @@ public class ReportsController {
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 			
-			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			//String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 			programMap = new HashMap<Integer, String> ();
 			locationMap = new HashMap<Integer, String> ();
 			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				jurIdArrayList.add(jurisIdSingle);
 				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
 				if (programTempMap == null) continue;
 				
@@ -85,6 +88,7 @@ public class ReportsController {
 				
 				programTempMap = null;
 			}
+			reportsForm.setJurIdList(jurIdArrayList);
 			model.addAttribute("programMapEdit", programMap);	
 			model.addAttribute("locationMapEdit", locationMap);	
 			
@@ -183,35 +187,45 @@ public class ReportsController {
 			 "/mac_user/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}"})	
 	public String macJurReportDrillDown(@PathVariable("macId") final String macIdString, @PathVariable("jurisId") final String jurIdString, @PathVariable("searchString") final String searchString, final Model model,HttpSession session) {
 		
-		HashMap<Integer,ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
-		HashMap<String,ArrayList<ScoreCard>> scoreCardSessionMap = (HashMap<String,ArrayList<ScoreCard>>) session.getAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT");
-		ArrayList<ScoreCard> scoreCardList = scoreCardSessionMap.get(macIdString+"_"+jurIdString);
-		
-		for(ScoreCard scoreCard: scoreCardList) {
-			scoreCard.setMacName(macIdString);
-			scoreCard.setJurisdictionName(jurIdString);
-			if(searchString.equalsIgnoreCase("ALL")) {
-				resultsMap.put(scoreCard.getId(), scoreCard);
-			} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
-				if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"))
+		try {
+			HashMap<Integer,ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
+			HashMap<String,ArrayList<ScoreCard>> scoreCardSessionMap = (HashMap<String,ArrayList<ScoreCard>>) session.getAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT");
+			ArrayList<ScoreCard> scoreCardList = scoreCardSessionMap.get(macIdString+"_"+jurIdString);
+			
+			for(ScoreCard scoreCard: scoreCardList) {
+				scoreCard.setMacName(macIdString);
+				scoreCard.setJurisdictionName(jurIdString);
+				if(searchString.equalsIgnoreCase("ALL")) {
 					resultsMap.put(scoreCard.getId(), scoreCard);
-			}else if(searchString.equalsIgnoreCase("ScoreablePass")) {
-				if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) 
-				 resultsMap.put(scoreCard.getId(), scoreCard);
-			}else if(searchString.equalsIgnoreCase("ScoreableFail")) {
-				if(scoreCard.getCallResult().equalsIgnoreCase("Fail"))
+				} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
+					if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"))
+						resultsMap.put(scoreCard.getId(), scoreCard);
+				}else if(searchString.equalsIgnoreCase("ScoreablePass")) {
+					if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) 
+					 resultsMap.put(scoreCard.getId(), scoreCard);
+				}else if(searchString.equalsIgnoreCase("ScoreableFail")) {
+					if(scoreCard.getCallResult().equalsIgnoreCase("Fail"))
+							 resultsMap.put(scoreCard.getId(), scoreCard);
+				} else if(searchString.equalsIgnoreCase("Non-Scoreable")) {
+					if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable"))
 						 resultsMap.put(scoreCard.getId(), scoreCard);
-			} else if(searchString.equalsIgnoreCase("Non-Scoreable")) {
-				if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable"))
-					 resultsMap.put(scoreCard.getId(), scoreCard);
-			} else if(searchString.equalsIgnoreCase("Does Not Count")) {
-				if(scoreCard.getScorecardType().equalsIgnoreCase("Does Not Count"))
-					 resultsMap.put(scoreCard.getId(), scoreCard);
-			}			
+				} else if(searchString.equalsIgnoreCase("Does Not Count")) {
+					if(scoreCard.getScorecardType().equalsIgnoreCase("Does Not Count"))
+						 resultsMap.put(scoreCard.getId(), scoreCard);
+				}			
+			}
+			
+			ObjectMapper mapper = new ObjectMapper();
+			//Convert the result set to string and replace single character with spaces
+			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
+			//session.setAttribute("SESSION_SCOPE_SCORECARDS_MAP",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
+			session.setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
+			model.addAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
+			model.addAttribute("ReportFlag",true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		session.setAttribute("SESSION_SCOPE_SCORECARDS_MAP", resultsMap);
-		model.addAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
-		model.addAttribute("ReportFlag",true);
 		
 		return "scorecardlist";
 	}
@@ -250,7 +264,7 @@ public class ReportsController {
 	 @RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
 			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport"})			
 	public String getMacJurisReport(@ModelAttribute("reportsForm") ReportsForm reportsForm,  final BindingResult result,
-			final Model model, HttpServletRequest request, HttpSession session) {
+			final Model model, HttpServletRequest request, HttpSession session, Authentication authentication) {
 
 		String returnView = "";
 		log.debug("--> getMacJurisReport <--");
@@ -258,7 +272,11 @@ public class ReportsController {
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI;
 		
+		HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+		HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
+		
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
+		String roles = authentication.getAuthorities().toString();
 			
 		try {
 			
@@ -267,49 +285,116 @@ public class ReportsController {
 			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
 			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			
-			if (reportsForm.getJurisdictionIds() != null ) {
+			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 				
+				reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
 				String[] jurisIds = reportsForm.getJurisdictionIds();
 				
-				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
-				ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
-				String jurisdictionNamesValues = "";
-				for (String jurisIdSingleValue: jurisIds) {
-					if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
-						reportsForm.setJurisdictionName("ALL");
-						break;
+				String jurIds = reportsForm.getJurisdictionIds().toString();
+				
+				ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
+				
+				if(jurisIds[0].equalsIgnoreCase("ALL")) {
+					reportsForm.setJurisdictionName("ALL");
+					
+					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+						jurIdArrayList.add(jurisIdSingle);
+						
+						if(reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
+							reportsForm.setProgramName(reportsForm.getProgramId());
+							HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+							if (programTempMap == null) continue;
+							
+							programMap.putAll(programTempMap);
+							if(reportsForm.getLoc().equalsIgnoreCase("ALL")) {
+								for(Integer programIdSingle: programTempMap.keySet()) {
+									HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+									if (locationTempMap == null) continue;
+									locationMap.putAll(locationTempMap);
+									locationTempMap = null;
+								}
+							}
+							
+							programTempMap = null;
+						}
+						
 					}
-					jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
-					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
-					jurisdictionNameArrayList.add(jurisdictionTempName);
-					jurisdictionNamesValues += jurisdictionTempName+ " ";
+					reportsForm.setJurIdList(jurIdArrayList);			
+					
+				} else {
+					
+					String jurisdictionNamesValues = "";
+					for (String jurisIdSingleValue: jurisIds) {
+						jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+						
+						String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+						
+						jurisdictionNamesValues += jurisdictionTempName+ " ";
+					}
+					
+					reportsForm.setJurIdList(jurIdArrayList);		
+					reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+					
+					if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+						String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+						reportsForm.setMacName(macName);
+					}
+					
+					if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
+						String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
+						reportsForm.setProgramName(programName);
+					}
+				}				
+				
+			} else {
+				
+				if (reportsForm.getJurisdictionIds() != null ) {
+					
+					String[] jurisIds = reportsForm.getJurisdictionIds();
+					
+					ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
+					ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
+					String jurisdictionNamesValues = "";
+					for (String jurisIdSingleValue: jurisIds) {
+						if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
+							reportsForm.setJurisdictionName("ALL");
+							break;
+						}
+						jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+						String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+						jurisdictionNameArrayList.add(jurisdictionTempName);
+						jurisdictionNamesValues += jurisdictionTempName+ " ";
+					}
+					reportsForm.setJurIdList(jurisIdArrayList);			
+					reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+					reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
+					reportsForm.setJurisId("");
+				} 
+				
+				if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+					String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+					reportsForm.setMacName(macName);
+				} else {
+					reportsForm.setMacName("ALL");
 				}
-				reportsForm.setJurIdList(jurisIdArrayList);			
-				reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
-				reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
-				reportsForm.setJurisId("");
-			} 
-			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
-				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
-				reportsForm.setMacName(macName);
-			} else {
-				reportsForm.setMacName("ALL");
+				
+				if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
+					String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
+					reportsForm.setProgramName(programName);
+				} else {
+					reportsForm.setProgramName(reportsForm.getProgramId());
+				}
+				
+				if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase("ALL") ) {
+					/*String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+					reportsForm.setMacName(macName);*/
+				} else {
+					/**/
+				}
+				
 			}
-			
-			if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
-				String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
-				reportsForm.setProgramName(programName);
-			} else {
-				reportsForm.setProgramName(reportsForm.getProgramId());
-			}
-			
-			if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase("ALL") ) {
-				/*String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
-				reportsForm.setMacName(macName);*/
-			} else {
-				/**/
-			}
+			////
 			
 			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = new TreeMap<String, QamMacByJurisdictionReviewReport>(
 					new Comparator<String>() {

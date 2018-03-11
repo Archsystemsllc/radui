@@ -56,6 +56,11 @@
 
 		
 		$("select#macId").change(function(){
+
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+			
+			var macIdValue = $(this).val();
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
@@ -66,6 +71,7 @@
       	  	    		
       	  	    	});  	   
                });
+			}
         });
 
 		//Back Button Functionality
@@ -109,7 +115,9 @@ $(document).ready(function(){
 	   "targets" : 7
 	   },
 	 ],
-	 dom: 'Bfrtip',
+	 //dom: 'Bfrtip',
+	 //dom: '<"top"i>fprtl<"bottom"B><"clear">',
+	 dom: '<lif<t>pB>',
      buttons: [
          {
              extend: 'copyHtml5',
@@ -128,8 +136,8 @@ $(document).ready(function(){
              exportOptions: {
                  columns: [ 0, 1, 2, 3, 4, 5 ]
              }
-         },
-         'colvis'
+         }
+         //,'colvis'
      ],
 	  "paging" : true,
 	  "pageLength" : 10,
@@ -143,7 +151,7 @@ $(document).ready(function(){
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div role="main">
 	<table id="mid">
-		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardfilter"
+		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist"
 			id="scorecardfilterForm">
 			<tr>
 				<td style="vertical-align: top" >
@@ -155,11 +163,9 @@ $(document).ready(function(){
 							<div class="table-users" style="width: 80%">
 								<div class="header">List of Scorecards</div>
 							<!-- 	Removed Blank Space - 508 -->
-							<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
+							 <input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 								<c:if test="${ScoreCardFilter == true}">
-									<form:input type = "hidden" path="userId" /> 
-								
-								
+									
 									<div class="row " style="margin-top: 10px">
 										<div class="col-lg-12 col-lg-offset-1 form-container">
 											<div class="row">
@@ -252,6 +258,7 @@ $(document).ready(function(){
 											<button class="btn btn-primary" id="back" type="button">Back</button></a></span>
 										</div>
 									</div>
+									<br/>
 								</c:if>
 								<%-- <div class="row " style="margin-top: 10px">
 									<!--  Section 1 -->

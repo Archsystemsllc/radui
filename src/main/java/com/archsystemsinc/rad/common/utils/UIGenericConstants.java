@@ -17,5 +17,8 @@ public class UIGenericConstants {
 	public static final String QUALITY_MONITOR_ROLE_STRING = "Quality Monitor";
 	public static final String MAC_USER_ROLE_STRING = "MAC User";
 	
+	public static final String RESULT_PASS_STRING = "Pass";
+	public static final String RESULT_FAIL_STRING = "Fail";
+	
 	public static final Long RECORD_STATUS_ACTIVE = 1l;
 }

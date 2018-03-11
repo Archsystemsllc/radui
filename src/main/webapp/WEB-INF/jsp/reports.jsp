@@ -57,6 +57,10 @@
     		format: "mm/dd/yyyy"
     	});  
 
+    	$('.required').each(function(){
+		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
+		});
+
     	
     	 var reportSelectValue=$('input:radio[name=mainReportSelect]:checked').val();
     	
@@ -234,6 +238,9 @@
 		
      });		
 </script>
+<style type="text/css">
+	.red {  color:#cd2026;  }
+</style>
 </head>
 <body  >
 	<jsp:include page="admin_header.jsp"></jsp:include>
@@ -298,16 +305,16 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> From Date:</label>
 			                             
-										<form:input type = "text" class="form-control" id="fromDateString" name = "fromDateString" path="fromDateString" required="true" title="Choose From Date from the Calendar"/>
+										<form:input type = "text" class="form-control required"  id="fromDateString" name = "fromDateString" path="fromDateString" required="true" title="Choose From Date from the Calendar"/>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> To Date:</label>
-			                                <form:input type = "text" class="form-control" id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List"/>
+			                                <form:input type = "text" class="form-control required"  id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List"/>
 			                            </div>
 			                        </div>
 			                        
 			                        <div class="row">
-			                            <div class="col-sm-6 form-group">
+			                            <div class="col-sm-10 form-group">
 			                            <label for="reportType"> Report Type:</label>
 											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;Scorecard &nbsp;										                            
 										  	<form:radiobutton path="mainReportSelect" value="Compliance" title="Choose Compliance"/>&nbsp;Compliance &nbsp;
@@ -344,7 +351,7 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="callCategoryTypeDiv">
 			                            <label for="callCategoryType"> Call Category:</label> 
-			                               <form:select path="callCategoryType" class="form-control" id="callCategoryType" title="Select one Call Category Type from the List">
+			                               <form:select path="callCategoryType" class="form-control required" id="callCategoryType" title="Select one Call Category Type from the List">
 											   	<form:option value="ALL" label="ALL"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 		

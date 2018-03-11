@@ -42,6 +42,9 @@ public class User {
 	private Long orgId;
 	private Date lastLoggedinDate;
 	
+	private String token;
+	private Boolean enabled;
+	
 	
 	//Temporary Variables
 	
@@ -52,6 +55,18 @@ public class User {
 	
 	
 	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public Boolean getEnabled() {
+		return enabled;
+	}
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
 	public String[] getJurisidictionId() {
 		return jurisidictionId;
 	}

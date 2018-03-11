@@ -112,6 +112,8 @@
 		//Auto Complete CSF Full Name Functionality
 		var username="qamadmin";
   	   	var password="123456";
+
+  	 
     	    	
     	$("#csrFullName" ).autocomplete({
     	      minLength: 0,
@@ -209,13 +211,29 @@
  	
 	});
 
-	$(function(){		
+	$(function(){	
+
+		 $("#csrFullName").change(function(){
+			alert("Test");
+			var csrFullNameValue = $(this).val().trim();
+			alert(csrFullNameValue);
+	        if(csrFullNameValue == "No CSR's Found") {
+		        alert("Testing");
+	        	$("#csrFullName").val("");
+	        }
+				
+	     });	
 
 		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
+
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+			
+			var macIdValue = $(this).val();
 			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                    {macId: $(this).val(), multipleInput: false}, function(data){
+                    {macId: macIdValue, multipleInput: false}, function(data){
                
                  $("#jurId").get(0).options.length = 0;	           
       	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
@@ -224,11 +242,16 @@
       	  	    		
       	  	    	});  	   
                });
+			}
         });
 
 		//Select Program Functionality
 		$("select#jurId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: $('#macId').val(),jurisId: $(this).val()}, function(data){
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+			var macIdValue = $('#macId').val();
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: $(this).val()}, function(data){
                 
                  $("#programId").get(0).options.length = 0;	           
       	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
@@ -237,6 +260,7 @@
       	  	    		
       	  	    	});  	   
                });
+			}
         });
 
 		//Select Call Category Functionality
@@ -264,7 +288,7 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");
-	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/gobackscorecardfilter";
+	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist";
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 
@@ -290,12 +314,13 @@
 				$("#nonScoreableReasonCommentsDiv").show();	
 				$('#section4HeaderDiv').show();		
 				$("#section4HeaderDiv_DoesNotCount").hide();
-							
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
-
+				alert("test1");			
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				$('#nonScoreableReason').attr('required',true);
+				alert("test2");
 				$("#Section8Div").hide();				
 				
 				
@@ -311,10 +336,11 @@
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",true);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",true);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",true);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",true);	
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				$('#nonScoreableReason').attr("required",false);
 
 				$("#Section8Div").show();
 								
@@ -335,6 +361,7 @@
 				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
 				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
 				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$('#nonScoreableReason').attr("required",false);
 
 				$("#Section8Div").hide();	
 								
@@ -448,11 +475,19 @@
             		$('#failReasonComments').attr("required",false);	
         	}
 
-        	if ((scorecardType_value == "Non-Scoreable" || scorecardType_value == "Does Not Count")) {
+        	if ((scorecardType_value == "Non-Scoreable" )) {
 
         		$("#callResult").val("N/A");
         		$("#failReasonCommentsDiv").hide();
-        		$('#failReasonComments').attr("required",false);	
+        		$('#failReasonComments').attr("required",false);        		    		
+           } 
+
+        	if ((scorecardType_value == "Does Not Count")) {
+
+        		$("#callResult").val("N/A");
+        		$("#failReasonCommentsDiv").hide();
+        		$('#failReasonComments').attr("required",false);        		
+        		
            } 
         }
 	});
@@ -669,11 +704,15 @@
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   
 			                         <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected , please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" required="true" title="Select Radiobutton Yes, if accurate information was provided"/>&nbsp;Yes&nbsp;
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" required="true" title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
-			                            </div>			                           
+			                            <div class="col-lg-8 form-group">
+			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected , please enter reason in text box below:<span class='red'><strong>*</strong></span></label>
+			                              
+			                                
+			                            </div>	
+			                             <div class="col-lg-2 form-group" >
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" title="Select Radiobutton Yes, if accurate information was provided"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
+			                               </div>		                           
 			                        </div>
 			                        <div class="row" id="accuracyCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
@@ -688,11 +727,14 @@
 			                        </div>
 			                        
 			                        <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected , please enter reason in text box below:</label>
+			                            <div class="col-lg-8 form-group">
+			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected , please enter reason in text box below:<span class='red'><strong>*</strong></span></label>
+			                                
+			                            </div>
+			                             <div class="col-lg-2 form-group" >
 			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true" title="Select Radiobutton Yes, if complete information was provided"/>&nbsp;Yes&nbsp;
 										  	<form:radiobutton path="csrPrvCompInfo" value="No" title="Select Radiobutton No, if complete information was not provided"/>&nbsp;No
-			                            </div>
+			                               </div>		
 			                           
 			                        </div> 
 			                         <div class="row" id="completenessCallFailureBlock">
@@ -715,11 +757,14 @@
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   
 			                         <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="csrPrivacyQ"> Did CSR follow privacy procedures? If 'No' was selected , please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true" id="csrPrivacyQ"/>&nbsp;Yes&nbsp;
-										  <form:radiobutton path="csrFallPrivacyProv" value="No" id="csrPrivacyQ"/>&nbsp;No
-			                            </div>		                           
+			                            <div class="col-lg-8 form-group">
+			                                <label for="csrPrivacyQ"> Did CSR follow privacy procedures? If 'No' was selected , please select the reason below:<span class='red'><strong>*</strong></span></label>
+			                                
+			                            </div>	
+			                             <div class="col-lg-2 form-group" >
+			                               <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true" />&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrFallPrivacyProv" value="No" />&nbsp;No
+										 </div>			                           
 			                        </div>   
 			                         <div class="row" id="privacyCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
@@ -747,11 +792,14 @@
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   
 			                         <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="csrCourteousQ">Was the CSR courteous, friendly, and professional? If 'No' was selected , please select the reason below:</label>
-			                                <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" required="true" id="csrCourteousQ"/>&nbsp;Yes&nbsp;
-										  <form:radiobutton path="csrWasCourteous" value="No" id="csrCourteousQ"/>&nbsp;No
-			                            </div>		                           
+			                            <div class="col-lg-8 form-group">
+			                                <label for="csrCourteousQ">Was the CSR courteous, friendly, and professional? If 'No' was selected , please select the reason below:<span class='red'><strong>*</strong></span></label>
+			                                
+			                            </div>	
+			                             <div class="col-lg-2 form-group" >
+			                               <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" />&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrWasCourteous" value="No" />&nbsp;No
+										 </div>				                           
 			                        </div>   
 			                         <div class="row" id="customerSkillsCallFailureBlock">
 			                       	 <div class="col-lg-5 form-group">
@@ -822,6 +870,7 @@
 				                    
 				                </div>
 				            </div>
+				            <c:if test="${scorecard.id > 0 && scorecard.callResult != 'Pass'}">
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 8 - Calibration Module</h2> 
@@ -874,6 +923,7 @@
 				                    
 				                </div>
 				            </div>
+				            </c:if>
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><c:if test="${scorecard.id == 0}">
