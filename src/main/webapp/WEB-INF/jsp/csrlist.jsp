@@ -591,7 +591,8 @@ $(function() {
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="file">CSR List Upload: </label>
-										<input type="hidden" id="userId" name="userId" value="1"/>
+										
+										<form:input type = "hidden" path="userId" />
 										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload CSR List from Local">
 										</input>
 			                            </div>
@@ -678,7 +679,7 @@ $(function() {
 			                        </div>
 				                </div>
 				            </div>
-				            <div class="row" id="csrListViewDiv">
+				            <div class="row" id="csrListViewDiv">f
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   

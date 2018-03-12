@@ -209,6 +209,7 @@
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the Rebuttal form without saving?</p>
 	</div>
 	<div id="complete-confirm" title="Complete Scorecard Confirmation?">
+	
 			                             <form >
 								  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Please select the Rebuttal Status</p>
 								  		 <div id="confirm-msg" style="color: red;"></div>
@@ -224,12 +225,14 @@
 
 	<table id="mid">
 		<form:form method="POST" modelAttribute="rebuttal" class="form-signin" action="#" id="rebuttalForm">
+			
 			<tr>
 				<td style="vertical-align: top">
 
 					<div id="updates" class="boxed">
 
 						<div class="content">
+						
 							
 							<div class="table-users" style="width: 80%">
 								<div class="header">View Rebuttal</div>	
@@ -247,6 +250,7 @@
 								 	<form:hidden path="jurisId" />
 								 	<form:hidden path="id" />
 								 	<form:hidden path="rebuttalResult" />
+								 	<fieldset disabled>
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="macReferenceId"> MAC Call Reference ID:</label>
@@ -398,7 +402,8 @@
 			                               <input class="form-control" id="file" type="file" name="uploadAttachment" style="box-sizing: content-box;" value="TestFile.xls">
 										</input>
 			                            </div>		                           
-			                        </div>       
+			                        </div>    
+			                        </fieldset>   
 				                    
 				                </div>
 				            </div>		
@@ -407,9 +412,12 @@
 							</div>
 						</div>
 					</div>
+					
 				</td>
 			</tr>
+			
 		</form:form>
+		
 	</table>
 	<jsp:include page="footer.jsp"></jsp:include>
 </body>

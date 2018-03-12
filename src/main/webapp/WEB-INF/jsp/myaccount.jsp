@@ -76,6 +76,119 @@
 										<tr>
 										</tr>
 									</table>
+									
+									<div class="row" style="margin-top: 10px">
+									 <div class="col-lg-8 col-lg-offset-1 form-container">
+								
+									<div class="row" style="margin-top: 10px">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="userName"> Username/Email Address:</label> 
+											 <spring:bind path="userName">
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+
+								                <form:input type="text" path="userName" class="form-control" placeholder=""
+								                            autofocus="true" readonly="true" title="Edit Username field"></form:input>
+
+								                <form:errors path="userName"></form:errors>
+								            </div>
+								            </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/change-password/${userForm.id}">Change Password</a>
+			                            </div>
+			                        	</div>
+			                        	
+			                        <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                              <label for="firstName"> First Name:</label> 
+											<spring:bind path="firstName">
+											<div class="required ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="firstName" class="form-control" placeholder=""
+								                            title="Please fill out First Name field" required="true"></form:input>
+								                <form:errors path="firstName"></form:errors>
+								            </div>
+								            </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                <label for="middleName"> Middle Name:</label> 
+											 <div class="form-group ${status.error ? 'has-error' : ''}">
+								                <form:input type="text" path="middleName" class="form-control" placeholder=""
+								                            title="Please fill out Middle Name field"></form:input>
+								                <form:errors path="middleName"></form:errors>
+			                            	</div>
+			                        	</div>
+				                    
+				                	</div>
+									
+									<div class="row">
+			                            <div class="col-lg-6 form-group">
+			                              <label for="lastName"> Last Name:</label> 
+			                               <spring:bind path="firstName">
+											 <div class="required  ${status.error ? 'has-error' : ''}">
+											
+								                <form:input type="text" path="lastName" class="form-control" placeholder=""
+								                            title="Please fill out Last Name Field" required="true"></form:input>
+								                <form:errors path="lastName"></form:errors>
+								            </div>
+								           </spring:bind>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               
+			                        	</div>				                    
+				                	</div>
+				                	
+				                	<div class="row">
+				                		<div class="col-lg-6 form-group">
+			                            	<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
+													class="form-control required" id="organizationLookupId" required="true" title="Select one organization from the list">
+													<form:option value="" label="---Select Organization---" />
+													<form:options items="${orgIds}" />
+												</form:select>
+			                                
+			                        	</div>		
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> Role:</label>
+											<form:select path="role.id"
+													class="form-control required" id="roleId" required="true" title="Select one role from the list">
+													<form:option value="" label="---Select Role---" />
+													<form:options items="${roleIds}" />
+												</form:select>
+			                            </div>
+			                            		                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group" id="macIdBlock">
+			                          
+										<label for="name"> MAC:</label>
+			                                <form:select path="macId" id="macId" class="form-control required" title="Select one Medicare Administrative Contractor ID from the list">
+											   <form:option value="" label="---Select MAC---"/>
+											   <form:options items="${macIds}" />
+											</form:select> 	
+			                            </div>
+			                            <div class="col-lg-6 form-group"  id="jurIdBlock">
+			                            
+			                           	<label for="jurId"> Jurisdiction:</label>
+			                               <form:select path="jurisidictionId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one or multiple jurisdiction from the list">
+										   <form:option value="" label="---Select Jurisdiction---"/>		
+										   <form:options items="${jurisMapEdit}" />						   
+										</form:select>	
+			                        	</div>				                    
+				                	</div>
+				                	<div class="row">
+			                            <div class="col-lg-6 form-group" id="pccIdBlock">
+			                          
+										<label for="pccId"> PCC Location:</label>
+										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" required="true" title="Select one PCC Location from list">
+										   <form:option value="" label="---Select PCC Location---"/>	
+										    <form:options items="${programMapEdit}" />									   
+										</form:select>	
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                            	<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}" style ="padding-top: 40px;"/>
+			                        	</div>				                    
+				                	</div>
+				                	
+				                	<%-- 
 
 									<div class="row">
 										<div class="col-sm-6 col-md-offset-1 form-group">
@@ -168,7 +281,7 @@
 													
 											
 												</form:select>
-										</div>
+										</div> --%>
 
 										<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}"/>
 										
@@ -178,7 +291,9 @@
 									</div>
 								</div>
 							</div>
-						</div>
+							</div>
+							</div>
+						
 				</td>
 			</tr>
 

@@ -214,14 +214,10 @@
 	$(function(){	
 
 		 $("#csrFullName").change(function(){
-			alert("Test");
-			var csrFullNameValue = $(this).val().trim();
-			alert(csrFullNameValue);
-	        if(csrFullNameValue == "No CSR's Found") {
-		        alert("Testing");
+			var csrFullNameValue = $(this).val().trim();			
+	        if(csrFullNameValue == "No CSR's Found") {		       
 	        	$("#csrFullName").val("");
-	        }
-				
+	        }				
 	     });	
 
 		//Select Jurisdiction Functionality
@@ -288,7 +284,7 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");
-	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist";
+	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=true";
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 
@@ -314,13 +310,13 @@
 				$("#nonScoreableReasonCommentsDiv").show();	
 				$('#section4HeaderDiv').show();		
 				$("#section4HeaderDiv_DoesNotCount").hide();
-				alert("test1");			
+					
 				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
 				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
 				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
 				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
 				$('#nonScoreableReason').attr('required',true);
-				alert("test2");
+				
 				$("#Section8Div").hide();				
 				
 				
@@ -509,7 +505,7 @@
 		<form:input type = "hidden" path="id" />
 		<form:input type = "hidden" path="qamStartdateTime" />
 		<form:input type = "hidden" path="qamEnddateTime" />
-		<input type="hidden" id="userRole" value='${loggedInUserRole}'/>
+		<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			<tr>
 				<td style="vertical-align: top">
 

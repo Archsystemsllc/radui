@@ -242,7 +242,7 @@ $(function(){
 			                               <label for="password"> Password:</label> 
 											 <spring:bind path="password">
 											 <div class="required ${status.error ? 'has-error' : ''}">
-								                <form:input type="password" path="password" class="form-control required" placeholder=""></form:input>
+								                <form:input title="Please fill out password field" type="password" path="password" class="form-control required" placeholder=""></form:input>
 								                <form:errors path="password" title="Please fill out password field" required="true"></form:errors>
 								            </div>
 								            </spring:bind>

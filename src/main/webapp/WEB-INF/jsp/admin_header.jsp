@@ -119,19 +119,18 @@
 								<ul class="nav navbar-nav" style="font-weight: bold" id="navlist">
 									<li style="margin-left: 0px"><a class="${menu_highlight == 'home' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User') or hasAuthority('CMS User')">
-										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist" title="Scorecard Page">Scorecard</a></li>
+										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=false" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
 									<!--  Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('CMS User')">
 									<li class="dropdown">
 										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Menu">Reports</a>
-										<span class="caret"></span>
-										<ul class="dropdown-menu">
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
-									      	<li><a href="${pageContext.request.contextPath}/resources/documents/contractorinfo.docx" title="Create Users Page">Contractor Information</a></li>
-									     </sec:authorize>
-									
+										<span class="caret"></span>
+										<ul class="dropdown-menu">										
+									      	<li><a href="${pageContext.request.contextPath}/resources/documents/contractorinfo.docx" title="Create Users Page">Contractor Information</a></li>									     								
 									    </ul>
+									    </sec:authorize>	
 									</li>
 									</sec:authorize>
 									<!-- Menu for the Reports -->

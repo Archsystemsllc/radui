@@ -153,8 +153,8 @@
 		
 		
 		 $('#close1,#close2').click(function(e) {	
-			 e.preventDefault();		
-			 window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/gobackscorecardfilter";
+			 e.preventDefault();	
+			 window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=true";			 
 	     }); 
 
       //Secton 1 - Option 1

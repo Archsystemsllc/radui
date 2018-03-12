@@ -430,16 +430,69 @@ public class UserController {
 			model.addAttribute("programMapEdit", programMap);
 		}
 		
-		
-		
-		
-		
 		userDefaults(model);
 		
 		model.addAttribute("userForm", userByID);
 		
 		log.debug("<-- editUser");
 		return "edituser";
+	}
+	
+	
+	@RequestMapping(value ={"/admin/change-password/{id}", "/quality_manager/change-password/{id}", "/cms_user/change-password/{id}",
+			 "/mac_admin/change-password/{id}","/mac_user/change-password/{id}","/quality_monitor/change-password/{id}"}, method = RequestMethod.GET)
+	public String changePasswordGet(@PathVariable("id") final Long id,
+			final Model model, User user) {
+		log.debug("--> changePassword:"+id);
+		final User userByID = userService.findById(id);
+		
+		userByID.setPassword("");
+		//userByID.setPasswordFromdb(userByID.getPassword());
+		//userByID.setPasswordConfirm(userByID.getPassword());
+		
+		userDefaults(model);
+		
+		model.addAttribute("userForm", userByID);
+		
+		log.debug("<-- changePassword");
+		return "changepassword";
+	}
+	
+	
+	/**
+	 * 
+	 * This method provides the functionalities for the user to re-direct to the
+	 * welcome page after successful login.
+	 * 
+	 * @param userForm
+	 * @param bindingResult
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value ={"/admin/change-password", "/quality_manager/change-password", "/cms_user/change-password",
+			 "/mac_admin/change-password","/mac_user/change-password","/quality_monitor/change-password"}, method = RequestMethod.POST)	
+	public String changePasswordPost(@ModelAttribute("userForm") User userForm,
+			BindingResult bindingResult,
+			final RedirectAttributes redirectAttributes, Model model) {
+		log.debug("--> changePasswordPost:" + userForm);
+		userValidator.updateUserDetailsValidation(userForm, bindingResult);
+		if (bindingResult.hasErrors()) {
+			userDefaults(model);			
+			return "changepassword";
+		}
+		try {
+			User userByDb = userService.findById(userForm.getId());
+			userByDb.setPasswordFromdb(userByDb.getPassword());
+			userByDb.setPassword(userForm.getPassword());
+			userService.update(userByDb);
+			redirectAttributes.addFlashAttribute("success", "success.update.password");
+		} catch (Exception e) {
+			log.error("Error while updating user",e);
+			redirectAttributes.addFlashAttribute("success", "fail.update.password");
+		}
+		
+		log.debug("<-- changePasswordPost");
+		return "changepassword";
 	}
 
 	/**

@@ -192,7 +192,7 @@ $(function(){
 					                                 <td><a class="${linkcolor }">${user.role.roleName}</a></td>
 					                                <td><a class="${linkcolor }">${user.status == 1? "Active":"Inactive"}</a></td>
 					                                <td>
-					                                    <span><a class="action-icons c-edit" href="edit-user/${user.id}" title="Edit User">Edit</a></span>
+					                                    <span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-user/${user.id}" title="Edit User">Edit</a></span>
 					                                    <span><a class="action-icons c-delete" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/${user.id}/${pageContext.request.userPrincipal.name}" title="Delete User" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></span>
 					                                </td>
 					                            </tr>

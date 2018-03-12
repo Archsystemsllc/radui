@@ -31,7 +31,9 @@ public class CsrListController {
 		log.debug("--> showAdminDashboard <--");
 		
 		CsrUploadForm csrUploadForm = new CsrUploadForm();
-		model.addAttribute("csrUploadForm", csrUploadForm);
+		
+		
+		User userObject = (User) session.getAttribute("LoggedInUserForm");
 		
 		String roles = authentication.getAuthorities().toString();
 		
@@ -41,10 +43,12 @@ public class CsrListController {
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
 			
 		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
+			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);	
+			model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);			
 			
 		}		
-		
+		csrUploadForm.setUserId(userObject.getId().intValue());
+		model.addAttribute("csrUploadForm", csrUploadForm);
 		//session.setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		return "csrlist";
 	}
