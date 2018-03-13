@@ -204,6 +204,8 @@ $(function() {
 
 	  	$('#csrLists tbody').empty();
 		$('#alertMsg').text('');
+		$('#searchalertMsg').text('');
+		
 		 var row= $(this).closest('tr');  
 	  	var monthYear=$("td:eq(0)",row).text(); 
 
@@ -238,6 +240,7 @@ $(function() {
 
 	$('#searchCsr').click(function(e){ 
   		$('#alertMsg').text('');
+  		$('#searchalertMsg').text('');
   		$('#csrMonthLists tbody').empty();
   		$('#csrListViewDiv').hide();
   	  	$('#csrListMonthDiv').hide();
@@ -249,19 +252,20 @@ $(function() {
 		var validateToDate = $('#fromDate').val();		  
 		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
 		  if(validateMac == null && validateJurisdiction == null) {
-			  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
+			  $('#searchalertMsg').text("Please Select Mac Id and Jurisdiction Id");
+			  
 				return;
 			} else if(validateFromDate == "" ) {
-				  $('#alertMsg').text("Please Enter From Date");
+				  $('#searchalertMsg').text("Please Enter From Date");
 					return;
 				}else if(validateToDate == "" ) {
-					  $('#alertMsg').text("Please Enter To Date");
+					  $('#searchalertMsg').text("Please Enter To Date");
 						return;
 					} else if(validateMac == null ) {
-						  $('#alertMsg').text("Please Select Mac Id ");
+						  $('#searchalertMsg').text("Please Select Mac Id ");
 							return;
 						} else if(validateJurisdiction == null) {
-							  $('#alertMsg').text("Please Select Jurisdiction Id");
+							  $('#searchalertMsg').text("Please Select Jurisdiction Id");
 								return;
 							} 
 
@@ -287,13 +291,13 @@ $(function() {
 	        var resultCount = data.length;
 	       // alert("Result Count:"+resultCount);
 	        if(resultCount==0) {
-	        	$('#alertMsg').text('No Data Found for the Selected Months');
+	        	$('#searchalertMsg').text('No Data Found for the Selected Months');
 		    } else {
 		    	 
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
 	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-	      	        $('#alertMsg').text('CSR List Available Months Retrieved');
+	      	        $('#searchalertMsg').text('CSR List Available Months Retrieved');
 	  	    	});
 		    	trHTML += '</tbody>';
 		    	$('#csrListMonthDiv').show();
@@ -415,6 +419,8 @@ $(function() {
     	$('#csrMonthLists').hide();
     	$('#csrLists').hide();
     	$('#alertMsg').text('');
+    	$('#searchalertMsg').text('');
+    	
     	$("#keepPreviousListButton").hide();
     	$("#dialog-confirm").hide();
     	$("#macIdK_Div").hide();	
@@ -428,15 +434,27 @@ $(function() {
     		{ "data": "firstName" },
     		{ "data": "middleName" },
     		{ "data": "lastName" },
-    		{ "data": "level" },
-    		{ "data": "location" },
+    		{ "data": "level" },    		
+    		{ "data": "macName" },
     		{ "data": "jurisdiction" },
+    		{ "data": "location" },
     		{ "data": "program" },
     		{ "data": "status" }
     		],
-    		dom: 'Bfrtip',
-    		buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+    		 dom: '<lif<t>pB>',
+    	     buttons: [
+    	         {
+    	             extend: 'copyHtml5',
+    	                messageTop: 'CSR List Report.'
+    	         },
+    	         {
+    	             extend: 'excelHtml5',
+ 	                messageTop: 'CSR List Report.'
+    	         },
+    	         {
+    	             extend: 'pdfHtml5',
+ 	                messageTop: 'CSR List Report.'
+    	         }    		
             ],            
     		rowCallback: function (row, data) {},
     			filter: false,
@@ -626,7 +644,9 @@ $(function() {
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Search CSR Section</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                    
+				                    <div class="row">
+				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
+									</div>
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                             <label for="name"> From Date:</label>
@@ -663,7 +683,7 @@ $(function() {
 				            <div class="row " id="csrListMonthDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    
-				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                     <h3>CSR Monthly List: </h3> 					                   
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
@@ -679,12 +699,12 @@ $(function() {
 			                        </div>
 				                </div>
 				            </div>
-				            <div class="row" id="csrListViewDiv">f
+				            <div class="row" id="csrListViewDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
-				                   
-				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                    <h3>CSR List Reports: </h3>				                   		                   
 				                   
 			                         <div class="row" id="csrlistsdiv">
+			                         
 			                            <div class="col-lg-10 form-group">
 			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrLists" style="width: 90%">
 						                    <thead>
@@ -693,9 +713,10 @@ $(function() {
 										            <th style="text-align: left">Middle Name</th>
 										            <th style="text-align: left">Last Name</th>
 										            <th style="text-align: left">CSR Level</th>
-										            <th style="text-align: left">PCC</th>
+										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Program</th>       
+										             <th style="text-align: left">Program</th>   
+										            <th style="text-align: left">PCC</th>										               
 										            <th style="text-align: left">Status</th>
 										        </tr>
 										    </thead>

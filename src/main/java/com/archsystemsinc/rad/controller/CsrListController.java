@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.model.CsrUploadForm;
 import com.archsystemsinc.rad.model.User;
 
@@ -37,7 +38,7 @@ public class CsrListController {
 		
 		String roles = authentication.getAuthorities().toString();
 		
-		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			

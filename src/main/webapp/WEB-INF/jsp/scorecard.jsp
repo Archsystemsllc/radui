@@ -71,7 +71,74 @@
 		//Section 8 Div
 		//$("#Section8Div").hide();
 		
-    	
+	
+			
+			var selected_value ="${scorecard.scorecardType}"; 
+			
+			if(selected_value=="Non-Scoreable") {				
+				$("#section4Div").hide();	
+				$("#section5Div").hide();
+				$("#section6Div").hide();	
+				
+				$("#callFailureReasonDiv").hide();
+				$("#failReasonCommentsDiv").hide();	
+				$('#section7HeaderDiv').hide();		
+				$("#nonScoreableReasonCommentsDiv").show();	
+				$('#section4HeaderDiv').show();		
+				$("#section4HeaderDiv_DoesNotCount").hide();
+					
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				$('#nonScoreableReason').attr('required',true);
+				
+				$("#Section8Div").hide();				
+				
+				
+			} else if(selected_value=="Scoreable") {
+				$("#section4Div").show();	
+				$("#section5Div").show();
+				$("#section6Div").show();	
+				$("#callResultDiv").show();	
+				$("#callFailureReasonDiv").show();
+				$("#failReasonCommentsDiv").show();
+				$('#section7HeaderDiv').show();		
+				$("#nonScoreableReasonCommentsDiv").hide();	
+				$('#section4HeaderDiv').hide();	
+				$("#section4HeaderDiv_DoesNotCount").hide();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				$('#nonScoreableReason').attr("required",false);
+
+				$("#Section8Div").show();
+								
+			}  else if(selected_value=="Does Not Count") {
+				
+				$("#section4Div").hide();	
+				$("#section5Div").hide();
+				$("#section6Div").hide();	
+				
+				$("#callFailureReasonDiv").hide();
+				$("#failReasonCommentsDiv").hide();	
+				$('#section7HeaderDiv').hide();	
+				$('#section4HeaderDiv').hide()	
+				$("#nonScoreableReasonCommentsDiv").hide();	
+				$("#section4HeaderDiv_DoesNotCount").show();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$('#nonScoreableReason').attr("required",false);
+
+				$("#Section8Div").hide();	
+								
+			} 
+			
 
 	    var csrPrvAccInfoFlag="${scorecard.csrPrvAccInfo}";
 	    var csrPrvCompInfoFlag="${scorecard.csrPrvCompInfo}";
@@ -866,7 +933,7 @@
 				                    
 				                </div>
 				            </div>
-				            <c:if test="${scorecard.id > 0 && scorecard.callResult != 'Pass'}">
+				            <c:if test="${scorecard.id > 0 && scorecard.callResult == 'Fail'}">
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 8 - Calibration Module</h2> 

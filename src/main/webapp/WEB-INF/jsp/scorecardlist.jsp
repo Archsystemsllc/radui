@@ -123,19 +123,22 @@ $(document).ready(function(){
              extend: 'copyHtml5',
              exportOptions: {
                  columns: [ 0, ':visible' ]
-             }
+             },
+             messageTop: 'Scorecard List Report.'
          },
          {
              extend: 'excelHtml5',
              exportOptions: {
                  columns: ':visible'
-             }
+             },
+             messageTop: 'Scorecard List Report.'
          },
          {
              extend: 'pdfHtml5',
              exportOptions: {
                  columns: [ 0, 1, 2, 3, 4, 5 ]
-             }
+             },
+             messageTop: 'Scorecard List Report.'
          }
          //,'colvis'
      ],

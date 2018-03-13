@@ -64,7 +64,7 @@ public class ReportsController {
 		
 		String roles = authentication.getAuthorities().toString();
 		
-		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
@@ -144,7 +144,7 @@ public class ReportsController {
 		model.addAttribute("reportsForm", reportsForm);
 		String roles = authentication.getAuthorities().toString();
 		
-		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
@@ -285,7 +285,7 @@ public class ReportsController {
 			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
 			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			
-			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 				
 				reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());

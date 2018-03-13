@@ -93,8 +93,7 @@ public class RebuttalController {
 			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
 				//User userForm = (User) request.getSession().getAttribute("LoggedInUserForm");					
 						
-				rebuttal.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				
+				rebuttal.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);				
 				
 			} 
 			
@@ -151,7 +150,7 @@ public class RebuttalController {
 		try {
 			String roles = authentication.getAuthorities().toString();
 			
-			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				rebuttalObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				String jurisIdList = HomeController.LOGGED_IN_USER_JURISDICTION_IDS;		
 				
@@ -212,7 +211,7 @@ public class RebuttalController {
 		
 		String roles = authentication.getAuthorities().toString();
 		
-		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
 			
 			String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
@@ -266,7 +265,7 @@ public class RebuttalController {
 			
 			String roles = authentication.getAuthorities().toString();
 			
-			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				
 				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				
@@ -378,108 +377,6 @@ public class RebuttalController {
 		return returnView;
 	}
 	
-	/*@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
-			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
-	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, BindingResult result, ModelMap model, HttpSession session) {
-
-		String returnView = "";
-		log.debug("--> saverebuttal <--");
-
-		try {
-			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-			String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
-			
-			String pattern = "MM/dd/yyyy hh:mm:ss a";
-			
-			SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
-			TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-			sdfAmerica.setTimeZone(tzInAmerica);
-			String currentDateString = sdfAmerica.format(new Date());
-			if(rebuttal.getId()==0) {
-				rebuttal.setDatePosted(currentDateString);
-				rebuttal.setCreatedDate(currentDateString);
-			} else {
-				rebuttal.setUpdatedDate(currentDateString);
-			}
-			
-			if(rebuttal.getRebuttalCompleteFlag()==null) {
-				rebuttal.setRebuttalStatus("Pending");
-			} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("Yes")) {
-				rebuttal.setRebuttalStatus("Completed");
-				
-			} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("No")) {
-				rebuttal.setRebuttalStatus("Pending");
-				rebuttal.setRebuttalResult("Pending");
-			} 
-			
-			if(rebuttal.getDescriptionComments() != null) {
-				rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"\n"+rebuttal.getDescriptionCommentsAppend());
-			} else {
-				rebuttal.setDescriptionComments(rebuttal.getDescriptionCommentsAppend());
-			}
-			
-			MultipartFile multipartFile = rebuttal.getRebuttalFileObject();
-			
-			File tempFile = null;
-			String extension = ".xlsx";
-			
-			tempFile = File.createTempFile("temp", extension);
-			multipartFile.transferTo(tempFile);
-			
-			rebuttal.setFileName(multipartFile.getOriginalFilename());
-			rebuttal.setFileType(multipartFile.getContentType());
-			rebuttal.setRebuttalFileAttachment(multipartFile.getBytes());
-			
-			 String plainCreds = "qamadmin:123456";
-				byte[] plainCredsBytes = plainCreds.getBytes();
-				byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-				String base64Creds = new String(base64CredsBytes);
-				
-				HttpHeaders headers = new HttpHeaders();
-				
-				headers.add("Authorization", "Basic " + base64Creds);
-				headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-				RestTemplate restTemplate = new RestTemplate();
-			
-			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-			map.add("file", tempFile);
-			//HttpHeaders headers = new HttpHeaders();
-			
-			User user =  (User) session.getAttribute("LoggedInUserForm");
-			rebuttal.setUserId(user.getId().intValue());
-			
-
-			HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(
-			                    map, headers);
-			ResponseEntity<String> response = restTemplate.exchange(
-							ROOT_URI, HttpMethod.POST, requestEntity,
-							String.class);
-			
-			ResponseEntity<Rebuttal> response = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
-					Rebuttal.class);
-			
-			
-			
-			LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-		    map.add("file", new FileSystemResource(tempFile));
-			
-			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
-			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
-			ResponseEntity<Rebuttal> response = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
-					Rebuttal.class);
-				
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		returnView = "forward:/admin/rebuttallist";
-
-		return returnView;
-	}
-	*/
 	
 	/*public DocumentDetailed uploadDocumentInIfs(MultipartFile file, String userProfile) {
 	    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(backendURL + "documents/upload");

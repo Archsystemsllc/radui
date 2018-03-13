@@ -82,7 +82,7 @@ public class ScoreCardController {
 				scoreCardNew = new ScoreCard();
 			}
 			
-			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 					
 					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
@@ -224,7 +224,7 @@ public class ScoreCardController {
 		
 		String roles = authentication.getAuthorities().toString();
 		
-		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			
 			scoreCard.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
@@ -273,7 +273,7 @@ public class ScoreCardController {
 		model.addAttribute("scorecard", scoreCard);
 		String roles = authentication.getAuthorities().toString();
 		
-		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 			
@@ -355,7 +355,7 @@ public class ScoreCardController {
 
 		String returnView = "";
 		log.debug("--> savescorecard <--");
-		HashMap<Integer,String> programMap = null;
+		HashMap<Integer,String> programMap = new HashMap<Integer, String> ();
 		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
 		
 		String roles = authentication.getAuthorities().toString();
@@ -389,7 +389,7 @@ public class ScoreCardController {
 				
 				HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCard.getMacId());
 				model.addAttribute("jurisMapEdit", jurisMap);
-				
+				programMap = new HashMap<Integer, String> ();
 				for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
 					jurIdArrayList.add(jurisIdSingle);
 					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
@@ -425,15 +425,15 @@ public class ScoreCardController {
 				Date currentDateTime = new Date();
 				
 				if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.ADMIN_ROLE_STRING) && 
-						existingScoreCard != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
+						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
 					scoreCard.setCmsCalibrationUpdateDateTime(currentDateTime);
 					
 				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MANAGER_ROLE_STRING) && 
-						existingScoreCard != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus()) ) {
+						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus()) ) {
 					scoreCard.setQamCalibrationUpdateDateTime(currentDateTime);
 					
 				}  else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MONITOR_ROLE_STRING) && 
-						(existingScoreCard != null && !existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult()) || existingScoreCard == null)  ){
+						(existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult()) || existingScoreCard == null)  ){
 					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
 					
 				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.MAC_USER_ROLE_STRING)) {
