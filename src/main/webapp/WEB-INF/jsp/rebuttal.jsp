@@ -197,7 +197,7 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");	              		
-	              		window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist';          	 	
+	              		window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';          	 	
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 

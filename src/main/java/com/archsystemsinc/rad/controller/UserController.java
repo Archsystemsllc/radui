@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -346,32 +347,53 @@ public class UserController {
 			 "/mac_admin/edit-user","/mac_user/edit-user","/quality_monitor/edit-user"}, method = RequestMethod.POST)	
 	public String editUser(@ModelAttribute("userForm") User userForm,
 			BindingResult bindingResult,
-			final RedirectAttributes redirectAttributes, Model model) {
+			final RedirectAttributes redirectAttributes, Model model, Authentication authentication) {
 		log.debug("--> editUser:" + userForm);
 		userValidator.updateUserDetailsValidation(userForm, bindingResult);
+		String roles = authentication.getAuthorities().toString();
 		if (bindingResult.hasErrors()) {
 			userDefaults(model);
-			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userForm.getMacId().intValue());
-			model.addAttribute("jurisMapEdit", jurisMap);	
-			HashMap<Integer,String> programMap = new HashMap<Integer,String>();
-			for(Integer jurisId: jurisMap.keySet()) {
-				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userForm.getMacId()+"_"+jurisId);
-				programMap.putAll(programTempMap);
-				programTempMap = null;
-			}		
 			
-			model.addAttribute("programMapEdit", programMap);
+			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+				HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userForm.getMacId().intValue());
+				model.addAttribute("jurisMapEdit", jurisMap);	
+				HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+				for(Integer jurisId: jurisMap.keySet()) {
+					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userForm.getMacId()+"_"+jurisId);
+					programMap.putAll(programTempMap);
+					programTempMap = null;
+				}		
+				
+				model.addAttribute("programMapEdit", programMap);
+			}
+			
 			return "edituser";
 
 		}
 		try {
-			String jurIdDBValue = "";
-			for(String singleJurisIdValue: userForm.getJurisidictionId()) {
-				jurIdDBValue += singleJurisIdValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+			
+			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+				String jurIdDBValue = "";
+				for(String singleJurisIdValue: userForm.getJurisidictionId()) {
+					jurIdDBValue += singleJurisIdValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+				}
+				
+				userForm.setJurId(jurIdDBValue);
+				//userService.update(userForm);
 			}
 			
-			userForm.setJurId(jurIdDBValue);
-			userService.update(userForm);
+			userForm.setStatus(1l);
+			if(userForm.getPasswordFromdb().equals(userForm.getPassword())){
+				log.debug("No need encrypt Password!!");
+			}else{
+				BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+				String userPwd = b.encode(userForm.getPassword());
+				userForm.setPassword(userPwd);
+			}
+			
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(HomeController.RAD_WS_URI + "updateUser");
+			ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userForm,User.class);
 			redirectAttributes.addFlashAttribute("success", "success.edit.user");
 		} catch (Exception e) {
 			log.error("Error while updating user",e);

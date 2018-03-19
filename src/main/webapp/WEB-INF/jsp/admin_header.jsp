@@ -112,6 +112,8 @@
 							<div id="sessionTimer" align="right" style="color: #000080"></div>
 						</td>
 					</tr>
+					</table>
+					<table>
 					<tr>
 						<td
 							style="vertical-align: bottom; border: 0px; padding: 0px">

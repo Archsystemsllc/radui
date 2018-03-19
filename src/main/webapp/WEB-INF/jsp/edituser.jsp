@@ -89,9 +89,11 @@
 	  	      	 $("#roleId").get(0).options[0] = new Option("---Select Role---", "");
 	  	  	    	$.each(data, function (key,obj) {
 	  	  	    		$("#roleId").get(0).options[$("#roleId").get(0).options.length] = new Option(obj, key);     	  	    		
-	  	  	    	});  	   
+	  	  	    	});  
+
+	  	  	    $('#roleId').val(selectedRole);	   
 	   });	    
-		 $('#roleId').val(selectedRole);    
+		    
 	});
 
 	$(function(){

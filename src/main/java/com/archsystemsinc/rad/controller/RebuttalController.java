@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
@@ -68,7 +69,7 @@ public class RebuttalController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value ={"/admin/rebuttalfilter", "/quality_manager/rebuttalfilter", "/cms_user/rebuttalfilter",
+	/*@RequestMapping(value ={"/admin/rebuttalfilter", "/quality_manager/rebuttalfilter", "/cms_user/rebuttalfilter",
 			 "/mac_admin/rebuttalfilter","/mac_user/rebuttalfilter","/quality_monitor/rebuttalfilter"})		
 	public String filterRebuttalList(@ModelAttribute("rebuttal") Rebuttal rebuttal, 
 			final BindingResult result,
@@ -109,9 +110,9 @@ public class RebuttalController {
 		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
 		
 		return "rebuttallist";
-	}
+	}*/
 	
-	private HashMap<Integer,Rebuttal> retrieveRebuttalList(Rebuttal rebuttalModelObject) {		
+	/*private HashMap<Integer,Rebuttal> retrieveRebuttalList(Rebuttal rebuttalModelObject) {		
 		
 		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
 		HashMap<Integer, Rebuttal> finalResultsMap = new HashMap<Integer, Rebuttal> ();
@@ -134,24 +135,38 @@ public class RebuttalController {
 		}
 		return finalResultsMap;
 	}
+	*/
 	
-	
-	 @RequestMapping(value ={"/admin/rebuttallist", "/quality_manager/rebuttallist", "/cms_user/rebuttallist",
-			 "/mac_admin/rebuttallist","/mac_user/rebuttallist","/quality_monitor/rebuttallist"})		
-	public String getRebuttalList(HttpServletRequest request,Model model, Authentication authentication) {
+	 @RequestMapping(value ={"/admin/rebuttallist/{sessionBack}", "/quality_manager/rebuttallist/{sessionBack}", "/cms_user/rebuttallist/{sessionBack}",
+			 "/mac_admin/rebuttallist/{sessionBack}","/mac_user/rebuttallist/{sessionBack}","/quality_monitor/rebuttallist/{sessionBack}"})		
+	public String getRebuttalList(@ModelAttribute("rebuttal") Rebuttal rebuttalFromModel, final BindingResult result,
+			final Model model,HttpServletRequest request, Authentication authentication,@PathVariable("sessionBack") final String sessionBackObject,HttpServletResponse response) {
 		log.debug("--> getRebuttalList Screen <--");
 		
 		HashMap<Integer,Rebuttal> resultsMap = new HashMap<Integer,Rebuttal>();
 		
 		List<Rebuttal> rebuttalTempList = null;
 		
-		Rebuttal rebuttalObject = new Rebuttal();
+		Rebuttal rebuttalNew = new Rebuttal();
 		
 		try {
+			
+			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
+			Rebuttal rebuttalFromSession = (Rebuttal) request.getSession().getAttribute("SESSION_SCOPE_REBUTTAL_FILTER");
+			if (rebuttalFromModel.getMacId() != null && rebuttalFromModel.getJurisIdReportSearchString() !=null ){
+				rebuttalNew = rebuttalFromModel;				
+			} else if(rebuttalFromSession != null && sessionBackObject.equalsIgnoreCase("true")) {
+				//Back Button is Clicked				
+				rebuttalNew = rebuttalFromSession;
+			} else {
+				//ScoreCard Menu Item Is Clicked
+				rebuttalNew = new Rebuttal();
+			}
+			
 			String roles = authentication.getAuthorities().toString();
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-				rebuttalObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				String jurisIdList = HomeController.LOGGED_IN_USER_JURISDICTION_IDS;		
 				
 				if(jurisIdList != null && !jurisIdList.equalsIgnoreCase("")) {
@@ -164,14 +179,17 @@ public class RebuttalController {
 						jurisdictionArrayList.add(Integer.valueOf(jurisIdSingleValue));
 					}
 					
-					rebuttalObject.setJurisIdList(jurisdictionArrayList);
+					rebuttalNew.setJurisIdList(jurisdictionArrayList);
 				}
-				
-			} 
+				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+			} else {
+				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);		
+				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
+			}
 			
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 			String ROOT_URI = new String(HomeController.RAD_WS_URI + "rebuttallist");
-			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttalObject, List.class);
+			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttalNew, List.class);
 			ObjectMapper mapper = new ObjectMapper();
 			rebuttalTempList = responseEntity.getBody();
 			
@@ -182,15 +200,25 @@ public class RebuttalController {
 				String macPCCNameTempValue = HomeController.PCC_LOC_MAP.get(rebuttal.getPccLocationId());
 				rebuttal.setMacPCCNameTempValue(macPCCNameTempValue);
 				rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
+				rebuttal.setDescriptionComments("");
 				resultsMap.put(rebuttal.getId(), rebuttal);
 			}
-			model.addAttribute("rebuttal",rebuttalObject);
+			model.addAttribute("rebuttal",rebuttalNew);
+			
+			request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_MAP", resultsMap);
+			model.addAttribute("rebuttalFilter",true);
+			
+			String rebuttalListString = mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " ");
+					
+			rebuttalListString = response.encodeRedirectURL(rebuttalListString);
+			request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_FILTER", rebuttalNew);
+			model.addAttribute("rebuttalList",rebuttalListString);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_MAP", resultsMap);
-		request.getSession().setAttribute("WEB_SERVICE_URL",HomeController.RAD_WS_URI);
+		
+		
 		return "rebuttallist";
 	}
 	 
@@ -321,7 +349,7 @@ public class RebuttalController {
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
 			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
 	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result,
-			final Model model, HttpSession session) {
+			final Model model, HttpSession session, HttpServletResponse response) {
 
 		String returnView = "";
 		log.debug("--> saverebuttal <--");
@@ -364,17 +392,18 @@ public class RebuttalController {
 		try {
 			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
 			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
-			ResponseEntity<Rebuttal> response = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
+			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
 					Rebuttal.class);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
+		String url = "forward:/"+userFolder+"/rebuttallist/sessionBack=false";
+		url = response.encodeRedirectURL(url);
 
-		returnView = "forward:/admin/rebuttallist";
-
-		return returnView;
+		return url;
 	}
 	
 	
@@ -412,9 +441,11 @@ public class RebuttalController {
 	*/
 	@RequestMapping(value ={"/admin/edit-rebuttal/{id}", "/quality_manager/edit-rebuttal/{id}", "/cms_user/edit-rebuttal/{id}",
 			 "/mac_admin/edit-rebuttal/{id}","/mac_user/edit-rebuttal/{id}","/quality_monitor/edit-rebuttal/{id}"}, method = RequestMethod.GET)		
-	public String editRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
+	public String editRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request, Authentication authentication) {
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
 		Rebuttal rebuttal = resultsMap.get(id);
+		
+		HashMap<Integer,String> pccContactPersonMap = new HashMap<Integer,String>();
 		
 		String datePostedString = utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted());
 		
@@ -425,6 +456,46 @@ public class RebuttalController {
 		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Pending")) {
 			rebuttal.setRebuttalCompleteFlag("No");
 		} 
+		
+		String roles = authentication.getAuthorities().toString();
+		User userSearchObject = new User();
+		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+		
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
+			
+			String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			
+			ArrayList<String> jurIdArrayList = new ArrayList<String>();
+			for (String jurisIdSingleValue: jurisIds) {
+				
+				jurIdArrayList.add(jurisIdSingleValue+UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			}
+			userSearchObject.setJurIdList(jurIdArrayList);
+		}
+		
+		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);		
+		
+		userSearchObject.setStatus(UIGenericConstants.RECORD_STATUS_ACTIVE);
+		userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
+		
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchUsers");
+		
+		ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, userSearchObject, List.class);
+		ObjectMapper mapper = new ObjectMapper();
+		List<User> userResultsList = new ArrayList<User> ();
+		userResultsList = responseEntity.getBody();
+		List<User> userList = mapper.convertValue(userResultsList, new TypeReference<List<User>>() { });
+		
+		for(User userTemp: userList) {
+			pccContactPersonMap.put(userTemp.getId().intValue(), userTemp.getLastName()+" "+userTemp.getFirstName());
+		}
+		
+		
+		model.addAttribute("pccContactPersonMap",pccContactPersonMap);
+		
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		model.addAttribute("rebuttal", rebuttal);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		HashMap<Integer,String> pccLocationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(rebuttal.getMacId()+"_"+rebuttal.getJurisId()+"_"+rebuttal.getProgramId());

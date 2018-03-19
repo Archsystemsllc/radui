@@ -424,29 +424,43 @@ public class ReportsController {
 				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
 					model.addAttribute("AllScoreCardReport_All",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("scoreCardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (All Records)");
 					
 					
 				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("AllScoreCardReport_Pass",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("allPassScoreCardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Pass Records)");
 					
 					
 				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
 					model.addAttribute("AllScoreCardReport_Fail",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("allFailScorecardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Fail Records)");
 					
 					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
 					model.addAttribute("ScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("scoreableReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Both Pass and Fail Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("ScoreablePassReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("scoreablePassReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Pass Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Fail") ) {
@@ -454,14 +468,22 @@ public class ReportsController {
 					model.addAttribute("ScoreableFailReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
+					model.addAttribute("scoreableFailReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Fail Records)");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Non-Scoreable")) {
 					model.addAttribute("NonScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("nonScoreableList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
 					model.addAttribute("DoesNotCountReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("doesNotCountList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
 				}
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
@@ -477,6 +499,9 @@ public class ReportsController {
 				finalSortedMap.putAll(finalResultsMap);
 				model.addAttribute("COMPLIANCE_REPORT",finalSortedMap);
 				model.addAttribute("ComplianceReport",true);
+				model.addAttribute("complianceReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				
+				
 				model.addAttribute("ReportTitle","Non-Compliance Report (ALL)");
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
@@ -492,6 +517,9 @@ public class ReportsController {
 				finalSortedMap.putAll(finalResultsMap);
 				model.addAttribute("REBUTTAL_REPORT",finalSortedMap);
 				model.addAttribute("RebuttalReport",true);
+				
+				model.addAttribute("rebuttalReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				
 				model.addAttribute("ReportTitle","Rebuttal Report");
 				
 			}

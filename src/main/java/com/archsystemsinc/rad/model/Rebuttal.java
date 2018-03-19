@@ -119,6 +119,8 @@ public class Rebuttal  {
 	
 	private String jurisName;
 	
+	private String[] jurisIdReportSearchString;
+	
 	private ArrayList<Integer> jurisIdList;
 	
 	private byte[] rebuttalFileAttachment;
@@ -135,6 +137,18 @@ public class Rebuttal  {
 	private MultipartFile rebuttalFileObject;
 	
 	
+	
+	
+	public String[] getJurisIdReportSearchString() {
+		return jurisIdReportSearchString;
+	}
+
+
+	public void setJurisIdReportSearchString(String[] jurisIdReportSearchString) {
+		this.jurisIdReportSearchString = jurisIdReportSearchString;
+	}
+
+
 	public MultipartFile getRebuttalFileObject() {
 		return rebuttalFileObject;
 	}

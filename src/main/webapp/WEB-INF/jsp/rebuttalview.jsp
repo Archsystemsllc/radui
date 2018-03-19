@@ -169,8 +169,10 @@
         });
 
 		 $('#back').click(function(e) {	
-			 window.history.back();
+			 window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';        
 	     }); 
+
+		 
 
 		 $('#rebuttalCompleteFlag').change(function(e) {
 			 if($(this).val()=="Yes") {

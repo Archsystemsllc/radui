@@ -154,7 +154,7 @@ $(document).ready(function(){
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div role="main">
 	<table id="mid">
-		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist"
+		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=false"
 			id="scorecardfilterForm">
 			<tr>
 				<td style="vertical-align: top" >
@@ -244,7 +244,7 @@ $(document).ready(function(){
 													<td>
 													<span><button class="btn btn-primary" id="filter" type="submit" title="Select Filter button to Filter the results">Filter</button></span> 
 													<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to Reset the results">Reset</button></span>
-													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin')">
+													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Monitor') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin')">
 													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Select Add Scorecard button to add new scorecard"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
 													</sec:authorize>
 												</td>
@@ -262,50 +262,7 @@ $(document).ready(function(){
 										</div>
 									</div>
 									<br/>
-								</c:if>
-								<%-- <div class="row " style="margin-top: 10px">
-									<!--  Section 1 -->
-									<div class="col-lg-12 col-lg-offset-1 form-container">
-
-										<div class="row">
-											<div class="col-lg-10 form-group">
-
-												<display:table class="display hover stripe cell-border " id="row" name="${sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()}"													 
-													style="width:95%;font-size:95%;" export="true" pagesize="15" requestURI="" >
-													<display:column property="macName"	title="MAC" sortable="true"	style="text-align:center;" />
-													<display:column property="jurisdictionName"	title="Jurisdiction" sortable="true"	style="text-align:center;" />
-													<display:column property="macCallReferenceNumber" title="MAC Call Reference ID" sortable="true" style="text-align:center;" />
-													<display:column property="qamFullName" title="QM Name/ID" sortable="true" style="text-align:center;" />
-													<display:column property="qamStartdateTimeString" title="QM Start Date/Time" sortable="true" style="text-align:center;" />
-													<display:column property="scorecardType"	title="Scorecard Type" sortable="true"	style="text-align:center;" />
-													<display:column property="callResult" title="Status"	sortable="true" style="text-align:center;" />
-													
-													<display:column title="Actions" style="text-align:center;"	media="html">
-														<span><a class="action-icons c-pending"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/${row.id}" title="View">View</a></span>
-														<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
-															<span><a class="action-icons c-edit"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/${row.id}" title="Edit">Edit</a></span>
-														</sec:authorize>
-														
-													</display:column>
-													<display:setProperty name="export.excel.filename"	value="ScorecardReport.xls" />
-													<display:setProperty name="export.csv.filename"	value="ScorecardReport.csv" />
-													<display:setProperty name="export.pdf.filename"	value="ScorecardReport.pdf" />
-													<display:setProperty name="export.pdf" value="true" />
-													
-													
-													
-
-												</display:table>
-												<c:if
-													test="${fn:length(sessionScope.SESSION_SCOPE_SCORECARDS_MAP.values()) eq 0}">
-													<!-- <span><a class="action-icons c-approve"
-														href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard"
-														title="Create">Create</a></span> -->
-												</c:if>
-											</div>
-										</div>
-									</div>
-								</div> --%>
+								</c:if>		
 								
 								<div class="row" id="scorecardlistdatatablediv">
 				                <div class="col-lg-12 col-lg-offset-1 form-container">

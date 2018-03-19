@@ -95,7 +95,9 @@ public class HomeController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/admin/privacy", method = RequestMethod.GET)
+
+    @RequestMapping(value ={"/admin/privacy", "/quality_manager/privacy", "/cms_user/privacy",
+			 "/mac_admin/privacy","/mac_user/privacy","/quality_monitor/privacy"}, method = RequestMethod.GET)	
     public String privacy(Model model) {       
        
         return "privacy";
@@ -106,7 +108,8 @@ public class HomeController {
      * @return
      */
     
-    @RequestMapping(value = "/admin/resources", method = RequestMethod.GET)
+    @RequestMapping(value ={"/admin/resources", "/quality_manager/resources", "/cms_user/resources",
+			 "/mac_admin/resources","/mac_user/resources","/quality_monitor/resources"}, method = RequestMethod.GET)	
     public String resources(Model model) {       
        
         return "resources";
@@ -434,7 +437,7 @@ public class HomeController {
 	 	private void setupSessionGlobalVariables(User user, HttpSession session) {
 			
 			//Mac Id Setup
-	 		if(user.getMacId() != null) { 
+	 		
 			HashMap<Integer, String> userBasedMacIdMap = new HashMap<Integer, String> ();
 			HashMap<Integer, String> userBasedJurisdictionMap = new HashMap<Integer, String> ();
 			HashMap<Integer, String> userBasedPccLocationMap = new HashMap<Integer, String> ();
@@ -484,6 +487,6 @@ public class HomeController {
 			
 			session.setAttribute("SS_LOGGED_IN_USER_ROLE", user.getRole().getRoleName());
 				
-		}	
+	 		
 	 	}
 }
