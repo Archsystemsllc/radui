@@ -144,7 +144,7 @@ $(document).ready(function () {
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
 			                            <button class=" btn btn-primary">Update Password</button>
-			                            <span><button class="btn btn-primary" id="close1" type="button">Close</button></span>
+			                            <span><button class="btn btn-primary" id="close1" type="button" onclick="location.href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount'">Close</button></span>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	
