@@ -478,7 +478,7 @@
 			                                <form:input type="file" path="rebuttalFileObject" id="rebuttalFileObject" class="form-control input-sm"></form:input>
 			                                
 			                                <br/>
-			                                <label for="name">Note: Pleae don't include PHI/PII information in the attachment</label>		
+			                              <!--   <label for="name">Note: Pleae don't include PHI/PII information in the attachment</label>		 -->
 										 
 			                            </div>		                           
 			                        </div>       
