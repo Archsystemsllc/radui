@@ -43,8 +43,30 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
 
+<style type="text/css">
+	.red {  color:#cd2026;  }
+</style>
+
 <script type="text/javascript">
+	function resetFields() {
+		
+		
+		$('#macId').prop('selectedIndex',0);
+		$('#jurId').prop('selectedIndex',0);
+		$('#jurisIdReportSearchString').find('option:selected').removeAttr('selected');
+		$('#callResult').prop('selectedIndex',0);
+		$('#scorecardType').prop('selectedIndex',0);
+		$('#qamFullName').val("");
+		$('#filterFromDateString').val("");
+		$('#filterToDateString').val("");
+		
+	}
 	$(document).ready(function() {
+
+		//Required Fields Logic
+		$('.required').each(function(){
+		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
+		});
 
 		$('#filterFromDateString').datepicker({
 			maxDate : 0
@@ -65,7 +87,7 @@
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurId").get(0).options.length = 0;	           
-      	      	 $("#jurId").get(0).options[0] = new Option("---Select All---", "ALL");
+      	      	 $("#jurId").get(0).options[0] = new Option("ALL", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -154,7 +176,7 @@ $(document).ready(function(){
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div role="main">
 	<table id="mid">
-		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=false"
+		<form:form method="POST" modelAttribute="scorecard" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/false"
 			id="scorecardfilterForm">
 			<tr>
 				<td style="vertical-align: top" >
@@ -194,8 +216,8 @@ $(document).ready(function(){
 												
 												<div class="col-lg-4 form-group">
 													<label for="name">Status:</label>
-													<form:select class="form-control" id="callResult"
-														path="callResult" title="Select one Status from the List">
+													<form:select class="form-control  required" id="callResult"
+														path="callResult" title="Select one Status from the List" required="true" >
 														<form:option value="ALL" label="ALL" />
 														<form:option value="Pass" />
 														<form:option value="Fail" />
@@ -211,8 +233,8 @@ $(document).ready(function(){
 												
 												<div class="col-lg-4 form-group">
 													<label for="name">Scorecard Type:</label>
-													<form:select class="form-control" id="scorecardType"
-														path="scorecardType" title="Select one Score Card Type from the List">
+													<form:select class="form-control  required" id="scorecardType"
+														path="scorecardType" title="Select one Score Card Type from the List" required="true" >
 														<form:option value="ALL" label="ALL" />
 														<form:option value="Scoreable" />
 														<form:option value="Non-Scoreable" />
@@ -243,7 +265,7 @@ $(document).ready(function(){
 												<tr>
 													<td>
 													<span><button class="btn btn-primary" id="filter" type="submit" title="Select Filter button to Filter the results">Filter</button></span> 
-													<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to Reset the results">Reset</button></span>
+													<span><button class="btn btn-primary" onclick="resetFields();" type="button" title="Select Reset button to Reset the results">Reset</button></span>
 													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Monitor') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin')">
 													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Select Add Scorecard button to add new scorecard"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
 													</sec:authorize>

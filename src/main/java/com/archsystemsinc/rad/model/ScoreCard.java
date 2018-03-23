@@ -16,11 +16,21 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private Integer callSubCategoryId;
 	
 	
+	private String callCategoryIdKnoweledgeSkills;	
+	
+	
+	private String callSubCategoryIdKnoweledgeSkills;
+	
+	private String[] callCategoryIdKnoweledgeSkillsUIObject;	
+	
+	
+	private String[] callSubCategoryIdKnoweledgeSkillsUIObject;
+	
+	
 	private String csrFullName;
 	
 	
 	private String callDuration;
-
 	
 	
 	private Date callFailureTime;
@@ -162,7 +172,38 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private ArrayList<String> macCallResultList;
 	
-	
+	public String getCallCategoryIdKnoweledgeSkills() {
+		return callCategoryIdKnoweledgeSkills;
+	}
+
+	public void setCallCategoryIdKnoweledgeSkills(String callCategoryIdKnoweledgeSkills) {
+		this.callCategoryIdKnoweledgeSkills = callCategoryIdKnoweledgeSkills;
+	}
+
+	public String getCallSubCategoryIdKnoweledgeSkills() {
+		return callSubCategoryIdKnoweledgeSkills;
+	}
+
+	public void setCallSubCategoryIdKnoweledgeSkills(String callSubCategoryIdKnoweledgeSkills) {
+		this.callSubCategoryIdKnoweledgeSkills = callSubCategoryIdKnoweledgeSkills;
+	}
+
+	public String[] getCallCategoryIdKnoweledgeSkillsUIObject() {
+		return callCategoryIdKnoweledgeSkillsUIObject;
+	}
+
+	public void setCallCategoryIdKnoweledgeSkillsUIObject(String[] callCategoryIdKnoweledgeSkillsUIObject) {
+		this.callCategoryIdKnoweledgeSkillsUIObject = callCategoryIdKnoweledgeSkillsUIObject;
+	}
+
+	public String[] getCallSubCategoryIdKnoweledgeSkillsUIObject() {
+		return callSubCategoryIdKnoweledgeSkillsUIObject;
+	}
+
+	public void setCallSubCategoryIdKnoweledgeSkillsUIObject(String[] callSubCategoryIdKnoweledgeSkillsUIObject) {
+		this.callSubCategoryIdKnoweledgeSkillsUIObject = callSubCategoryIdKnoweledgeSkillsUIObject;
+	}
+
 	public ArrayList<String> getMacCallResultList() {
 		return macCallResultList;
 	}

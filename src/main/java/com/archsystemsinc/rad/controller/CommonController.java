@@ -390,17 +390,43 @@ public class CommonController {
 		return locationMap;
 	}
 	
-	@RequestMapping(value ={"/admin/selectCallSubcategories", "/quality_manager/selectCallSubcategories", "/cms_user/selectCallSubcategories",
-			 "/mac_admin/selectCallSubcategories","/mac_user/selectCallSubcategories","/quality_monitor/selectCallSubcategories"}, method = RequestMethod.GET)	
+	@RequestMapping(value ={"/admin/selectCallSubCategoriesList", "/quality_manager/selectCallSubCategoriesList", "/cms_user/selectCallSubCategoriesList",
+			 "/mac_admin/selectCallSubCategoriesList","/mac_user/selectCallSubCategoriesList","/quality_monitor/selectCallSubCategoriesList"}, method = RequestMethod.GET)	
 	@ResponseBody
-	public HashMap<Integer,String> selectCallSubCategories(@RequestParam("categoryId") final Integer categoryId) {
+	public HashMap<Integer,String> selectCallSubCategoriesList(@RequestParam("categoryId[]") final String[] categoryId) {
 		
-		HashMap<Integer,String> subCategorylMap = new HashMap<Integer, String>();	
+		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
 		
-		subCategorylMap  = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(categoryId);
-		return subCategorylMap;
+		
+			String[] subCategoryIds = categoryId;
+			for(String subCategoryIdsSingleValue: subCategoryIds) {
+				if(!subCategoryIdsSingleValue.equalsIgnoreCase("")) {
+					
+					if(subCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
+						//subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.values();
+						break;
+					}
+					Integer subCategoryId = Integer.valueOf(subCategoryIdsSingleValue);
+					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(subCategoryId);
+					subCategoryMapFinal.putAll(subCategoryMap);
+				}				
+			}
+		
+	
+		return subCategoryMapFinal;
+	
 	}
 	
+	@RequestMapping(value ={"/admin/selectCallSubCategories", "/quality_manager/selectCallSubCategories", "/cms_user/selectCallSubCategories",
+			 "/mac_admin/selectCallSubCategories","/mac_user/selectCallSubCategories","/quality_monitor/selectCallSubCategories"}, method = RequestMethod.GET)	
+	@ResponseBody
+	public HashMap<Integer,String> selectCallSubCategoriesList(@RequestParam("categoryId") final Integer categoryId) {
+		
+		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();
+		subCategoryMapFinal  = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(categoryId);
+		
 	
+		return subCategoryMapFinal;
 	
+	}
 }

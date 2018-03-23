@@ -154,7 +154,7 @@
 		
 		 $('#close1,#close2').click(function(e) {	
 			 e.preventDefault();	
-			 window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=true";			 
+			 window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";			 
 	     }); 
 
       //Secton 1 - Option 1
@@ -651,6 +651,60 @@
 				                    </fieldset>
 				                </div>
 				            </div>		
+				            <c:if test="${scorecard.id > 0 && scorecard.callResult == 'Fail'}">
+				            <div class="row " id="Section8Div">
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                    <h2>Section 8 - Calibration Module</h2> 
+				                    <div class="row">
+			                            
+			                            <div class="col-lg-6 form-group">
+			                               
+			                                <label for="scoreCardStatusUpdateDateTime">User Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="scoreCardStatusUpdateDateTime" disabled="true" title="Choose User Calibration Update Date from the Calendar"/>
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                            </div>
+			                        </div>
+				                    
+				                    <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="qamCalibrationStatus">QAM Admin Calibration Status:</label>
+			                                 <form:select path="qamCalibrationStatus" class="form-control required"  disabled="true" title="Select QAM Admin Calibration Status from the List">
+											   	<form:option value="" label="---Select---"/>											   	
+											   	<form:option value="Pass" label="Pass" />	
+											   	<form:option value="Fail" label="Fail" />											  						  	
+											</form:select> 
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               
+			                                <label for="qamCalibrationUpdateDateTime">QAM Admin Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" disabled="true" title="Choose QAM Admin Calibration Update Date from the Calendar"/>
+			                            
+			                                
+			                            </div>
+			                        </div>
+			                         <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="cmsCalibrationStatus">CMS Calibration Status:</label>
+			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  disabled="true" title="Select CMS Calibration Status from the List">
+											   	<form:option value="" label="---Select---"/>											   	
+											   	<form:option value="Pass" label="Pass" />	
+											   	<form:option value="Fail" label="Fail" />											  						  	
+											</form:select> 
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                                
+			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" disabled="true" title="Choose CMS Calibration Update Date from the Calendar"/>
+			                            
+			                                
+			                            </div>
+			                        </div>
+			                       
+				                    
+				                </div>
+				            </div>
+				            </c:if>
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="close1" type="button">Back</button></span></td>

@@ -61,8 +61,10 @@
     	$("#section4HeaderDiv_DoesNotCount").hide();	
     	$("#dialog-confirm").hide();
     	//Hiding Section 4, 5, 6, 7 Failure Blocks
-    	$("#accuracyCallFailureBlock").hide();	
+    	$("#accuracyCallFailureBlock1").hide();	
+    	$("#accuracyCallFailureBlock2").hide();
     	$("#completenessCallFailureBlock").hide();	
+    		
     	$("#privacyCallFailureBlock").hide();	
     	$("#customerSkillsCallFailureBlock").hide();
 		//Failure Reason Comments Attributes
@@ -147,10 +149,12 @@
 	    var callResultFlag = "${scorecard.callResult}";
 
 	    if(csrPrvAccInfoFlag=="No") {
-			$("#accuracyCallFailureBlock").show();	
+			$("#accuracyCallFailureBlock1").show();	
+			$("#accuracyCallFailureBlock2").show();
 		}
 		if(csrPrvCompInfoFlag=="No") {
 			$("#completenessCallFailureBlock").show();	
+		
 		}
 		if(csrPrvCompInfoFlag=="No") {
 			$("#privacyCallFailureBlock").show();	
@@ -167,11 +171,11 @@
 		var role = $('#userRole').val();
 
 		if (role == 'Administrator') {
-			$('#cmsCalibrationStatus').attr("readonly",false);
+			$('#cmsCalibrationStatus').attr("disabled",false);
 			$('#cmsCalibrationStatus').attr("required",true);
 			
 		} else if (role == 'Quality Manager') {
-			$('#qamCalibrationStatus').attr("readonly",false);
+			$('#qamCalibrationStatus').attr("disabled",false);
 			$('#qamCalibrationStatus').attr("required",true);
 		}
 			
@@ -329,12 +333,27 @@
 		//Select Call Category Functionality
 		$("select#callCategoryId").change(function(){
 			
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubcategories",{categoryId: $('#callCategoryId').val()}, function(data){
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategories",
+                    {categoryId: $('#callCategoryId').val()}, function(data){
                 
                  $("#callSubCategoryId").get(0).options.length = 0;	           
       	      	 $("#callSubCategoryId").get(0).options[0] = new Option("---Select Sub Category---", "");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#callSubCategoryId").get(0).options[$("#callSubCategoryId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+
+		$("#callCategoryIdKnoweledgeSkillsUIObject").change(function(){
+			alert("Inside Select:"+$('#callCategoryIdKnoweledgeSkillsUIObject').val());
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategoriesList",
+                    {categoryId: $('#callCategoryIdKnoweledgeSkillsUIObject').val()}, function(data){
+                
+                 $("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length = 0;	           
+      	      	 
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options[$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length] = new Option(obj, key);
       	  	    		
       	  	    	});  	   
                });
@@ -351,7 +370,7 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");
-	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/sessionBack=true";
+	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 
@@ -439,13 +458,17 @@
 			var selected_value = $("input[name='csrPrvAccInfo']:checked").val();
 			
 			if(selected_value=="No") {
-				$("#accuracyCallFailureBlock").show();	
+				$("#accuracyCallFailureBlock1").show();	
+				$("#accuracyCallFailureBlock2").show();	
 				$("#accuracyCallFailureReason").focus();
-				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",true);				
+				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",true);		
+				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",true);			
 				setCallResult();	
 			} else if(selected_value=="Yes") {
-				$("#accuracyCallFailureBlock").hide();	
-				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",false);				
+				$("#accuracyCallFailureBlock1").hide();	
+				$("#accuracyCallFailureBlock2").hide();		
+				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",false);
+				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",false);					
 				setCallResult();					
 			}    		
         });
@@ -458,11 +481,13 @@
 			if(selected_value=="No") {
 				
 				$("#completenessCallFailureBlock").show();	
+			
 				$("#completenessCallFailureReason").focus();
 				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",true);						
 				setCallResult();	
 			} else if(selected_value=="Yes") {
-				$("#completenessCallFailureBlock").hide();	
+				$("#completenessCallFailureBlock1").hide();	
+				$("#completenessCallFailureBlock2").hide();	
 				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",false);	
 				setCallResult();	
 			}    		
@@ -747,7 +772,7 @@
 			                              <form:select path="callCategoryId" class="form-control required" id="callCategoryId" required="true" title="Select one required Call Category from the List">
 											   	<form:option value="" label="---Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
-											</form:select> 			                                
+										   </form:select> 			                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> Call Sub Category:</label>
@@ -777,8 +802,8 @@
 										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
 			                               </div>		                           
 			                        </div>
-			                        <div class="row" id="accuracyCallFailureBlock">
-			                        <div class="col-lg-5 form-group">
+			                        <div class="row" id="accuracyCallFailureBlock1">
+			                        	<div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureReason">Accuracy Call Failure Reason: </label>
 			                                 <form:input class="form-control required" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
@@ -788,6 +813,24 @@
 			                                <form:input class="form-control required" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime" title="Choose time for the Accuracy Time Failure" />
 			                               </div>
 			                        </div>
+			                         <div class="row" id="accuracyCallFailureBlock2">
+			                        	 <div class="col-lg-5 form-group">
+			                        	 <label for="email"> Call Category:</label>
+			                               <form:select path="callCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Category from the List"  multiple="true">
+											   
+											  	<form:options items="${callCategoryMap}" />										  	
+										   </form:select> 	
+			                               
+										</div>
+			                        	<div class="col-lg-5 form-group">
+			                                <label for="email"> Call Sub Category:</label>
+			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
+											   							   	
+											   	<form:options items="${subCategorylMapEdit}" />												  						  	
+											</form:select> 
+			                            </div>                     
+			                           
+			                        </div>		    
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-8 form-group">
@@ -800,18 +843,37 @@
 			                               </div>		
 			                           
 			                        </div> 
-			                         <div class="row" id="completenessCallFailureBlock">
+			                        <div class="row" id="completenessCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureReason">Completeness Call Failure Reason: </label>
 			                                 <form:input class="form-control required" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
-										</div>
-			                            <div class="col-lg-5 form-group">
+									</div>
+			                        <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureTime">Completeness Call Failure Time:</label>
 			                                <form:input class="form-control required" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime" title="Choose time for the Accuracy Time Failure"/>
-			                               </div>
+			                               </div>                     
+			                           
 			                        </div>
-				                    
+			                       <%--  <div class="row" id="completenessCallFailureBlock2">
+			                        	 <div class="col-lg-5 form-group">
+			                        	 <label for="email"> Call Category:</label>
+			                               <form:select path="callCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Category from the List"  multiple="true">
+											   	<form:option value="" label="ALL" />
+											  	<form:options items="${callCategoryMap}" />										  	
+										   </form:select> 	
+			                               
+										</div>
+			                        	<div class="col-lg-5 form-group">
+			                                <label for="email"> Call Sub Category:</label>
+			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
+											   	<form:option value="" label="ALL" />									   	
+											   	<form:options items="${subCategorylMapEdit}" />												  						  	
+											</form:select> 
+			                            </div>                     
+			                           
+			                        </div>		       --%>                     
+			                     
 				                </div>
 				            </div>	
 				            <div class="row" id="section5Div">
@@ -942,7 +1004,7 @@
 			                            <div class="col-lg-6 form-group">
 			                               
 			                                <label for="scoreCardStatusUpdateDateTime">User Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="scoreCardStatusUpdateDateTime" readonly="true" title="Choose User Calibration Update Date from the Calendar"/>
+			                                <form:input class="form-control required" type ="text" path="scoreCardStatusUpdateDateTime" disabled="true" title="Choose User Calibration Update Date from the Calendar"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            </div>
@@ -951,7 +1013,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamCalibrationStatus">QAM Admin Calibration Status:</label>
-			                                 <form:select path="qamCalibrationStatus" class="form-control required"  readonly="true" title="Select QAM Admin Calibration Status from the List">
+			                                 <form:select path="qamCalibrationStatus" class="form-control required"  disabled="true" title="Select QAM Admin Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
 											   	<form:option value="Pass" label="Pass" />	
 											   	<form:option value="Fail" label="Fail" />											  						  	
@@ -960,7 +1022,7 @@
 			                            <div class="col-lg-6 form-group">
 			                               
 			                                <label for="qamCalibrationUpdateDateTime">QAM Admin Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" readonly="true" title="Choose QAM Admin Calibration Update Date from the Calendar"/>
+			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" disabled="true" title="Choose QAM Admin Calibration Update Date from the Calendar"/>
 			                            
 			                                
 			                            </div>
@@ -968,7 +1030,7 @@
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="cmsCalibrationStatus">CMS Calibration Status:</label>
-			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  readonly="true" title="Select CMS Calibration Status from the List">
+			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  disabled="true" title="Select CMS Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
 											   	<form:option value="Pass" label="Pass" />	
 											   	<form:option value="Fail" label="Fail" />											  						  	
@@ -977,7 +1039,7 @@
 			                            <div class="col-lg-6 form-group">
 			                                
 			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" readonly="true" title="Choose CMS Calibration Update Date from the Calendar"/>
+			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" disabled="true" title="Choose CMS Calibration Update Date from the Calendar"/>
 			                            
 			                                
 			                            </div>

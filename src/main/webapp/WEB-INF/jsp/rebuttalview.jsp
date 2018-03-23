@@ -169,7 +169,7 @@
         });
 
 		 $('#back').click(function(e) {	
-			 window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';        
+			 window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/true';        
 	     }); 
 
 		 
@@ -210,7 +210,7 @@
 	<div id="dialog-confirm" title="Close Scorecard Confirmation?">
   		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the Rebuttal form without saving?</p>
 	</div>
-	<div id="complete-confirm" title="Complete Scorecard Confirmation?">
+	<div id="complete-confirm" title="Complete Rebuttal Confirmation?">
 	
 			                             <form >
 								  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Please select the Rebuttal Status</p>
@@ -270,13 +270,10 @@
 											</c:if>
 			                            </div>
 			                           <div class="col-sm-6 form-group">
-			                                <label for="contactPerson">PCC Contact Person:</label>
-			                                <form:select path="contactPerson" class="form-control" id="contactPerson" readonly="true">
-											   	<form:option value="" label="---Select Contact---"/>
-											  	<form:option value="Contact 1" />
-											  	<form:option value="Contact 2" />
-											  	<form:option value="Contact 3" />
-											  	<form:option value="Contact 4" />
+			                                <label for="name"> PCC/Location:</label>
+			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
+			                                	<form:option value="" label="---Select PCC/Location---"/>
+			                                	<form:options items="${programMapEdit}" />
 											</form:select> 
 			                            </div>
 			                        </div>

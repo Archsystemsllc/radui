@@ -16,9 +16,9 @@ import com.archsystemsinc.rad.common.utils.RadServiceApiClient;
  *
  */
 @Component
-public class UserActivityScheduler {
+public class CsrLogScheduler {
 	
-	private static final Logger log = Logger.getLogger(UserActivityScheduler.class);
+	private static final Logger log = Logger.getLogger(CsrLogScheduler.class);
 	
 	
 	//@Value("${useractivity.scheduling.job.cron}")

@@ -44,6 +44,16 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
 
 <script type="text/javascript">
+
+function resetFields() {
+	
+	
+	$('#macId').prop('selectedIndex',0);
+	$('#jurId').prop('selectedIndex',0);	
+	$('#filterFromDateString').val("");
+	$('#filterToDateString').val("");
+	
+}
 	$(document).ready(function() {
 
 		$('#filterFromDateString').datepicker({
@@ -96,7 +106,7 @@ $(document).ready(function(){
 	{ "mData": "macCallReferenceNumber"},
 	{ "mData": "qamFullName"},
 	{ "mData": "macPCCNameTempValue"},
-	{ "mData": "datePosted"},
+	{ "mData": "datePostedString"},
 	{ "mData": "callDate"},
 	{ "mData": "rebuttalStatus"},
 	{ "mData": "rebuttalResult"},
@@ -147,7 +157,7 @@ $(document).ready(function(){
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div role="main">
 	<table id="mid">
-		<form:form method="POST" modelAttribute="rebuttal" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=false"
+		<form:form method="POST" modelAttribute="rebuttal" class="form-signin"	action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/false"
 			id="rebuttalfilterForm">
 			<tr>
 				<td style="vertical-align: top" >
@@ -208,7 +218,7 @@ $(document).ready(function(){
 												<tr>
 													<td>
 													<span><button class="btn btn-primary" id="filter" type="submit" title="Select Filter button to Filter the results">Filter</button></span> 
-													<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to Reset the results">Reset</button></span>
+													<span><button class="btn btn-primary" id="reset" onclick="resetFields();"  type="button" title="Select Reset button to Reset the results">Reset</button></span>
 													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin') or hasAuthority('MAC User') or hasAuthority('Quality Monitor') or hasAuthority('Quality Manager')">
 													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-rebuttal" title="Select Add rebuttal button to add new rebuttal"><button class="btn btn-primary" id="addrebuttal" type="button">Add Rebuttal</button></a></span> 
 													</sec:authorize>

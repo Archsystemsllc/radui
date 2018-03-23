@@ -50,7 +50,7 @@ public class ReportsController {
 
 	
 	 @RequestMapping(value ={"/admin/goBackMacJurisReport", "/quality_manager/goBackMacJurisReport", "/cms_user/goBackMacJurisReport",
-			 "/mac_admin/goBackMacJurisReport","/mac_user/goBackMacJurisReport"})		
+			 "/mac_admin/goBackMacJurisReport","/mac_user/goBackMacJurisReport","/quality_monitor/goBackMacJurisReport"})		
 	public String goBackGetMacJuris(final Model model,HttpSession session, Authentication authentication) {
 		log.debug("--> showAdminDashboard <--");
 		HashMap<Integer,String> locationMap = null;
@@ -135,7 +135,7 @@ public class ReportsController {
 	
 	
 	 @RequestMapping(value ={"/admin/reports", "/quality_manager/reports", "/cms_user/reports",
-			 "/mac_admin/reports","/mac_user/reports"})		
+			 "/mac_admin/reports","/mac_user/reports","/quality_monitor/reports"})		
 	public String viewReports(Model model, HttpSession session, Authentication authentication) {
 		log.debug("--> viewReports <--");
 		
@@ -184,7 +184,7 @@ public class ReportsController {
 	
 	 @RequestMapping(value ={"/admin/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}", "/quality_manager/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}", 
 			 "/cms_user/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}", "/mac_admin/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}",
-			 "/mac_user/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}"})	
+			 "/mac_user/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}","/quality_monitor/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}"})	
 	public String macJurReportDrillDown(@PathVariable("macId") final String macIdString, @PathVariable("jurisId") final String jurIdString, @PathVariable("searchString") final String searchString, final Model model,HttpSession session) {
 		
 		try {
@@ -232,7 +232,7 @@ public class ReportsController {
 	 
 	 @RequestMapping(value ={"/admin/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}", "/quality_manager/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}", 
 			 "/cms_user/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}", "/mac_admin/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}",
-			 "/mac_user/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}"})	
+			 "/mac_user/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}","/quality_monitor/rebuttal-report-drilldown/{macId}/{jurisId}/{callCategoryId}/{rebuttalStatus}"})	
 	public String rebuttalReportDrillDown(@PathVariable("macId") final String macIdString, @PathVariable("jurisId") final String jurIdString, @PathVariable("callCategoryId") final String callCategoryId,@PathVariable("rebuttalStatus") final String rebuttalStatus, final Model model,HttpSession session) {
 		
 		HashMap<Integer,Rebuttal> resultsMap = new HashMap<Integer,Rebuttal>();
@@ -260,9 +260,8 @@ public class ReportsController {
 		return "rebuttalreportlist";
 	}
 	 
-	
-	 @RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
-			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport"})			
+	@RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
+			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport","/quality_monitor/getMacJurisReport"})			
 	public String getMacJurisReport(@ModelAttribute("reportsForm") ReportsForm reportsForm,  final BindingResult result,
 			final Model model, HttpServletRequest request, HttpSession session, Authentication authentication) {
 
@@ -535,7 +534,7 @@ public class ReportsController {
 
 
 	@RequestMapping(value ={"/admin/getMacJurisReportFromSession", "/quality_manager/getMacJurisReportFromSession", "/cms_user/getMacJurisReportFromSession",
-			 "/mac_admin/getMacJurisReportFromSession","/mac_user/getMacJurisReportFromSession"})			
+			 "/mac_admin/getMacJurisReportFromSession","/mac_user/getMacJurisReportFromSession","/quality_monitor/getMacJurisReportFromSession"})			
 	public String getMacJurisReportFromSession(HttpServletRequest request, final Model model, HttpSession session) {
 		ReportsForm reportsForm= (ReportsForm) session.getAttribute("ReportsFormSession");
 		
@@ -545,9 +544,7 @@ public class ReportsController {
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI;
 		
-		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
-		
-		
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();	
 			
 		try {
 			

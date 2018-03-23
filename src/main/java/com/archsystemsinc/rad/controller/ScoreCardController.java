@@ -245,6 +245,21 @@ public class ScoreCardController {
 			model.addAttribute("programMapEdit", programMap);
 		}
 		
+		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null 
+				&& !scoreCard.getCallCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
+			String[] tempString = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
+			
+			scoreCard.setCallCategoryIdKnoweledgeSkillsUIObject(tempString);
+		}
+		
+		if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
+				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
+			String[] tempString = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
+			
+			scoreCard.setCallSubCategoryIdKnoweledgeSkillsUIObject(tempString);
+		}
+		
+		
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		//model.addAttribute("loggedInUserRole", userForm.getRole().getRoleName());
 		
@@ -432,7 +447,13 @@ public class ScoreCardController {
 						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus()) ) {
 					scoreCard.setQamCalibrationUpdateDateTime(currentDateTime);
 					
-				}  else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MONITOR_ROLE_STRING) && 
+				}  
+				
+				if(!existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult())) {
+					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
+				}
+				
+				/*else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MONITOR_ROLE_STRING) && 
 						(existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult()) || existingScoreCard == null)  ){
 					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
 					
@@ -445,6 +466,25 @@ public class ScoreCardController {
 				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.MAC_ADMIN_ROLE_STRING)) {
 					
 					
+				}*/
+				
+				
+				if(scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject() != null 
+						&& scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject().length > 0) {
+					String tempString = "";
+					for(String singleValue:scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject()) {
+						tempString += singleValue +",";
+					}
+					scoreCard.setCallCategoryIdKnoweledgeSkills(tempString);
+				}
+				
+				if(scoreCard.getCallSubCategoryIdKnoweledgeSkillsUIObject() != null 
+						&& scoreCard.getCallSubCategoryIdKnoweledgeSkillsUIObject().length > 0) {
+					String tempString = "";
+					for(String singleValue:scoreCard.getCallSubCategoryIdKnoweledgeSkillsUIObject()) {
+						tempString += singleValue +",";
+					}
+					scoreCard.setCallSubCategoryIdKnoweledgeSkills(tempString);
 				}
 				
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
@@ -461,6 +501,7 @@ public class ScoreCardController {
 				scoreCard.setUserId(userFormSession.getId().intValue());
 				scoreCard.setMacName(HomeController.MAC_ID_MAP.get(scoreCard.getMacId()));
 				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
+				scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
 				ResponseEntity<ScoreCard> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,ScoreCard.class);
 				
 				
