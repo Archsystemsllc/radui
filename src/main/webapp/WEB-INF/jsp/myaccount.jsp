@@ -49,7 +49,10 @@
 	src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-
+	<style>
+#changePassword{
+     margin-top: 25px;
+}</style>
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
@@ -94,7 +97,7 @@
 								            </spring:bind>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/change-password/${userForm.id}">Change Password</a>
+			                               <button class=" btn btn-primary" onclick="location.href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/change-password/${userForm.id}'" id="changePassword">Change Password</a></button>
 			                            </div>
 			                        	</div>
 			                        	

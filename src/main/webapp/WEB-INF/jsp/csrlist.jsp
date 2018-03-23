@@ -249,10 +249,10 @@ $(function() {
 	  	 var validateMac = $('select[name=macIdS]').val();
 		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
 	  	var validateFromDate = $('#fromDate').val();
-		var validateToDate = $('#fromDate').val();		  
+		var validateToDate = $('#toDate').val();		  
 		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
 		  if(validateMac == null && validateJurisdiction == null) {
-			  $('#searchalertMsg').text("Please Select Mac Id and Jurisdiction Id");
+			  $('#searchalertMsg').text("Please Select MAC Id and Jurisdiction Id");
 			  
 				return;
 			} else if(validateFromDate == "" ) {
@@ -262,7 +262,7 @@ $(function() {
 					  $('#searchalertMsg').text("Please Enter To Date");
 						return;
 					} else if(validateMac == null ) {
-						  $('#searchalertMsg').text("Please Select Mac Id ");
+						  $('#searchalertMsg').text("Please Select MAC Id ");
 							return;
 						} else if(validateJurisdiction == null) {
 							  $('#searchalertMsg').text("Please Select Jurisdiction Id");
