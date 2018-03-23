@@ -449,7 +449,7 @@ public class ScoreCardController {
 					
 				}  
 				
-				if(!existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult())) {
+				if(existingScoreCard != null && existingScoreCard.getCallResult() != null && !existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult())) {
 					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
 				}
 				
