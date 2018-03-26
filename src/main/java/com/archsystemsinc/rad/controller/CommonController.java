@@ -398,16 +398,20 @@ public class CommonController {
 		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
 		
 		
-			String[] subCategoryIds = categoryId;
-			for(String subCategoryIdsSingleValue: subCategoryIds) {
-				if(!subCategoryIdsSingleValue.equalsIgnoreCase("")) {
+			String[] callCategoryIds = categoryId;
+			for(String callCategoryIdsSingleValue: callCategoryIds) {
+				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
 					
-					if(subCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
-						//subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.values();
+					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
+						
+						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
+							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+							subCategoryMapFinal.putAll(subCategoryMap);
+						}
 						break;
 					}
-					Integer subCategoryId = Integer.valueOf(subCategoryIdsSingleValue);
-					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(subCategoryId);
+					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
+					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
 					subCategoryMapFinal.putAll(subCategoryMap);
 				}				
 			}
@@ -420,12 +424,10 @@ public class CommonController {
 	@RequestMapping(value ={"/admin/selectCallSubCategories", "/quality_manager/selectCallSubCategories", "/cms_user/selectCallSubCategories",
 			 "/mac_admin/selectCallSubCategories","/mac_user/selectCallSubCategories","/quality_monitor/selectCallSubCategories"}, method = RequestMethod.GET)	
 	@ResponseBody
-	public HashMap<Integer,String> selectCallSubCategoriesList(@RequestParam("categoryId") final Integer categoryId) {
+	public HashMap<Integer,String> selectCallSubCategories(@RequestParam("categoryId") final Integer categoryId) {
 		
 		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();
-		subCategoryMapFinal  = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(categoryId);
-		
-	
+		subCategoryMapFinal  = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(categoryId);	
 		return subCategoryMapFinal;
 	
 	}

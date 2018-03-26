@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -172,11 +173,12 @@
 
 		if (role == 'Administrator') {
 			$('#cmsCalibrationStatus').attr("disabled",false);
-			$('#cmsCalibrationStatus').attr("required",true);
+			//$('#cmsCalibrationStatus').attr("required",true);
 			
 		} else if (role == 'Quality Manager') {
 			$('#qamCalibrationStatus').attr("disabled",false);
-			$('#qamCalibrationStatus').attr("required",true);
+			$('#cmsCalibrationStatus').attr("disabled",false);
+			//$('#qamCalibrationStatus').attr("required",true);
 		}
 			
 
@@ -346,7 +348,7 @@
         });
 
 		$("#callCategoryIdKnoweledgeSkillsUIObject").change(function(){
-			alert("Inside Select:"+$('#callCategoryIdKnoweledgeSkillsUIObject').val());
+			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategoriesList",
                     {categoryId: $('#callCategoryIdKnoweledgeSkillsUIObject').val()}, function(data){
                 
@@ -532,6 +534,11 @@
 			}    		
         });
 
+
+		$("#callResult,#qamCalibrationStatus,#cmsCalibrationStatus").change(function(){		
+			setFinalCallResult();
+        });
+
 		//Select Call Result Functionality
 		function setCallResult() {
 			$("#callResult").val("");
@@ -565,7 +572,7 @@
 
         	if ((scorecardType_value == "Non-Scoreable" )) {
 
-        		$("#callResult").val("N/A");
+        		$("#callResult").val("N/A");        		
         		$("#failReasonCommentsDiv").hide();
         		$('#failReasonComments').attr("required",false);        		    		
            } 
@@ -577,6 +584,39 @@
         		$('#failReasonComments').attr("required",false);        		
         		
            } 
+
+        	setFinalCallResult();
+        }
+
+		//Select Call Result Functionality
+		function setFinalCallResult() {
+			
+			var callResultValue = $("#callResult").val();	
+			
+			if(callResultValue=="N/A") {				
+				$("#finalScoreCardStatus").val("N/A");	
+				return;								
+			} else if(callResultValue=="") {				
+				$("#finalScoreCardStatus").val("");												
+			}
+			var qamCalibrationStatusValue = "";			
+			if ( $("#qamCalibrationStatus").length ) {				 
+				qamCalibrationStatusValue = $("#qamCalibrationStatus").val();			 
+			}
+
+			var cmsCalibrationStatusValue = "";
+			if ( $("#cmsCalibrationStatus").length ) {				 
+				qamCalibrationStatusValue = $("#cmsCalibrationStatus").val();			 
+			}
+			
+			
+			if(cmsCalibrationStatusValue != "") {			
+				$("#finalScoreCardStatus").val(cmsCalibrationStatusValue);
+			} else if(qamCalibrationStatusValue != "") {				
+				$("#finalScoreCardStatus").val(qamCalibrationStatusValue);
+			} else if(callResultValue != "") {				
+				$("#finalScoreCardStatus").val(callResultValue);
+			}	
         }
 	});
 	
@@ -778,7 +818,7 @@
 			                                <label for="email"> Call Sub Category:</label>
 			                                <form:select path="callSubCategoryId" class="form-control required" id="callSubCategoryId" required="true" title="Select one required Call Sub Category from the List">
 											   	<form:option value="" label="---Select Call Sub Category---"/>											   	
-											   	<form:options items="${subCategorylMapEdit}" />												  						  	
+											   	<form:options items="${subCategoryMapEdit}" />												  						  	
 											</form:select> 
 			                            </div>
 			                        </div>             
@@ -826,10 +866,9 @@
 			                                <label for="email"> Call Sub Category:</label>
 			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
 											   							   	
-											   	<form:options items="${subCategorylMapEdit}" />												  						  	
+											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
 											</form:select> 
-			                            </div>                     
-			                           
+			                            </div>
 			                        </div>		    
 			                        
 			                        <div class="row">
@@ -855,25 +894,6 @@
 			                               </div>                     
 			                           
 			                        </div>
-			                       <%--  <div class="row" id="completenessCallFailureBlock2">
-			                        	 <div class="col-lg-5 form-group">
-			                        	 <label for="email"> Call Category:</label>
-			                               <form:select path="callCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Category from the List"  multiple="true">
-											   	<form:option value="" label="ALL" />
-											  	<form:options items="${callCategoryMap}" />										  	
-										   </form:select> 	
-			                               
-										</div>
-			                        	<div class="col-lg-5 form-group">
-			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
-											   	<form:option value="" label="ALL" />									   	
-											   	<form:options items="${subCategorylMapEdit}" />												  						  	
-											</form:select> 
-			                            </div>                     
-			                           
-			                        </div>		       --%>                     
-			                     
 				                </div>
 				            </div>	
 				            <div class="row" id="section5Div">
@@ -957,14 +977,18 @@
 				                   
 				                    <div class="row" id="callResultDiv">
 			                            <div class="col-lg-6 form-group" >
-			                                <label for="name"> Call Result:</label>
+			                                <label for="name">Quality Monitor Call Result:</label>
 			                                
 											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" title="Enter Call Result"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                             
+			                              	<label for="name">Final Call Result:</label>			                                
+											<form:input class="form-control required" type = "text" name = "finalScoreCardStatus" path="finalScoreCardStatus" readonly="true" title="Enter Call Result"/>
+			                            
 			                            </div>
 			                        </div>
+			                        
+			                       
 			                       
 			                         <div class="row" id="failReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
@@ -995,6 +1019,7 @@
 				                    
 				                </div>
 				            </div>
+				            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
 				            <c:if test="${scorecard.id > 0 && scorecard.callResult == 'Fail'}">
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
@@ -1049,6 +1074,7 @@
 				                </div>
 				            </div>
 				            </c:if>
+				            </sec:authorize>
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><c:if test="${scorecard.id == 0}">

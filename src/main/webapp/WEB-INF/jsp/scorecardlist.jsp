@@ -144,23 +144,25 @@ $(document).ready(function(){
          {
              extend: 'copyHtml5',
              exportOptions: {
-                 columns: [ 0, ':visible' ]
+                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
              },
              messageTop: 'Scorecard List Report.'
          },
          {
              extend: 'excelHtml5',
              exportOptions: {
-                 columns: ':visible'
+                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
              },
              messageTop: 'Scorecard List Report.'
          },
          {
              extend: 'pdfHtml5',
              exportOptions: {
-                 columns: [ 0, 1, 2, 3, 4, 5 ]
+                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
              },
-             messageTop: 'Scorecard List Report.'
+             messageTop: 'Scorecard List Report.',
+             orientation : 'landscape',
+             pageSize : 'LEGAL'
          }
          //,'colvis'
      ],
@@ -207,7 +209,7 @@ $(document).ready(function(){
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurisIdReportSearchString" class="form-control required"
 														id="jurId" required="true" title="Select one or multiple Jurisdiction from the List" multiple="true">
-														<form:option value="" label="ALL" />
+														<form:option value="ALL" label="ALL" />
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
 												</div>

@@ -109,10 +109,15 @@ public class ScoreCardController {
 					scoreCardFailObject.setCmsCalibrationStatus(UIGenericConstants.RESULT_FAIL_STRING);
 					
 			} else {
-				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);			
-			}
-			
+				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);	
+				
+				if(scoreCardNew.getMacId() == null || scoreCardNew.getMacId() == 0) {
+					model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
+				} else {
+					jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCardNew.getMacId());
+					model.addAttribute("jurisMapEdit", jurisMap);
+				}
+			}			
 			
 			if(roles.contains("Quality Monitor")) {
 				scoreCardNew.setUserId(userFormFromSession.getId().intValue());
@@ -252,6 +257,30 @@ public class ScoreCardController {
 			scoreCard.setCallCategoryIdKnoweledgeSkillsUIObject(tempString);
 		}
 		
+		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
+		
+		if(scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject() != null) {
+			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject();
+			for(String callCategoryIdsSingleValue: callCategoryIds) {
+				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
+					
+					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
+						
+						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
+							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+							subCategoryMapFinal.putAll(subCategoryMap);
+						}
+						break;
+					}
+					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
+					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+					subCategoryMapFinal.putAll(subCategoryMap);
+				}			
+			}			
+		}	
+
+		model.addAttribute("subCategoryMapListEdit", subCategoryMapFinal);
+		
 		if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
 				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
 			String[] tempString = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
@@ -264,7 +293,7 @@ public class ScoreCardController {
 		//model.addAttribute("loggedInUserRole", userForm.getRole().getRoleName());
 		
 		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
-		model.addAttribute("subCategorylMapEdit", subCategorylMap);		
+		model.addAttribute("subCategoryMapEdit", subCategorylMap);		
 		
 		return "scorecard";
 	}
@@ -303,12 +332,62 @@ public class ScoreCardController {
 			HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCard.getMacId()+"_"+scoreCard.getJurId());
 			model.addAttribute("programMapEdit", programMap);
 		}
-		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
 		model.addAttribute("loggedInUserRole", userForm.getRole().getRoleName());
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		HashMap<Integer, String> callCatMap = new HashMap<Integer, String>();
+		
+		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
+			String[] tempValues = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
+			for(String stringTempValue:tempValues) {
+				String callCategoryName = HomeController.CALL_CATEGORY_MAP.get(Integer.valueOf(stringTempValue));
+				callCatMap.put(Integer.valueOf(stringTempValue), callCategoryName);
+			}
+			
+		}
+		
+		model.addAttribute("callCategoryListView", callCatMap);
 		
 		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
-		model.addAttribute("subCategorylMapEdit", subCategorylMap);
+		model.addAttribute("subCategoryMapEdit", subCategorylMap);
 		
+		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
+		
+		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
+			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
+			for(String callCategoryIdsSingleValue: callCategoryIds) {
+				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
+					
+					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
+						
+						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
+							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+							subCategoryMapFinal.putAll(subCategoryMap);
+						}
+						break;
+					}
+					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
+					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+					subCategoryMapFinal.putAll(subCategoryMap);
+				}			
+			}			
+		}	
+
+		
+		HashMap<Integer, String> callSubCatMap = new HashMap<Integer, String>();
+		
+		if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
+				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
+			String[] tempValues = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
+			
+			for(String stringTempValue:tempValues) {
+				String callSubCategoryName = subCategoryMapFinal.get(Integer.valueOf(stringTempValue));
+				callSubCatMap.put(Integer.valueOf(stringTempValue), callSubCategoryName);
+			}
+		}
+		
+		model.addAttribute("subCategoryMapListEdit", callSubCatMap);		
 		
 		return "scorecardview";
 	}
@@ -416,6 +495,30 @@ public class ScoreCardController {
 				}
 			}
 			
+			HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
+			
+			
+			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject();
+			for(String callCategoryIdsSingleValue: callCategoryIds) {
+				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
+					
+					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
+						
+						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
+							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+							subCategoryMapFinal.putAll(subCategoryMap);
+						}
+						break;
+					}
+					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
+					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
+					subCategoryMapFinal.putAll(subCategoryMap);
+				}				
+			}
+		
+	
+			model.addAttribute("subCategoryMapListEdit", subCategoryMapFinal);
+			
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 			model.addAttribute("programMapEdit", programMap);	
@@ -423,7 +526,7 @@ public class ScoreCardController {
 			model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 			
 			HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
-			model.addAttribute("subCategorylMapEdit", subCategorylMap);
+			model.addAttribute("subCategoryMapEdit", subCategorylMap);
 			model.addAttribute("scorecard", scoreCard);
 			
 			model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
@@ -439,12 +542,23 @@ public class ScoreCardController {
 				
 				Date currentDateTime = new Date();
 				
+				String callResult = "";
+				String qmCalibrationStatus = "";
+				String cmcCalibrationSataus = "";
+								
+				if(scoreCard.getCallResult() != null && scoreCard.getCallResult() !="") {
+					callResult = scoreCard.getCallResult(); 
+				}
+				
 				if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.ADMIN_ROLE_STRING) && 
 						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
 					scoreCard.setCmsCalibrationUpdateDateTime(currentDateTime);
 					
 				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MANAGER_ROLE_STRING) && 
-						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus()) ) {
+						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && 
+						( (!existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus())) || 
+								( existingScoreCard.getCmsCalibrationStatus() != null 
+								&& !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) ) ) {
 					scoreCard.setQamCalibrationUpdateDateTime(currentDateTime);
 					
 				}  
@@ -510,7 +624,7 @@ public class ScoreCardController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String url = "redirect:/"+userFolder+"/scorecardlist/sessionBack=false";
+			String url = "redirect:/"+userFolder+"/scorecardlist/false";
 			url = response.encodeRedirectURL(url);
 			returnView =  url;
 		}

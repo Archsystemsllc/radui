@@ -143,7 +143,7 @@
 										<li><a class="${menu_highlight == 'rebuttal' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/false" title="Rebuttal Page">Rebuttal</a></li>
 									</sec:authorize>
 								
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin') or hasAuthority('Quality Manager')">
 									<li class="dropdown">
 										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
 										<span class="caret"></span>

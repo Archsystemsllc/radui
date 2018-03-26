@@ -4,6 +4,7 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -36,30 +37,97 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-
 <script type="text/javascript">
-
-	$(document).ready(function () {
-
-    	var username="qamadmin";
-  	   	var password="123456";
-    	
+$(document).ready(function () {
+		
+		
+    	//Set Default Values    	
     	$('#alertMsg').text('');
     	$('#nonScoreableReasonCommentsDiv').hide();
     	$('#section4HeaderDiv').hide();
     	$("#section4HeaderDiv_DoesNotCount").hide();	
     	$("#dialog-confirm").hide();
     	//Hiding Section 4, 5, 6, 7 Failure Blocks
-    	$("#accuracyCallFailureBlock").hide();	
+    	$("#accuracyCallFailureBlock1").hide();	
+    	$("#accuracyCallFailureBlock2").hide();
     	$("#completenessCallFailureBlock").hide();	
+    		
     	$("#privacyCallFailureBlock").hide();	
     	$("#customerSkillsCallFailureBlock").hide();
-
-    	//Failure Reason Comments Attributes
+		//Failure Reason Comments Attributes
     	$("#failReasonCommentsDiv").hide();
     	$('#failReasonComments').attr("required",false);	
+		//Section 8 Div
+		//$("#Section8Div").hide();
+		
+	
+			
+			var selected_value ="${scorecard.scorecardType}"; 
+			
+			if(selected_value=="Non-Scoreable") {				
+				$("#section4Div").hide();	
+				$("#section5Div").hide();
+				$("#section6Div").hide();	
+				
+				$("#callFailureReasonDiv").hide();
+				$("#failReasonCommentsDiv").hide();	
+				$('#section7HeaderDiv').hide();		
+				$("#nonScoreableReasonCommentsDiv").show();	
+				$('#section4HeaderDiv').show();		
+				$("#section4HeaderDiv_DoesNotCount").hide();
+					
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				$('#nonScoreableReason').attr('required',true);
+				
+				$("#Section8Div").hide();				
+				
+				
+			} else if(selected_value=="Scoreable") {
+				$("#section4Div").show();	
+				$("#section5Div").show();
+				$("#section6Div").show();	
+				$("#callResultDiv").show();	
+				$("#callFailureReasonDiv").show();
+				$("#failReasonCommentsDiv").show();
+				$('#section7HeaderDiv').show();		
+				$("#nonScoreableReasonCommentsDiv").hide();	
+				$('#section4HeaderDiv').hide();	
+				$("#section4HeaderDiv_DoesNotCount").hide();	
 
-    	
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				$('#nonScoreableReason').attr("required",false);
+
+				$("#Section8Div").show();
+								
+			}  else if(selected_value=="Does Not Count") {
+				
+				$("#section4Div").hide();	
+				$("#section5Div").hide();
+				$("#section6Div").hide();	
+				
+				$("#callFailureReasonDiv").hide();
+				$("#failReasonCommentsDiv").hide();	
+				$('#section7HeaderDiv').hide();	
+				$('#section4HeaderDiv').hide()	
+				$("#nonScoreableReasonCommentsDiv").hide();	
+				$("#section4HeaderDiv_DoesNotCount").show();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$('#nonScoreableReason').attr("required",false);
+
+				$("#Section8Div").hide();	
+								
+			} 
+			
 
 	    var csrPrvAccInfoFlag="${scorecard.csrPrvAccInfo}";
 	    var csrPrvCompInfoFlag="${scorecard.csrPrvCompInfo}";
@@ -68,10 +136,12 @@
 	    var callResultFlag = "${scorecard.callResult}";
 
 	    if(csrPrvAccInfoFlag=="No") {
-			$("#accuracyCallFailureBlock").show();	
+			$("#accuracyCallFailureBlock1").show();	
+			$("#accuracyCallFailureBlock2").show();
 		}
 		if(csrPrvCompInfoFlag=="No") {
 			$("#completenessCallFailureBlock").show();	
+		
 		}
 		if(csrPrvCompInfoFlag=="No") {
 			$("#privacyCallFailureBlock").show();	
@@ -82,6 +152,26 @@
 		if(callResultFlag=="Fail") {			
 			$("#failReasonCommentsDiv").show();
 		}
+
+
+		//Assigning Values Based on User Role
+		var role = $('#userRole').val();
+
+		if (role == 'Administrator') {
+			$('#cmsCalibrationStatus').attr("disabled",false);
+			$('#cmsCalibrationStatus').attr("required",true);
+			
+		} else if (role == 'Quality Manager') {
+			$('#qamCalibrationStatus').attr("disabled",false);
+			$('#qamCalibrationStatus').attr("required",true);
+		}
+			
+
+		//Auto Complete CSF Full Name Functionality
+		var username="qamadmin";
+  	   	var password="123456";
+
+  	 
     	    	
     	$("#csrFullName" ).autocomplete({
     	      minLength: 0,
@@ -144,20 +234,139 @@
    	        .append( "<div>" + item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level + "</div>" )
    	        .appendTo( ul );
    	    };
+
+   	    //Dates Initialisation Functionality
+    	
+    	$('#callMonitoringDate').datepicker({
+    		maxDate: 0,
+    		altField: "#callMonitoringDate_Alt",
+    		altFieldTimeOnly: false,
+    		altFormat: "yymmdd"
+    	});    	
+
+    	$('#callDuration').timepicker({
+    		timeFormat: 'HH:mm:ss',
+    		controlType: 'select',
+        	oneLine: true,
+        	hourMax: 4
+    	});    	
+
+    	$('#callTime').timepicker({
+    		timeFormat: 'hh:mm:ss TT',    		
+    		controlType: 'select',
+        	oneLine: true,
+        	altField: "#callTime_Alt",
+    		altFieldTimeOnly: false,
+    		altFormat: "HHmmss"
+    	});
+
+    	$('#callFailureTime,#accuracyCallFailureTime,#completenessCallFailureTime,#privacyCallFailureTime,#customerSkillsCallFailureTime').timepicker({
+    		timeFormat: 'HH:mm:ss',
+    		controlType: 'select',
+        	oneLine: true,
+        	hourMax: 4
+    	}); 
  	
 	});
 
-	$(function(){		 
-		
-		
-		
-		
-		 $('#close1,#close2').click(function(e) {	
-			 e.preventDefault();	
-			 window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";			 
+	$(function(){	
+
+		 $("#csrFullName").change(function(){
+			var csrFullNameValue = $(this).val().trim();			
+	        if(csrFullNameValue == "No CSR's Found") {		       
+	        	$("#csrFullName").val("");
+	        }				
+	     });	
+
+		//Select Jurisdiction Functionality
+		$("select#macId").change(function(){
+
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+			
+			var macIdValue = $(this).val();
+			
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+                    {macId: macIdValue, multipleInput: false}, function(data){
+               
+                 $("#jurId").get(0).options.length = 0;	           
+      	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+			}
+        });
+
+		//Select Program Functionality
+		$("select#jurId").change(function(){
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+			var macIdValue = $('#macId').val();
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: $(this).val()}, function(data){
+                
+                 $("#programId").get(0).options.length = 0;	           
+      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+			}
+        });
+
+		//Select Call Category Functionality
+		$("select#callCategoryId").change(function(){
+			
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategories",
+                    {categoryId: $('#callCategoryId').val()}, function(data){
+                
+                 $("#callSubCategoryId").get(0).options.length = 0;	           
+      	      	 $("#callSubCategoryId").get(0).options[0] = new Option("---Select Sub Category---", "");
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#callSubCategoryId").get(0).options[$("#callSubCategoryId").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+
+		$("#callCategoryIdKnoweledgeSkillsUIObject").change(function(){
+			
+            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategoriesList",
+                    {categoryId: $('#callCategoryIdKnoweledgeSkillsUIObject').val()}, function(data){
+                
+                 $("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length = 0;	           
+      	      	 
+      	  	    	$.each(data, function (key,obj) {
+      	  	    		$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options[$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length] = new Option(obj, key);
+      	  	    		
+      	  	    	});  	   
+               });
+        });
+
+		//Back Button Functionality
+		$('#close1,#close2').click(function(e) {	
+			 e.preventDefault();		
+	          $("#dialog-confirm" ).dialog({
+	              resizable: false,
+	              height: "auto",
+	              width: 400,
+	              modal: true,	              
+	              buttons: {
+	                "Yes": function() {
+	              		$( this ).dialog("close");
+	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+	                },
+	                Cancel: function() {                    
+	                	$( this ).dialog("close"); 
+	                }
+	              }
+            });
 	     }); 
 
-      //Secton 1 - Option 1
+      	//Secton 1 - Option 1
 
 		$("input[name='scorecardType']").change(function(){		
 			
@@ -167,13 +376,22 @@
 				$("#section4Div").hide();	
 				$("#section5Div").hide();
 				$("#section6Div").hide();	
-				//$("#callResultDiv").hide();	
+				
 				$("#callFailureReasonDiv").hide();
 				$("#failReasonCommentsDiv").hide();	
 				$('#section7HeaderDiv').hide();		
 				$("#nonScoreableReasonCommentsDiv").show();	
 				$('#section4HeaderDiv').show();		
-				$("#section4HeaderDiv_DoesNotCount").hide();	
+				$("#section4HeaderDiv_DoesNotCount").hide();
+					
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				$('#nonScoreableReason').attr('required',true);
+				
+				$("#Section8Div").hide();				
+				
 				
 			} else if(selected_value=="Scoreable") {
 				$("#section4Div").show();	
@@ -186,19 +404,35 @@
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				$('#nonScoreableReason').attr("required",false);
+
+				$("#Section8Div").show();
 								
 			}  else if(selected_value=="Does Not Count") {
 				
 				$("#section4Div").hide();	
 				$("#section5Div").hide();
 				$("#section6Div").hide();	
-				//$("#callResultDiv").hide();	
+				
 				$("#callFailureReasonDiv").hide();
 				$("#failReasonCommentsDiv").hide();	
 				$('#section7HeaderDiv').hide();	
 				$('#section4HeaderDiv').hide()	
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
+
+				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
+				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
+				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
+				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$('#nonScoreableReason').attr("required",false);
+
+				$("#Section8Div").hide();	
 								
 			} 
 			setCallResult();	 		
@@ -211,11 +445,17 @@
 			var selected_value = $("input[name='csrPrvAccInfo']:checked").val();
 			
 			if(selected_value=="No") {
-				$("#accuracyCallFailureBlock").show();	
+				$("#accuracyCallFailureBlock1").show();	
+				$("#accuracyCallFailureBlock2").show();	
 				$("#accuracyCallFailureReason").focus();
+				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",true);		
+				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",true);			
 				setCallResult();	
 			} else if(selected_value=="Yes") {
-				$("#accuracyCallFailureBlock").hide();	
+				$("#accuracyCallFailureBlock1").hide();	
+				$("#accuracyCallFailureBlock2").hide();		
+				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",false);
+				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",false);					
 				setCallResult();					
 			}    		
         });
@@ -228,10 +468,14 @@
 			if(selected_value=="No") {
 				
 				$("#completenessCallFailureBlock").show();	
-				$("#completenessCallFailureReason").focus();		
+			
+				$("#completenessCallFailureReason").focus();
+				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",true);						
 				setCallResult();	
 			} else if(selected_value=="Yes") {
-				$("#completenessCallFailureBlock").hide();	
+				$("#completenessCallFailureBlock1").hide();	
+				$("#completenessCallFailureBlock2").hide();	
+				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",false);	
 				setCallResult();	
 			}    		
         });
@@ -244,11 +488,13 @@
 			if(selected_value=="No") {
 				
 				$("#privacyCallFailureBlock").show();	
-		 	    $("#privacyCallFailureReason").focus();  		
+		 	    $("#privacyCallFailureReason").focus();  
+		 	    $('#privacyCallFailureReason,#privacyCallFailureTime').attr("required",true);			
 		 	    setCallResult();	
 				
 			} else if(selected_value=="Yes") {
-				$("#privacyCallFailureBlock").hide();					
+				$("#privacyCallFailureBlock").hide();
+				 $('#privacyCallFailureReason,#privacyCallFailureTime').attr("required",false);						
 				setCallResult();	
 			}    		
         });
@@ -262,15 +508,18 @@
 				
 				$("#customerSkillsCallFailureBlock").show();
 				$("#customerSkillsCallFailureReason").focus();
+				$('#customerSkillsCallFailureReason,#customerSkillsCallFailureTime').attr("required",true);	
 				setCallResult();
 							
 			} else if(selected_value=="Yes") {				
 				
 				$("#customerSkillsCallFailureBlock").hide();
+				$('#customerSkillsCallFailureReason,#customerSkillsCallFailureTime').attr("required",false);	
 				setCallResult();
 			}    		
         });
 
+		//Select Call Result Functionality
 		function setCallResult() {
 			$("#callResult").val("");
         	var csrWasCourteous_value = $("input[name='csrWasCourteous']:checked").val();	
@@ -286,6 +535,9 @@
             	) {
             	
         			$("#callResult").val("Fail");
+        			$("#failReasonCommentsDiv").show();
+        			$('#failReasonComments').attr("required",true);	
+        			
         	} 
 
         	if (( scorecardType_value == "Scoreable" ) 
@@ -294,14 +546,27 @@
                 	) {
             		
             		$("#callResult").val("Pass");
+            		$("#failReasonCommentsDiv").hide();
+            		$('#failReasonComments').attr("required",false);	
         	}
 
-        	if ((scorecardType_value == "Non-Scoreable" || scorecardType_value == "Does Not Count")) {
+        	if ((scorecardType_value == "Non-Scoreable" )) {
 
         		$("#callResult").val("N/A");
+        		$("#failReasonCommentsDiv").hide();
+        		$('#failReasonComments').attr("required",false);        		    		
+           } 
+
+        	if ((scorecardType_value == "Does Not Count")) {
+
+        		$("#callResult").val("N/A");
+        		$("#failReasonCommentsDiv").hide();
+        		$('#failReasonComments').attr("required",false);        		
+        		
            } 
         }
 	});
+	
 </script>
 
 </head>
@@ -469,7 +734,7 @@
 			                                <label for="email"> Call Sub Category:</label>
 			                                <form:select path="callSubCategoryId" class="form-control required" id="callSubCategoryId" readonly="true">
 											   	<form:option value="" label="--- Select Call Sub Category---"/>											   	
-											   	<form:options items="${subCategorylMapEdit}" />												  						  	
+											   	<form:options items="${subCategoryMapEdit}" />												  						  	
 											</form:select> 
 			                            </div>
 			                        </div>             
@@ -492,68 +757,99 @@
 				                </div>
 				            </div>
 				            
-				            <div class="row " id="section4Div">
+				           <div class="row " id="section4Div">
+				           <fieldset disabled>
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
+				                
 				                    <h2>Section 4 - Knowledge Skills</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <fieldset disabled>
+				                   
 			                         <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide accurate information? If 'No' was selected, please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" readonly="true" disabled="disabled" />Yes&nbsp;
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" readonly="true" disabled="disabled" />No
-			                            </div>			                           
+			                            <div class="col-lg-8 form-group">
+			                                <label for="csrPrvAccInfo"> Did the CSR provide accurate information? If 'No' was selected , please enter reason in text box below:<span class='red'><strong>*</strong></span></label>
+			                              
+			                                
+			                            </div>	
+			                             <div class="col-lg-2 form-group" >
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" title="Select Radiobutton Yes, if accurate information was provided"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
+			                               </div>		                           
 			                        </div>
-			                        <div class="row" id="accuracyCallFailureBlock">
-			                        <div class="col-lg-5 form-group">
+			                        <div class="row" id="accuracyCallFailureBlock1">
+			                        	<div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureReason">Accuracy Call Failure Reason: </label>
-			                                 <form:input class="form-control" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" readonly="true"/>
+			                                 <form:input class="form-control required" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureTime">Accuracy Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime" readonly="true"/>
+			                                <form:input class="form-control required" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime" title="Choose time for the Accuracy Time Failure" />
 			                               </div>
 			                        </div>
-			                        
-			                        <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected, please enter reason in text box below:</label>
-			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"  readonly="true"/>Yes&nbsp;
-										  	<form:radiobutton path="csrPrvCompInfo" value="No" readonly="true"/>No
-			                            </div>
-			                           
-			                        </div> 
-			                         <div class="row" id="completenessCallFailureBlock">
-			                        <div class="col-lg-5 form-group">
-			                                <label for="completenessCallFailureReason">Completeness Call Failure Reason: </label>
-			                                 <form:input class="form-control" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason" readonly="true"/>
+			                         <div class="row" id="accuracyCallFailureBlock2">
+			                        	 <div class="col-lg-5 form-group">
+			                        	 <label for="email"> Call Category:</label>
+			                               <form:select path="callCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Category from the List"  multiple="true">
+											   
+											  	<form:options items="${callCategoryListView}" />										  	
+										   </form:select> 	
 			                               
 										</div>
-			                            <div class="col-lg-5 form-group">
+			                        	<div class="col-lg-5 form-group">
+			                                <label for="email"> Call Sub Category:</label>
+			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
+											   							   	
+											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
+											</form:select> 
+			                            </div>
+			                        </div>		    
+			                        
+			                        <div class="row">
+			                            <div class="col-lg-8 form-group">
+			                                <label for="name"> Did the CSR provide complete information? If 'No' was selected , please enter reason in text box below:<span class='red'><strong>*</strong></span></label>
+			                                
+			                            </div>
+			                             <div class="col-lg-2 form-group" >
+			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true" title="Select Radiobutton Yes, if complete information was provided"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvCompInfo" value="No" title="Select Radiobutton No, if complete information was not provided"/>&nbsp;No
+			                               </div>		
+			                           
+			                        </div> 
+			                        <div class="row" id="completenessCallFailureBlock">
+			                        <div class="col-lg-5 form-group">
+			                                <label for="completenessCallFailureReason">Completeness Call Failure Reason: </label>
+			                                 <form:input class="form-control required" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
+			                               
+									</div>
+			                        <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureTime">Completeness Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime" readonly="true"/>
-			                               </div>
+			                                <form:input class="form-control required" type = "text" name = "completenessCallFailureTime" path="completenessCallFailureTime" title="Choose time for the Accuracy Time Failure"/>
+			                               </div>                     
+			                           
 			                        </div>
-				                    </fieldset>
 				                </div>
+				               </fieldset>
 				            </div>	
 				            <div class="row" id="section5Div">
+				            <fieldset disabled>
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    <h2>Section 5 - Adherence to Privacy</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <fieldset disabled>
+				                   
 			                         <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="name"> Did CSR follow privacy procedures? If 'No' was selected, please select the reason below:</label>
-			                                <form:radiobutton path="csrFallPrivacyProv" value="Yes" readonly="true"/>Yes&nbsp;
-										  <form:radiobutton path="csrFallPrivacyProv" value="No" readonly="true"/>No
-			                            </div>		                           
+			                            <div class="col-lg-8 form-group">
+			                                <label for="csrPrivacyQ"> Did CSR follow privacy procedures? If 'No' was selected , please select the reason below:<span class='red'><strong>*</strong></span></label>
+			                                
+			                            </div>	
+			                             <div class="col-lg-2 form-group" >
+			                               <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true" />&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrFallPrivacyProv" value="No" />&nbsp;No
+										 </div>			                           
 			                        </div>   
 			                         <div class="row" id="privacyCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="privacyCallFailureReason">Privacy Call Failure Reason: </label>
-			                                 <form:select class="form-control" id="privacyCallFailureReason" path="privacyCallFailureReason" title="Select one of the Failure Reason" readonly="true">
+			                                 <form:select class="form-control required" id="privacyCallFailureReason" path="privacyCallFailureReason" title="Select one of the Failure Reason" >
 			                                 	<form:option value="" label="Select Privacy Failure Reason"/>
 			                                 	<form:option value="PII and/or PHI were released, but the caller was not authorized to receive the information"/>
 			                                 	<form:option value="PII and/or PHI were not released, but the caller requested and was authorized to receive the information"/>
@@ -564,28 +860,33 @@
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="privacyCallFailureTime">Privacy Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "privacyCallFailureTime" path="privacyCallFailureTime" readonly="true"/>
+			                                <form:input class="form-control required" type = "text" name = "privacyCallFailureTime" path="privacyCallFailureTime"/>
 			                               </div>
 			                        </div>      
-				                    </fieldset>
+				                    
 				                </div>
+				               </fieldset>
 				            </div>
 				            <div class="row" id="section6Div">
+				            <fieldset disabled>
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    <h2>Section 6 - Customer Skills</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <fieldset disabled>
+				                   
 			                         <div class="row">
-			                            <div class="col-lg-10 form-group">
-			                                <label for="name">Was the CSR courteous, friendly, and professional? If 'No' was selected, please select the reason below:</label>
-			                                <form:radiobutton path="csrWasCourteous" value="Yes" readonly="true"/>Yes&nbsp;
-										  <form:radiobutton path="csrWasCourteous" value="No" readonly="true"/>No
-			                            </div>		                           
+			                            <div class="col-lg-8 form-group">
+			                                <label for="csrCourteousQ">Was the CSR courteous, friendly, and professional? If 'No' was selected , please select the reason below:<span class='red'><strong>*</strong></span></label>
+			                                
+			                            </div>	
+			                             <div class="col-lg-2 form-group" >
+			                               <form:radiobutton path="csrWasCourteous" value="Yes"  class="required" />&nbsp;Yes&nbsp;
+										  <form:radiobutton path="csrWasCourteous" value="No" />&nbsp;No
+										 </div>				                           
 			                        </div>   
 			                         <div class="row" id="customerSkillsCallFailureBlock">
 			                       	 <div class="col-lg-5 form-group">
 			                                <label for="customerSkillsCallFailureReason">Customer Skills Call Failure Reason: </label>
-			                                 <form:select class="form-control" id="customerSkillsCallFailureReason" path="customerSkillsCallFailureReason" title="Select one of the Failure Reason" readonly="true">
+			                                 <form:select class="form-control required" id="customerSkillsCallFailureReason" path="customerSkillsCallFailureReason" title="Select one of the Failure Reason"  >
 			                                 	<form:option value="" label="Select Customer Skills Call Failure Reason"/>
 			                                 	<form:option value="Inappropriately interrupting the caller"/>
 			                                 	<form:option value="Using profanity"/>
@@ -598,40 +899,42 @@
 										</div>
 			                            <div class="col-lg-5 form-group">
 			                                <label for="customerSkillsCallFailureTime">Customer Skills Call Failure Time:</label>
-			                                <form:input class="form-control" type = "text" name = "customerSkillsCallFailureTime" path="customerSkillsCallFailureTime" readonly="true"/>
+			                                <form:input class="form-control required" type = "text" name = "customerSkillsCallFailureTime" path="customerSkillsCallFailureTime"/>
 			                               </div>
 			                        </div>            
-				                    </fieldset>
+				                    
 				                </div>
+				             </fieldset>
 				            </div>
 				             <div class="row" >
+				             <fieldset disabled>
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2 id="section7HeaderDiv">Section 7 - Call Result</h2> 
 				                    <h2 id="section4HeaderDiv">Section 4 - Non-Scoreable Call Result</h2> 
 				                    <h2 id="section4HeaderDiv_DoesNotCount">Section 4 - Does Not Count Call Result</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                   <fieldset disabled>
+				                   
 				                    <div class="row" id="callResultDiv">
 			                            <div class="col-lg-6 form-group" >
 			                                <label for="name"> Call Result:</label>
 			                                
-											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" />
+											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" title="Enter Call Result"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                             
 			                            </div>
 			                        </div>
-			                        
+			                       
 			                         <div class="row" id="failReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Call Failure Reason Comments:</label>
-			                                <form:textarea class="form-control" type = "textarea" name = "failReasonComments" path="failReasonComments" readonly="true"/>
+			                                <form:textarea class="form-control required" type = "textarea" name = "failReasonComments" path="failReasonComments" title="Enter Call Failure Reason" />
 			                            </div>		                           
 			                        </div>
 			                        <div class="row" id="nonScoreableReasonCommentsDiv">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Non-Scoreable Reason:</label>
-			                                <form:select class="form-control" id="nonScoreableReason" path="nonScoreableReason" title="Select one of the Reason" readonly="true">
+			                                <form:select class="form-control required" id="nonScoreableReason" path="nonScoreableReason" title="Select one of the Reason" >
 			                                 	<form:option value="" label="Select Non-Scoreable Reason"/>
 			                                 	<form:option value="Recorded file disconnected unexpectedly"/>
 			                                 	<form:option value="Recorded file was inaudible/not viewable and deemed corrupted"/>
@@ -645,12 +948,15 @@
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <label for="name">Additional Comments Box:</label>
-			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" readonly="true"/>
+			                               <form:textarea class="form-control" type = "text" name = "failReasonAdditionalComments" path="failReasonAdditionalComments" title="Enter Additional Comments" />
 			                            </div>		                           
 			                        </div>       
-				                    </fieldset>
+				                    
 				                </div>
-				            </div>		
+				            </fieldset>
+				            </div>
+				            <fieldset disabled>
+				             <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
 				            <c:if test="${scorecard.id > 0 && scorecard.callResult == 'Fail'}">
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
@@ -705,9 +1011,12 @@
 				                </div>
 				            </div>
 				            </c:if>
+				            </sec:authorize>
+				            </fieldset>
 				            <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
-									<td><span><button class="btn btn-primary" id="close1" type="button">Back</button></span></td>
+									<td>
+									<span><button class="btn btn-primary" id="close2" type="button" title="Select Close button to navigate to Scorecard List ">Back</button></span></td>
 							       </tr>
 							</table>
 								<!-- </div> -->

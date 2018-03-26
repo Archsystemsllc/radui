@@ -137,6 +137,8 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private Date scoreCardStatusUpdateDateTime;
 	
+	private String finalScoreCardStatus;
+	
 	//Temporary Variables
 	private String jurisdictionName;	
 	
@@ -172,6 +174,16 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private ArrayList<String> macCallResultList;
 	
+	
+	
+	public String getFinalScoreCardStatus() {
+		return finalScoreCardStatus;
+	}
+
+	public void setFinalScoreCardStatus(String finalScoreCardStatus) {
+		this.finalScoreCardStatus = finalScoreCardStatus;
+	}
+
 	public String getCallCategoryIdKnoweledgeSkills() {
 		return callCategoryIdKnoweledgeSkills;
 	}
