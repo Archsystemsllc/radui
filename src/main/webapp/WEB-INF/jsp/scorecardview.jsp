@@ -916,12 +916,14 @@ $(document).ready(function () {
 				                   
 				                    <div class="row" id="callResultDiv">
 			                            <div class="col-lg-6 form-group" >
-			                                <label for="name"> Call Result:</label>
+			                                <label for="name">Quality Monitor Call Result:</label>
 			                                
 											<form:input class="form-control required" type = "text" name = "callResult" path="callResult" readonly="true" title="Enter Call Result"/>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                             
+			                              	<label for="name">Final Call Result:</label>			                                
+											<form:input class="form-control required" type = "text" name = "finalScoreCardStatus" path="finalScoreCardStatus" readonly="true" title="Enter Call Result"/>
+			                            
 			                            </div>
 			                        </div>
 			                       

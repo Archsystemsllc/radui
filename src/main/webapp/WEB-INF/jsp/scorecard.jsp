@@ -348,6 +348,12 @@
         });
 
 		$("#callCategoryIdKnoweledgeSkillsUIObject").change(function(){
+
+			var selectedJurisList = "";
+
+			$("#callSubCategoryIdKnoweledgeSkillsUIObject :selected").each(function() {
+				selectedJurisList+=($(this).attr('value'))+",";
+			}); 
 			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategoriesList",
                     {categoryId: $('#callCategoryIdKnoweledgeSkillsUIObject').val()}, function(data){
@@ -357,8 +363,15 @@
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options[$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length] = new Option(obj, key);
       	  	    		
-      	  	    	});  	   
+      	  	    	});  
+
+	      	  	    $.each(selectedJurisList.split(","), function(i,e){
+	                    $("#callSubCategoryIdKnoweledgeSkillsUIObject option[value='" + e + "']").prop("selected", true);
+	                });	   
                });
+			
+            
+            
         });
 
 		//Back Button Functionality

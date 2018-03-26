@@ -120,7 +120,7 @@ $(document).ready(function(){
 	{ "mData": "qamFullName"},
 	{ "mData": "qamStartdateTimeString"},
 	{ "mData": "scorecardType"},
-	{ "mData": "callResult"},
+	{ "mData": "finalScoreCardStatus"},
 	{ "mData": "id"}
 	],
     "columnDefs": [ 
