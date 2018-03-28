@@ -117,9 +117,9 @@
 					<tr>
 						<td
 							style="vertical-align: bottom; border: 0px; padding: 0px">
-							<div class="collapse navbar-collapse navbar-right">
+							<div class="collapse navbar-collapse">
 								<ul class="nav navbar-nav" style="font-weight: bold" id="navlist">
-									<li style="margin-left: 0px"><a class="${menu_highlight == 'home' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
+									<li><a class="${menu_highlight == 'home' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User') or hasAuthority('CMS User')">
 										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/false" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
@@ -158,7 +158,7 @@
 									
 									<li><a class="${menu_highlight == 'my_account' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount" title="My Account Page">My Account</a></li>	
 									<li><a class="${menu_highlight == 'resources' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/resources" title="Resources">Resources</a></li>									
-									<li>&nbsp; &nbsp;</li>			
+								<!-- <li>&nbsp; &nbsp;</li>	 -->	
 								</ul>
 							</div>
 						</td>

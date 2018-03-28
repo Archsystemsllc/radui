@@ -104,7 +104,9 @@ a:hover, a:focus {
 
 .dropdown-menu {
 	margin-top: -1px;
+	margin-left: 30px;
 	min-width: 180px;
+	positon: relative;
 }
 
 .center h2 {
@@ -291,16 +293,20 @@ input.search-form:hover {
 
 .navbar-nav {
 	margin-top: 12px;
+	display:table;
 }
 
 .navbar-nav>li {
-	/* margin-left: 35px; */
-	margin: 5px 29px 0px;
+	/*  margin-left: 35px;  */
+/* 	margin: 5px 29px 0px; */
+    float: none;
+    horizontal-align:middle;
 	padding-bottom: 5px;
-}
+	display: table-cell;
+	}
 
 .navbar-inverse .navbar-nav>li>a {
-	padding: 5px 12px;
+	padding: 5px 20px;
 	margin: 0;
 	border-radius: 3px;
 	color: #2E2E2E;
@@ -345,13 +351,15 @@ input.search-form:hover {
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu:before {
-	position: absolute;
+	position: relative;
 	top: 0;
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu>li>a {
 	padding: 8px 15px;
 	color: #fff;
+	float: center;
+	text-align: center;
 }
 
 .navbar-inverse .navbar-nav .dropdown-menu>li:hover>a, .navbar-inverse .navbar-nav .dropdown-menu>li:focus>a,
