@@ -1,6 +1,8 @@
 package com.archsystemsinc.rad.controller;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.server.ClassPathResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -115,6 +119,8 @@ public class RebuttalController {
 					rebuttalNew.setJurisIdList(jurisdictionArrayList);
 				}
 				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
+				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);		
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
@@ -311,6 +317,9 @@ public class RebuttalController {
 		return scoreCard;
 	}
 	
+	@Value("${radui.uploadfile.server.location}")
+    public String SERVER_UPLOAD_FILE_LOCATION;
+	
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
 			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
 	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result,
@@ -324,9 +333,30 @@ public class RebuttalController {
 		
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
 		
+		
+		String fileName = "";
+		 MultipartFile tempMultipartFile = null;
+		if (!rebuttal.getRebuttalFileObject().isEmpty()) {
+            try {
+                fileName = rebuttal.getRebuttalFileObject().getOriginalFilename();
+                tempMultipartFile = rebuttal.getRebuttalFileObject();
+                //byte[] bytes = rebuttal.getRebuttalFileObject().getBytes();
+                //rebuttal.setRebuttalFileAttachment(bytes);
+                //rebuttal.setHttpFileData(new ByteArrayResource(bytes));
+               /* BufferedOutputStream buffStream = 
+                        new BufferedOutputStream(new FileOutputStream(new File(SERVER_UPLOAD_FILE_LOCATION + fileName)));
+                buffStream.write(bytes);
+                buffStream.close();*/
+                //return "You have successfully uploaded " + fileName;
+            } catch (Exception e) {
+                //return "You failed to upload " + fileName + ": " + e.getMessage();
+            }
+        } else {
+            //return "Unable to upload. File is empty.";
+        }
+		
 		//Nulling the File Value
 		rebuttal.setRebuttalFileObject(null);
-		
 		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
        sdfAmerica.setTimeZone(tzInAmerica);
@@ -357,7 +387,8 @@ public class RebuttalController {
 		try {
 			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
 			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
-			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
+			
+			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, tempMultipartFile,
 					Rebuttal.class);
 			
 		} catch (Exception e) {
@@ -365,7 +396,7 @@ public class RebuttalController {
 			e.printStackTrace();
 		}
 		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
-		String url = "forward:/"+userFolder+"/rebuttallist/sessionBack=false";
+		String url = "forward:/"+userFolder+"/rebuttallist/false";
 		url = response.encodeRedirectURL(url);
 
 		return url;

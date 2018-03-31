@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Rebuttal  {	
@@ -136,9 +137,23 @@ public class Rebuttal  {
 	
 	private MultipartFile rebuttalFileObject;
 	
+	private ByteArrayResource httpFileData;
 	
 	
 	
+	
+	
+	
+	public ByteArrayResource getHttpFileData() {
+		return httpFileData;
+	}
+
+
+	public void setHttpFileData(ByteArrayResource httpFileData) {
+		this.httpFileData = httpFileData;
+	}
+
+
 	public String[] getJurisIdReportSearchString() {
 		return jurisIdReportSearchString;
 	}

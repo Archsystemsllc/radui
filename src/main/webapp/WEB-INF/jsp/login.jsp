@@ -43,6 +43,16 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     [endif] -->
+<style type="text/css">
+	.red {  color:#cd2026;  }
+</style>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.required').each(function(){
+	       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
+	});
+});
+</script>
 </head>
 
 <body id="b"  style="height:100%">
@@ -64,15 +74,15 @@
 								<div class="form-group ${error != null ? 'has-error' : ''}">
 									<span>${message}</span>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span> -->
-									<label for="username">Email Address</label>
+									<label for="username">Email Address/Username</label>
 									<input style="margin: 0px" name="username" id="username" type="text"
-										class="form-control" placeholder="Username" autofocus="true" title="Please fill out User Name field"/>
+										class="form-control" placeholder="Email Address/Username" autofocus="true" title="Please fill out Email Address/Username field" required/>
 									<!-- </div> -->
 									<br>
 									<!-- <div class="input-group"><span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span> -->
 									<label for="password">Password</label>
 									<input style="margin: 0px" name="password" id="password" type="password"
-										class="form-control" placeholder="Password" title="Please fill out Password field"/>
+										class="form-control" placeholder="Password" title="Please fill out Password field" required/>
 									<!-- </div> -->
 									<span>${error}</span> <input type="hidden"
 										name="${_csrf.parameterName}" value="${_csrf.token}" /> <br>

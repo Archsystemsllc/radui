@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -54,6 +53,38 @@
 #changePassword{
      margin-top: 25px;
 }</style>
+<script type="text/javascript">
+
+$(document).ready(function () {
+	$("#dialog-confirm").hide();
+
+	
+
+	var selectedOrganization="${userForm.organizationLookup.id}";
+	
+	var selectedRole="${userForm.role.id}";
+	
+	 if(selectedOrganization==1) {	
+		 $('#macId,#jurId,#pccId').attr("required",false);
+		 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();	
+		 
+		 	
+	 } else if(selectedOrganization==2) {	
+		 $('#macId,#jurId,#pccId').attr("required",false);
+		 $("#macIdBlock,#jurIdBlock,#pccIdBlock").hide();
+		 	
+	 } else if(selectedOrganization==3) {	
+		 $('#macId,#jurId,#pccId').attr("required",true);
+		 $("#macIdBlock,#jurIdBlock,#pccIdBlock").show();
+		 	
+	 }	
+
+	
+	
+});
+
+
+</script>
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>

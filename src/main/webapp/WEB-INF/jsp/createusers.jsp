@@ -132,16 +132,20 @@ $(function(){
 	});
 	
 	$("select#macId").change(function(){
+
+		var userRole = $('#userRole').val();			
+		if ((userRole != "MAC Admin") && (userRole != "MAC User")){
 		 
-           $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-                   {macId: $(this).val(), multipleInput: false}, function(data){
-              
-                $("#jurId").get(0).options.length = 0;	           
-     	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
-     	  	    	$.each(data, function (key,obj) {
-     	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);     	  	    		
-     	  	    	});  	   
-              });
+	           $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+	                   {macId: $(this).val(), multipleInput: false}, function(data){
+	              
+	                $("#jurId").get(0).options.length = 0;	           
+	     	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+	     	  	    	$.each(data, function (key,obj) {
+	     	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);     	  	    		
+	     	  	    	});  	   
+	              });
+			}
        });
        
 	$("#jurId").change(function(){			
@@ -206,7 +210,10 @@ $(function(){
 									<table
 										style="border-collapse: separate; border-spacing: 2px; valign: middle"
 										id='table1'>
-										<tr>
+										<tr><td>
+											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
+										</td>
+										
 										</tr>
 									</table>
 									
@@ -321,7 +328,7 @@ $(function(){
 										<label for="name"> MAC:</label>
 			                                <form:select path="macId" id="macId" class="form-control required" title="Select one Medicare Administrative Contractor ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
-											   <form:options items="${macIds}" />
+											   <form:options items="${macIdMap}" />
 											</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group"  id="jurIdBlock">

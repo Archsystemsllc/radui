@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 
-<link rel="stylesheet" href="/resources/demos/style.css" />
+
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui-timepicker-addon.css" />
 <!-- CSS for Bootstrap -->
@@ -77,6 +77,7 @@
 	
 			
 			var selected_value ="${scorecard.scorecardType}"; 
+
 			
 			if(selected_value=="Non-Scoreable") {				
 				$("#section4Div").hide();	
@@ -89,11 +90,12 @@
 				$("#nonScoreableReasonCommentsDiv").show();	
 				$('#section4HeaderDiv').show();		
 				$("#section4HeaderDiv_DoesNotCount").hide();
-					
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
+				
 				$('#nonScoreableReason').attr('required',true);
 				
 				$("#Section8Div").hide();				
@@ -111,10 +113,10 @@
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").attr('required',true);
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").attr('required',true);
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").attr('required',true);
+				$("#csrWasCourteous1,#csrWasCourteous2").attr('required',true);	
 				$('#nonScoreableReason').attr("required",false);
 
 				$("#Section8Div").show();
@@ -132,12 +134,12 @@
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
+				
 				$('#nonScoreableReason').attr("required",false);
-
 				$("#Section8Div").hide();	
 								
 			} 
@@ -157,7 +159,7 @@
 			$("#completenessCallFailureBlock").show();	
 		
 		}
-		if(csrPrvCompInfoFlag=="No") {
+		if(csrFallPrivacyProvFlag=="No") {
 			$("#privacyCallFailureBlock").show();	
 		}
 		if(csrWasCourteousFlag=="No") {
@@ -347,26 +349,26 @@
                });
         });
 
-		$("#callCategoryIdKnoweledgeSkillsUIObject").change(function(){
+		$("#ccid_know_skills_uiobj").change(function(){
 
 			var selectedJurisList = "";
 
-			$("#callSubCategoryIdKnoweledgeSkillsUIObject :selected").each(function() {
+			$("#cscid_know_skills_uiobj :selected").each(function() {
 				selectedJurisList+=($(this).attr('value'))+",";
 			}); 
 			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategoriesList",
-                    {categoryId: $('#callCategoryIdKnoweledgeSkillsUIObject').val()}, function(data){
+                    {categoryId: $('#ccid_know_skills_uiobj').val()}, function(data){
                 
-                 $("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length = 0;	           
+                 $("#cscid_know_skills_uiobj").get(0).options.length = 0;	           
       	      	 
       	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options[$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length] = new Option(obj, key);
+      	  	    		$("#cscid_know_skills_uiobj").get(0).options[$("#cscid_know_skills_uiobj").get(0).options.length] = new Option(obj, key);
       	  	    		
       	  	    	});  
 
 	      	  	    $.each(selectedJurisList.split(","), function(i,e){
-	                    $("#callSubCategoryIdKnoweledgeSkillsUIObject option[value='" + e + "']").prop("selected", true);
+	                    $("#cscid_know_skills_uiobj option[value='" + e + "']").prop("selected", true);
 	                });	   
                });
 			
@@ -399,6 +401,7 @@
 		$("input[name='scorecardType']").change(function(){		
 			
 			var selected_value = $("input[name='scorecardType']:checked").val();
+
 			
 			if(selected_value=="Non-Scoreable") {				
 				$("#section4Div").hide();	
@@ -412,10 +415,11 @@
 				$('#section4HeaderDiv').show();		
 				$("#section4HeaderDiv_DoesNotCount").hide();
 					
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				//$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
 				$('#nonScoreableReason').attr('required',true);
 				
 				$("#Section8Div").hide();				
@@ -432,13 +436,13 @@
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
-
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").attr('required',true);
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").attr('required',true);
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").attr('required',true);
+				$("#csrWasCourteous1,#csrWasCourteous2").attr('required',true);
 				$('#nonScoreableReason').attr("required",false);
-
+				
 				$("#Section8Div").show();
 								
 			}  else if(selected_value=="Does Not Count") {
@@ -454,12 +458,12 @@
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
 				$('#nonScoreableReason').attr("required",false);
-
+				
 				$("#Section8Div").hide();	
 								
 			} 
@@ -477,13 +481,13 @@
 				$("#accuracyCallFailureBlock2").show();	
 				$("#accuracyCallFailureReason").focus();
 				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",true);		
-				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",true);			
+				$('#ccid_know_skills_uiobj,#cscid_know_skills_uiobj').attr("required",true);			
 				setCallResult();	
 			} else if(selected_value=="Yes") {
 				$("#accuracyCallFailureBlock1").hide();	
 				$("#accuracyCallFailureBlock2").hide();		
 				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",false);
-				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",false);					
+				$('#ccid_know_skills_uiobj,#cscid_know_skills_uiobj').attr("required",false);					
 				setCallResult();					
 			}    		
         });
@@ -501,8 +505,7 @@
 				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",true);						
 				setCallResult();	
 			} else if(selected_value=="Yes") {
-				$("#completenessCallFailureBlock1").hide();	
-				$("#completenessCallFailureBlock2").hide();	
+				$("#completenessCallFailureBlock").hide();	
 				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",false);	
 				setCallResult();	
 			}    		
@@ -551,6 +554,8 @@
 		$("#callResult,#qamCalibrationStatus,#cmsCalibrationStatus").change(function(){		
 			setFinalCallResult();
         });
+
+	});
 
 		//Select Call Result Functionality
 		function setCallResult() {
@@ -631,7 +636,7 @@
 				$("#finalScoreCardStatus").val(callResultValue);
 			}	
         }
-	});
+	
 	
 </script>
 
@@ -851,8 +856,8 @@
 			                                
 			                            </div>	
 			                             <div class="col-lg-2 form-group" >
-			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" class="required" title="Select Radiobutton Yes, if accurate information was provided"/>&nbsp;Yes&nbsp;
-										  	<form:radiobutton path="csrPrvAccInfo" value="No" class="required" title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
+			                                <form:radiobutton path="csrPrvAccInfo" value="Yes" title="Select Radiobutton Yes, if accurate information was provided"/>&nbsp;Yes&nbsp;
+										  	<form:radiobutton path="csrPrvAccInfo" value="No"  title="Select Radiobutton No, if accurate information was not provided"/>&nbsp;No
 			                               </div>		                           
 			                        </div>
 			                        <div class="row" id="accuracyCallFailureBlock1">
@@ -869,7 +874,7 @@
 			                         <div class="row" id="accuracyCallFailureBlock2">
 			                        	 <div class="col-lg-5 form-group">
 			                        	 <label for="email"> Call Category:</label>
-			                               <form:select path="callCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Category from the List"  multiple="true">
+			                               <form:select path="ccidKsUi" id="ccid_know_skills_uiobj" class="form-control required"  title="Select one required Call Category from the List"  multiple="true">
 											   
 											  	<form:options items="${callCategoryMap}" />										  	
 										   </form:select> 	
@@ -877,7 +882,7 @@
 										</div>
 			                        	<div class="col-lg-5 form-group">
 			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
+			                                <form:select path="cscidKsUi" id="cscid_know_skills_uiobj" class="form-control required" title="Select one required Call Sub Category from the List"  multiple="true">
 											   							   	
 											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
 											</form:select> 
@@ -890,7 +895,7 @@
 			                                
 			                            </div>
 			                             <div class="col-lg-2 form-group" >
-			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" required="true" title="Select Radiobutton Yes, if complete information was provided"/>&nbsp;Yes&nbsp;
+			                                <form:radiobutton path="csrPrvCompInfo" value="Yes"   class="required" title="Select Radiobutton Yes, if complete information was provided"/>&nbsp;Yes&nbsp;
 										  	<form:radiobutton path="csrPrvCompInfo" value="No" title="Select Radiobutton No, if complete information was not provided"/>&nbsp;No
 			                               </div>		
 			                           
@@ -920,7 +925,7 @@
 			                                
 			                            </div>	
 			                             <div class="col-lg-2 form-group" >
-			                               <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" required="true" />&nbsp;Yes&nbsp;
+			                               <form:radiobutton path="csrFallPrivacyProv" value="Yes"  class="required" />&nbsp;Yes&nbsp;
 										  <form:radiobutton path="csrFallPrivacyProv" value="No" />&nbsp;No
 										 </div>			                           
 			                        </div>   

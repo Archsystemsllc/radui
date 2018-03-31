@@ -348,22 +348,7 @@ $(document).ready(function () {
 
 		//Back Button Functionality
 		$('#close1,#close2').click(function(e) {	
-			 e.preventDefault();		
-	          $("#dialog-confirm" ).dialog({
-	              resizable: false,
-	              height: "auto",
-	              width: 400,
-	              modal: true,	              
-	              buttons: {
-	                "Yes": function() {
-	              		$( this ).dialog("close");
-	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
-	                },
-	                Cancel: function() {                    
-	                	$( this ).dialog("close"); 
-	                }
-	              }
-            });
+			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
 	     }); 
 
       	//Secton 1 - Option 1
@@ -789,15 +774,15 @@ $(document).ready(function () {
 			                         <div class="row" id="accuracyCallFailureBlock2">
 			                        	 <div class="col-lg-5 form-group">
 			                        	 <label for="email"> Call Category:</label>
-			                               <form:select path="callCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Category from the List"  multiple="true">
+			                               <form:select path="ccidKsUi" id="ccid_know_skills_uiobj" class="form-control required"  title="Select one required Call Category from the List"  multiple="true">
 											   
-											  	<form:options items="${callCategoryListView}" />										  	
+											  	<form:options items="${callCategoryMap}" />										  	
 										   </form:select> 	
 			                               
 										</div>
 			                        	<div class="col-lg-5 form-group">
 			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="callSubCategoryIdKnoweledgeSkillsUIObject" class="form-control required" id="callSubCategoryIdKnoweledgeSkillsUIObject" required="true" title="Select one required Call Sub Category from the List"  multiple="true">
+			                                <form:select path="cscidKsUi" id="cscid_know_skills_uiobj" class="form-control required" title="Select one required Call Sub Category from the List"  multiple="true">
 											   							   	
 											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
 											</form:select> 

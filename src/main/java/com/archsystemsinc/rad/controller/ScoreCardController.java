@@ -254,13 +254,13 @@ public class ScoreCardController {
 				&& !scoreCard.getCallCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
 			String[] tempString = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
 			
-			scoreCard.setCallCategoryIdKnoweledgeSkillsUIObject(tempString);
+			scoreCard.setCcidKsUi(tempString);
 		}
 		
 		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
 		
-		if(scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject() != null) {
-			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject();
+		if(scoreCard.getCcidKsUi() != null) {
+			String[] callCategoryIds = scoreCard.getCcidKsUi();
 			for(String callCategoryIdsSingleValue: callCategoryIds) {
 				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
 					
@@ -285,7 +285,7 @@ public class ScoreCardController {
 				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
 			String[] tempString = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
 			
-			scoreCard.setCallSubCategoryIdKnoweledgeSkillsUIObject(tempString);
+			scoreCard.setCscidKsUi(tempString);
 		}
 		
 		
@@ -498,7 +498,7 @@ public class ScoreCardController {
 			HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
 			
 			
-			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject();
+			String[] callCategoryIds = scoreCard.getCcidKsUi();
 			for(String callCategoryIdsSingleValue: callCategoryIds) {
 				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
 					
@@ -583,19 +583,19 @@ public class ScoreCardController {
 				}*/
 				
 				
-				if(scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject() != null 
-						&& scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject().length > 0) {
+				if(scoreCard.getCcidKsUi() != null 
+						&& scoreCard.getCcidKsUi().length > 0) {
 					String tempString = "";
-					for(String singleValue:scoreCard.getCallCategoryIdKnoweledgeSkillsUIObject()) {
+					for(String singleValue:scoreCard.getCcidKsUi()) {
 						tempString += singleValue +",";
 					}
 					scoreCard.setCallCategoryIdKnoweledgeSkills(tempString);
 				}
 				
-				if(scoreCard.getCallSubCategoryIdKnoweledgeSkillsUIObject() != null 
-						&& scoreCard.getCallSubCategoryIdKnoweledgeSkillsUIObject().length > 0) {
+				if(scoreCard.getCscidKsUi() != null 
+						&& scoreCard.getCscidKsUi().length > 0) {
 					String tempString = "";
-					for(String singleValue:scoreCard.getCallSubCategoryIdKnoweledgeSkillsUIObject()) {
+					for(String singleValue:scoreCard.getCscidKsUi()) {
 						tempString += singleValue +",";
 					}
 					scoreCard.setCallSubCategoryIdKnoweledgeSkills(tempString);

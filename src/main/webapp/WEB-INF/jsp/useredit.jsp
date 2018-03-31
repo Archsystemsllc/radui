@@ -64,7 +64,7 @@
 							<div id="breadcrumb">
 							        <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard">Home</a> 
 							        <span> >> </span>
-							        <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/users">Users</a> 
+							        <a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers">Users</a> 
 							        <span> >> </span>
 							        <a href="#" style="text-decoration: none;">Edit User</a>
 							</div>
