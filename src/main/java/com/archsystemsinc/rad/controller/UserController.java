@@ -424,7 +424,7 @@ public class UserController {
 		blank.setRole(br);
 		model.addAttribute("userForm", blank);
 		model.addAttribute("allRoles", userService.findAllRoles());
-		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
 		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 
@@ -453,7 +453,7 @@ public class UserController {
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("allRoles", userService.findAllRoles());
-			model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
 			model.addAttribute("progIds", HomeController.MAC_JURISDICTION_PROGRAM_MAP);
 			return "registration";
@@ -549,7 +549,7 @@ public class UserController {
 	 */
 	private void userDefaults(Model model) {
 		model.addAttribute("roleIds", HomeController.ROLE_MAP);
-		model.addAttribute("macIds", HomeController.MAC_ID_MAP);
+		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
 		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 		model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);

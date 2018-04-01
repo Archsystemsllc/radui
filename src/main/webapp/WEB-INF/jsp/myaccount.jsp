@@ -92,7 +92,7 @@ $(document).ready(function () {
 		<table id="mid">
 			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
  --%>
- <form:form method="POST" modelAttribute="userForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createUser" class="form-signin">
+ <form:form method="POST" modelAttribute="userForm" action="#" class="form-signin">
 			<tr>
 				<td style="vertical-align: top">
 
@@ -129,7 +129,7 @@ $(document).ready(function () {
 								            </spring:bind>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               <button class=" btn btn-primary" onclick="location.href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/change-password/${userForm.id}'" id="changePassword">Change Password</a></button>
+			                               <button class=" btn btn-primary" type="button" onclick="location.href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/change-password/${userForm.id}'" id="changePassword">Change Password</a></button>
 			                            </div>
 			                        	</div>
 			                        	
@@ -197,7 +197,7 @@ $(document).ready(function () {
 										<label for="name"> MAC:</label>
 			                                <form:select path="macId" id="macId" class="form-control required" title="Select one Medicare Administrative Contractor ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
-											   <form:options items="${macIds}" />
+											   <form:options items="${macIdMap}" />
 											</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group"  id="jurIdBlock">

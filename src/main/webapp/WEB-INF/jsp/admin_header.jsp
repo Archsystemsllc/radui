@@ -28,11 +28,7 @@
 <link
 	href="${pageContext.request.contextPath}/resources/css/animate.min.css"
 	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/css/bootstrap.css"
-	rel="stylesheet">
-<%-- <link href="${pageContext.request.contextPath}/resources/css/login.css"
-	rel="stylesheet"> --%>
+
 <link href="https://fonts.googleapis.com/css?family=Architects+Daughter"
 	rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -120,30 +116,30 @@
 							<div class="collapse navbar-collapse">
 								<ul class="nav navbar-nav" style="font-weight: bold" id="navlist">
 									<li><a class="${menu_highlight == 'home' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User') or hasAuthority('CMS User')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('MAC Admin') or hasAuthority('MAC User') ">
 										<li><a class="${menu_highlight == 'scorecard' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/false" title="Scorecard Page">Scorecard</a></li>
 									</sec:authorize>
 									<!--  Menu for the Reports -->
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('CMS User')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
 									<li class="dropdown">
-										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Menu">Reports</a>
-										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
+										<a class="dropdown-toggle ${menu_highlight == 'reports' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Menu">Reports</a>
+										<%-- <sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
 										<span class="caret"></span>
 										<ul class="dropdown-menu">										
 									      	<li><a href="${pageContext.request.contextPath}/resources/documents/contractorinfo.docx" title="Create Users Page">Contractor Information</a></li>									     								
 									    </ul>
-									    </sec:authorize>	
+									    </sec:authorize>	 --%>
 									</li>
 									</sec:authorize>
 									<!-- Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
 										<li><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a></li>
 									</sec:authorize>
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User') or hasAuthority('Quality Monitor')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
 										<li><a class="${menu_highlight == 'rebuttal' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/false" title="Rebuttal Page">Rebuttal</a></li>
 									</sec:authorize>
 								
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin') or hasAuthority('Quality Manager')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									<li class="dropdown">
 										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
 										<span class="caret"></span>

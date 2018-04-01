@@ -96,7 +96,7 @@ public class ScoreCardController {
 					}
 										
 					scoreCardNew.setJurIdList(jurIdArrayList);
-					scoreCardNew.setCallResult(UIGenericConstants.RESULT_PASS_STRING);
+					scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
@@ -104,9 +104,8 @@ public class ScoreCardController {
 					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
 					scoreCardFailObject.setJurIdList(jurIdArrayList);
-					scoreCardFailObject.setCallResult(UIGenericConstants.RESULT_FAIL_STRING);
-					scoreCardFailObject.setQamCalibrationStatus(UIGenericConstants.RESULT_FAIL_STRING);
-					scoreCardFailObject.setCmsCalibrationStatus(UIGenericConstants.RESULT_FAIL_STRING);
+					
+					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.CMS_FAIL_STRING);
 					
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);	
@@ -550,12 +549,10 @@ public class ScoreCardController {
 					callResult = scoreCard.getCallResult(); 
 				}
 				
-				if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.ADMIN_ROLE_STRING) && 
-						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
+				if (existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
 					scoreCard.setCmsCalibrationUpdateDateTime(currentDateTime);
 					
-				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MANAGER_ROLE_STRING) && 
-						existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && 
+				} else if (	existingScoreCard != null && 
 						( (!existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus())) || 
 								( existingScoreCard.getCmsCalibrationStatus() != null 
 								&& !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) ) ) {

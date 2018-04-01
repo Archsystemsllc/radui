@@ -21,8 +21,15 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui-timepicker-addon.css" />
+
+
 <!-- CSS for Bootstrap -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"></link>
+
+<!-- CSS for PQSelect -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pqselect.bootstrap.dev.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pqselect.dev.css" />
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -43,6 +50,8 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 
+<!-- JavaScript for PQSelect -->
+<script src="${pageContext.request.contextPath}/resources/js/pqselect.dev.js"></script>
 <style type="text/css">
 	.red {  color:#cd2026;  }
 </style>
@@ -174,13 +183,12 @@
 		var role = $('#userRole').val();
 
 		if (role == 'Administrator') {
+			$('#qamCalibrationStatus').attr("disabled",false);
 			$('#cmsCalibrationStatus').attr("disabled",false);
-			//$('#cmsCalibrationStatus').attr("required",true);
 			
 		} else if (role == 'Quality Manager') {
 			$('#qamCalibrationStatus').attr("disabled",false);
-			$('#cmsCalibrationStatus').attr("disabled",false);
-			//$('#qamCalibrationStatus').attr("required",true);
+			$('#cmsCalibrationStatus').attr("disabled",false);			
 		}
 			
 
@@ -555,6 +563,17 @@
 			setFinalCallResult();
         });
 
+
+        //Multiple Select Functionality
+		 //initialize the pqSelect widget.
+	      /*   $("#ccid_know_skills_uiobj2").pqSelect({
+	            multiplePlaceholder: 'Select Call Category',
+	            checkbox: true //adds checkbox to options    
+	        }).on("change", function(evt) {
+	            var val = $(this).val();
+	            alert(val);
+	        }); */
+
 	});
 
 		//Select Call Result Functionality
@@ -572,7 +591,7 @@
             		|| csrPrvCompInfo_value =="No" || csrPrvAccInfo_value =="No" )             		
             	) {
             	
-        			$("#callResult").val("Fail");
+        			$("#callResult").val("Quality Monitor Fail");
         			$("#failReasonCommentsDiv").show();
         			$('#failReasonComments').attr("required",true);	
         			
@@ -583,7 +602,7 @@
             			&& csrPrvCompInfo_value == "Yes" && csrPrvAccInfo_value == "Yes" )             		
                 	) {
             		
-            		$("#callResult").val("Pass");
+            		$("#callResult").val("Quality Monitor Pass");
             		$("#failReasonCommentsDiv").hide();
             		$('#failReasonComments').attr("required",false);	
         	}
@@ -887,7 +906,16 @@
 											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
 											</form:select> 
 			                            </div>
-			                        </div>		    
+			                        </div>		   
+			                        
+			                        <%-- <div class="row">
+			                         <div class="col-lg-5 form-group">
+			                         	<form:select path="ccidKsUi" id="ccid_know_skills_uiobj2" class="form-control required"  title="Select one required Call Category from the List"  multiple="true">
+											   
+											  	<form:options items="${callCategoryMap}" />										  	
+										</form:select>
+									</div>
+									</div>  --%>
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-8 form-group">
@@ -1038,7 +1066,7 @@
 				                </div>
 				            </div>
 				            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
-				            <c:if test="${scorecard.id > 0 && scorecard.callResult == 'Fail'}">
+				            <c:if test="${scorecard.id > 0 && scorecard.callResult == 'Quality Monitor Fail'}">
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 8 - Calibration Module</h2> 
@@ -1055,17 +1083,17 @@
 				                    
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="qamCalibrationStatus">QAM Admin Calibration Status:</label>
-			                                 <form:select path="qamCalibrationStatus" class="form-control required"  disabled="true" title="Select QAM Admin Calibration Status from the List">
+			                                <label for="qamCalibrationStatus">Quality Manager Calibration Status:</label>
+			                                 <form:select path="qamCalibrationStatus" class="form-control required"  disabled="true" title="Select Quality Manager Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
-											   	<form:option value="Pass" label="Pass" />	
-											   	<form:option value="Fail" label="Fail" />											  						  	
+											   	<form:option value="Quality Manager Pass" label="Quality Manager Pass" />	
+											   	<form:option value="Quality Manager Fail" label="Quality Manager Fail" />											  						  	
 											</form:select> 
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                               
-			                                <label for="qamCalibrationUpdateDateTime">QAM Admin Calibration Update Date:</label>
-			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" disabled="true" title="Choose QAM Admin Calibration Update Date from the Calendar"/>
+			                                <label for="qamCalibrationUpdateDateTime">Quality Manager Calibration Update Date:</label>
+			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" disabled="true" title="Choose Quality Manager Calibration Update Date from the Calendar"/>
 			                            
 			                                
 			                            </div>
@@ -1075,8 +1103,8 @@
 			                                <label for="cmsCalibrationStatus">CMS Calibration Status:</label>
 			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  disabled="true" title="Select CMS Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
-											   	<form:option value="Pass" label="Pass" />	
-											   	<form:option value="Fail" label="Fail" />											  						  	
+											   	<form:option value="CMS Pass" label="CMS Pass" />	
+											   	<form:option value="CMS Fail" label="CMS Fail" />											  						  	
 											</form:select> 
 			                            </div>
 			                            <div class="col-lg-6 form-group">
