@@ -16,15 +16,15 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private Integer callSubCategoryId;
 	
 	
-	private String callCategoryIdKnoweledgeSkills;	
+	/*private String callCategoryIdKnoweledgeSkills;	
 	
 	
-	private String callSubCategoryIdKnoweledgeSkills;
+	private String callSubCategoryIdKnoweledgeSkills;*/
 	
-	private String[] ccidKsUi;	
+	/*private String[] ccidKsUi;	
 	
 	
-	private String[] cscidKsUi;
+	private String[] cscidKsUi;*/
 	
 	
 	private String csrFullName;
@@ -174,8 +174,27 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private ArrayList<String> macCallResultList;
 	
+	private String callCatSubCatMsString;
 	
+	private String[] callCatSubCatMsStringArray;
 	
+
+	public String[] getCallCatSubCatMsStringArray() {
+		return callCatSubCatMsStringArray;
+	}
+
+	public void setCallCatSubCatMsStringArray(String[] callCatSubCatMsStringArray) {
+		this.callCatSubCatMsStringArray = callCatSubCatMsStringArray;
+	}
+
+	public String getCallCatSubCatMsString() {
+		return callCatSubCatMsString;
+	}
+
+	public void setCallCatSubCatMsString(String callCatSubCatMsString) {
+		this.callCatSubCatMsString = callCatSubCatMsString;
+	}
+
 	public String getFinalScoreCardStatus() {
 		return finalScoreCardStatus;
 	}
@@ -184,38 +203,7 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 		this.finalScoreCardStatus = finalScoreCardStatus;
 	}
 
-	public String getCallCategoryIdKnoweledgeSkills() {
-		return callCategoryIdKnoweledgeSkills;
-	}
-
-	public void setCallCategoryIdKnoweledgeSkills(String callCategoryIdKnoweledgeSkills) {
-		this.callCategoryIdKnoweledgeSkills = callCategoryIdKnoweledgeSkills;
-	}
-
-	public String getCallSubCategoryIdKnoweledgeSkills() {
-		return callSubCategoryIdKnoweledgeSkills;
-	}
-
-	public void setCallSubCategoryIdKnoweledgeSkills(String callSubCategoryIdKnoweledgeSkills) {
-		this.callSubCategoryIdKnoweledgeSkills = callSubCategoryIdKnoweledgeSkills;
-	}
-
-	public String[] getCcidKsUi() {
-		return ccidKsUi;
-	}
-
-	public void setCcidKsUi(String[] ccidKsUi) {
-		this.ccidKsUi = ccidKsUi;
-	}
-
-	public String[] getCscidKsUi() {
-		return cscidKsUi;
-	}
-
-	public void setCscidKsUi(String[] cscidKsUi) {
-		this.cscidKsUi = cscidKsUi;
-	}
-
+	
 	public ArrayList<String> getMacCallResultList() {
 		return macCallResultList;
 	}

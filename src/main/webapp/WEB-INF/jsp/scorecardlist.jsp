@@ -291,8 +291,19 @@ $(document).ready(function(){
 								<div class="row" id="scorecardlistdatatablediv">
 				                <div class="col-lg-12 col-lg-offset-1 form-container">
 				                   
-				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   
+				                    <!-- <p> Please provide your feedback below: </p> -->	
+				                  <div class="row" style="width:90%;">			                   
+				                   <c:if test="${not empty success}">
+				                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
+				                    </div>
+				                 </c:if>
+				                  <c:if test="${not empty error}">
+				                 	<div class="errorblock" ><spring:message code="${success}"></spring:message>
+				                    </div>
+				                 </c:if>
+				                
+				                 </div>
+			               
 			                         <div class="row" id="scorecardlistdatatable">
 			                            <div class="col-lg-10 form-group">
 			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreCardLists" style="width: 90%">

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
@@ -224,7 +225,7 @@ public class ScoreCardController {
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
 		
-		model.addAttribute("scorecard", scoreCard);
+		
 		
 		String roles = authentication.getAuthorities().toString();
 		
@@ -249,42 +250,29 @@ public class ScoreCardController {
 			model.addAttribute("programMapEdit", programMap);
 		}
 		
-		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null 
-				&& !scoreCard.getCallCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
-			String[] tempString = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
-			
-			scoreCard.setCcidKsUi(tempString);
+		/*String[] callCategorySubCatMsIds = scoreCard.getCallCatSubCatMsStringArray();
+		String callSubCategoryStringMsTemp = "";
+		for(String callCatSubCatMsIdSingleValue: callCategorySubCatMsIds) {
+			if(!callCatSubCatMsIdSingleValue.equalsIgnoreCase("")) {					
+				callSubCategoryStringMsTemp += callCatSubCatMsIdSingleValue+",";					
+			}				
 		}
+		scoreCard.setCallCatSubCatMsString(callSubCategoryStringMsTemp);*/
+			
+		//model.addAttribute("subCategoryMapListEdit", subCategoryMapFinal);
 		
-		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
-		
-		if(scoreCard.getCcidKsUi() != null) {
-			String[] callCategoryIds = scoreCard.getCcidKsUi();
-			for(String callCategoryIdsSingleValue: callCategoryIds) {
-				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
-					
-					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
-						
-						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
-							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
-							subCategoryMapFinal.putAll(subCategoryMap);
-						}
-						break;
-					}
-					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
-					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
-					subCategoryMapFinal.putAll(subCategoryMap);
-				}			
-			}			
-		}	
-
-		model.addAttribute("subCategoryMapListEdit", subCategoryMapFinal);
-		
-		if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
+		/*if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
 				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
 			String[] tempString = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
 			
 			scoreCard.setCscidKsUi(tempString);
+		}*/
+		
+		String[] callCategorySubCatMsIds = {};
+		String callSubCategoryStringMsTemp = scoreCard.getCallCatSubCatMsString();
+		if(callSubCategoryStringMsTemp!=null && !callSubCategoryStringMsTemp.equalsIgnoreCase("")) {
+			callCategorySubCatMsIds = callSubCategoryStringMsTemp.split(",");			
+			scoreCard.setCallCatSubCatMsStringArray(callCategorySubCatMsIds);
 		}
 		
 		
@@ -294,6 +282,8 @@ public class ScoreCardController {
 		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
 		model.addAttribute("subCategoryMapEdit", subCategorylMap);		
 		
+		model.addAttribute("callCatSubCatMultiSelectMap", HomeController.CALL_CAT_SUB_CAT_MULTI_SELECT_MAP);
+		model.addAttribute("scorecard", scoreCard);
 		return "scorecard";
 	}
 	 
@@ -313,7 +303,7 @@ public class ScoreCardController {
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
 		
-		model.addAttribute("scorecard", scoreCard);
+		
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
@@ -335,9 +325,20 @@ public class ScoreCardController {
 		model.addAttribute("loggedInUserRole", userForm.getRole().getRoleName());
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
-		HashMap<Integer, String> callCatMap = new HashMap<Integer, String>();
+		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
+		model.addAttribute("subCategoryMapEdit", subCategorylMap);
 		
-		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
+		String[] callCategorySubCatMsIds = {};
+		String callSubCategoryStringMsTemp = scoreCard.getCallCatSubCatMsString();
+		if(callSubCategoryStringMsTemp!=null && !callSubCategoryStringMsTemp.equalsIgnoreCase("")) {
+			callCategorySubCatMsIds = callSubCategoryStringMsTemp.split(",");			
+			scoreCard.setCallCatSubCatMsStringArray(callCategorySubCatMsIds);
+		}
+		
+		
+		/*
+		 * HashMap<Integer, String> callCatMap = new HashMap<Integer, String>();
+		 * if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
 			String[] tempValues = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
 			for(String stringTempValue:tempValues) {
 				String callCategoryName = HomeController.CALL_CATEGORY_MAP.get(Integer.valueOf(stringTempValue));
@@ -345,14 +346,9 @@ public class ScoreCardController {
 			}
 			
 		}
-		
-		model.addAttribute("callCategoryListView", callCatMap);
-		
-		HashMap<Integer,String> subCategorylMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(scoreCard.getCallCategoryId());
-		model.addAttribute("subCategoryMapEdit", subCategorylMap);
-		
+		model.addAttribute("callCategoryListView", callCatMap);		
+				
 		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
-		
 		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
 			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
 			for(String callCategoryIdsSingleValue: callCategoryIds) {
@@ -371,12 +367,13 @@ public class ScoreCardController {
 					subCategoryMapFinal.putAll(subCategoryMap);
 				}			
 			}			
-		}	
+		}	*/
 
 		
-		HashMap<Integer, String> callSubCatMap = new HashMap<Integer, String>();
 		
-		if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
+		
+		/*HashMap<Integer, String> callSubCatMap = new HashMap<Integer, String>();
+		 if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
 				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
 			String[] tempValues = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
 			
@@ -385,9 +382,13 @@ public class ScoreCardController {
 				callSubCatMap.put(Integer.valueOf(stringTempValue), callSubCategoryName);
 			}
 		}
+		model.addAttribute("subCategoryMapListEdit", callSubCatMap);	
+		*/
 		
-		model.addAttribute("subCategoryMapListEdit", callSubCatMap);		
 		
+		
+		model.addAttribute("callCatSubCatMultiSelectMap", HomeController.CALL_CAT_SUB_CAT_MULTI_SELECT_MAP);
+		model.addAttribute("scorecard", scoreCard);
 		return "scorecardview";
 	}
 	
@@ -437,6 +438,10 @@ public class ScoreCardController {
 			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
 		}
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		model.addAttribute("callCatSubCatMultiSelectMap", HomeController.CALL_CAT_SUB_CAT_MULTI_SELECT_MAP);	
+		
+		
 		return "scorecard";
 	}
 
@@ -444,7 +449,7 @@ public class ScoreCardController {
 	@RequestMapping(value ={"/admin/saveorupdatescorecard", "/quality_manager/saveorupdatescorecard", "/cms_user/saveorupdatescorecard",
 			 "/mac_admin/saveorupdatescorecard","/mac_user/saveorupdatescorecard","/quality_monitor/saveorupdatescorecard"}, method = RequestMethod.POST)
 	public String saveScorecard(@ModelAttribute("scorecard") ScoreCard scoreCard, final BindingResult result,
-			final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
+			final RedirectAttributes redirectAttributes, final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
 
 		String returnView = "";
 		log.debug("--> savescorecard <--");
@@ -497,24 +502,14 @@ public class ScoreCardController {
 			HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
 			
 			
-			String[] callCategoryIds = scoreCard.getCcidKsUi();
-			for(String callCategoryIdsSingleValue: callCategoryIds) {
-				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
-					
-					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
-						
-						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
-							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
-							subCategoryMapFinal.putAll(subCategoryMap);
-						}
-						break;
-					}
-					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
-					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
-					subCategoryMapFinal.putAll(subCategoryMap);
+			String[] callCategorySubCatMsIds = scoreCard.getCallCatSubCatMsStringArray();
+			String callSubCategoryStringMsTemp = "";
+			for(String callCatSubCatMsIdSingleValue: callCategorySubCatMsIds) {
+				if(!callCatSubCatMsIdSingleValue.equalsIgnoreCase("")) {					
+					callSubCategoryStringMsTemp += callCatSubCatMsIdSingleValue+",";					
 				}				
 			}
-		
+			scoreCard.setCallCatSubCatMsString(callSubCategoryStringMsTemp);
 	
 			model.addAttribute("subCategoryMapListEdit", subCategoryMapFinal);
 			
@@ -529,7 +524,10 @@ public class ScoreCardController {
 			model.addAttribute("scorecard", scoreCard);
 			
 			model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+			model.addAttribute("callCatSubCatMultiSelectMap", HomeController.CALL_CAT_SUB_CAT_MULTI_SELECT_MAP);
 			model.addAttribute("ValidationFailure", validationResult);
+			redirectAttributes
+			.addFlashAttribute("error", "validation.failed.scorecard");
 			returnView = "scorecard";
 		} else {			
 			
@@ -552,8 +550,8 @@ public class ScoreCardController {
 				if (existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
 					scoreCard.setCmsCalibrationUpdateDateTime(currentDateTime);
 					
-				} else if (	existingScoreCard != null && 
-						( (!existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus())) || 
+				} else if (	existingScoreCard != null &&
+						( (existingScoreCard.getQamCalibrationStatus() != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus())) || 
 								( existingScoreCard.getCmsCalibrationStatus() != null 
 								&& !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) ) ) {
 					scoreCard.setQamCalibrationUpdateDateTime(currentDateTime);
@@ -564,39 +562,16 @@ public class ScoreCardController {
 					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
 				}
 				
-				/*else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.QUALITY_MONITOR_ROLE_STRING) && 
-						(existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCallResult().equalsIgnoreCase(scoreCard.getCallResult()) || existingScoreCard == null)  ){
-					scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
-					
-				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-					
-					
-				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.CMS_USER_ROLE_STRING)) {
-					
-					
-				} else if (loggedInUserRole.equalsIgnoreCase(UIGenericConstants.MAC_ADMIN_ROLE_STRING)) {
-					
-					
-				}*/
 				
 				
-				if(scoreCard.getCcidKsUi() != null 
-						&& scoreCard.getCcidKsUi().length > 0) {
-					String tempString = "";
-					for(String singleValue:scoreCard.getCcidKsUi()) {
-						tempString += singleValue +",";
-					}
-					scoreCard.setCallCategoryIdKnoweledgeSkills(tempString);
+				String[] callCategorySubCatMsIds = scoreCard.getCallCatSubCatMsStringArray();
+				String callSubCategoryStringMsTemp = "";
+				for(String callCatSubCatMsIdSingleValue: callCategorySubCatMsIds) {
+					if(!callCatSubCatMsIdSingleValue.equalsIgnoreCase("")) {					
+						callSubCategoryStringMsTemp += callCatSubCatMsIdSingleValue+",";					
+					}				
 				}
-				
-				if(scoreCard.getCscidKsUi() != null 
-						&& scoreCard.getCscidKsUi().length > 0) {
-					String tempString = "";
-					for(String singleValue:scoreCard.getCscidKsUi()) {
-						tempString += singleValue +",";
-					}
-					scoreCard.setCallSubCategoryIdKnoweledgeSkills(tempString);
-				}
+				scoreCard.setCallCatSubCatMsString(callSubCategoryStringMsTemp);
 				
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 				String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateScoreCard");
@@ -614,6 +589,14 @@ public class ScoreCardController {
 				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
 				scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
 				ResponseEntity<ScoreCard> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,ScoreCard.class);
+				
+				if(scoreCard.getId() == 0) {
+					redirectAttributes.addFlashAttribute("success",
+							"success.create.scorecard");
+				} else {
+					redirectAttributes.addFlashAttribute("success",
+							"success.edit.scorecard");
+				}
 				
 				
 				

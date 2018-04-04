@@ -79,6 +79,8 @@ public class HomeController {
 	
 	public static HashMap<Integer,HashMap<Integer,String>> CALL_CATEGORY_SUB_CATEGORY_MAP = null;
 	
+	public static HashMap<String, String> CALL_CAT_SUB_CAT_MULTI_SELECT_MAP = null;
+	
 	public static HashMap<Integer, String> LOGGED_IN_USER_MAC_MAP;
 	public static HashMap<Integer, String> LOGGED_IN_USER_JURISDICTION_MAP;
 	public static HashMap<Integer, String> LOGGED_IN_USER_PCC_LOCATION_MAP;
@@ -416,12 +418,31 @@ public class HomeController {
 					CALL_CATEGORY_MAP = callCategoryMap;
 					CALL_CATEGORY_SUB_CATEGORY_MAP = callCatSubCatMap;
 					
+					String key = "";
+					String value = "";
+					
+					HashMap<String, String> callCatSubCatMultiSelectMap = new HashMap<String, String> ();
+					for(Integer callCategoryId: callCategoryMap.keySet()) {
+						String callCategoryName = callCategoryMap.get(callCategoryId);
+						HashMap<Integer, String> callSubCategoryMap = callCatSubCatMap.get(callCategoryId);
+						
+						for(Integer callSubCategoryId: callSubCategoryMap.keySet()) {
+							key = "";
+							value = "";
+							String callSubCategoryName = callSubCategoryMap.get(callSubCategoryId);
+							key = callCategoryId+"-"+callSubCategoryId;
+							value = callCategoryName+"-"+callSubCategoryName;
+							callCatSubCatMultiSelectMap.put(key, value);
+						}
+						
+					}
+					
 					MAC_OBJECT_MAP = macObjectMap;
 					MAC_JURISDICTION_MAP = macJurisMap;
 					MAC_JURISDICTION_PROGRAM_MAP = macJurisProgramMap;
 					JURISDICTION_PROGRAM_MAP = jurisProgramMap;
 					MAC_JURISDICTION_PROGRAM_PCC_MAP = macJurisProgramLocationMap;
-					
+					CALL_CAT_SUB_CAT_MULTI_SELECT_MAP = callCatSubCatMultiSelectMap;
 				} catch (JsonParseException e) {
 					
 					e.printStackTrace();

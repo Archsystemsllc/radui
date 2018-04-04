@@ -5,6 +5,22 @@
 /*************************
 *******Typography******
 **************************/
+.successblock {
+	color: #0000ff;
+	background-color: #ffffff;
+	border: 3px solid #C0C0C0;
+	padding: 8px;
+	margin: 16px;
+}
+
+.errorblock {
+	color: #ff0000;
+	background-color: #ffEEEE;
+	border: 3px solid #ff0000;
+	padding: 8px;
+	margin: 16px;
+}
+
 body {
 	background: #fff;
 	font-family: 'Open Sans', sans-serif;

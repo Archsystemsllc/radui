@@ -30,6 +30,7 @@
 <!-- CSS for PQSelect -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pqselect.bootstrap.dev.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pqselect.dev.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery.tree-multiselect.min.css" />
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -52,6 +53,8 @@
 
 <!-- JavaScript for PQSelect -->
 <script src="${pageContext.request.contextPath}/resources/js/pqselect.dev.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.tree-multiselect.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/patosai/tree-multiselect/v2.4.1/dist/jquery.tree-multiselect.min.js"></script>
 <style type="text/css">
 	.red {  color:#cd2026;  }
 </style>
@@ -566,13 +569,13 @@
 
         //Multiple Select Functionality
 		 //initialize the pqSelect widget.
-	      /*   $("#ccid_know_skills_uiobj2").pqSelect({
+	    $("#ccid_know_skills_uiobj2").pqSelect({
 	            multiplePlaceholder: 'Select Call Category',
 	            checkbox: true //adds checkbox to options    
 	        }).on("change", function(evt) {
 	            var val = $(this).val();
 	            alert(val);
-	        }); */
+	        }); 
 
 	});
 
@@ -659,7 +662,65 @@
 	
 </script>
 
+<script type="text/javascript">
+		$(document).ready(function() {
+			
+			$("#callCatSubCatMs").treeMultiselect({
 
+				  min_height: 100, 
+				 
+				  // Sections have checkboxes which when checked, check everything within them
+				  allowBatchSelection: true,
+
+				  // Selected options can be sorted by dragging 
+				  // Requires jQuery UI
+				  sortable: false,
+
+				  // Adds collapsibility to sections
+				  collapsible: true,
+
+				  // Enables selection of all or no options
+				  enableSelectAll: false,
+
+				  // Only used if enableSelectAll is active
+				  selectAllText: 'Select All',
+
+				  // Only used if enableSelectAll is active
+				  unselectAllText: 'Unselect All',
+
+				  // Disables selection/deselection of options; aka display-only
+				  freeze: false,
+
+				  // Hide the right panel showing all the selected items
+				  hideSidePanel: false,
+
+				  // max amount of selections
+				  maxSelections: 0,
+
+				  // Only sections can be checked, not individual items
+				  onlyBatchSelection: false,
+
+				  // Separator between sections in the select option data-section attribute
+				  sectionDelimiter: '-',
+
+				  // Show section name on the selected items
+				  showSectionOnSelected: true,
+
+				  // Activated only if collapsible is true; sections are collapsed initially
+				  startCollapsed: true,
+
+				  // Allows searching of options
+				  searchable: true,
+
+				  // Set items to be searched. Array must contain 'value', 'text', or 'description', and/or 'section'
+				  searchParams: ['value', 'text', 'description', 'section'],
+
+				  // Callback
+				  onChange: null
+				  
+				});
+		});
+	</script>
 
 </head>
 <body>
@@ -890,32 +951,32 @@
 			                                <form:input class="form-control required" type = "text" name = "accuracyCallFailureTime" path="accuracyCallFailureTime" title="Choose time for the Accuracy Time Failure" />
 			                               </div>
 			                        </div>
-			                         <div class="row" id="accuracyCallFailureBlock2">
-			                        	 <div class="col-lg-5 form-group">
-			                        	 <label for="email"> Call Category:</label>
-			                               <form:select path="ccidKsUi" id="ccid_know_skills_uiobj" class="form-control required"  title="Select one required Call Category from the List"  multiple="true">
-											   
-											  	<form:options items="${callCategoryMap}" />										  	
-										   </form:select> 	
-			                               
-										</div>
-			                        	<div class="col-lg-5 form-group">
-			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="cscidKsUi" id="cscid_know_skills_uiobj" class="form-control required" title="Select one required Call Sub Category from the List"  multiple="true">
-											   							   	
-											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
-											</form:select> 
-			                            </div>
-			                        </div>		   
+			                         			                        
+			                        <div class="row" id="accuracyCallFailureBlock2">
 			                        
-			                        <%-- <div class="row">
-			                         <div class="col-lg-5 form-group">
-			                         	<form:select path="ccidKsUi" id="ccid_know_skills_uiobj2" class="form-control required"  title="Select one required Call Category from the List"  multiple="true">
-											   
-											  	<form:options items="${callCategoryMap}" />										  	
-										</form:select>
+									 <div class="col-lg-10 form-group">
+									 
+									 <form:select path="callCatSubCatMsStringArray" id="callCatSubCatMs" class="form-control required" title="Select one required Call Sub Category from the List"  multiple="multiple">
+										<c:forEach var="item" items="${callCatSubCatMultiSelectMap}">
+											<%-- <c:if test = "${fn:contains(theString, 'test')}">
+										    <option value="${item.key}" data-section="${fn:substringBefore(item.value, '-')}">${fn:substringAfter(item.value, '-')}</option>
+										   </c:if> --%>
+										    <c:choose>
+										      <c:when test="${fn:contains(scorecard.callCatSubCatMsString, item.key)}">
+										     	 <option value="${item.key}" data-section="${fn:substringBefore(item.value, '-')}" selected="selected">${fn:substringAfter(item.value, '-')}</option>
+										      </c:when>		
+										      						
+										      <c:otherwise>
+										      <option value="${item.key}" data-section="${fn:substringBefore(item.value, '-')}" >${fn:substringAfter(item.value, '-')}</option> 
+										      </c:otherwise>
+										    </c:choose>
+										</c:forEach>   							   	
+									   									  						  	
+									</form:select> 
+									
+			                         	
 									</div>
-									</div>  --%>
+									</div> 
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-8 form-group">
