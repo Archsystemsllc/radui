@@ -282,10 +282,8 @@ public class UserController {
 					model.addAttribute("programMapEdit", programMap);
 				}
 				
-				userDefaults(model);
-				
-			}
-			
+				userDefaults(model);				
+			}			
 			
 			return "createusers";
 			
@@ -663,10 +661,10 @@ public class UserController {
 			ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userByDb,User.class);
 			
 			//userService.update(userByDb);
-			redirectAttributes.addFlashAttribute("success", "success.update.password");
+			model.addAttribute("success", "success.update.password");
 		} catch (Exception e) {
 			log.error("Error while updating user",e);
-			redirectAttributes.addFlashAttribute("success", "fail.update.password");
+			model.addAttribute("success", "fail.update.password");
 		}
 		
 		log.debug("<-- changePasswordPost");

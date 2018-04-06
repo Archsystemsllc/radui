@@ -81,6 +81,8 @@ public class ScoreCardController {
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				scoreCardNew = new ScoreCard();
+				String[] tempValues = {"ALL"};
+				scoreCardNew.setJurisIdReportSearchString(tempValues);
 			}
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
