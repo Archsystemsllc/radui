@@ -134,7 +134,12 @@
 									</sec:authorize>
 									<!-- Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
-										<li><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a></li>
+										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a>
+										<span class="caret"></span>
+										<ul class="dropdown-menu">										
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload QAM Environment Form">QAM Envrionment Form</a></li>									      
+									    </ul>
+										</li>
 									</sec:authorize>
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">
 										<li><a class="${menu_highlight == 'rebuttal' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/false" title="Rebuttal Page">Rebuttal</a></li>

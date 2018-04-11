@@ -30,7 +30,9 @@ public class CsrController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/admin/csr_upload", method = RequestMethod.GET)
+
+    @RequestMapping(value ={"/admin/csr_upload", "/quality_manager/csr_upload", "/cms_user/csr_upload",
+			 "/mac_admin/csr_upload","/mac_user/csr_upload","/quality_monitor/csr_upload"}, method = RequestMethod.GET)	
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
        
@@ -46,7 +48,9 @@ public class CsrController {
      * @param bindingResult
      * @return
      */
-    @RequestMapping(value = "/admin/csr_upload", method = RequestMethod.POST)
+   
+    @RequestMapping(value ={"/admin/csr_upload", "/quality_manager/csr_upload", "/cms_user/csr_upload",
+			 "/mac_admin/csr_upload","/mac_user/csr_upload","/quality_monitor/csr_upload"}, method = RequestMethod.POST)	
     public String registration(Model model,@ModelAttribute("userForm") User userForm, BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         
        securityService.autologin(userForm.getUserName(), userForm.getPasswordConfirm());

@@ -644,9 +644,11 @@
 				qamCalibrationStatusValue = $("#qamCalibrationStatus").val();			 
 			}
 
+			
+
 			var cmsCalibrationStatusValue = "";
 			if ( $("#cmsCalibrationStatus").length ) {				 
-				qamCalibrationStatusValue = $("#cmsCalibrationStatus").val();			 
+				cmsCalibrationStatusValue = $("#cmsCalibrationStatus").val();			 
 			}
 			
 			
@@ -657,6 +659,7 @@
 			} else if(callResultValue != "") {				
 				$("#finalScoreCardStatus").val(callResultValue);
 			}	
+			
         }
 	
 	
