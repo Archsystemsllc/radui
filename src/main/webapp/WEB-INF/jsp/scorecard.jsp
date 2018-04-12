@@ -258,8 +258,15 @@
     	      }
     	})
    	    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+       	  var returnName = "";
+       	  if(item.middleName == null || item.middleName == "NULL") {
+       		returnName = item.firstName+" "+item.lastName + " ---- " +item.level
+          } else {
+        	  returnName = item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level;
+          }
+           	  
    	      return $( "<li>" )
-   	        .append( "<div>" + item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level + "</div>" )
+   	        .append( "<div>" + returnName  + "</div>" )
    	        .appendTo( ul );
    	    };
 
@@ -303,12 +310,21 @@
 			var csrFullNameValue = $(this).val().trim();			
 	        if(csrFullNameValue == "No CSR's Found") {		       
 	        	$("#csrFullName").val("");
-	        }				
+	        	$("#csrLevel").val("");
+	        	$("#macCallReferenceNumber").val("");  
+	        } 
+
+	        if(csrFullNameValue == " ") {		       
+	        	$("#csrFullName").val("");
+	        	$("#csrLevel").val("");
+	        	$("#macCallReferenceNumber").val("");        	
+	        } 
+	        	
 	     });	
 
 		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
-
+			$("#csrFullName").val("");
 			var userRole = $('#userRole').val();			
 			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
 			
@@ -329,6 +345,7 @@
 
 		//Select Program Functionality
 		$("select#jurId").change(function(){
+			$("#csrFullName").val("");
 			var userRole = $('#userRole').val();			
 			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
 
@@ -343,6 +360,11 @@
       	  	    	});  	   
                });
 			}
+        });
+
+		//Change Program Functionality
+		$("select#programId").change(function(){
+			$("#csrFullName").val("");			
         });
 
 		//Select Call Category Functionality

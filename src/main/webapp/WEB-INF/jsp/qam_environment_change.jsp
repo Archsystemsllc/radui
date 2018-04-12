@@ -153,53 +153,10 @@ $(function() {
           		' - '+jqXHR.statusText+')');
     	
     });
-  });  
-
+  }); 
   
-  $('button[id=keepPreviousListButton]').click(function(e) {
-	  e.preventDefault();
-	  //var result = $("#csrupload").valid();
-	  //alert("result:"+result);
-	  $('#csrListViewDiv').hide();
-	  $('#csrListMonthDiv').hide();
-	  
-	  var selectedMac = $('#macIdK').val();
-	  var validateJurisdiction = $('#jurisdictionK option:selected').val(); 
-	  var selectedJurisdiction = $('#jurisdictionK option:selected').text(); 
-		
-	  if(selectedMac == "" && validateJurisdiction == "") {
-		  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
-			return;
-		} else if(selectedMac == "" ) {
-			  $('#alertMsg').text("Please Select Mac Id ");
-				return;
-			} else if(validateJurisdiction == "") {
-				  $('#alertMsg').text("Please Select Jurisdiction Id");
-					return;
-				} 
-	  
-	  var username="qamadmin";
-	  var password="123456";
-	  $.ajax({ 
-	      type: "GET",
-	      dataType: "json",
-	      data: {userId: $('#userId').val(), macIdK: selectedMac, jurisdictionK: JSON.stringify(selectedJurisdiction)},
-	      url : "${WEB_SERVICE_URL}keepCurrentList",
-	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-	     success: function(data){	    
-		     //alert("Inside success"+data.erroMessage+data.status);
-	    	 $('#alertMsg').text(data.erroMessage);
-		      $('button[id=keepPreviousListButton]').prop('disabled',false);		    
-	     },
-	     failure: function (jqXHR) {
-	    	 $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-	 	      		' - '+jqXHR.statusText+')');
-	 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-	     }
-	 	});
-	 });  
 
-  $(document).on('click',".viewLink",function (){    
+  /* $(document).on('click',".viewLink",function (){    
 
 
 	  	$('#csrLists tbody').empty();
@@ -236,7 +193,7 @@ $(function() {
 	            $("#csrLists").append("Error when fetching data please contact administrator");
 	        }
 	    });
-	 });
+	 }); */
 
 	$('#searchCsr').click(function(e){ 
   		$('#alertMsg').text('');
@@ -246,11 +203,11 @@ $(function() {
   	  	$('#csrListMonthDiv').hide();
   	  	
 	  	e.preventDefault();			  	
-	  	 var validateMac = $('select[name=macIdS]').val();
-		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
+	  	var validateMac = $('select[name=macIdS]').val();
+		var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
 	  	var validateFromDate = $('#fromDate').val();
 		var validateToDate = $('#toDate').val();		  
-		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
+		
 		  if(validateMac == null && validateJurisdiction == null) {
 			  $('#searchalertMsg').text("Please Select MAC Id and Jurisdiction Id");
 			  
@@ -276,9 +233,7 @@ $(function() {
 		 
 		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
 		 var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
-
-		 
-	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction+':::'+selectedJurisArr+"::::"+JSON.stringify(selectedJurisArr));
+	 	
 	 	var username="qamadmin";
 	   	var password="123456";
 	 	$.ajax({ 
@@ -296,9 +251,14 @@ $(function() {
 		    	 
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
-	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-	      	        $('#searchalertMsg').text('CSR List Available Months Retrieved');
+	      	        trHTML += '<tr>'
+		      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
+		      	       + '<td align="center">' + item[2] + '</td>'
+		      	     + '<td align="center">' + item[3] + '</td>'
+	      	        +'<td style="text-align: center"><a class="viewLink" href="#" >Download</a></td></tr>';
+	      	        
 	  	    	});
+		    	$('#searchalertMsg').text('QAM Environment Change Form Months Retrieved');
 		    	trHTML += '</tbody>';
 		    	$('#csrListMonthDiv').show();
 		  	    $('#csrMonthLists').append(trHTML);
@@ -372,44 +332,7 @@ $(function() {
 		}
     });
     
-    $('#keepCurrentListCB').click(function() {
-    	$('#alertMsg').text('');
-        if( $(this).is(':checked')) {            
-        	
-            $( "#dialog-confirm" ).dialog({
-                resizable: false,
-                height: "auto",
-                width: 400,
-                modal: true,
-                
-                buttons: {
-                  "Yes": function() {
-                	$( this ).dialog( "close" );
-                    $("#keepPreviousListButton").show();
-                    $("#macIdK_Div").show();	
-                    $("#jurisdictionK_Div").show();	
-                    $('#progressBar_Hideme').hide();
-                    $('#table1 .hideme').hide();
-                                        
-                  },
-                  Cancel: function() {                    
-                    $("#keepPreviousListButton").hide();
-                    $("#macIdK_Div").hide();
-                    $("#jurisdictionK_Div").hide();	
-                    $('#table1 .hideme').show();
-                    $('input[id=keepCurrentListCB]').attr('checked', false);
-                    $( this ).dialog( "close" );
-                  }                  
-                }	            
-              });
-            
-        } else {
-            $("#keepPreviousListButton").hide();
-            $("#macIdK_Div").hide();
-            $("#jurisdictionK_Div").hide();
-            $('#table1 .hideme').show();
-        }
-    }); 
+   
 });
 </script>
 <script type="text/javascript">
@@ -426,46 +349,7 @@ $(function() {
     	$("#macIdK_Div").hide();	
     	$("#jurisdictionK_Div").hide();	
     	
-    	$('#progressBar_Hideme').hide();   
-
-    	CsrListTable = $("#csrLists").DataTable({
-    		data:[],
-    		columns: [
-    		{ "data": "firstName" },
-    		{ "data": "middleName" },
-    		{ "data": "lastName" },
-    		{ "data": "level" },    		
-    		{ "data": "macName" },
-    		{ "data": "jurisdiction" },
-    		{ "data": "location" },
-    		{ "data": "program" },
-    		{ "data": "status" }
-    		],
-    		 dom: '<lif<t>pB>',
-    	     buttons: [
-    	         {
-    	             extend: 'copyHtml5',
-    	                messageTop: 'CSR List Report.'
-    	         },
-    	         {
-    	             extend: 'excelHtml5',
- 	                messageTop: 'CSR List Report.'
-    	         },
-    	         {
-    	             extend: 'pdfHtml5',
- 	                messageTop: 'CSR List Report.'
-    	         }    		
-            ],            
-    		rowCallback: function (row, data) {},
-    			filter: false,
-    			info: false,
-    			ordering: true,
-    			processing: true,
-    			retrieve: true,
-    			sort:true,
-    			export: true
-    			
-    		});
+    	$('#progressBar_Hideme').hide(); 
 
     	$('#csrLists').hide();
     	
@@ -650,15 +534,17 @@ $(function() {
 				            <div class="row " id="csrListMonthDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    
-				                     <h3>CSR Monthly List: </h3> 					                   
+				                     <h3>QAM Environment Monthly List: </h3> 					                   
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
 			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrMonthLists" style="width: 80%">
 											<thead>
 												<tr>
-													<th title="Monthly">Monthly</th>
-													<th title="CSR Name">Action</th>
+													<th title="Monthly">Month</th>
+													<th title="MAC">Mac</th>
+													<th title="Jurisdiction">Jurisdiction</th>
+													<th title="Action">Action</th>
 												</tr>
 											</thead>
 										</table>
@@ -666,35 +552,7 @@ $(function() {
 			                        </div>
 				                </div>
 				            </div>
-				            <div class="row" id="csrListViewDiv">
-				                <div class="col-lg-10 col-lg-offset-1 form-container">
-				                    <h3>CSR List Reports: </h3>				                   		                   
-				                   
-			                         <div class="row" id="csrlistsdiv">
-			                         
-			                            <div class="col-lg-10 form-group">
-			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="csrLists" style="width: 90%">
-						                    <thead>
-										        <tr>
-										            <th style="text-align: left">First Name</th>
-										            <th style="text-align: left">Middle Name</th>
-										            <th style="text-align: left">Last Name</th>
-										            <th style="text-align: left">CSR Level</th>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										             <th style="text-align: left">Program</th>   
-										            <th style="text-align: left">PCC</th>										               
-										            <th style="text-align: left">Status</th>
-										        </tr>
-										    </thead>
-						                    <tbody>  
-						                    </tbody>
-						                </table> 
-			                            </div>		                           
-			                        </div>         
-				                    
-				                </div>
-				            </div>
+				            
 						</div>
 					</div>
 					</div>

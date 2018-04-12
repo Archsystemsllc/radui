@@ -75,7 +75,7 @@ function resetFields() {
                     {macId: $(this).val(), multipleInput: false}, function(data){
                
                  $("#jurId").get(0).options.length = 0;	           
-      	      	 $("#jurId").get(0).options[0] = new Option("---Select All---", "ALL");
+      	      	 $("#jurId").get(0).options[0] = new Option("ALL", "ALL");
       	  	    	$.each(data, function (key,obj) {
       	  	    		$("#jurId").get(0).options[$("#jurId").get(0).options.length] = new Option(obj, key);
       	  	    		
@@ -188,7 +188,7 @@ $(document).ready(function(){
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurisIdReportSearchString" class="form-control required"
 														id="jurId" required="true" title="Select one or multiple Jurisdiction from the List" multiple="true">
-														<form:option value="" label="ALL" />
+														<form:option value="ALL" label="ALL" />
 														<form:options items="${jurisMapEdit}" />
 													</form:select>
 												</div>

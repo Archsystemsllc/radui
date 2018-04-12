@@ -98,6 +98,8 @@ public class RebuttalController {
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				rebuttalNew = new Rebuttal();
+				String[] tempValues = {"ALL"};
+				rebuttalNew.setJurisIdReportSearchString(tempValues);
 			}
 			
 			String roles = authentication.getAuthorities().toString();
@@ -211,16 +213,21 @@ public class RebuttalController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
 			
-			String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
-			
-			ArrayList<String> jurIdArrayList = new ArrayList<String>();
-			for (String jurisIdSingleValue: jurisIds) {
-				
-				jurIdArrayList.add(jurisIdSingleValue+UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+			if(HomeController.LOGGED_IN_USER_MAC_ID != null ) {
+				userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
 			}
-			userSearchObject.setJurIdList(jurIdArrayList);
+			
+			if(userFormSession.getJurId() !=null && !userFormSession.getJurId().equalsIgnoreCase("")) {
+				String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+				
+				ArrayList<String> jurIdArrayList = new ArrayList<String>();
+				for (String jurisIdSingleValue: jurisIds) {
+					
+					jurIdArrayList.add(jurisIdSingleValue+UIGenericConstants.DB_JURISDICTION_SEPERATOR);
+				}
+				userSearchObject.setJurIdList(jurIdArrayList);
+			}			
 		}
 		
 		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);		
@@ -268,14 +275,18 @@ public class RebuttalController {
 				
 				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				
-				String[] jurisIds = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
-				
-				ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
-				for (String jurisIdSingleValue: jurisIds) {
+				if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("")) {
+					String[] jurisIds = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 					
-					jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
-				}				
-				scoreCardTemp.setJurIdList(jurIdArrayList);
+					ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
+					for (String jurisIdSingleValue: jurisIds) {
+						
+						jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+					}				
+					scoreCardTemp.setJurIdList(jurIdArrayList);
+				}
+				
+				
 			} 
 			
 			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardTemp, List.class);

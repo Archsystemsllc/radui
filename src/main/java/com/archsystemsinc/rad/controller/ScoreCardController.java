@@ -90,22 +90,26 @@ public class ScoreCardController {
 					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 					
-					String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
-					programMap = new HashMap<Integer, String> ();
-					locationMap = new HashMap<Integer, String> ();
-					
-					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
-						jurIdArrayList.add(jurisIdSingle);
+					if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("")) {
+						String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+						programMap = new HashMap<Integer, String> ();
+						locationMap = new HashMap<Integer, String> ();
+						
+						for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+							jurIdArrayList.add(jurisIdSingle);
+						}
+											
+						scoreCardNew.setJurIdList(jurIdArrayList);
+						scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
 					}
-										
-					scoreCardNew.setJurIdList(jurIdArrayList);
+					
 					scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
 					scoreCardFailObject = new ScoreCard();
 					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-					scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
+					
 					scoreCardFailObject.setJurIdList(jurIdArrayList);
 					
 					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.CMS_FAIL_STRING);

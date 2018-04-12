@@ -11,7 +11,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/main.css"
 	rel="stylesheet" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/images/adda_ico.png">
+	href="${pageContext.request.contextPath}/resources/images/logo.png">
 	<link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 <%-- <link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet"> --%>
 <link
