@@ -137,7 +137,8 @@
 										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">										
-									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload QAM Environment Form">QAM Envrionment Form</a></li>									      
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload QAM Environment Form">QAM Envrionment Form</a></li>	
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/systemissueform" title="Upload System Issue Form">System Issue Form</a></li>									      
 									    </ul>
 										</li>
 									</sec:authorize>

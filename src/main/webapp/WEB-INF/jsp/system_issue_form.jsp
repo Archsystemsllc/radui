@@ -10,7 +10,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Qam Environment List</title>
+<title>System Issue List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -46,9 +46,9 @@
 
 function resetFields() {
 	//alert("Inside ResetFields");
-    $('#qamEnvironmentMonthLists').hide();
-    QamEnvironmentListTable.clear().draw();
-	$('#qamEnvironmentLists').hide();
+    $('#systemIssueMonthLists').hide();
+    SystemIssueListTable.clear().draw();
+	$('#systemIssueLists').hide();
 	$('input[type=file]').val('');
 	
 	$('#macIdU').prop('selectedIndex',0);
@@ -59,8 +59,8 @@ function resetFields() {
 	$("#jurisdictionS option:selected").prop("selected", false);
 	$("#jurisdictionU option:selected").prop("selected", false);	
 
-	$('#qamEnvironmentListViewDiv').hide();
-	$('#qamEnvironmentListMonthDiv').hide();	
+	$('#systemIssueListViewDiv').hide();
+	$('#systemIssueListMonthDiv').hide();	
 }
 	
 $(function() {
@@ -78,12 +78,12 @@ $(function() {
 	    }
 	});	
 	
-  $('button[id=uploadQamEnvForm]').click(function(e) {
+  $('button[id=uploadSystemIssueForm]').click(function(e) {
     e.preventDefault();
     //Disable submit button
     //$(this).prop('disabled',true);
-    $('#qamEnvironmentListViewDiv').hide();
-	$('#qamEnvironmentListMonthDiv').hide();
+    $('#systemIssueListViewDiv').hide();
+	$('#systemIssueListMonthDiv').hide();
    
     	var validatedMac = $('#macIdU').val();
 		var validateJurisdiction = $('#jurisdictionU').val(); 
@@ -113,7 +113,7 @@ $(function() {
     var password="123456";
     // Ajax call for file uploaling
     var ajaxReq = $.ajax({
-      url : "${WEB_SERVICE_URL}uploadQamEnvForm",
+      url : "${WEB_SERVICE_URL}uploadSystemIssueForm",
       type : 'POST',
       data : formData,
       cache : false,
@@ -154,13 +154,14 @@ $(function() {
     	
     });
   }); 
+  
 
-	$('#searchQamEnvironment').click(function(e){ 
+	$('#searchSystemIssue').click(function(e){ 
   		$('#alertMsg').text('');
   		$('#searchalertMsg').text('');
-  		$('#qamEnvironmentMonthLists tbody').empty();
-  		$('#qamEnvironmentListViewDiv').hide();
-  	  	$('#qamEnvironmentListMonthDiv').hide();
+  		$('#systemIssueMonthLists tbody').empty();
+  		$('#systemIssueListViewDiv').hide();
+  	  	$('#systemIssueListMonthDiv').hide();
   	  	
 	  	e.preventDefault();			  	
 	  	var validateMac = $('select[name=macIdS]').val();
@@ -200,7 +201,7 @@ $(function() {
            type: "GET",
            dataType: "json",
            data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
-           url : "${WEB_SERVICE_URL}qamEnvListMonths",
+           url : "${WEB_SERVICE_URL}systemIssueListMonths",
            headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
           success: function(data){	    
 	        var resultCount = data.length;
@@ -218,15 +219,15 @@ $(function() {
 	      	        +'<td style="text-align: center"><a class="viewLink" href="#" >Download</a></td></tr>';
 	      	        
 	  	    	});
-		    	$('#searchalertMsg').text('QAM Environment Change Form Months Retrieved');
+		    	$('#searchalertMsg').text('System Issue Form Months Retrieved');
 		    	trHTML += '</tbody>';
-		    	$('#qamEnvironmentListMonthDiv').show();
-		  	    $('#qamEnvironmentMonthLists').append(trHTML);
-		  	    $('#qamEnvironmentMonthLists').show();
+		    	$('#systemIssueListMonthDiv').show();
+		  	    $('#systemIssueMonthLists').append(trHTML);
+		  	    $('#systemIssueMonthLists').show();
 			 } 
           },
           failure: function () {
-              $("#qamEnvironmentMonthLists").append("Error when fetching data please contact administrator");
+              $("#systemIssueMonthLists").append("Error when fetching data please contact administrator");
           }
       });
 
@@ -296,11 +297,11 @@ $(function() {
 });
 </script>
 <script type="text/javascript">
-	var QamEnvironmentListTable;
+	var SystemIssueListTable;
     $(document).ready(function () {
 
-    	$('#qamEnvironmentMonthLists').hide();
-    	$('#qamEnvironmentLists').hide();
+    	$('#systemIssueMonthLists').hide();
+    	$('#systemIssueLists').hide();
     	$('#alertMsg').text('');
     	$('#searchalertMsg').text('');
     	
@@ -311,7 +312,7 @@ $(function() {
     	
     	$('#progressBar_Hideme').hide(); 
 
-    	$('#qamEnvironmentLists').hide();
+    	$('#systemIssueLists').hide();
     	
     	$("#fromDate").datepicker({ 
             dateFormat: 'mm-yy',
@@ -373,7 +374,7 @@ $(function() {
 	</div>
 	
 	<table id="mid">
-		<form:form method="POST" modelAttribute="qamEnvironmentForm" class="form-signin" action="#" enctype="multipart/form-data" id="qamEnvironmentupload">
+		<form:form method="POST" modelAttribute="systemIssueForm" class="form-signin" action="#" enctype="multipart/form-data" id="systemissueform">
 			<tr>
 				
 				<td style="vertical-align: top">
@@ -383,7 +384,7 @@ $(function() {
 						<div class="content">
 						
 						<div class="table-users" style="width: 80%">
-								<div class="header">QAM Environment Change Form</div>	
+								<div class="header">System Issue Form</div>	
 												
       							 <div class="row " style="margin-top: 10px">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
@@ -406,7 +407,7 @@ $(function() {
 				                    <div class="row">
 			                              <div class="col-lg-6 form-group">
 			                                <a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environment Change Form">Download Sample QAM Environment Change Form</a>
+												href="${pageContext.request.contextPath}/resources/static/SYSTEM_ISSUE_FORM_SAMPLE.xlsx" title="Click here to download Sample System Issue Form">Download Sample System Issue Form</a>
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			                             </div>
 			                        </div>
@@ -416,10 +417,10 @@ $(function() {
 				            
 				             <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                 <h2>Upload QAM Environment Change Form Section</h2> 
+				                 <h2>Upload System Issue Form Section</h2> 
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="file">QAM Environment Change Form Upload: </label>
+			                                <label for="file">System Issue Form Upload: </label>
 										
 										<form:input type = "hidden" path="userId" />
 										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload System Issue List from Local">
@@ -428,15 +429,6 @@ $(function() {
 			                          </div>
 			                         </div>
 			                          <div class="col-lg-8 col-lg-offset-1 form-container">
-			                          <div class="row">
-			                           <div class="col-lg-6 form-group">
-			                                <label for="formType">Form Type:</label></br>
-			                                											
-											<form:radiobutton path="formType" value="No Planned Changes" title="No Planned Changes radio button"/>&nbsp;No Planned Changes&nbsp;
-										  	&nbsp;<form:radiobutton path="formType" value="Adverse Event" title="Adverse Event radio button"/>&nbsp;Adverse Event&nbsp;
-										  	&nbsp;<form:radiobutton path="formType" value="Emergency Change" title="Emergency Change radio button"/>&nbsp;Emergency Change&nbsp;
-			                            </div>
-			                           </div>
 				                     <div class="row">
 			                             <div class="col-lg-6 form-group">
 			                              <label for="name"> MAC:</label>
@@ -454,7 +446,7 @@ $(function() {
 											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" type="submit" name="uploadQamEnvForm" id="uploadQamEnvForm" title="Select Upload File button to upload System Issue List">Upload File</button>
+			                               	<button class="btn btn-primary" type="submit" name="uploadSystemIssueEnvForm" id="uploadSystemIssueForm" title="Select Upload File button to upload System Issue List">Upload File</button>
 			                            </div>
 			                        </div>
 				                </div>
@@ -462,7 +454,7 @@ $(function() {
 				            
 				             <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                    <h2>Search QAM Environment Change Form</h2> 
+				                    <h2>Search System Issue Form</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
 				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
@@ -494,20 +486,20 @@ $(function() {
 										</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" id="searchQamEnvironment" title="Select Search QAM Environment Change Form button to get the QAM list">Search</button>
+			                               	<button class="btn btn-primary" id="searchSystemIssue" title="Select Search System Issue Form button to get the System Issue list">Search</button>
 			                            </div>
 			                        </div>
 				                </div>
 				            </div>
 				            
-				            <div class="row " id="qamEnvironmentListMonthDiv">
+				            <div class="row " id="systemIssueListMonthDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    
-				                     <h3>QAM Environment Monthly List: </h3> 					                   
+				                     <h3>System Issue Environment Monthly List: </h3> 					                   
 				                   
 			                         <div class="row">
 			                            <div class="col-lg-10 form-group">
-			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qamEnvironmentMonthLists" style="width: 80%">
+			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="systemIssueMonthLists" style="width: 80%">
 											<thead>
 												<tr>
 													<th title="Monthly">Month</th>
