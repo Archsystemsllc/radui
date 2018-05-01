@@ -355,7 +355,7 @@ public class UserController {
 				}
 			}
 			
-			userSearchObject.setJurIdList(jurIdArrayList);
+			//userSearchObject.setJurIdList(jurIdArrayList);
 			
 			userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
 			
@@ -509,7 +509,7 @@ public class UserController {
 		}
 		try {
 			
-			if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
+			if(roles.contains("MAC Admin") || roles.contains("MAC User") || roles.contains("Administrator")) {
 				String jurIdDBValue = "";
 				for(String singleJurisIdValue: userForm.getJurisidictionId()) {
 					jurIdDBValue += singleJurisIdValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;

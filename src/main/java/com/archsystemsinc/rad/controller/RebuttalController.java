@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -347,17 +350,28 @@ public class RebuttalController {
 		
 		String fileName = "";
 		 MultipartFile tempMultipartFile = null;
+		 /*LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+		 map.add("file", new ClassPathResource(file));
+		 HttpHeaders headers = new HttpHeaders();
+		 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+		 HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(
+		                     map, headers);
+		 ResponseEntity<String> result = template.get().exchange(
+		                     contextPath.get() + path, HttpMethod.POST, requestEntity,
+		                     String.class);*/
+		
 		if (!rebuttal.getRebuttalFileObject().isEmpty()) {
             try {
                 fileName = rebuttal.getRebuttalFileObject().getOriginalFilename();
                 tempMultipartFile = rebuttal.getRebuttalFileObject();
-                //byte[] bytes = rebuttal.getRebuttalFileObject().getBytes();
-                //rebuttal.setRebuttalFileAttachment(bytes);
-                //rebuttal.setHttpFileData(new ByteArrayResource(bytes));
-               /* BufferedOutputStream buffStream = 
+                byte[] bytes = rebuttal.getRebuttalFileObject().getBytes();
+                rebuttal.setRebuttalFileAttachment(bytes);
+                rebuttal.setHttpFileData(new ByteArrayResource(bytes));
+                BufferedOutputStream buffStream = 
                         new BufferedOutputStream(new FileOutputStream(new File(SERVER_UPLOAD_FILE_LOCATION + fileName)));
                 buffStream.write(bytes);
-                buffStream.close();*/
+                buffStream.close();
                 //return "You have successfully uploaded " + fileName;
             } catch (Exception e) {
                 //return "You failed to upload " + fileName + ": " + e.getMessage();
@@ -399,7 +413,7 @@ public class RebuttalController {
 			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
 			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
 			
-			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, tempMultipartFile,
+			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
 					Rebuttal.class);
 			
 		} catch (Exception e) {

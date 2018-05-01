@@ -291,6 +291,31 @@ $(function() {
 	           });
 		}
     });
+
+    $(document).on('click',".viewLink",function (){    
+	
+		var row= $(this).closest('tr');  
+	  	var monthYear=$("td:eq(0)",row).text(); 
+
+	  	var username="qamadmin";
+		var password="123456";	
+
+		alert(monthYear);
+	  
+	     $.ajax({ 
+	         type: "GET",
+	         dataType: "json",
+	         data: {docId: 1},
+	         url : "${WEB_SERVICE_URL}download-document",
+	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+	        success: function(data){ 
+	        	alert("Successly downloaded");
+	        },
+	        failure: function () {
+	            $("#csrLists").append("Error when fetching data please contact administrator");
+	        }
+	    });
+	 });
     
    
 });

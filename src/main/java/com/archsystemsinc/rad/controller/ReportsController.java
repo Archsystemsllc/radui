@@ -334,6 +334,7 @@ public class ReportsController {
 					
 					reportsForm.setJurIdList(jurIdArrayList);		
 					reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+					reportsForm.setJurisdictionName(jurisdictionNamesValues);
 					
 					if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
 						String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
@@ -368,6 +369,7 @@ public class ReportsController {
 					reportsForm.setJurIdList(jurisIdArrayList);			
 					reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
 					reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
+					reportsForm.setJurisdictionName(jurisdictionNamesValues);
 					reportsForm.setJurisId("");
 				} 
 				

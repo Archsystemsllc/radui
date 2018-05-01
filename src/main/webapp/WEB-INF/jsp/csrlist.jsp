@@ -416,8 +416,8 @@ $(function() {
 	var CsrListTable;
     $(document).ready(function () {
 
-    	$('#csrMonthLists').hide();
-    	$('#csrLists').hide();
+    	$('#csrListViewDiv').hide();
+    	$('#csrListMonthDiv').hide();	
     	$('#alertMsg').text('');
     	$('#searchalertMsg').text('');
     	

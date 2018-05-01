@@ -79,17 +79,20 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: reportTitle,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: reportTitle,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
 	             messageTop: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
+	             title: reportTitle
 	         }	        
 	     ],
 		  "paging" : true,
@@ -597,8 +600,8 @@ $(document).ready(function() {
 										            <th style="text-align: left">Scoreable Pass Percent</th> 
 										            <th style="text-align: left">Scoreable Fail Count</th>
 										            <th style="text-align: left">Scoreable Fail Percent</th>
-										            <th style="text-align: left">Non Scoreable Count</th>										            
-										            <th style="text-align: left">Non Scoreable Percent</th> 
+										            <th style="text-align: left">Non-Scoreable Count</th>										            
+										            <th style="text-align: left">Non-Scoreable Percent</th> 
 										            <th style="text-align: left">Does Not Count</th>
 										            <th style="text-align: left">Does Not Count Percent</th>
 										             <th style="text-align: left">QAM Start Date</th>
@@ -627,8 +630,8 @@ $(document).ready(function() {
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Pass Count</th>
 										            <th style="text-align: left">Scoreable Pass Percent</th> 
-										            <th style="text-align: left">Non Scoreable Count</th>										            
-										            <th style="text-align: left">Non Scoreable Percent</th> 
+										            <th style="text-align: left">Non-Scoreable Count</th>										            
+										            <th style="text-align: left">Non-Scoreable Percent</th> 
 										            <th style="text-align: left">Does Not Count</th>
 										            <th style="text-align: left">Does Not Count Percent</th>	
 										             <th style="text-align: left">QAM Start Date</th>
@@ -656,8 +659,8 @@ $(document).ready(function() {
 										            <th style="text-align: left">Jurisdiction</th>
 										            <th style="text-align: left">Scoreable Fail Count</th>
 										            <th style="text-align: left">Scoreable Fail Percent</th>
-										            <th style="text-align: left">Non Scoreable Count</th>										            
-										            <th style="text-align: left">Non Scoreable Percent</th> 
+										            <th style="text-align: left">Non-Scoreable Count</th>										            
+										            <th style="text-align: left">Non-Scoreable Percent</th> 
 										            <th style="text-align: left">Does Not Count</th>
 										            <th style="text-align: left">Does Not Count Percent</th>	
 										             <th style="text-align: left">QAM Start Date</th>
@@ -764,8 +767,8 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Non Scoreable Count</th>
-										            <th style="text-align: left">Non Scoreable Percent</th>
+										            <th style="text-align: left">Non-Scoreable Count</th>
+										            <th style="text-align: left">Non-Scoreable Percent</th>
 										             <th style="text-align: left">QAM Start Date</th>
 										            <th style="text-align: left">QAM End Date</th>		
 										            								          										           

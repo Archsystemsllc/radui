@@ -174,6 +174,30 @@ public class ScoreCardController {
 				scoreCardModelObject.setJurIdList(jurisdictionArrayList);
 			}
 			
+			if(scoreCardModelObject.getFilterFromDateString() != null && 
+					!scoreCardModelObject.getFilterFromDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = scoreCardModelObject.getFilterFromDateString() + " 00:00:00 AM";
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				scoreCardModelObject.setFilterFromDate(filterFromDate);
+				
+				if (scoreCardFailObject != null) {
+					scoreCardFailObject.setFilterFromDate(filterFromDate);
+				}
+			}
+			
+			
+			if(scoreCardModelObject.getFilterToDateString() != null && 
+					!scoreCardModelObject.getFilterToDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = scoreCardModelObject.getFilterToDateString() + " 11:59:59 PM";
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				scoreCardModelObject.setFilterToDate(filterToDate);
+				
+				if (scoreCardFailObject != null) {
+					scoreCardFailObject.setFilterToDate(filterToDate);
+				}
+			}
+			
+			
 			//Scorecard All List
 			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardModelObject, List.class);
 			ObjectMapper mapper = new ObjectMapper();

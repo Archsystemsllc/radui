@@ -63,7 +63,26 @@ $(document).ready(function () {
 	       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
 	});
 
+	document.getElementById("update").disabled = false; 
+
 });
+
+function activateButton(element) {
+
+	alert("Element:::::"+element);
+	 
+	  if(element.checked) {
+  	  
+        document.getElementById("update").disabled = false; 
+  		 
+     }
+     else  {
+  	  
+        document.getElementById("update").disabled = true;      
+		  
+    }
+
+}
 </script>
 
 </head>
@@ -139,11 +158,21 @@ $(document).ready(function () {
 								            </spring:bind>
 			                            </div>
 			                        </div>
+			                         <div class="row">
+			                            <div class="col-sm-10 form-group">
+			                                
+			                                <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">&nbsp; I Agree that I have read the <a href="https://www.hhs.gov/about/agencies/asa/ocio/cybersecurity/rules-of-behavior-for-use-of-hhs-information-resources/index.html">Rules of Behavior for Use of HHS Information Resources</a>.</input>	                                
+			                               
+			                                    
+			                                <br/>
+			                             
+			                            </div>		                           
+			                        </div>       
 									
 									
 				                	<div class="row">
 			                            <div class="col-lg-6 form-group">
-			                            <button class=" btn btn-primary">Update Password</button>
+			                            <button class=" btn btn-primary" id="update" >Update Password</button>
 			                            <span><button class="btn btn-primary" id="close1" type="button" onclick="location.href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/myaccount'">Close</button></span>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
