@@ -219,6 +219,8 @@ public class ScoreCardController {
 					if (scoreCardList == null) {
 						scoreCardList = new ArrayList<ScoreCard>();
 						scoreCardList.addAll(scoreCardFailList);
+					} else {
+						scoreCardList.addAll(scoreCardFailList);
 					}
 				}
 			}
