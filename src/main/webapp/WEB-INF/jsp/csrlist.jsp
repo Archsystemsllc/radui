@@ -437,8 +437,8 @@ $(function() {
     		{ "data": "level" },    		
     		{ "data": "macName" },
     		{ "data": "jurisdiction" },
-    		{ "data": "location" },
     		{ "data": "program" },
+    		{ "data": "location" },
     		{ "data": "status" }
     		],
     		 dom: '<lif<t>pB>',
@@ -539,7 +539,7 @@ $(function() {
 						<div class="content">
 						
 						<div class="table-users" style="width: 80%">
-								<div class="header">CSR List</div>	
+								<div class="header">CSR List Upload</div>	
 												
       							 <div class="row " style="margin-top: 10px">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">

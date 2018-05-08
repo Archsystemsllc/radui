@@ -197,6 +197,7 @@ public class UserController {
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
 			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			model.addAttribute("pccMapEdit", HomeController.LOGGED_IN_USER_PCC_LOCATION_MAP);	
 			
 			HashMap<Integer,String> roleMap = new HashMap<Integer, String>();	
 			
@@ -212,6 +213,7 @@ public class UserController {
 		} else {
 			
 			userDefaults(model);
+			model.addAttribute("pccMapEdit", HomeController.ALL_PCC_LOCATION_MAP);
 		}
 		
 		return "createusers";

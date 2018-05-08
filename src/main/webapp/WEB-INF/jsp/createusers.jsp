@@ -148,7 +148,7 @@ $(function(){
 			}
        });
        
-	$("#jurId").change(function(){			
+	/* $("#jurId").change(function(){			
 			 var selectedJurisdiction =""; 
 			 $("#jurId :selected").each(function() {
 				 selectedJurisdiction+=($(this).attr('value'))+",";
@@ -162,7 +162,7 @@ $(function(){
      	  	    		$("#pccId").get(0).options[$("#pccId").get(0).options.length] = new Option(obj, key);     	  	    		
      	  	    	});  	   
               });
-      });
+      }); */
 
 	 $('#close1').click(function(e) {	
 		 e.preventDefault();		
@@ -346,7 +346,7 @@ $(function(){
 										<label for="pccId"> PCC Location:</label>
 										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" title="Select one PCC Location from the list">
 										   <form:option value="" label="---Select PCC Location---"/>	
-										    <form:options items="${programMapEdit}" />										   							   
+										    <form:options items="${pccMapEdit}" />										   							   
 										</form:select>	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
