@@ -67,9 +67,7 @@ $(document).ready(function () {
 
 });
 
-function activateButton(element) {
-
-	alert("Element:::::"+element);
+function activateButton(element) {	
 	 
 	  if(element.checked) {
   	  
@@ -161,7 +159,7 @@ function activateButton(element) {
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                
-			                                <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">&nbsp; I Agree that I have read the <a href="https://www.hhs.gov/about/agencies/asa/ocio/cybersecurity/rules-of-behavior-for-use-of-hhs-information-resources/index.html">Rules of Behavior for Use of HHS Information Resources</a>.</input>	                                
+			                                <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">&nbsp; I Agree that I have read the <a target="_blank" href="https://www.hhs.gov/about/agencies/asa/ocio/cybersecurity/rules-of-behavior-for-use-of-hhs-information-resources/index.html">Rules of Behavior for Use of HHS Information Resources</a>.</input>	                                
 			                               
 			                                    
 			                                <br/>

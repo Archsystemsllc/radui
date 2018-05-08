@@ -134,6 +134,7 @@ $(document).ready(function () {
 			                        	</div>
 			                        	
 			                        <div class="row">
+			                        <fieldset disabled>
 			                            <div class="col-lg-6 form-group">
 			                              <label for="firstName"> First Name:</label> 
 											<spring:bind path="firstName">
@@ -152,10 +153,11 @@ $(document).ready(function () {
 								                <form:errors path="middleName"></form:errors>
 			                            	</div>
 			                        	</div>
-				                    
+				                    </fieldset>
 				                	</div>
 									
 									<div class="row">
+									<fieldset disabled>
 			                            <div class="col-lg-6 form-group">
 			                              <label for="lastName"> Last Name:</label> 
 			                               <spring:bind path="firstName">
@@ -169,10 +171,12 @@ $(document).ready(function () {
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                               
-			                        	</div>				                    
+			                        	</div>	
+			                        </fieldset>			                    
 				                	</div>
 				                	
 				                	<div class="row">
+				                	<fieldset disabled>
 				                		<div class="col-lg-6 form-group">
 			                            	<label for="organization"> Organization:</label> <form:select path="organizationLookup.id"
 													class="form-control required" id="organizationLookupId" required="true" title="Select one organization from the list">
@@ -189,9 +193,10 @@ $(document).ready(function () {
 													<form:options items="${roleIds}" />
 												</form:select>
 			                            </div>
-			                            		                    
+			                        </fieldset> 		                    
 				                	</div>
 				                	<div class="row">
+				                	<fieldset disabled>
 			                            <div class="col-lg-6 form-group" id="macIdBlock">
 			                          
 										<label for="name"> MAC:</label>
@@ -205,22 +210,26 @@ $(document).ready(function () {
 			                           	<label for="jurId"> Jurisdiction:</label>
 			                               <form:select path="jurisidictionId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one or multiple jurisdiction from the list">
 										   <form:option value="" label="---Select Jurisdiction---"/>		
-										   <form:options items="${jurisMapEdit}" />						   
+										   <form:options items="${jurIds}" />						   
 										</form:select>	
-			                        	</div>				                    
+			                        	</div>		
+			                        </fieldset>		                    
 				                	</div>
 				                	<div class="row">
+				                	<fieldset disabled>
 			                            <div class="col-lg-6 form-group" id="pccIdBlock">
 			                          
 										<label for="pccId"> PCC Location:</label>
 										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" required="true" title="Select one PCC Location from list">
 										   <form:option value="" label="---Select PCC Location---"/>	
-										    <form:options items="${programMapEdit}" />									   
+										    <form:options items="${pccIds}" />									   
 										</form:select>	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}" style ="padding-top: 40px;"/>
-			                        	</div>				                    
+			                        	</div>	
+			                        	
+			                        </fieldset>			                    
 				                	</div>
 				                	
 				                	<%-- 

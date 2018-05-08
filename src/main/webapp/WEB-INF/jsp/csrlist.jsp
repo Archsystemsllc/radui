@@ -297,7 +297,7 @@ $(function() {
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
 	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-	      	        $('#searchalertMsg').text('CSR List Available Months Retrieved');
+	      	        $('#searchalertMsg').text('CSR Monthly List Available Retrieved Successfully!');
 	  	    	});
 		    	trHTML += '</tbody>';
 		    	$('#csrListMonthDiv').show();
@@ -642,7 +642,7 @@ $(function() {
 				            
 				             <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                    <h2>Search CSR Section</h2> 
+				                    <h2>Search CSR Lists Section</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
 				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>

@@ -86,7 +86,7 @@ public class ScoreCardController {
 			}
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-					
+				scoreCardFailObject = new ScoreCard();
 					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 					
@@ -107,7 +107,7 @@ public class ScoreCardController {
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
-					scoreCardFailObject = new ScoreCard();
+					
 					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
 					scoreCardFailObject.setJurIdList(jurIdArrayList);

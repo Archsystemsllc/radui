@@ -134,11 +134,12 @@
 									</sec:authorize>
 									<!-- Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
-										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Page">CSR</a>
+										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="#" title="Customer Service Representative List Page">Forms Upload</a>
 										<span class="caret"></span>
-										<ul class="dropdown-menu">										
-									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload QAM Environment Form">QAM Envrionment Form</a></li>	
-									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/systemissueform" title="Upload System Issue Form">System Issue Form</a></li>									      
+										<ul class="dropdown-menu">		
+											<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Upload Page">CSR Upload</a></li>								
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload QAM Environment Form">Envrionmental Change Control Form</a></li>	
+									      	<%-- <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/systemissueform" title="Upload System Issue Form">System Issue Form</a></li>									       --%>
 									    </ul>
 										</li>
 									</sec:authorize>
@@ -155,6 +156,9 @@
 									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createusers" title="Create Users Page">Create Users</a></li>
 									     </sec:authorize>
 									      <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers" title="List of Users Page">List Users</a></li>
+									    <%-- <sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macassignment" title="MAC Assignment Page">MAC Assignment</a></li>
+									     </sec:authorize> --%>
 									    </ul>
 									</li>
 									</sec:authorize>

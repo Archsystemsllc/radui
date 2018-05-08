@@ -305,7 +305,7 @@ $(function() {
 	     $.ajax({ 
 	         type: "GET",
 	         dataType: "json",
-	         data: {docId: 1},
+	         data: {docId: 3},
 	         url : "${WEB_SERVICE_URL}download-document",
 	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	        success: function(data){ 
@@ -454,7 +454,7 @@ $(function() {
 			                         </div>
 			                          <div class="col-lg-8 col-lg-offset-1 form-container">
 			                          <div class="row">
-			                           <div class="col-lg-6 form-group">
+			                           <div class="col-lg-8 form-group">
 			                                <label for="formType">Form Type:</label></br>
 			                                											
 											<form:radiobutton path="formType" value="No Planned Changes" title="No Planned Changes radio button"/>&nbsp;No Planned Changes&nbsp;
@@ -485,7 +485,7 @@ $(function() {
 				                </div>
 				            </div>
 				            
-				             <div class="row " >
+				           <%--   <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Search QAM Environment Change Form</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
@@ -523,9 +523,9 @@ $(function() {
 			                            </div>
 			                        </div>
 				                </div>
-				            </div>
+				            </div> --%>
 				            
-				            <div class="row " id="qamEnvironmentListMonthDiv">
+				           <!--  <div class="row " id="qamEnvironmentListMonthDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    
 				                     <h3>QAM Environment Monthly List: </h3> 					                   
@@ -545,7 +545,7 @@ $(function() {
 			                            </div>
 			                        </div>
 				                </div>
-				            </div>
+				            </div> -->
 				            
 						</div>
 					</div>

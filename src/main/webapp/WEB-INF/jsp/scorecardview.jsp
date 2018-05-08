@@ -15,31 +15,57 @@
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<meta charset="utf-8" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui-timepicker-addon.css" />
 
-<link rel="stylesheet" href="/resources/demos/style.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
-<link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/css/screen.css"></link>
 
 <!-- CSS for Bootstrap -->
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
-<!-- JQuery -->
- <script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet"></link>
+
+<!-- CSS for PQSelect -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pqselect.bootstrap.dev.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pqselect.dev.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery.tree-multiselect.min.css" />
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.33.3/es6-shim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.20/system-polyfills.js"></script>
 
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+
+<!-- JavaScript for PQSelect -->
+<script src="${pageContext.request.contextPath}/resources/js/pqselect.dev.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.tree-multiselect.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/patosai/tree-multiselect/v2.4.1/dist/jquery.tree-multiselect.min.js"></script>
+<style type="text/css">
+	.red {  color:#cd2026;  }
+</style>
 <script type="text/javascript">
-$(document).ready(function () {
-		
+
+	$(document).ready(function () {
+		//Required Fields Logic
+		$('.required').each(function(){
+		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
+		});
 		
     	//Set Default Values    	
     	$('#alertMsg').text('');
@@ -63,6 +89,7 @@ $(document).ready(function () {
 	
 			
 			var selected_value ="${scorecard.scorecardType}"; 
+
 			
 			if(selected_value=="Non-Scoreable") {				
 				$("#section4Div").hide();	
@@ -75,11 +102,12 @@ $(document).ready(function () {
 				$("#nonScoreableReasonCommentsDiv").show();	
 				$('#section4HeaderDiv').show();		
 				$("#section4HeaderDiv_DoesNotCount").hide();
-					
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
+				
 				$('#nonScoreableReason').attr('required',true);
 				
 				$("#Section8Div").hide();				
@@ -97,10 +125,10 @@ $(document).ready(function () {
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").attr('required',true);
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").attr('required',true);
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").attr('required',true);
+				$("#csrWasCourteous1,#csrWasCourteous2").attr('required',true);	
 				$('#nonScoreableReason').attr("required",false);
 
 				$("#Section8Div").show();
@@ -118,12 +146,12 @@ $(document).ready(function () {
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
+				
 				$('#nonScoreableReason').attr("required",false);
-
 				$("#Section8Div").hide();	
 								
 			} 
@@ -143,7 +171,7 @@ $(document).ready(function () {
 			$("#completenessCallFailureBlock").show();	
 		
 		}
-		if(csrPrvCompInfoFlag=="No") {
+		if(csrFallPrivacyProvFlag=="No") {
 			$("#privacyCallFailureBlock").show();	
 		}
 		if(csrWasCourteousFlag=="No") {
@@ -158,12 +186,12 @@ $(document).ready(function () {
 		var role = $('#userRole').val();
 
 		if (role == 'Administrator') {
+			$('#qamCalibrationStatus').attr("disabled",false);
 			$('#cmsCalibrationStatus').attr("disabled",false);
-			$('#cmsCalibrationStatus').attr("required",true);
 			
 		} else if (role == 'Quality Manager') {
 			$('#qamCalibrationStatus').attr("disabled",false);
-			$('#qamCalibrationStatus').attr("required",true);
+			$('#cmsCalibrationStatus').attr("disabled",false);			
 		}
 			
 
@@ -230,8 +258,15 @@ $(document).ready(function () {
     	      }
     	})
    	    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+       	  var returnName = "";
+       	  if(item.middleName == null || item.middleName == "NULL") {
+       		returnName = item.firstName+" "+item.lastName + " ---- " +item.level
+          } else {
+        	  returnName = item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level;
+          }
+           	  
    	      return $( "<li>" )
-   	        .append( "<div>" + item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level + "</div>" )
+   	        .append( "<div>" + returnName  + "</div>" )
    	        .appendTo( ul );
    	    };
 
@@ -275,12 +310,21 @@ $(document).ready(function () {
 			var csrFullNameValue = $(this).val().trim();			
 	        if(csrFullNameValue == "No CSR's Found") {		       
 	        	$("#csrFullName").val("");
-	        }				
+	        	$("#csrLevel").val("");
+	        	$("#macCallReferenceNumber").val("");  
+	        } 
+
+	        if(csrFullNameValue == " ") {		       
+	        	$("#csrFullName").val("");
+	        	$("#csrLevel").val("");
+	        	$("#macCallReferenceNumber").val("");        	
+	        } 
+	        	
 	     });	
 
 		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
-
+			$("#csrFullName").val("");
 			var userRole = $('#userRole').val();			
 			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
 			
@@ -301,6 +345,7 @@ $(document).ready(function () {
 
 		//Select Program Functionality
 		$("select#jurId").change(function(){
+			$("#csrFullName").val("");
 			var userRole = $('#userRole').val();			
 			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
 
@@ -315,6 +360,11 @@ $(document).ready(function () {
       	  	    	});  	   
                });
 			}
+        });
+
+		//Change Program Functionality
+		$("select#programId").change(function(){
+			$("#csrFullName").val("");			
         });
 
 		//Select Call Category Functionality
@@ -332,23 +382,51 @@ $(document).ready(function () {
                });
         });
 
-		$("#callCategoryIdKnoweledgeSkillsUIObject").change(function(){
+		$("#ccid_know_skills_uiobj").change(function(){
+
+			var selectedJurisList = "";
+
+			$("#cscid_know_skills_uiobj :selected").each(function() {
+				selectedJurisList+=($(this).attr('value'))+",";
+			}); 
 			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectCallSubCategoriesList",
-                    {categoryId: $('#callCategoryIdKnoweledgeSkillsUIObject').val()}, function(data){
+                    {categoryId: $('#ccid_know_skills_uiobj').val()}, function(data){
                 
-                 $("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length = 0;	           
+                 $("#cscid_know_skills_uiobj").get(0).options.length = 0;	           
       	      	 
       	  	    	$.each(data, function (key,obj) {
-      	  	    		$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options[$("#callSubCategoryIdKnoweledgeSkillsUIObject").get(0).options.length] = new Option(obj, key);
+      	  	    		$("#cscid_know_skills_uiobj").get(0).options[$("#cscid_know_skills_uiobj").get(0).options.length] = new Option(obj, key);
       	  	    		
-      	  	    	});  	   
+      	  	    	});  
+
+	      	  	    $.each(selectedJurisList.split(","), function(i,e){
+	                    $("#cscid_know_skills_uiobj option[value='" + e + "']").prop("selected", true);
+	                });	   
                });
+			
+            
+            
         });
 
 		//Back Button Functionality
 		$('#close1,#close2').click(function(e) {	
-			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+			 e.preventDefault();		
+	          $("#dialog-confirm" ).dialog({
+	              resizable: false,
+	              height: "auto",
+	              width: 400,
+	              modal: true,	              
+	              buttons: {
+	                "Yes": function() {
+	              		$( this ).dialog("close");
+	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+	                },
+	                Cancel: function() {                    
+	                	$( this ).dialog("close"); 
+	                }
+	              }
+            });
 	     }); 
 
       	//Secton 1 - Option 1
@@ -356,6 +434,7 @@ $(document).ready(function () {
 		$("input[name='scorecardType']").change(function(){		
 			
 			var selected_value = $("input[name='scorecardType']:checked").val();
+
 			
 			if(selected_value=="Non-Scoreable") {				
 				$("#section4Div").hide();	
@@ -369,10 +448,11 @@ $(document).ready(function () {
 				$('#section4HeaderDiv').show();		
 				$("#section4HeaderDiv_DoesNotCount").hide();
 					
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',false);
+				//$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',false);
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
 				$('#nonScoreableReason').attr('required',true);
 				
 				$("#Section8Div").hide();				
@@ -389,13 +469,13 @@ $(document).ready(function () {
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$('#section4HeaderDiv').hide();	
 				$("#section4HeaderDiv_DoesNotCount").hide();	
-
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr('required',true);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr('required',true);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr('required',true);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr('required',true);	
+				
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").attr('required',true);
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").attr('required',true);
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").attr('required',true);
+				$("#csrWasCourteous1,#csrWasCourteous2").attr('required',true);
 				$('#nonScoreableReason').attr("required",false);
-
+				
 				$("#Section8Div").show();
 								
 			}  else if(selected_value=="Does Not Count") {
@@ -411,12 +491,12 @@ $(document).ready(function () {
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$("#section4HeaderDiv_DoesNotCount").show();	
 
-				$('#csrPrvAccInfo1,#csrPrvAccInfo2').attr("required",false);
-				$('#csrPrvCompInfo1,#csrPrvCompInfo2').attr("required",false);
-				$('#csrFallPrivacyProv1,#csrFallPrivacyProv2').attr("required",false);
-				$('#csrWasCourteous1,#csrWasCourteous2').attr("required",false);
+				$("#csrPrvAccInfo1,#csrPrvAccInfo2").removeAttr('required');
+				$("#csrPrvCompInfo1,#csrPrvCompInfo2").removeAttr('required');
+				$("#csrFallPrivacyProv1,#csrFallPrivacyProv2").removeAttr('required');
+				$("#csrWasCourteous1,#csrWasCourteous2").removeAttr('required');
 				$('#nonScoreableReason').attr("required",false);
-
+				
 				$("#Section8Div").hide();	
 								
 			} 
@@ -434,13 +514,13 @@ $(document).ready(function () {
 				$("#accuracyCallFailureBlock2").show();	
 				$("#accuracyCallFailureReason").focus();
 				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",true);		
-				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",true);			
+				$('#ccid_know_skills_uiobj,#cscid_know_skills_uiobj').attr("required",true);			
 				setCallResult();	
 			} else if(selected_value=="Yes") {
 				$("#accuracyCallFailureBlock1").hide();	
 				$("#accuracyCallFailureBlock2").hide();		
 				$('#accuracyCallFailureReason,#accuracyCallFailureTime').attr("required",false);
-				$('#callCategoryIdKnoweledgeSkillsUIObject,#callSubCategoryIdKnoweledgeSkillsUIObject').attr("required",false);					
+				$('#ccid_know_skills_uiobj,#cscid_know_skills_uiobj').attr("required",false);					
 				setCallResult();					
 			}    		
         });
@@ -458,8 +538,7 @@ $(document).ready(function () {
 				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",true);						
 				setCallResult();	
 			} else if(selected_value=="Yes") {
-				$("#completenessCallFailureBlock1").hide();	
-				$("#completenessCallFailureBlock2").hide();	
+				$("#completenessCallFailureBlock").hide();	
 				$('#completenessCallFailureReason,#completenessCallFailureTime').attr("required",false);	
 				setCallResult();	
 			}    		
@@ -504,6 +583,24 @@ $(document).ready(function () {
 			}    		
         });
 
+
+		$("#callResult,#qamCalibrationStatus,#cmsCalibrationStatus").change(function(){		
+			setFinalCallResult();
+        });
+
+
+        //Multiple Select Functionality
+		 //initialize the pqSelect widget.
+	    $("#ccid_know_skills_uiobj2").pqSelect({
+	            multiplePlaceholder: 'Select Call Category',
+	            checkbox: true //adds checkbox to options    
+	        }).on("change", function(evt) {
+	            var val = $(this).val();
+	            alert(val);
+	        }); 
+
+	});
+
 		//Select Call Result Functionality
 		function setCallResult() {
 			$("#callResult").val("");
@@ -519,7 +616,7 @@ $(document).ready(function () {
             		|| csrPrvCompInfo_value =="No" || csrPrvAccInfo_value =="No" )             		
             	) {
             	
-        			$("#callResult").val("Fail");
+        			$("#callResult").val("Quality Monitor Fail");
         			$("#failReasonCommentsDiv").show();
         			$('#failReasonComments').attr("required",true);	
         			
@@ -530,14 +627,14 @@ $(document).ready(function () {
             			&& csrPrvCompInfo_value == "Yes" && csrPrvAccInfo_value == "Yes" )             		
                 	) {
             		
-            		$("#callResult").val("Pass");
+            		$("#callResult").val("Quality Monitor Pass");
             		$("#failReasonCommentsDiv").hide();
             		$('#failReasonComments').attr("required",false);	
         	}
 
         	if ((scorecardType_value == "Non-Scoreable" )) {
 
-        		$("#callResult").val("N/A");
+        		$("#callResult").val("N/A");        		
         		$("#failReasonCommentsDiv").hide();
         		$('#failReasonComments').attr("required",false);        		    		
            } 
@@ -549,10 +646,106 @@ $(document).ready(function () {
         		$('#failReasonComments').attr("required",false);        		
         		
            } 
+
+        	setFinalCallResult();
         }
-	});
+
+		//Select Call Result Functionality
+		function setFinalCallResult() {
+			
+			var callResultValue = $("#callResult").val();	
+			
+			if(callResultValue=="N/A") {				
+				$("#finalScoreCardStatus").val("N/A");	
+				return;								
+			} else if(callResultValue=="") {				
+				$("#finalScoreCardStatus").val("");												
+			}
+			var qamCalibrationStatusValue = "";			
+			if ( $("#qamCalibrationStatus").length ) {				 
+				qamCalibrationStatusValue = $("#qamCalibrationStatus").val();			 
+			}
+
+			
+
+			var cmsCalibrationStatusValue = "";
+			if ( $("#cmsCalibrationStatus").length ) {				 
+				cmsCalibrationStatusValue = $("#cmsCalibrationStatus").val();			 
+			}
+			
+			
+			if(cmsCalibrationStatusValue != "") {			
+				$("#finalScoreCardStatus").val(cmsCalibrationStatusValue);
+			} else if(qamCalibrationStatusValue != "") {				
+				$("#finalScoreCardStatus").val(qamCalibrationStatusValue);
+			} else if(callResultValue != "") {				
+				$("#finalScoreCardStatus").val(callResultValue);
+			}	
+			
+        }
+	
 	
 </script>
+
+<script type="text/javascript">
+		$(document).ready(function() {
+			
+			$("#callCatSubCatMs").treeMultiselect({
+
+				  min_height: 100, 
+				 
+				  // Sections have checkboxes which when checked, check everything within them
+				  allowBatchSelection: true,
+
+				  // Selected options can be sorted by dragging 
+				  // Requires jQuery UI
+				  sortable: false,
+
+				  // Adds collapsibility to sections
+				  collapsible: true,
+
+				  // Enables selection of all or no options
+				  enableSelectAll: false,
+
+				  // Only used if enableSelectAll is active
+				  selectAllText: 'Select All',
+
+				  // Only used if enableSelectAll is active
+				  unselectAllText: 'Unselect All',
+
+				  // Disables selection/deselection of options; aka display-only
+				  freeze: false,
+
+				  // Hide the right panel showing all the selected items
+				  hideSidePanel: false,
+
+				  // max amount of selections
+				  maxSelections: 0,
+
+				  // Only sections can be checked, not individual items
+				  onlyBatchSelection: false,
+
+				  // Separator between sections in the select option data-section attribute
+				  sectionDelimiter: '-',
+
+				  // Show section name on the selected items
+				  showSectionOnSelected: true,
+
+				  // Activated only if collapsible is true; sections are collapsed initially
+				  startCollapsed: true,
+
+				  // Allows searching of options
+				  searchable: true,
+
+				  // Set items to be searched. Array must contain 'value', 'text', or 'description', and/or 'section'
+				  searchParams: ['value', 'text', 'description', 'section'],
+
+				  // Callback
+				  onChange: null
+				  
+				});
+		});
+	</script>
 
 </head>
 <body>
@@ -590,7 +783,7 @@ $(document).ready(function () {
 										</c:if>
 				                      </div>
 									</div>
-				                    <h2>Section 1 - QAM Info</h2> 
+				                    <h2>Section 1 - QAM Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   <fieldset disabled>
 				                    <div class="row">
@@ -772,22 +965,30 @@ $(document).ready(function () {
 			                               </div>
 			                        </div>
 			                         <div class="row" id="accuracyCallFailureBlock2">
-			                        	 <div class="col-lg-5 form-group">
-			                        	 <label for="email"> Call Category:</label>
-			                               <form:select path="ccidKsUi" id="ccid_know_skills_uiobj" class="form-control required"  title="Select one required Call Category from the List"  multiple="true">
-											   
-											  	<form:options items="${callCategoryMap}" />										  	
-										   </form:select> 	
-			                               
-										</div>
-			                        	<div class="col-lg-5 form-group">
-			                                <label for="email"> Call Sub Category:</label>
-			                                <form:select path="cscidKsUi" id="cscid_know_skills_uiobj" class="form-control required" title="Select one required Call Sub Category from the List"  multiple="true">
-											   							   	
-											   	<form:options items="${subCategoryMapListEdit}" />												  						  	
-											</form:select> 
-			                            </div>
-			                        </div>		    
+			                        
+									 <div class="col-lg-10 form-group">
+									 
+									 <form:select path="callCatSubCatMsStringArray" id="callCatSubCatMs" class="form-control required" title="Select one required Call Sub Category from the List"  multiple="multiple">
+										<c:forEach var="item" items="${callCatSubCatMultiSelectMap}">
+											<%-- <c:if test = "${fn:contains(theString, 'test')}">
+										    <option value="${item.key}" data-section="${fn:substringBefore(item.value, '-')}">${fn:substringAfter(item.value, '-')}</option>
+										   </c:if> --%>
+										    <c:choose>
+										      <c:when test="${fn:contains(scorecard.callCatSubCatMsString, item.key)}">
+										     	 <option value="${item.key}" data-section="${fn:substringBefore(item.value, '-')}" selected="selected">${fn:substringAfter(item.value, '-')}</option>
+										      </c:when>		
+										      						
+										      <c:otherwise>
+										      <option value="${item.key}" data-section="${fn:substringBefore(item.value, '-')}" >${fn:substringAfter(item.value, '-')}</option> 
+										      </c:otherwise>
+										    </c:choose>
+										</c:forEach>   							   	
+									   									  						  	
+									</form:select> 
+									
+			                         	
+									</div>
+									</div> 
 			                        
 			                        <div class="row">
 			                            <div class="col-lg-8 form-group">
