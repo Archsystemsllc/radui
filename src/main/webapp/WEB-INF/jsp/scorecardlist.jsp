@@ -127,7 +127,7 @@ $(document).ready(function(){
         { 
            "render" : function(data, type, row) {
 			var linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/"+data+"' title='View'>View</a></span>";
-			if (role == 'Administrator' || role == 'Quality Manager' || role == 'Quality Monitor' || role == 'MAC Admin') {
+			if (role == 'Administrator' || role == 'Quality Manager' || role == 'Quality Monitor' ) {
 				var linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/"+data+"' title='Edit'>Edit</a></span>";
 			}
                        
