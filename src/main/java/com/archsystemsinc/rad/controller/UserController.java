@@ -221,14 +221,36 @@ public class UserController {
 	@RequestMapping(value ={"/admin/myaccount", "/quality_manager/myaccount", "/cms_user/myaccount",
 			 "/mac_admin/myaccount","/mac_user/myaccount","/quality_monitor/myaccount"})	
 	
-	public String myaccount(Model model,HttpSession session) {
+	public String myaccount(Model model,HttpSession session,Authentication authentication) {
 		User blank = new User();
 		Role br = new Role();
 		blank.setRole(br);
 		blank = (User) session.getAttribute("LoggedInUserForm");
 		
 		model.addAttribute("userForm", blank);
-		userDefaults(model);
+		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
+		String roles = authentication.getAuthorities().toString();
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			model.addAttribute("pccMapEdit", HomeController.LOGGED_IN_USER_PCC_LOCATION_MAP);	
+			
+			HashMap<Integer,String> roleMap = new HashMap<Integer, String>();	
+			
+			roleMap.put(4, "MAC Admin");
+			roleMap.put(6, "MAC User");			
+			
+			model.addAttribute("roleIds", roleMap);
+			
+			HashMap<Integer,String> organizationMap = new HashMap<Integer, String>();	
+			organizationMap.put(3,  "MAC");
+			model.addAttribute("orgIds", organizationMap);
+			
+		} else {
+			
+			userDefaults(model);
+		}
+		
 		return "myaccount";
 	}
 

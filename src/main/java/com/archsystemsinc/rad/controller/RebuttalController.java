@@ -361,7 +361,7 @@ public class RebuttalController {
 		                     contextPath.get() + path, HttpMethod.POST, requestEntity,
 		                     String.class);*/
 		
-		if (!rebuttal.getRebuttalFileObject().isEmpty()) {
+		if (rebuttal.getRebuttalFileObject() != null && !rebuttal.getRebuttalFileObject().isEmpty()) {
             try {
                 fileName = rebuttal.getRebuttalFileObject().getOriginalFilename();
                 tempMultipartFile = rebuttal.getRebuttalFileObject();
@@ -477,6 +477,8 @@ public class RebuttalController {
 		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Pending")) {
 			rebuttal.setRebuttalCompleteFlag("No");
 		} 
+		
+		rebuttal.setDescriptionCommentsAppend(rebuttal.getDescriptionComments());
 		
 		String roles = authentication.getAuthorities().toString();
 		User userSearchObject = new User();

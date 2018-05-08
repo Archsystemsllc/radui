@@ -411,22 +411,7 @@
 
 		//Back Button Functionality
 		$('#close1,#close2').click(function(e) {	
-			 e.preventDefault();		
-	          $("#dialog-confirm" ).dialog({
-	              resizable: false,
-	              height: "auto",
-	              width: 400,
-	              modal: true,	              
-	              buttons: {
-	                "Yes": function() {
-	              		$( this ).dialog("close");
-	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
-	                },
-	                Cancel: function() {                    
-	                	$( this ).dialog("close"); 
-	                }
-	              }
-            });
+			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
 	     }); 
 
       	//Secton 1 - Option 1
@@ -750,9 +735,7 @@
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-	<div id="dialog-confirm" title="Close Scorecard Confirmation?">
-  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the scorecard without saving?</p>
-	</div>
+	
 
 	<table id="mid">
 		<form:form method="GET" modelAttribute="scorecard" class="form-signin" action="#" id="scorecardForm">

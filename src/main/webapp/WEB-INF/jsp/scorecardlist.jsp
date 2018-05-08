@@ -187,7 +187,7 @@ $(document).ready(function(){
 
 						<div class="content">
 
-							<div class="table-users" style="width: 80%">
+							<div class="table-users" style="width: 90%">
 								<div class="header">List of Scorecards</div>
 							<!-- 	Removed Blank Space - 508 -->
 							 <input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>

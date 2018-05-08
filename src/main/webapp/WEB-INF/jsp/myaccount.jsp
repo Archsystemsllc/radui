@@ -210,7 +210,7 @@ $(document).ready(function () {
 			                           	<label for="jurId"> Jurisdiction:</label>
 			                               <form:select path="jurisidictionId"  id="jurId" class="form-control required" data-val="true"  multiple="true"  required="true" title="Select one or multiple jurisdiction from the list">
 										   <form:option value="" label="---Select Jurisdiction---"/>		
-										   <form:options items="${jurIds}" />						   
+										   <form:options items="${jurisMapEdit}" />						   
 										</form:select>	
 			                        	</div>		
 			                        </fieldset>		                    
@@ -222,7 +222,7 @@ $(document).ready(function () {
 										<label for="pccId"> PCC Location:</label>
 										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" required="true" title="Select one PCC Location from list">
 										   <form:option value="" label="---Select PCC Location---"/>	
-										    <form:options items="${pccIds}" />									   
+										    <form:options items="${pccMapEdit}" />									   
 										</form:select>	
 			                            </div>
 			                            <div class="col-lg-6 form-group">

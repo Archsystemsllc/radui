@@ -219,7 +219,7 @@
 			                	$('#confirm-msg').text('Please select Result');
 				            } else {
 				            	$("#rebuttalResult").val($("#rebuttalResultTemp").val());
-				            	alert($("#rebuttalResult").val());
+				            	//alert($("#rebuttalResult").val());
 				            	$( this ).dialog("close");
 					        }               	 	
 		                },
@@ -321,6 +321,8 @@
 								 	<form:hidden path="jurisId" />
 								 	<form:hidden path="id" />
 								 	<form:hidden path="rebuttalResult" />
+								 	<form:hidden path="datePosted" />
+								 	<form:hidden path="createdDate" />
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="macReferenceId"> MAC Call Reference ID:</label>
