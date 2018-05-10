@@ -560,15 +560,54 @@ $(function() {
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    
 				                    <div class="row">
-			                              <div class="col-lg-6 form-group">
+			                              <div class="col-lg-6 form-group" align="left">
 			                                <a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template">Download Sample CSR Template</a>
+												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template">
+												<button type="button" name="downloadSampleTemplate" id="downloadSampleTemplate" title="Click here to download Sample CSR Template">Download Sample CSR Template</button></a>
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			                             </div>
 			                        </div>
 			                      </div>
 			                      </div>
-				             <div class="row " >
+				            
+				            
+				             <div class="row " style="border:1px solid black;" >
+				                <div class="col-lg-8 col-lg-offset-1 form-container">
+				                 <h2>Upload CSR Lists Section</h2> 
+				                     <div class="row">
+			                            <div class="col-lg-6 form-group">
+			                                <label for="file">CSR List Upload: </label>
+										
+										<form:input type = "hidden" path="userId" />
+										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload CSR List from Local">
+										</input>
+			                            </div>
+			                          </div>
+			                         </div>
+			                          <div class="col-lg-8 col-lg-offset-1 form-container">
+				                     <div class="row">
+			                             <div class="col-lg-6 form-group">
+			                              <label for="name"> MAC:</label>
+			                                <form:select path="macIdU" class="form-control" id="macIdU" title="Select one MAC ID from the list">
+										   <form:option value="" label="---Select MAC---"/>
+										   <form:options items="${macIdMap}" />
+										</form:select> 	
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                             <label for="name"> Jurisdiction:</label>
+			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU" title="Select one Jurisdiction from the list">
+										   		<form:option value="" label="---Select Jurisdiction---"/>
+										   		 <form:options items="${jurisMapEdit}" />	
+											</form:select>
+											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
+			                            </div>
+			                            <div class="col-lg-6 form-group">
+			                               	<button class="btn btn-primary" type="submit" name="uploadCsr" id="uploadCsr" title="Select Upload File button to upload CSR List">Upload File</button>
+			                            </div>
+			                        </div>
+				                </div>
+				            </div>
+				             <div class="row " style="border:1px solid black;" >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">  
 				                <h2>Keep Current List Section</h2> 
 				                    <div class="row">
@@ -603,44 +642,7 @@ $(function() {
 				                </div>
 				            </div>
 				            
-				             <div class="row " >
-				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                 <h2>Upload CSR Section</h2> 
-				                     <div class="row">
-			                            <div class="col-lg-6 form-group">
-			                                <label for="file">CSR List Upload: </label>
-										
-										<form:input type = "hidden" path="userId" />
-										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload CSR List from Local">
-										</input>
-			                            </div>
-			                          </div>
-			                         </div>
-			                          <div class="col-lg-8 col-lg-offset-1 form-container">
-				                     <div class="row">
-			                             <div class="col-lg-6 form-group">
-			                              <label for="name"> MAC:</label>
-			                                <form:select path="macIdU" class="form-control" id="macIdU" title="Select one MAC ID from the list">
-										   <form:option value="" label="---Select MAC---"/>
-										   <form:options items="${macIdMap}" />
-										</form:select> 	
-			                            </div>
-			                            <div class="col-lg-6 form-group">
-			                             <label for="name"> Jurisdiction:</label>
-			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU" title="Select one Jurisdiction from the list">
-										   		<form:option value="" label="---Select Jurisdiction---"/>
-										   		 <form:options items="${jurisMapEdit}" />	
-											</form:select>
-											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
-			                            </div>
-			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" type="submit" name="uploadCsr" id="uploadCsr" title="Select Upload File button to upload CSR List">Upload File</button>
-			                            </div>
-			                        </div>
-				                </div>
-				            </div>
-				            
-				             <div class="row " >
+				             <div class="row " style="border:1px solid black;" >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Search CSR Lists Section</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->

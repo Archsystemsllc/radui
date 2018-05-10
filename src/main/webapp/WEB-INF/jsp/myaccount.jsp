@@ -232,6 +232,15 @@ $(document).ready(function () {
 			                        </fieldset>			                    
 				                	</div>
 				                	
+				                	<div class="row">
+				                	<fieldset disabled>
+			                            <div class="col-lg-8 form-group" >
+			                          
+										Note: Contact system administrator to change My Account information
+			                            </div>
+			                            
+			                        </fieldset>			                    
+				                	</div>
 				                	<%-- 
 
 									<div class="row">

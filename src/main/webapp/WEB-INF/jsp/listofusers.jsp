@@ -116,7 +116,7 @@ $(function(){
 													<form:options items="${roleIds}" />
 												</form:select>
 										</div>
-										<div class="col-md-3 col-md-offset-1 form-container">
+										<%-- <div class="col-md-3 col-md-offset-1 form-container">
 											<label for="organizationId"> Organization:</label>
 											
 											 <form:select path="orgId"
@@ -125,7 +125,7 @@ $(function(){
 													<option value="" label="--- Select Org---" />
 													<form:options items="${orgIds}" />
 												</form:select>
-										</div>
+										</div> --%>
 									</div>
 									<div class="row">
 										<div class="col-sm-3 form-group">

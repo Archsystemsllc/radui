@@ -500,7 +500,7 @@ $(function() {
 <ul style="padding-left:480px;padding-top:10px;font-size:18px;">
 <li style="padding-top:10px;"><a href="${pageContext.request.contextPath}/resources/documents/comradguide.docx" title="Help Guide Document">Help Guide</a> </li>
 
-<li style="padding-top:20px;"><a href="#" title="QAM Handbook Document">QAM Hand Book</a></li>
+<li style="padding-top:20px;"><a href="#" title="QAM Handbook Document">QAM Handbook</a></li>
 </ul>
 
 

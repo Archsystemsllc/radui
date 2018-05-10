@@ -48,7 +48,47 @@ public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJuri
     
     private String scoreCardType;
     
-    public String getScoreCardType() {
+    private Integer plannedCalls;
+    
+    private String createdMethod;
+    
+    private Integer assignedCalls;
+    
+    private String qmName;
+    
+    public Integer getPlannedCalls() {
+		return plannedCalls;
+	}
+
+	public void setPlannedCalls(Integer plannedCalls) {
+		this.plannedCalls = plannedCalls;
+	}
+
+	public String getCreatedMethod() {
+		return createdMethod;
+	}
+
+	public void setCreatedMethod(String createdMethod) {
+		this.createdMethod = createdMethod;
+	}
+
+	public Integer getAssignedCalls() {
+		return assignedCalls;
+	}
+
+	public void setAssignedCalls(Integer assignedCalls) {
+		this.assignedCalls = assignedCalls;
+	}
+
+	public String getQmName() {
+		return qmName;
+	}
+
+	public void setQmName(String qmName) {
+		this.qmName = qmName;
+	}
+
+	public String getScoreCardType() {
 		return scoreCardType;
 	}
 

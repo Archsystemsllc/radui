@@ -408,7 +408,7 @@ $(function() {
 						<div class="content">
 						
 						<div class="table-users" style="width: 80%">
-								<div class="header">QAM Environment Change Form</div>	
+								<div class="header">QAM Environment Change Control Form</div>	
 												
       							 <div class="row " style="margin-top: 10px">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">

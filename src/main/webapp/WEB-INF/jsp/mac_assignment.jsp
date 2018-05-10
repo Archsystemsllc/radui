@@ -48,25 +48,25 @@ $(document).ready(function() {
 	
 	var reportTitle = '${ReportTitle}';
 
-	var allScorecardData =eval('${scoreCardList}');
+	var allScorecardData =eval('${MAC_ASSIGNMENT_REPORT}');
 	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {
 		"aaData": allScorecardData,
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
 		{ "mData": "program"},
-		{ "mData": "planned"},
-		{ "mData": "created"},
-		{ "mData": "assigned"},
+		{ "mData": "plannedCalls"},
+		{ "mData": "createdMethod"},
+		{ "mData": "assignedCalls"},
 		{ "mData": "qmName"}
 		],		
 	    "columnDefs": [ 
 	        { 
 	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ALL'>"+data+"</a></span>";
+				var linkData = "<span><select><option>Select</otion><option>QAM User1</otion><option>QAM User2</option></span>";
 				return linkData;
 	        },
-		   "targets" : 0
+		   "targets" : 6
 		   }	
 		 ], 
 		 dom: '<lif<t>pB>',
@@ -89,8 +89,8 @@ $(document).ready(function() {
 	             title: reportTitle
 	         }	        
 	     ],
-		  "paging" : true,
-		  "pageLength" : 10,
+		  "paging" : false,
+		  "pageLength" : 40,
 		  "ordering" : true,
 	});
 
@@ -107,8 +107,7 @@ $(document).ready(function() {
 			<tr>
 				<td style="vertical-align: top">
 
-					<div id="updates" class="boxed">
-					
+					<div id="updates" class="boxed">					
 						
 						<div class="content">
 						
@@ -129,20 +128,14 @@ $(document).ready(function() {
 								 
 								 			
 								<div class="table-users" style="width: 95%">
-									<div class="header">Report Results Screen</div>
+									<div class="header">MAC Assignment Screen</div>
 									
 								<div class="row " style="margin-top: 10px">
 									<div class="col-lg-12 col-lg-offset-1 form-container">
 				                    <%-- <h2>"${reportName}"</h2>  --%>
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    
-				                    <div class="row">
-			                            <div class="col-sm-12 form-group">
-			                                <button class="btn btn-primary" id="create"  type="submit">Back</button>
-			                            </div>
-			                           
-			                        </div>
-				                    
+				                   
 				                	</div>
 				                </div>
 									
@@ -152,7 +145,7 @@ $(document).ready(function() {
 					                
 					                    <h2>${ReportTitle}</h2> 
 					                  	
-				                   <c:if test="${AllScoreCardReport_All == true}">
+				                   
 				                        
 				               
 				                   
@@ -178,7 +171,7 @@ $(document).ready(function() {
 						                </table> 
 						                </div>
 						                </div>
-				                     </c:if>
+				                     
 				                     
 				                  </div>
 				                  </div>
