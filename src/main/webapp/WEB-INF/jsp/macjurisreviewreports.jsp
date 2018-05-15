@@ -47,6 +47,7 @@
 $(document).ready(function() {	
 	
 	var reportTitle = '${ReportTitle}';
+	var messageOnTop = 'Report From Date:${reportsForm.fromDateString}'+'\n'+'Report To Date:${reportsForm.toDateString}';
 
 	var allScorecardData =eval('${scoreCardList}');
 	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {
@@ -79,17 +80,17 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
 	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
 	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	             title: reportTitle
@@ -131,15 +132,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -178,15 +182,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -224,15 +231,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -268,15 +278,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -313,15 +326,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -357,15 +373,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -400,15 +419,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -443,15 +465,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
@@ -485,15 +510,18 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excelHtml5',
-	             messageTop: reportTitle
+	             messageTop: messageOnTop,
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
-	             messageTop: reportTitle,
+	             messageTop: messageOnTop,
+	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        

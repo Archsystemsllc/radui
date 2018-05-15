@@ -77,24 +77,69 @@ $(document).ready(function(){
 	{ "mData": "firstName"},
 	{ "mData": "middleName"},
 	{ "mData": "lastName"},
-	{ "mData": "lastName"},
-	{ "mData": "lastName"},
+	{ "mData": "organizationLookup"},
+	{ "mData": "role"},
 	{ "mData": "status"},
 	{ "mData": "id"}
 	],
     "columnDefs": [ 
+    	{ 
+            "render" : function(data, type, row) {
+         	var organizationName = "";
+         	
+ 			if (data == null  ) {
+ 				organizationName = "";
+ 			} else {
+ 				organizationName = data.organizationName;
+ 			}
+                        
+             return organizationName;		
+              
+         },
+ 	   "targets" : 4
+ 	   },
+ 	  { 
+           "render" : function(data, type, row) {
+        	var roleName = "";
+        	
+			if (data == null  ) {
+				roleName = "";
+			} else {
+				roleName = data.roleName;
+			}
+                       
+            return roleName;		
+             
+        },
+	   "targets" : 5
+	   },
         { 
+           "render" : function(data, type, row) {
+        	var statusName = "";
+        	
+			if (data == 0  ) {
+				statusName = "InActive";
+			} else {
+				statusName = "Active";
+			}
+                       
+            return statusName;		
+             
+        },
+	   "targets" : 6
+	   },
+	   { 
            "render" : function(data, type, row) {
 			var linkData = "<span><a class='action-icons c-edit' href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-user/"+data+"' title='Edit User'>Edit</a></span>";
 			if (role == 'Administrator'  ) {
-				var linkData = linkData+ "<span><a class='action-icons c-delete' href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/"+data+"/${pageContext.request.userPrincipal.name}' title='Delete User' onclick='return confirm('Are you sure you want to delete this item?');'>Delete</a></span>";
+				linkData = linkData+ "<span><a class='action-icons c-delete' href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/"+data+"/${pageContext.request.userPrincipal.name}' title='Delete User' onclick='return confirm('Are you sure you want to delete this item?');'>Delete</a></span>";
 			}
                        
             return linkData;		
              
         },
 	   "targets" : 7
-	   },
+	   }
 	 ],
 	
 	 dom: '<lif<t>pB>',
@@ -174,6 +219,7 @@ $(function(){
 										style="border-collapse: separate; border-spacing: 2px; valign: middle"
 										id='table1'>
 										<tr>
+										<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 										</tr>
 									</table>
 
