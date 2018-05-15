@@ -4,6 +4,7 @@
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -12,7 +13,7 @@
 <head>
 <title>Qam Environment List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
@@ -218,7 +219,7 @@ $(function() {
 	      	        +'<td style="text-align: center"><a class="viewLink" href="#" >Download</a></td></tr>';
 	      	        
 	  	    	});
-		    	$('#searchalertMsg').text('QAM Environment Change Form Months Retrieved');
+		    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
 		    	trHTML += '</tbody>';
 		    	$('#qamEnvironmentListMonthDiv').show();
 		  	    $('#qamEnvironmentMonthLists').append(trHTML);
@@ -427,11 +428,14 @@ $(function() {
 				                
 				             <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                    
-				                    <div class="row">
-			                              <div class="col-lg-6 form-group">
+				                    				                   
+			                        <div class="row">
+			                              <div class="col-lg-8 form-group" align="left">
 			                                <a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environment Change Form">Download Sample QAM Environment Change Form</a>
+												href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environmental Change Control Form">
+												<button type="button" name="downloadSampleTemplate" id="downloadSampleTemplate" title="Click here to download Sample QAM Environmental Change Control Form">Download Sample QAM Environmental Change Control Form</button></a>
+											<br/>&nbsp;
+											<br/>
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			                             </div>
 			                        </div>
@@ -439,12 +443,12 @@ $(function() {
 			                      </div>
 				           
 				            
-				             <div class="row " >
+				             <div class="row" style="border:1px solid black;">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                 <h2>Upload QAM Environment Change Form Section</h2> 
+				                 <h2>Upload QAM Environmental Change Control Form Section</h2> 
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="file">QAM Environment Change Form Upload: </label>
+			                                <label for="file">QAM Environmental Change Control Form Upload: </label>
 										
 										<form:input type = "hidden" path="userId" />
 										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload System Issue List from Local">
@@ -484,10 +488,11 @@ $(function() {
 			                        </div>
 				                </div>
 				            </div>
-				            
-				           <%--   <div class="row " >
+				            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
+									
+				           <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                    <h2>Search QAM Environment Change Form</h2> 
+				                    <h2>Search QAM Environmental Change Control Form</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
 				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
@@ -519,13 +524,13 @@ $(function() {
 										</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" id="searchQamEnvironment" title="Select Search QAM Environment Change Form button to get the QAM list">Search</button>
+			                               	<button class="btn btn-primary" id="searchQamEnvironment" title="Select Search QAM Environmental Change Control Form button to get the QAM list">Search</button>
 			                            </div>
 			                        </div>
 				                </div>
-				            </div> --%>
+				            </div> 
 				            
-				           <!--  <div class="row " id="qamEnvironmentListMonthDiv">
+				          <div class="row " id="qamEnvironmentListMonthDiv">
 				                <div class="col-lg-10 col-lg-offset-1 form-container">
 				                    
 				                     <h3>QAM Environment Monthly List: </h3> 					                   
@@ -545,7 +550,8 @@ $(function() {
 			                            </div>
 			                        </div>
 				                </div>
-				            </div> -->
+				            </div>
+				            </sec:authorize>
 				            
 						</div>
 					</div>

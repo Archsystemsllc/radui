@@ -18,7 +18,7 @@ uri="http://www.springframework.org/security/tags"%>
 <link href="${pageContext.request.contextPath}/resources/css/common.css"
 	rel="stylesheet" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+	href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/table.css" />
 <link

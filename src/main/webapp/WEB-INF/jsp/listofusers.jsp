@@ -15,7 +15,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/table.css"
 	rel="stylesheet" />
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+	href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 
@@ -50,9 +50,85 @@
 	src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
-	<script
+<script
 	src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+
+ 
 <script type="text/javascript">
+
+$(document).ready(function(){
+
+	var data =eval('${users}');	
+	var role = $('#userRole').val();
+	
+	var userListTable = $('#userLists').DataTable( {
+	"aaData": data,
+	"aoColumns": [
+	{ "mData": "id"},
+	{ "mData": "firstName"},
+	{ "mData": "middleName"},
+	{ "mData": "lastName"},
+	{ "mData": "lastName"},
+	{ "mData": "lastName"},
+	{ "mData": "status"},
+	{ "mData": "id"}
+	],
+    "columnDefs": [ 
+        { 
+           "render" : function(data, type, row) {
+			var linkData = "<span><a class='action-icons c-edit' href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-user/"+data+"' title='Edit User'>Edit</a></span>";
+			if (role == 'Administrator'  ) {
+				var linkData = linkData+ "<span><a class='action-icons c-delete' href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/delete-user/"+data+"/${pageContext.request.userPrincipal.name}' title='Delete User' onclick='return confirm('Are you sure you want to delete this item?');'>Delete</a></span>";
+			}
+                       
+            return linkData;		
+             
+        },
+	   "targets" : 7
+	   },
+	 ],
+	
+	 dom: '<lif<t>pB>',
+     buttons: [
+         {
+             extend: 'copyHtml5',
+             exportOptions: {
+                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+             },
+             messageTop: 'User List.'
+         },
+         {
+             extend: 'excelHtml5',
+             exportOptions: {
+                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+             },
+             messageTop: 'User List.'
+         },
+         {
+             extend: 'pdfHtml5',
+             exportOptions: {
+                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+             },
+             messageTop: 'User List.',
+             orientation : 'landscape',
+             pageSize : 'LEGAL'
+         }         
+     ],
+	  "paging" : true,
+	  "pageLength" : 10,
+	   "ordering" : true,
+	});
+	
+});
 
 
 $(function(){
@@ -81,8 +157,7 @@ $(function(){
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div role="main">
 		<table id="mid">
-			<%-- 		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/admin/getMacJurisReport" id="reportsForm">
- --%>
+			
 			<tr>
 				<td style="vertical-align: top">
 
@@ -93,7 +168,7 @@ $(function(){
 							<div class="panel panel-primary table-users" style="width: 75%; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1); border: 1px solid #327a81;">
 								<div class="panel-heading" style="background-color: #327a81;">List of Users</div>
 								<div class="panel-body" style="background-color: white;">
-<form:form method="GET" modelAttribute="userFilterForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/userFilter">
+								<form:form method="GET" modelAttribute="userFilterForm" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/userFilter">
 
 									<table
 										style="border-collapse: separate; border-spacing: 2px; valign: middle"
@@ -116,7 +191,8 @@ $(function(){
 													<form:options items="${roleIds}" />
 												</form:select>
 										</div>
-										<%-- <div class="col-md-3 col-md-offset-1 form-container">
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
+										<div class="col-md-3 col-md-offset-1 form-container">
 											<label for="organizationId"> Organization:</label>
 											
 											 <form:select path="orgId"
@@ -125,7 +201,8 @@ $(function(){
 													<option value="" label="--- Select Org---" />
 													<form:options items="${orgIds}" />
 												</form:select>
-										</div> --%>
+										</div>
+										</sec:authorize>
 									</div>
 									<div class="row">
 										<div class="col-sm-3 form-group">
@@ -135,21 +212,39 @@ $(function(){
 													</sec:authorize>
 										</div>
 									</div>
-									</form:form>
-								</div>
-							</div>
-							
-							
-							<div align="center">
-							<c:if test="${not empty success}">
-			                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
-			                    </div>
-			                 </c:if>
-			                 </div>
-							<div class="row">
-								<div class="col-md-2">
+									<div align="center">
+									<c:if test="${not empty success}">
+					                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
+					                    </div>
+					                 </c:if>
+					                 </div>
+					                 
+					                  <div class="row" id="userListTableDiv">
+			                            <div class="col-lg-10 form-group">
+			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="userLists" style="width: 90%">
+						                    <thead>
+										        <tr>
+										            <th style="text-align: left">User Id</th>
+										            <th style="text-align: left">First Name</th>
+										            <th style="text-align: left">Middle Name</th>
+										            <th style="text-align: left">Last Name</th>
+										            <th style="text-align: left">Organization</th> 
+										            <th style="text-align: left">Role</th>
+										            <th style="text-align: left">User Status</th>
+										            <th style="text-align: left">Actions</th>
+										           
+										        </tr>
+										    </thead>
+						                    <tbody>  
+						                    </tbody>
+						                </table> 
+			                            </div>		                           
+			                        </div>         
+					                 
+					                 
+					                 
+					                 <%-- <div class="row">
 								
-								</div>
 								<div class="col-md-8">
 									<table id="usersTable">
 										<thead>
@@ -200,9 +295,15 @@ $(function(){
 					                        </tbody>
 									</table>
 								</div>
-								<div class="col-md-2">
+								
+							</div> --%>
+									</form:form>
 								</div>
 							</div>
+							
+							
+							
+							
 							
 						</div>
 				</td>
@@ -215,7 +316,7 @@ $(function(){
 </body>
 <head>
 	<script>
-	$(document).ready(function() {
+	/* $(document).ready(function() {
 		$("#usersTable").DataTable();
 	
 		$("#usersTable").on('dblclick','tr',function() {
@@ -246,7 +347,7 @@ $(function(){
 			  });
 
 	        });
-	});
+	}); */
 	
 	
 	</script>

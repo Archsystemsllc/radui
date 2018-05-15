@@ -19,7 +19,7 @@
 <%-- <link href="${pageContext.request.contextPath}/resources/css/common.css"
 	rel="stylesheet"> --%>
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/images/adda_ico.png">
+	href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png">
 <link href="${pageContext.request.contextPath}/resources/css/main.css"
 	rel="stylesheet">
 <link

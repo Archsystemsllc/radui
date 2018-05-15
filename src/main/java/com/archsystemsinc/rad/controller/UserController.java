@@ -34,6 +34,7 @@ import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.model.UserFilter;
 import com.archsystemsinc.rad.service.UserService;
 import com.archsystemsinc.rad.ui.validator.UserValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
@@ -422,6 +423,13 @@ public class UserController {
 			model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 		}
 		model.addAttribute("users", finalUserList);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			model.addAttribute("users",mapper.writeValueAsString(finalUserList).replaceAll("'", " "));
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		log.debug("<-- List Users");
 		return "listofusers";
 

@@ -12,7 +12,7 @@
 <head>
 <title>QAM - Add New Scorecard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
@@ -769,7 +769,12 @@
 						<div class="content">
 							
 							<div class="table-users" style="width: 80%">
-								<div class="header">Save/Update Scorecard</div>	
+								<c:if test="${scorecard.id == 0}">
+								<div class="header">Add Scorecard</div>	
+								</c:if>
+								<c:if test="${scorecard.id > 0}">
+								<div class="header">Edit Scorecard</div>	
+								</c:if>
 								<table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td>

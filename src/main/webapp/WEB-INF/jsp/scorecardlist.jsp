@@ -13,7 +13,7 @@
 <head>
 <title>QAM - Scorecard List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
@@ -231,6 +231,7 @@ $(document).ready(function(){
 														id="qamFullName" name="qamFullName" path="qamFullName" title="Enter Qualtiy Monitor Name/ID" />
 												</div>
 											</div>
+											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
 											<div class="row">
 												
 												<div class="col-lg-4 form-group">
@@ -244,6 +245,7 @@ $(document).ready(function(){
 													</form:select>
 												</div>
 											</div>
+											</sec:authorize>
 											<div class="row">
 												<div class="col-lg-4 form-group">
 													<label for="name"> From Date:</label>

@@ -12,7 +12,7 @@
 <head>
 <title>QAM - Scorecard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 
@@ -46,9 +46,12 @@
 <script type="text/javascript">
 $(document).ready(function() {	
 	
+	
 	var reportTitle = '${ReportTitle}';
 
 	var allScorecardData =eval('${MAC_ASSIGNMENT_REPORT}');
+	var pccContactPerson = '${pccContactPersonMap}';
+	alert(pccContactPerson);
 	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {
 		"aaData": allScorecardData,
 		"aoColumns": [
@@ -59,16 +62,30 @@ $(document).ready(function() {
 		{ "mData": "createdMethod"},
 		{ "mData": "assignedCalls"},
 		{ "mData": "qmName"}
-		],		
-	    "columnDefs": [ 
-	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><select><option>Select</otion><option>QAM User1</otion><option>QAM User2</option></span>";
-				return linkData;
-	        },
-		   "targets" : 6
-		   }	
-		 ], 
+		],	
+		 "columnDefs": [ 
+		        { 
+		           "render" : function(data, type, row) {
+					var linkData = "<span><input type='text'></input></span>";
+					return linkData;
+		        },
+			   "targets" : 5
+			   },
+			   { 
+				   "render" : function(data, type, row) {
+						
+						var linkData = '<span><select><option value="">Select</option>';
+						//alert(pccContactPerson);
+						$.each(pccContactPerson, function (key,obj) {
+							linkData += '<option value="'+key+'">'+obj+'</option>';
+		  	  	    			  	  	    		
+		  	  	    	});  	   
+		  	  	    	linkData +="</select></span>"
+		  	  	    	return linkData;
+			        },
+				   "targets" : 6
+			   }		
+			 ],	   
 		 dom: '<lif<t>pB>',
 	     buttons: [
 	         {
@@ -94,8 +111,47 @@ $(document).ready(function() {
 		  "ordering" : true,
 	});
 
+
+	$("select#macIdK").change(function(){
+		var userRole = $('#userRole').val();
+		
+		if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+			
+	        $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
+	                {macId: $(this).val(), multipleInput: false}, function(data){
+	           
+	             $("#jurisdictionK").get(0).options.length = 0;	           
+	  	      	 $("#jurisdictionK").get(0).options[0] = new Option("---Select Jurisdiction---", "");
+	  	  	    	$.each(data, function (key,obj) {
+	  	  	    		$("#jurisdictionK").get(0).options[$("#jurisdictionK").get(0).options.length] = new Option(obj, key);
+	  	  	    		
+	  	  	    });  	   
+           });
+		}
+    });
+	
+
+	$('button[id=save]').click(function() {	
+		alert("Inside Submit"+allScoreCardDataTable);
+        //var data = allScoreCardDataTable.$('input, select').serialize();
+        var data = allScoreCardDataTable.rows().data();
+        
+		 data.each(function (value, index) {
+		     console.log('Data in index: ' + index + ' is: ' + value.macName + value[5]);
+		     
+		    
+		 }); 
+
+		 console.log(allScoreCardDataTable.cell(0,5).nodes().to$().find('input').val())
+	     console.log(allScoreCardDataTable.cell(1,6).nodes().to$().find('select').val())  
+        return false;
+    } );
+
+	
 	
 });
+
+
 </script>
 
 </head>
@@ -103,7 +159,7 @@ $(document).ready(function() {
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/goBackMacJurisReport" id="reportsForm" >
+		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="#" id="reportsForm" >
 			<tr>
 				<td style="vertical-align: top">
 
@@ -177,7 +233,17 @@ $(document).ready(function() {
 				                  </div>
 					                
 					            </div>  <!-- Main Row Div -->
-													
+									 <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
+									<tr>
+									<td>
+										<span><button class="btn btn-primary" id="save" type="button"  title="Select Save button to Save Scorecard details">Save & Continue</button></span>
+									
+									
+										<span><button class="btn btn-primary" id="submit" type="button" title="Select update button to update Scorecard details">Submit</button></span>
+									
+									<span><button class="btn btn-primary" id="close2" type="button" title="Select Close button to navigate to Scorecard List ">Close</button></span></td>
+							       </tr>
+							</table>				
 						
 						</div> <!-- Content Div -->
 					</div>

@@ -12,7 +12,7 @@
 <head>
 <title>CSR List</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/adda_ico.png" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
@@ -560,10 +560,12 @@ $(function() {
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    
 				                    <div class="row">
-			                              <div class="col-lg-6 form-group" align="left">
+			                              <div class="col-lg-8 form-group" align="left">
 			                                <a class="${linkcolor }"
 												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template">
 												<button type="button" name="downloadSampleTemplate" id="downloadSampleTemplate" title="Click here to download Sample CSR Template">Download Sample CSR Template</button></a>
+											<br/>&nbsp;
+											<br/>Note: CSR Status - Write A for active CSRs, T for terminated and / or inactive CSRs
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			                             </div>
 			                        </div>
@@ -571,7 +573,7 @@ $(function() {
 			                      </div>
 				            
 				            
-				             <div class="row " style="border:1px solid black;" >
+				             <div class="row" style="border:1px solid black;" >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                 <h2>Upload CSR Lists Section</h2> 
 				                     <div class="row">
