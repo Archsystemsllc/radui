@@ -4,6 +4,7 @@ public class UIGenericConstants {
 	
 	public static final String MAC_ADMIN_ROLE = "4";
 	public static final String MAC_USER_ROLE = "6";
+	public static final String QUALITY_MONITOR_ROLE = "5";
 	
 	public static final String UI_JURISDICTION_SEPERATOR = ",";
 	

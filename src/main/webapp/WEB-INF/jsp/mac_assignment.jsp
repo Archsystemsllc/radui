@@ -49,24 +49,30 @@ $(document).ready(function() {
 	
 	var reportTitle = '${ReportTitle}';
 
-	var allScorecardData =eval('${MAC_ASSIGNMENT_REPORT}');
+	var macAssignmentData =eval('${MAC_ASSIGNMENT_REPORT}');
 	var pccContactPerson = '${pccContactPersonMap}';
-	alert(pccContactPerson);
-	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {
-		"aaData": allScorecardData,
+	
+	var macAssignmentDataTable = $('#macAssignmentTableId').DataTable( {
+		"aaData": macAssignmentData,
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
-		{ "mData": "program"},
+		{ "mData": "programName"},
 		{ "mData": "plannedCalls"},
 		{ "mData": "createdMethod"},
 		{ "mData": "assignedCalls"},
-		{ "mData": "qmName"}
+		{ "mData": "assignedQualityMonitor"}
 		],	
 		 "columnDefs": [ 
 		        { 
 		           "render" : function(data, type, row) {
-					var linkData = "<span><input type='text'></input></span>";
+		        	   var linkData = "";
+			        if(data != null) {
+			        	linkData = "<span><input type='text' value='"+data+"'></input></span>";
+				    } else {
+				    	linkData = "<span><input type='text' value=''></input></span>";
+					}
+					
 					return linkData;
 		        },
 			   "targets" : 5
@@ -75,9 +81,15 @@ $(document).ready(function() {
 				   "render" : function(data, type, row) {
 						
 						var linkData = '<span><select><option value="">Select</option>';
-						//alert(pccContactPerson);
-						$.each(pccContactPerson, function (key,obj) {
-							linkData += '<option value="'+key+'">'+obj+'</option>';
+						
+						$.each(${pccContactPersonMap}, function (key,obj) {
+							
+							if(key == data) {								
+								linkData += '<option value="'+key+'" selected>'+obj+'</option>';
+							} else {
+								linkData += '<option value="'+key+'">'+obj+'</option>';
+							}
+							
 		  	  	    			  	  	    		
 		  	  	    	});  	   
 		  	  	    	linkData +="</select></span>"
@@ -112,38 +124,43 @@ $(document).ready(function() {
 	});
 
 
-	$("select#macIdK").change(function(){
-		var userRole = $('#userRole').val();
-		
-		if ((userRole != "MAC Admin") && (userRole != "MAC User")){
-			
-	        $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
-	                {macId: $(this).val(), multipleInput: false}, function(data){
-	           
-	             $("#jurisdictionK").get(0).options.length = 0;	           
-	  	      	 $("#jurisdictionK").get(0).options[0] = new Option("---Select Jurisdiction---", "");
-	  	  	    	$.each(data, function (key,obj) {
-	  	  	    		$("#jurisdictionK").get(0).options[$("#jurisdictionK").get(0).options.length] = new Option(obj, key);
-	  	  	    		
-	  	  	    });  	   
-           });
-		}
-    });
 	
 
 	$('button[id=save]').click(function() {	
-		alert("Inside Submit"+allScoreCardDataTable);
-        //var data = allScoreCardDataTable.$('input, select').serialize();
-        var data = allScoreCardDataTable.rows().data();
-        
+		
+        var data = macAssignmentDataTable.rows().data();
+        var eachRecord = "";
+        var finalDataSet = new Array();
 		 data.each(function (value, index) {
-		     console.log('Data in index: ' + index + ' is: ' + value.macName + value[5]);
+
+			 var idValue = value.id;
+			 if(idValue == "") {
+				 idValue = "NoId";
+			 }
+
+			 var inputValue = macAssignmentDataTable.cell(index,5).nodes().to$().find('input').val();
+			 if(inputValue == "") {
+				inputValue = "NoInput";
+			 }
+			 var selectValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('select').val();
+			 if(selectValue == "") {
+				selectValue = "NoSelect";
+			 }
+		     eachRecord = value.macName +","+value.jurisdictionName
+		     				+","+value.programName+","+idValue+","+inputValue
+		     				+","+selectValue;		    
 		     
-		    
+		     finalDataSet[index] = eachRecord;
 		 }); 
 
-		 console.log(allScoreCardDataTable.cell(0,5).nodes().to$().find('input').val())
-	     console.log(allScoreCardDataTable.cell(1,6).nodes().to$().find('select').val())  
+		 //console.log(finalDataSet);
+		var monthYear = "${currentMonthYear}";
+		 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/save-macassignmentlist",                    
+	             {monthNumber: monthYear, finalDataSet: finalDataSet}, function(){
+	            	 $('#searchalertMsg').text('Data Saved Succesfully!');
+	         
+	     });
+	   
         return false;
     } );
 
@@ -159,7 +176,7 @@ $(document).ready(function() {
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="#" id="reportsForm" >
+		<form:form method="POST" modelAttribute="macAssignmentObjectForm" class="form-signin" action="#" id="reportsForm" >
 			<tr>
 				<td style="vertical-align: top">
 
@@ -167,21 +184,7 @@ $(document).ready(function() {
 						
 						<div class="content">
 						
-						 		<form:hidden path="macId" />
-								 <form:hidden path="jurisId" />
-								 <form:hidden path="programId" />
-								 <form:hidden path="loc" />
-								 <form:hidden path="fromDate" />
-								 <form:hidden path="toDate" />
-								 <form:hidden path="mainReportSelect" />
-								 <form:hidden path="scoreCardType" />
-								 <form:hidden path="callResult" />
-								 <form:hidden path="fromDateString" />
-								 <form:hidden path="toDateString" />
-								  <form:hidden path="complianceReportType" />
-								  <form:hidden path="callCategoryType" />
-								  <form:hidden path="rebuttalStatus" />
-								 
+						 		
 								 			
 								<div class="table-users" style="width: 95%">
 									<div class="header">MAC Assignment Screen</div>
@@ -199,7 +202,7 @@ $(document).ready(function() {
 								 <div class="row" id="allScoreCardMainDiv">	
 					             <div class="col-lg-12 col-lg-offset-1 form-container">
 					                
-					                    <h2>${ReportTitle}</h2> 
+					                    <h2>MAC Assignment for: ${currentMonthYear}</h2> 
 					                  	
 				                   
 				                        
@@ -209,7 +212,7 @@ $(document).ready(function() {
 				                   <div class="row" id="allScoreCardDiv">
 			                            <div class="col-lg-10 form-group">
 			                        
-			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allScoreCardId" style="width: 95%">
+			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="macAssignmentTableId" style="width: 95%">
 						                    <thead>
 										        <tr>
 										            <th style="text-align: left">MAC</th>
