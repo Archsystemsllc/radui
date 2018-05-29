@@ -47,7 +47,8 @@
 $(document).ready(function() {	
 	
 	var reportTitle = '${ReportTitle}';
-	var messageOnTop = 'Report From Date:${reportsForm.fromDateString}'+'\n'+'Report To Date:${reportsForm.toDateString}';
+	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
+	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
 
 	var allScorecardData =eval('${scoreCardList}');
 	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {

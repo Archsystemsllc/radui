@@ -3,9 +3,9 @@
  */
 package com.archsystemsinc.rad.controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,16 +27,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.MacAssignmentObject;
-import com.archsystemsinc.rad.model.Rebuttal;
-import com.archsystemsinc.rad.model.ReportsForm;
-import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -106,9 +102,9 @@ public class MacAssignmentController {
 		return "macassignmentlist";
 	}
 	
-	@RequestMapping(value ={"/admin/edit-macassignment/{id}", "/quality_manager/edit-macassignment/{id}", "/cms_user/edit-macassignment/{id}",
-			 "/mac_admin/edit-macassignment/{id}","/mac_user/edit-macassignment/{id}","/quality_monitor/edit-macassignment/{id}"}, method = RequestMethod.GET)		
-	public String viewNewMacAssignmentScreenGetMethod(@PathVariable("id") final String monthYearPath,Model model, HttpSession session, Authentication authentication) {
+	@RequestMapping(value ={"/admin/edit-macassignment/{monthyear}/{action}", "/quality_manager/edit-macassignment/{monthyear}/{action}", "/cms_user/edit-macassignment/{monthyear}/{action}",
+			 "/mac_admin/edit-macassignment/{monthyear}/{action}","/mac_user/edit-macassignment/{monthyear}/{action}","/quality_monitor/edit-macassignment/{monthyear}/{action}"}, method = RequestMethod.GET)		
+	public String viewNewMacAssignmentScreenGetMethod(@PathVariable("monthyear") final String monthYearPath,@PathVariable("action") final String action,Model model, HttpSession session, Authentication authentication) {
 		log.debug("--> viewNewMacAssignmentScreenGetMethod <--");
 		  
 		
@@ -138,19 +134,27 @@ public class MacAssignmentController {
 
 			});
 			MacAssignmentObject macAssignmentSearchObject = new MacAssignmentObject();
+			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM_yyyy");
 			if(monthYearPath.equalsIgnoreCase("null")) {
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM_yyyy");
+				
 				String currentMonthYear = mdyFormat.format(today);
 				macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
 				model.addAttribute("currentMonthYear", currentMonthYear);
 			} else {
-				macAssignmentSearchObject.setAssignedMonthYear(monthYearPath);
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("MMM_yyyy");
-				model.addAttribute("currentMonthYear", monthYearPath);
 				
+				SimpleDateFormat mydFormat = new SimpleDateFormat("MMM_yyyy_dd");
+				try {
+					Date monthDate = mydFormat.parse(monthYearPath+"_01");
+					String currentMonthYear = mdyFormat.format(monthDate);
+					macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
+					model.addAttribute("currentMonthYear", currentMonthYear);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
-			
+			model.addAttribute("action", action);
 			
 			
 			String ROOT_URI_MAC_ASSIGNMENT = new String(HomeController.RAD_WS_URI + "macAssignmentWithMonthYear");
@@ -178,7 +182,10 @@ public class MacAssignmentController {
 						macAssignmentObject.setProgramName(programName);
 						macAssignmentObject.setPlannedCalls("20");
 						macAssignmentObject.setCreatedMethod("Auto");
-						macAssignmentObject.setAssignedCalls(0);
+						macAssignmentObject.setAssignedCallsForCindy(0);
+						macAssignmentObject.setAssignedCallsForLydia(0);
+						macAssignmentObject.setAssignedCallsForKelly(0);
+						macAssignmentObject.setAssignedCallsForJaneene(0);
 						
 						macAssignmentObjectList.add(macAssignmentObject);
 						
@@ -188,14 +195,25 @@ public class MacAssignmentController {
 			} else {
 				HashMap<Integer, MacAssignmentObject> macAssignmentMap = new HashMap<Integer, MacAssignmentObject>();
 				for(MacAssignmentObject macAssignmentObjectTemp: macAssignmentList) {
+					String assignedCalls = macAssignmentObjectTemp.getAssignedCalls();
+					String eachQualityMontiorCalls[] = assignedCalls.split(",");
+					if(eachQualityMontiorCalls.length > 1) {
+						macAssignmentObjectTemp.setAssignedCallsForCindy(Integer.valueOf(eachQualityMontiorCalls[0]));
+						macAssignmentObjectTemp.setAssignedCallsForLydia(Integer.valueOf(eachQualityMontiorCalls[1]));
+						macAssignmentObjectTemp.setAssignedCallsForKelly(Integer.valueOf(eachQualityMontiorCalls[2]));
+						macAssignmentObjectTemp.setAssignedCallsForJaneene(Integer.valueOf(eachQualityMontiorCalls[3]));
+					} else {
+						macAssignmentObjectTemp.setAssignedCallsForCindy(Integer.valueOf(eachQualityMontiorCalls[0]));
+						macAssignmentObjectTemp.setAssignedCallsForLydia(0);
+						macAssignmentObjectTemp.setAssignedCallsForKelly(0);
+						macAssignmentObjectTemp.setAssignedCallsForJaneene(0);
+					}
+					
 					macAssignmentMap.put(macAssignmentObjectTemp.getId(),macAssignmentObjectTemp);
 				}
 				session.setAttribute("SESSION_SCOPE_MAC_ASSIGNMENT_MAP", macAssignmentMap);
 				model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			}
-			
-			
-			
 			
 			model.addAttribute("macAssignmentObjectForm", macAssignmentObject);
 			
@@ -230,6 +248,9 @@ public class MacAssignmentController {
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
@@ -239,7 +260,6 @@ public class MacAssignmentController {
 	
 	@RequestMapping(value ={"/admin/save-macassignmentlist", "/quality_manager/save-macassignmentlist", "/cms_user/save-macassignmentlist",
 			 "/mac_admin/save-macassignmentlist","/mac_user/save-macassignmentlist","/quality_monitor/save-macassignmentlist"}, method = RequestMethod.GET)	
-	@ResponseBody
 	public String saveMacAssignmentScreenGetMethod(@RequestParam("monthNumber") final String assignedMonthYear, @RequestParam("finalDataSet[]") String[] saveDataSet,final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
 		log.debug("--> saveMacAssignmentScreenGetMethod <--");
 		  
@@ -273,7 +293,7 @@ public class MacAssignmentController {
 				if(eachCellArray[3] != null && !eachCellArray[3].equalsIgnoreCase("") && !eachCellArray[3].equalsIgnoreCase("NoId")) {
 						Integer idValue = Integer.valueOf(eachCellArray[3]);
 						macAssignmentObject = macAssignmentMap.get(idValue);
-						macAssignmentObject.setUpdatedDate(new Date());
+						//macAssignmentObject.setUpdatedDate(new Date());
 						macAssignmentObject.setUpdatedBy(userFormSession.getUserName());
 						macAssignmentObject.setPlannedCalls("20");
 						macAssignmentObject.setCreatedMethod("Auto");
@@ -286,23 +306,20 @@ public class MacAssignmentController {
 					macAssignmentObject.setProgramName(eachCellArray[2]);
 					macAssignmentObject.setPlannedCalls("20");
 					macAssignmentObject.setCreatedMethod("Auto");
-					macAssignmentObject.setCreatedDate(new Date());
+					//macAssignmentObject.setCreatedDate(new Date());
 					macAssignmentObject.setCreatedBy(userFormSession.getUserName());
 				}
 				
+				String assignedCalls = "";
 				
 				if(eachCellArray.length > 4) {
 					if(eachCellArray[4] != null && !eachCellArray[4].equalsIgnoreCase("") && !eachCellArray[4].equalsIgnoreCase("NoInput")) {
-						macAssignmentObject.setAssignedCalls(Integer.valueOf(eachCellArray[4]));
+						assignedCalls += eachCellArray[4]+","+eachCellArray[5]+","+eachCellArray[6]+","+eachCellArray[7];
+						
 					}					
 				}
 				
-				if(eachCellArray.length > 5 ) {
-					if(eachCellArray[5] != null && !eachCellArray[5].equalsIgnoreCase("") && !eachCellArray[5].equalsIgnoreCase("NoSelect")) {
-						macAssignmentObject.setAssignedQualityMonitor(eachCellArray[5]);
-					}	
-					
-				}
+				macAssignmentObject.setAssignedCalls(assignedCalls);
 				
 				macAssignmentObjectList.add(macAssignmentObject);			
 				

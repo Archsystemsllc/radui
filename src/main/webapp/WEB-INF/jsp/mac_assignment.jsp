@@ -45,10 +45,10 @@
 
 <script type="text/javascript">
 $(document).ready(function() {	
-	
+	$("#dialog-confirm").hide();
 	
 	var reportTitle = '${ReportTitle}';
-
+	
 	var macAssignmentData =eval('${MAC_ASSIGNMENT_REPORT}');
 	var pccContactPerson = '${pccContactPersonMap}';
 	
@@ -60,17 +60,19 @@ $(document).ready(function() {
 		{ "mData": "programName"},
 		{ "mData": "plannedCalls"},
 		{ "mData": "createdMethod"},
-		{ "mData": "assignedCalls"},
-		{ "mData": "assignedQualityMonitor"}
+		{ "mData": "assignedCallsForCindy"},
+		{ "mData": "assignedCallsForLydia"},
+		{ "mData": "assignedCallsForKelly"},
+		{ "mData": "assignedCallsForJaneene"}
 		],	
 		 "columnDefs": [ 
 		        { 
 		           "render" : function(data, type, row) {
 		        	   var linkData = "";
-			        if(data != null) {
-			        	linkData = "<span><input type='text' value='"+data+"'></input></span>";
+			        if(data != null) {				        
+				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
 				    } else {
-				    	linkData = "<span><input type='text' value=''></input></span>";
+				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
 					}
 					
 					return linkData;
@@ -78,25 +80,61 @@ $(document).ready(function() {
 			   "targets" : 5
 			   },
 			   { 
+		           "render" : function(data, type, row) {
+		        	   var linkData = "";
+			        if(data != null) {				        
+				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
+				    } else {
+				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
+					}
+					
+					return linkData;
+		        },
+			   "targets" : 6
+			   },
+			   { 
+		           "render" : function(data, type, row) {
+		        	   var linkData = "";
+			        if(data != null) {				        
+				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
+				    } else {
+				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
+					}
+					
+					return linkData;
+		        },
+			   "targets" : 7
+			   },
+			   { 
+		           "render" : function(data, type, row) {
+		        	   var linkData = "";
+			        if(data != null) {				        
+				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
+				    } else {
+				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
+					}
+					
+					return linkData;
+		        },
+			   "targets" : 8
+			   }/* ,
+			   { 
 				   "render" : function(data, type, row) {
 						
-						var linkData = '<span><select><option value="">Select</option>';
-						
+						var linkData = '<span><select readonly><option value="">Select</option>';	
 						$.each(${pccContactPersonMap}, function (key,obj) {
 							
-							if(key == data) {								
+							if(key == data) {
 								linkData += '<option value="'+key+'" selected>'+obj+'</option>';
 							} else {
 								linkData += '<option value="'+key+'">'+obj+'</option>';
-							}
-							
-		  	  	    			  	  	    		
+							}  	  	    		
 		  	  	    	});  	   
 		  	  	    	linkData +="</select></span>"
 		  	  	    	return linkData;
 			        },
 				   "targets" : 6
-			   }		
+			   }		 */
 			 ],	   
 		 dom: '<lif<t>pB>',
 	     buttons: [
@@ -128,6 +166,7 @@ $(document).ready(function() {
 
 	$('button[id=save]').click(function() {	
 		
+		
         var data = macAssignmentDataTable.rows().data();
         var eachRecord = "";
         var finalDataSet = new Array();
@@ -138,17 +177,32 @@ $(document).ready(function() {
 				 idValue = "NoId";
 			 }
 
-			 var inputValue = macAssignmentDataTable.cell(index,5).nodes().to$().find('input').val();
-			 if(inputValue == "") {
-				inputValue = "NoInput";
+			 var rifkinCindyInputValue = macAssignmentDataTable.cell(index,5).nodes().to$().find('input').val();
+			 if(rifkinCindyInputValue == "") {
+				 rifkinCindyInputValue = "NoInput";
 			 }
-			 var selectValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('select').val();
+
+			 var riveraLydiaInputValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('input').val();
+			 if(riveraLydiaInputValue == "") {
+				 riveraLydiaInputValue = "NoInput";
+			 }
+
+			 var reillyKellyInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
+			 if(reillyKellyInputValue == "") {
+				 reillyKellyInputValue = "NoInput";
+			 }
+
+			 var galtinJaneeneInputValue = macAssignmentDataTable.cell(index,8).nodes().to$().find('input').val();
+			 if(galtinJaneeneInputValue == "") {
+				 galtinJaneeneInputValue = "NoInput";
+			 }
+			/*  var selectValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('select').val();
 			 if(selectValue == "") {
 				selectValue = "NoSelect";
-			 }
+			 } */
 		     eachRecord = value.macName +","+value.jurisdictionName
-		     				+","+value.programName+","+idValue+","+inputValue
-		     				+","+selectValue;		    
+		     				+","+value.programName+","+idValue+","+rifkinCindyInputValue
+		     				+","+riveraLydiaInputValue+","+ reillyKellyInputValue +","+galtinJaneeneInputValue;		    
 		     
 		     finalDataSet[index] = eachRecord;
 		 }); 
@@ -157,14 +211,34 @@ $(document).ready(function() {
 		var monthYear = "${currentMonthYear}";
 		 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/save-macassignmentlist",                    
 	             {monthNumber: monthYear, finalDataSet: finalDataSet}, function(){
-	            	 $('#searchalertMsg').text('Data Saved Succesfully!');
+	            	
 	         
 	     });
-	   
-        return false;
+		
+		 $("#reportsForm").submit();
+        
     } );
 
-	
+	//Back Button Functionality
+	$('#close1,#close2').click(function(e) {	
+		 e.preventDefault();		
+          $("#dialog-confirm" ).dialog({
+              resizable: false,
+              height: "auto",
+              width: 400,
+              modal: true,	              
+              buttons: {
+                "Yes": function() {
+              		$( this ).dialog("close");
+              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/macassignmentlist";
+                },
+                Cancel: function() {                    
+                	$( this ).dialog("close"); 
+                }
+              }
+        });
+     }); 
+
 	
 });
 
@@ -174,9 +248,11 @@ $(document).ready(function() {
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
-
+	<div id="dialog-confirm" title="Close MAC Assignment Confirmation?">
+  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the MAC Assignment Screen without saving?</p>
+	</div>
 	<table id="mid">
-		<form:form method="POST" modelAttribute="macAssignmentObjectForm" class="form-signin" action="#" id="reportsForm" >
+		<form:form method="POST" modelAttribute="macAssignmentObjectForm" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macassignmentlist" id="reportsForm" >
 			<tr>
 				<td style="vertical-align: top">
 
@@ -186,7 +262,7 @@ $(document).ready(function() {
 						
 						 		
 								 			
-								<div class="table-users" style="width: 95%">
+								<div class="table-users" style="width: 98%">
 									<div class="header">MAC Assignment Screen</div>
 									
 								<div class="row " style="margin-top: 10px">
@@ -211,42 +287,57 @@ $(document).ready(function() {
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
 				                   <div class="row" id="allScoreCardDiv">
 			                            <div class="col-lg-10 form-group">
-			                        
+			                           <c:if test="${action == 'view'}">
+			                           	<fieldset disabled>
+			                           </c:if>
+			                        	
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="macAssignmentTableId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Progam</th>
-										            <th style="text-align: left">Planned</th>
-										            <th style="text-align: left">Created</th> 
-										            <th style="text-align: left">Assigned</th>
-										            <th style="text-align: left">QM Name</th>
+										            <th style="text-align: left" rowspan="2">MAC</th>
+										            <th style="text-align: left" rowspan="2">Jurisdiction</th>
+										            <th style="text-align: left" rowspan="2">Progam</th>
+										            <th style="text-align: left" rowspan="2">Planned</th>
+										            <th style="text-align: left" rowspan="2">Created</th> 
+										            <th style="text-align: center" colspan="4">Assigned Calls</th>
+										            
 										           
+										        </tr>
+										        <tr>
+										        	<th style="text-align: left">Rifkin,Cindy</th>
+										            <th style="text-align: left">Rivera,Lydia</th>
+										            <th style="text-align: left">Reilly,Kelly</th>
+										            <th style="text-align: left">Galtin,Janeene</th>
 										        </tr>
 										    </thead>
 						                    <tbody>  
 						                    </tbody>
 						                </table> 
+						                <c:if test="${action == 'view'}">
+			                            	</fieldset>
+			                           </c:if>
+						               
 						                </div>
 						                </div>
 				                     
 				                     
 				                  </div>
 				                  </div>
-					                
-					            </div>  <!-- Main Row Div -->
-									 <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
+				                  <c:if test="${action != 'view'}">
+				                   <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td>
-										<span><button class="btn btn-primary" id="save" type="button"  title="Select Save button to Save Scorecard details">Save & Continue</button></span>
+										<span><button class="btn btn-primary" id="save" type="button"  title="Select Save button to Save MAC Asiignment details">Save & Continue</button></span>
 									
 									
-										<span><button class="btn btn-primary" id="submit" type="button" title="Select update button to update Scorecard details">Submit</button></span>
-									
-									<span><button class="btn btn-primary" id="close2" type="button" title="Select Close button to navigate to Scorecard List ">Close</button></span></td>
+										<!-- <span><button class="btn btn-primary" id="confirm" type="button" title="Select update button to update Scorecard details">Submit</button></span>
+									 -->
+									<span><button class="btn btn-primary" id="close2" type="button" title="Select Close button to navigate to MAC Assignment List ">Close</button></span></td>
 							       </tr>
-							</table>				
+								</table>				
+					                </c:if>
+					            </div>  <!-- Main Row Div -->
+									
 						
 						</div> <!-- Content Div -->
 					</div>

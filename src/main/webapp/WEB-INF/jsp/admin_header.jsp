@@ -156,7 +156,7 @@
 									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createusers" title="Create Users Page">Create Users</a></li>
 									     </sec:authorize>
 									      <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers" title="List of Users Page">List Users</a></li>
-									    <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
+									    <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
 									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macassignmentlist" title="MAC Assignment List">MAC Assignment</a></li>
 									     </sec:authorize>
 									    </ul>

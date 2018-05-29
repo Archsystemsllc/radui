@@ -58,9 +58,9 @@ $(document).ready(function(){
     "columnDefs": [ 
         { 
            "render" : function(data, type, row) {
-			//var linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-macassignment/"+data+"' title='View'>View</a></span>";
+			var linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-macassignment/"+data+"/view' title='View'>View</a></span>";
 			if (role == 'Administrator' || role == 'Quality Manager') {
-				var linkData = "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-macassignment/"+data+"' title='Edit'>Edit</a></span>";
+				 linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-macassignment/"+data+"/edit' title='Edit'>Edit</a></span>";
 			}
                        
             return linkData;		
@@ -109,8 +109,8 @@ $(document).ready(function(){
 												<tr align="left">
 													<td align="left">
 													
-													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Monitor')">
-													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-macassignment/null" title="Select Add Mac Assignment button to add new Mac Assignment"><button class="btn btn-primary" id="addmacassignment" type="button">Add Mac Assignment For Month</button></a></span> 
+													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager')">
+														<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-macassignment/null/edit" title="Select Add Mac Assignment button to add new Mac Assignment"><button class="btn btn-primary" id="addmacassignment" type="button">Add Mac Assignment For Month</button></a></span> 
 													</sec:authorize>
 												</td>
 												
