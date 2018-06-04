@@ -147,15 +147,16 @@
 										<li><a class="${menu_highlight == 'rebuttal' ? 'active' : ''}" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/false" title="Rebuttal Page">Rebuttal</a></li>
 									</sec:authorize>
 								
-									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
+									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
 									<li class="dropdown">
 										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
 									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/createusers" title="Create Users Page">Create Users</a></li>
-									     </sec:authorize>
+									     
 									      <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/listofusers" title="List of Users Page">List Users</a></li>
+									    </sec:authorize>
 									    <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
 									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macassignmentlist" title="MAC Assignment List">MAC Assignment</a></li>
 									     </sec:authorize>

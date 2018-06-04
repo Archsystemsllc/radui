@@ -32,8 +32,8 @@ public class User {
 
 	private Long status;
 	
-	private Long pccId;
-	
+	private String pccId;
+	private String[] pccIdArray;
 
 	
 	private String jurId;
@@ -202,11 +202,18 @@ public class User {
 	public void setOrganizationLookup(OrganizationLookup organizationLookup) {
 		this.organizationLookup = organizationLookup;
 	}
-	public Long getPccId() {
+	
+	public String getPccId() {
 		return pccId;
 	}
-	public void setPccId(Long pccId) {
+	public void setPccId(String pccId) {
 		this.pccId = pccId;
+	}
+	public String[] getPccIdArray() {
+		return pccIdArray;
+	}
+	public void setPccIdArray(String[] pccIdArray) {
+		this.pccIdArray = pccIdArray;
 	}
 	@Override
 	public String toString() {

@@ -42,6 +42,8 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
+
 
 <script type="text/javascript">
 $(document).ready(function() {	
@@ -100,6 +102,118 @@ $(document).ready(function() {
 		  "paging" : true,
 		  "pageLength" : 10,
 		  "ordering" : true,
+		  "footerCallback": function ( row, data, start, end, display ) {
+	            var api = this.api(), data;
+	 
+	            // Remove the formatting to get integer data for summation
+	            var intVal = function ( i ) {
+	                return typeof i === 'string' ?
+	                    i.replace(/[\$,]/g, '')*1 :
+	                    typeof i === 'number' ?
+	                        i : 0;
+	            };
+	            var totalRows = api .column( 4 ) .data() . count();
+
+	            // Total over all pages for Scoreable Count
+	            var scoreableCountTotal = api
+	                .column( 2 )
+	                .data()
+	                .reduce( function (a, b) {
+	                    return intVal(a) + intVal(b);
+	                }, 0 );
+	 
+	            // Update footer
+	            $( api.column( 2 ).footer() ).html( scoreableCountTotal );
+
+	            // Total over all pages for Scoreable Pass Count
+	            var scoreablePassCountTotal = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+		        // Update footer
+		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var scoreablePassPercentAverage = api
+		            .column( 4 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 4 ).footer() ).html(scoreablePassPercentAverage.toFixed(0) +"%");
+
+		     	// Total over all pages for Scoreable Fail Count
+		        var scoreableFailCountTotal = api
+                .column( 5 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+		        // Update footer
+		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var scoreableFailPercentAverage = api
+		            .column( 6 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 6 ).footer() ).html(scoreableFailPercentAverage.toFixed(0) +"%");
+
+		     	// Total over all pages for Non Scoreable Count
+		        var nonScoreableCountTotal = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+		        // Update footer
+		        $( api.column( 7 ).footer() ).html( nonScoreableCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var nonScoreablePercentAverage = api
+		            .column( 8 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 8 ).footer() ).html(nonScoreablePercentAverage.toFixed(0) +"%");
+
+		     // Total over all pages for Does Not Count
+		        var doesNotCountTotal = api
+                .column( 9 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+		        // Update footer
+		        $( api.column( 9 ).footer() ).html( doesNotCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var doesNotCountPercentAverage = api
+		            .column( 10 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 10 ).footer() ).html(doesNotCountPercentAverage.toFixed(0) +"%");
+
+	        }
 	});
 
 	
@@ -536,6 +650,7 @@ $(document).ready(function() {
 });
 </script>
 
+
 </head>
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
@@ -640,6 +755,22 @@ $(document).ready(function() {
 										    </thead>
 						                    <tbody>  
 						                    </tbody>
+						                     <tfoot>
+								            <tr>
+								                <th colspan="2" style="text-align:right">Total and Average:</th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th></th>
+								                <th>NA</th>
+								                <th>NA</th>
+								            </tr>
+								        </tfoot>
 						                </table> 
 						                </div>
 						                </div>

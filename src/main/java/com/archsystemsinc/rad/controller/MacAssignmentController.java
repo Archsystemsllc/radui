@@ -184,7 +184,7 @@ public class MacAssignmentController {
 						macAssignmentObject.setCreatedMethod("Auto");
 						macAssignmentObject.setAssignedCallsForCindy(0);
 						macAssignmentObject.setAssignedCallsForLydia(0);
-						macAssignmentObject.setAssignedCallsForKelly(0);
+						//macAssignmentObject.setAssignedCallsForKelly(0);
 						macAssignmentObject.setAssignedCallsForJaneene(0);
 						
 						macAssignmentObjectList.add(macAssignmentObject);
@@ -200,12 +200,12 @@ public class MacAssignmentController {
 					if(eachQualityMontiorCalls.length > 1) {
 						macAssignmentObjectTemp.setAssignedCallsForCindy(Integer.valueOf(eachQualityMontiorCalls[0]));
 						macAssignmentObjectTemp.setAssignedCallsForLydia(Integer.valueOf(eachQualityMontiorCalls[1]));
-						macAssignmentObjectTemp.setAssignedCallsForKelly(Integer.valueOf(eachQualityMontiorCalls[2]));
-						macAssignmentObjectTemp.setAssignedCallsForJaneene(Integer.valueOf(eachQualityMontiorCalls[3]));
+						//macAssignmentObjectTemp.setAssignedCallsForKelly(Integer.valueOf(eachQualityMontiorCalls[2]));
+						macAssignmentObjectTemp.setAssignedCallsForJaneene(Integer.valueOf(eachQualityMontiorCalls[2]));
 					} else {
 						macAssignmentObjectTemp.setAssignedCallsForCindy(Integer.valueOf(eachQualityMontiorCalls[0]));
 						macAssignmentObjectTemp.setAssignedCallsForLydia(0);
-						macAssignmentObjectTemp.setAssignedCallsForKelly(0);
+						//macAssignmentObjectTemp.setAssignedCallsForKelly(0);
 						macAssignmentObjectTemp.setAssignedCallsForJaneene(0);
 					}
 					

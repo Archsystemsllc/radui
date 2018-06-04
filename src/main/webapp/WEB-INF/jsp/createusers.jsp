@@ -148,21 +148,26 @@ $(function(){
 			}
        });
        
-	/* $("#jurId").change(function(){			
+	$("#jurId").change(function(){		
+
+		var userRole = $('#userRole').val();			
+		if ((userRole != "MAC Admin") && (userRole != "MAC User")){	
 			 var selectedJurisdiction =""; 
 			 $("#jurId :selected").each(function() {
 				 selectedJurisdiction+=($(this).attr('value'))+",";
 				});			
-           $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: $('#macId').val(),jurisId: selectedJurisdiction}, function(data){
-               
-                $("#pccId").get(0).options.length = 0;	           
-     	      	 $("#pccId").get(0).options[0] = new Option("---Select Program---", "");
-     	      	 
-     	  	    	$.each(data, function (key,obj) {
-     	  	    		$("#pccId").get(0).options[$("#pccId").get(0).options.length] = new Option(obj, key);     	  	    		
-     	  	    	});  	   
+
+        	   $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: 'NoValue',programIdAvailableFlag: false}, function(data){
+   	                
+        		   $("#pccId").get(0).options.length = 0;	           
+	      	      	 $("#pccId").get(0).options[0] = new Option("---Select PCC/Location---", "");	      	      	 
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#pccId").get(0).options[$("#pccId").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    });  	 
               });
-      }); */
+		}
+     });
 
 	 $('#close1').click(function(e) {	
 		 e.preventDefault();		
@@ -344,10 +349,12 @@ $(function(){
 			                            <div class="col-lg-6 form-group" id="pccIdBlock">
 			                          
 										<label for="pccId"> PCC Location:</label>
-										<form:select path="pccId"  id="pccId" class="form-control required" data-val="true" title="Select one PCC Location from the list">
+										<form:select path="pccIdArray"  id="pccId" class="form-control required" data-val="true"  multiple="true" title="Select one PCC Location from the list">
 										   <form:option value="" label="---Select PCC Location---"/>	
 										    <form:options items="${pccMapEdit}" />										   							   
 										</form:select>	
+										
+										
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	<form:input type="hidden" path="createdBy" value="${pageContext.request.userPrincipal.name}" style ="padding-top: 40px;"/>

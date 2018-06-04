@@ -187,10 +187,15 @@ public class CommonController {
 	@RequestMapping(value ={"/admin/selectLocation", "/quality_manager/selectLocation", "/cms_user/selectLocation",
 			 "/mac_admin/selectLocation","/mac_user/selectLocation","/quality_monitor/selectLocation"}, method = RequestMethod.GET)	
 	@ResponseBody
-	public HashMap<Integer,String> selectLocation(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString,@RequestParam("programId") final String programIdString) {
+	public HashMap<Integer,String> selectLocation(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString,@RequestParam("programId") String programIdString,
+			@RequestParam("programIdAvailableFlag") final boolean programIdAvailableFlag) {
 		
 		HashMap<Integer,String> locationMap = new HashMap<Integer,String>();
 		HashMap<Integer,String> locationTempMap = new HashMap<Integer,String>();
+		
+		if(programIdAvailableFlag == false) {
+			programIdString = "ALL";
+		}
 		
 		if(!macIdString.equalsIgnoreCase("") && !jurisIdString.equalsIgnoreCase("") && !programIdString.equalsIgnoreCase("")) {
 			// ALL ALL ALL
@@ -305,37 +310,43 @@ public class CommonController {
 			} 
 			//Value Value All
 			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
-				HashMap programMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisIdString));	
+				
 				locationMap = new HashMap<Integer,String>();
 				
-				for(Object programKey: programMapTemp.keySet()) {
+				//for(Object programKey: programMapTemp.keySet()) {
 					
 					String[] jurisIds = jurisIdString.split(",");
 					for(String jurisSingleValue: jurisIds) {
-						if(!jurisSingleValue.equalsIgnoreCase("")) {
-							
-							if(jurisSingleValue.equalsIgnoreCase("ALL")) {
-								HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
+						HashMap programMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisSingleValue));	
+						
+						for(Object programKey: programMapTemp.keySet()) {
+							if(!jurisSingleValue.equalsIgnoreCase("")) {
 								
-								for(Object jurisKey: jurisIdMap.keySet()) {									
+								if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+									HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 									
-									HashMap locationMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(macIdString)+"_"+jurisKey+"_"+programKey);
+									for(Object jurisKey: jurisIdMap.keySet()) {									
+										
+										HashMap locationMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(macIdString)+"_"+jurisKey+"_"+programKey);
+										if (locationMapTemp == null) continue;
+										locationMap.putAll(locationMapTemp);
+										
+									}
+									break;
+								} else {
+									
+									HashMap locationMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisSingleValue)+"_"+programKey);
 									if (locationMapTemp == null) continue;
 									locationMap.putAll(locationMapTemp);
 									
-								}
-								break;
-							} else {
-								
-								HashMap locationMapTemp = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(macIdString)+"_"+Integer.valueOf(jurisSingleValue)+"_"+programKey);
-								if (locationMapTemp == null) continue;
-								locationMap.putAll(locationMapTemp);
-								
-							}						
-						}				
+								}						
+							}	
+						}
+						
+						programMapTemp = null;
 					}					
-				}					
-				programMapTemp = null;
+				//}					
+				
 			
 			} 
 			//Value All Value

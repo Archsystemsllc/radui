@@ -62,7 +62,7 @@ $(document).ready(function() {
 		{ "mData": "createdMethod"},
 		{ "mData": "assignedCallsForCindy"},
 		{ "mData": "assignedCallsForLydia"},
-		{ "mData": "assignedCallsForKelly"},
+		
 		{ "mData": "assignedCallsForJaneene"}
 		],	
 		 "columnDefs": [ 
@@ -92,6 +92,7 @@ $(document).ready(function() {
 		        },
 			   "targets" : 6
 			   },
+			  
 			   { 
 		           "render" : function(data, type, row) {
 		        	   var linkData = "";
@@ -104,19 +105,6 @@ $(document).ready(function() {
 					return linkData;
 		        },
 			   "targets" : 7
-			   },
-			   { 
-		           "render" : function(data, type, row) {
-		        	   var linkData = "";
-			        if(data != null) {				        
-				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
-				    } else {
-				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
-					}
-					
-					return linkData;
-		        },
-			   "targets" : 8
 			   }/* ,
 			   { 
 				   "render" : function(data, type, row) {
@@ -187,12 +175,12 @@ $(document).ready(function() {
 				 riveraLydiaInputValue = "NoInput";
 			 }
 
-			 var reillyKellyInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
+			 /* var reillyKellyInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
 			 if(reillyKellyInputValue == "") {
 				 reillyKellyInputValue = "NoInput";
-			 }
+			 } */
 
-			 var galtinJaneeneInputValue = macAssignmentDataTable.cell(index,8).nodes().to$().find('input').val();
+			 var galtinJaneeneInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
 			 if(galtinJaneeneInputValue == "") {
 				 galtinJaneeneInputValue = "NoInput";
 			 }
@@ -202,7 +190,7 @@ $(document).ready(function() {
 			 } */
 		     eachRecord = value.macName +","+value.jurisdictionName
 		     				+","+value.programName+","+idValue+","+rifkinCindyInputValue
-		     				+","+riveraLydiaInputValue+","+ reillyKellyInputValue +","+galtinJaneeneInputValue;		    
+		     				+","+riveraLydiaInputValue+"," +galtinJaneeneInputValue;		    
 		     
 		     finalDataSet[index] = eachRecord;
 		 }); 
@@ -299,14 +287,14 @@ $(document).ready(function() {
 										            <th style="text-align: left" rowspan="2">Progam</th>
 										            <th style="text-align: left" rowspan="2">Planned</th>
 										            <th style="text-align: left" rowspan="2">Created</th> 
-										            <th style="text-align: center" colspan="4">Assigned Calls</th>
+										            <th style="text-align: center" colspan="3">Assigned Calls</th>
 										            
 										           
 										        </tr>
 										        <tr>
 										        	<th style="text-align: left">Rifkin,Cindy</th>
 										            <th style="text-align: left">Rivera,Lydia</th>
-										            <th style="text-align: left">Reilly,Kelly</th>
+										            
 										            <th style="text-align: left">Galtin,Janeene</th>
 										        </tr>
 										    </thead>

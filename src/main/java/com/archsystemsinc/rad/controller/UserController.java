@@ -214,7 +214,7 @@ public class UserController {
 		} else {
 			
 			userDefaults(model);
-			model.addAttribute("pccMapEdit", HomeController.ALL_PCC_LOCATION_MAP);
+			//model.addAttribute("pccMapEdit", HomeController.ALL_PCC_LOCATION_MAP);
 		}
 		
 		return "createusers";
@@ -321,6 +321,12 @@ public class UserController {
 				}
 				
 				userForm.setJurId(jurIdDBValue);
+				
+				String pccIdDBValue = "";
+				for(String singlePccLocationValue: userForm.getPccIdArray()) {
+					pccIdDBValue += singlePccLocationValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+				}
+				userForm.setPccId(pccIdDBValue);
 				userForm.setStatus(1l);
 				
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
@@ -548,7 +554,12 @@ public class UserController {
 				}
 				
 				userForm.setJurId(jurIdDBValue);
-				//userService.update(userForm);
+				
+				String pccIdDBValue = "";
+				for(String singlePccLocationValue: userForm.getPccIdArray()) {
+					pccIdDBValue += singlePccLocationValue + UIGenericConstants.DB_JURISDICTION_SEPERATOR;
+				}
+				userForm.setPccId(pccIdDBValue);
 			}
 			
 			userForm.setStatus(1l);
@@ -607,22 +618,36 @@ public class UserController {
 		if(userByID.getMacId() != null) {
 			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(userByID.getMacId().intValue());
 			model.addAttribute("jurisMapEdit", jurisMap);	
-			HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+			//HashMap<Integer,String> programMap = new HashMap<Integer,String>();
+			HashMap<Integer,String> locationMap = new HashMap<Integer,String>();
 			for(Integer jurisId: jurisMap.keySet()) {
 				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(userByID.getMacId()+"_"+jurisId);
-				programMap.putAll(programTempMap);
-				programTempMap = null;
+				for(Integer programId: programTempMap.keySet()) {
+					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(userByID.getMacId()+"_"+jurisId+"_"+programId);
+					locationMap.putAll(locationTempMap);
+					locationTempMap = null;
+				}
+				//programMap.putAll(programTempMap);
+				//programTempMap = null;
 			}		
 			
-			String[] jurIdDBValue = {""};
+			String[] jurIdUIValue = {""};
 			if(userByID.getJurId() != null) {
-				 jurIdDBValue = userByID.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);	
+				jurIdUIValue = userByID.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);	
 				
 			}
 			
-			userByID.setJurisidictionId(jurIdDBValue);
+			userByID.setJurisidictionId(jurIdUIValue);
+						
+			String[] pccIdUIValue = {""};
+			if(userByID.getPccId() != null) {
+				pccIdUIValue = userByID.getPccId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);	
+				
+			}
 			
-			model.addAttribute("programMapEdit", programMap);
+			userByID.setPccIdArray(pccIdUIValue);
+			//model.addAttribute("programMapEdit", programMap);
+			model.addAttribute("pccMapEdit", locationMap);
 		}
 		
 		userDefaults(model);

@@ -488,8 +488,14 @@ public class HomeController {
 				}
 				
 				if(user.getPccId() != null) {
-					String pccLocationName = PCC_LOC_MAP.get(user.getPccId().intValue());					
-					userBasedPccLocationMap.put(user.getPccId().intValue(), pccLocationName);
+					String[] pccIdUiValue = user.getPccId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);				
+					
+					for (String pccIdSingleValue: pccIdUiValue) {
+						
+						String pccTempName = HomeController.PCC_LOC_MAP.get(Integer.valueOf(pccIdSingleValue));	
+						userBasedPccLocationMap.put(Integer.valueOf(pccIdSingleValue), pccTempName);
+					}
+					
 				}				
 			}
 			

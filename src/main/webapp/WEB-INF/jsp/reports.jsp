@@ -223,7 +223,7 @@
 				 $("#jurisId :selected").each(function() {
 					 selectedJurisdiction+=($(this).attr('value'))+",";
 				});
-	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val()}, function(data){
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val(),programIdAvailableFlag: true}, function(data){
 	                
 	                 $("#loc").get(0).options.length = 0;	           
 	      	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
