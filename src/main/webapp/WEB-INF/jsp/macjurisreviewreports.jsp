@@ -645,7 +645,125 @@ $(document).ready(function() {
 		  "pageLength" : 10,
 		  "ordering" : true,
 	});
-	
+
+	var qaspScorecardData =eval('${qaspReportList}');
+	var qaspScorecardDataTable = $('#qaspReportDTId').DataTable( {
+		"aaData": qaspScorecardData,
+		"aoColumns": [
+		{ "mData": "monthYear"},
+		{ "mData": "scorableCount"},
+		{ "mData": "hhhScorableCount"},
+		{ "mData": "scorablePass"},
+		{ "mData": "hhhScorablePass"},
+		{ "mData": "scorableFail"},
+		{ "mData": "hhhScorableFail"}
+		],		
+	    
+		 dom: '<lif<t>pB>',
+	     buttons: [
+	         {
+	             extend: 'copyHtml5',
+	             messageTop: messageOnTop,
+	             title: reportTitle
+	         },
+	         {
+	             extend: 'excelHtml5',
+	             messageTop: messageOnTop,
+	             title: reportTitle
+	         },
+	         {
+	             extend: 'pdfHtml5',
+	             messageTop: messageOnTop,
+	             orientation : 'landscape',
+	             pageSize : 'LEGAL',
+	             title: reportTitle
+	         }	        
+	     ],
+		  "paging" : true,
+		  "pageLength" : 10,
+		  "ordering" : true,
+		  "footerCallback": function ( row, data, start, end, display ) {
+	            var api = this.api(), data;
+	 
+	            // Remove the formatting to get integer data for summation
+	            var intVal = function ( i ) {
+	                return typeof i === 'string' ?
+	                    i.replace(/[\$,]/g, '')*1 :
+	                    typeof i === 'number' ?
+	                        i : 0;
+	            };
+	            var totalRows = api .column( 4 ) .data() . count();
+
+	            // Total over all pages for Scoreable Count
+	            var scoreableCountTotal = api
+	                .column( 1 )
+	                .data()
+	                .reduce( function (a, b) {
+	                    return intVal(a) + intVal(b);
+	                }, 0 );
+	 
+	            // Update footer
+	            $( api.column( 1 ).footer() ).html( scoreableCountTotal );
+
+	            // Total over all pages for Scoreable Pass Count
+	            var scoreableHhhCountTotal = api
+              .column( 2 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
+
+		       
+		     	// Total over all pages for Scoreable Fail Count
+		        var scoreablePassCountTotal = api
+              .column( 3 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
+
+		     // Total over all pages for Scoreable Fail Count
+		        var scoreableHhhPassCountTotal = api
+              .column( 4 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
+
+		        
+		     	// Total over all pages for Non Scoreable Count
+		        var scoreableFailCountTotal = api
+              .column( 5)
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var scoreableFailHhhCountTotal = api
+		            .column( 6 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) ;
+		
+		        // Update footer
+		        $( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
+		  }
+		     
+	});
 
 });
 </script>
@@ -1008,6 +1126,49 @@ $(document).ready(function() {
 										    </thead>
 						                    <tbody>  
 						                    </tbody>
+						                </table> 
+						                </div>
+						                </div>
+				                     </c:if>
+				                     
+				                     <c:if test="${QaspReport == true}">
+				                   
+				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                   	<div class="row" id="qaspReportDiv">
+			                            <div class="col-lg-10 form-group">
+			                            			                        
+			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qaspReportDTId" style="width: 95%">
+						                    <thead>
+										        <tr>
+										            <th style="text-align: left" rowspan="2">Month</th>
+										            <th style="text-align: left" colspan="2"># of QAM Scorecards Completed</th>
+										            <th style="text-align: left" colspan="2"># of QAM Scorecards Passed</th>
+										            <th style="text-align: left" colspan="2"># of QAM Scorecards Failed</th>
+										            									                 
+										        </tr>
+										         <tr>
+										        	<th style="text-align: left">Non HHH</th>
+										            <th style="text-align: left">HHH</th>
+										            <th style="text-align: left">Non HHH</th>
+										            <th style="text-align: left">HHH</th>
+										            <th style="text-align: left">Non HHH</th>
+										            <th style="text-align: left">HHH</th>
+										        </tr>
+										    </thead>
+						                    <tbody>  
+						                    </tbody>
+						                    <tfoot>
+								            <tr>
+								                <th colspan="1" style="text-align:right">Sub-Totals:</th>
+								                <th style="text-align: left"></th>
+								                <th style="text-align: left"></th>
+								                <th style="text-align: left"></th>
+								                <th style="text-align: left"></th>
+								                <th style="text-align: left"></th>
+								                <th style="text-align: left"></th>
+								               
+								            </tr>
+								        </tfoot>
 						                </table> 
 						                </div>
 						                </div>

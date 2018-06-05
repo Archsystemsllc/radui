@@ -11,13 +11,13 @@ public class UserFilter {
 
 	private String lastName;
 	
-	private String roleId;
-	
-	private String orgId;
-	
 	private String macId;
 	
 	private String jurisId;
+	
+	private String roleIdString;
+	
+	private String orgIdString;
 	
 	@Override
 	public String toString() {
@@ -25,9 +25,9 @@ public class UserFilter {
 		builder.append("UserFilter [lastName=");
 		builder.append(lastName);
 		builder.append(", roleId=");
-		builder.append(roleId);
+		builder.append(roleIdString);
 		builder.append(", orgId=");
-		builder.append(orgId);
+		builder.append(orgIdString);
 		builder.append(", macId=");
 		builder.append(macId);
 		builder.append(", jurisId=");
@@ -61,21 +61,22 @@ public class UserFilter {
 		this.lastName = lastName;
 	}
 
-	public String getRoleId() {
-		return roleId;
+	public String getRoleIdString() {
+		return roleIdString;
 	}
 
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
+	public void setRoleIdString(String roleIdString) {
+		this.roleIdString = roleIdString;
 	}
 
-	public String getOrgId() {
-		return orgId;
+	public String getOrgIdString() {
+		return orgIdString;
 	}
 
-	public void setOrgId(String orgId) {
-		this.orgId = orgId;
+	public void setOrgIdString(String orgIdString) {
+		this.orgIdString = orgIdString;
 	}
+
 	
 	
 }

@@ -28,6 +28,18 @@ public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJuri
     
     private Float scorableFailPercent= 0.0f;
     
+    private Integer hhhTotalCount = 0;
+    
+    private Integer hhhScorableCount = 0;
+    
+    private Integer hhhScorablePass = 0;
+    
+    private Integer hhhScorableFail = 0;
+    
+    private Float hhhScorablePassPercent = 0.0f;
+    
+    private Float hhhScorableFailPercent= 0.0f;
+    
     private Integer nonScorableCount= 0;
     
     private Float nonScorablePercent= 0.0f;
@@ -56,7 +68,57 @@ public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJuri
     
     private String qmName;
     
-    public Integer getPlannedCalls() {
+    
+    
+    public Integer getHhhTotalCount() {
+		return hhhTotalCount;
+	}
+
+	public void setHhhTotalCount(Integer hhhTotalCount) {
+		this.hhhTotalCount = hhhTotalCount;
+	}
+
+	public Integer getHhhScorableCount() {
+		return hhhScorableCount;
+	}
+
+	public void setHhhScorableCount(Integer hhhScorableCount) {
+		this.hhhScorableCount = hhhScorableCount;
+	}
+
+	public Integer getHhhScorablePass() {
+		return hhhScorablePass;
+	}
+
+	public void setHhhScorablePass(Integer hhhScorablePass) {
+		this.hhhScorablePass = hhhScorablePass;
+	}
+
+	public Integer getHhhScorableFail() {
+		return hhhScorableFail;
+	}
+
+	public void setHhhScorableFail(Integer hhhScorableFail) {
+		this.hhhScorableFail = hhhScorableFail;
+	}
+
+	public Float getHhhScorablePassPercent() {
+		return hhhScorablePassPercent;
+	}
+
+	public void setHhhScorablePassPercent(Float hhhScorablePassPercent) {
+		this.hhhScorablePassPercent = hhhScorablePassPercent;
+	}
+
+	public Float getHhhScorableFailPercent() {
+		return hhhScorableFailPercent;
+	}
+
+	public void setHhhScorableFailPercent(Float hhhScorableFailPercent) {
+		this.hhhScorableFailPercent = hhhScorableFailPercent;
+	}
+
+	public Integer getPlannedCalls() {
 		return plannedCalls;
 	}
 

@@ -68,16 +68,31 @@
     		$('input:radio[name=mainReportSelect]')[0].checked = true;
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
+    		$('#programPccLocDiv,#datesDiv').show();   
+    		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
         } else if (reportSelectValue == 'ScoreCard' ) {
         	$('input:radio[name=mainReportSelect]')[0].checked = true;
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
+    		$('#programPccLocDiv,#datesDiv').show();  
+    		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
         } else if (reportSelectValue == 'Compliance' ) {
         	$('#complianceTypeDiv').show();
+        	$('#programPccLocDiv,#datesDiv').show();   
+        	$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
         } else if (reportSelectValue == 'Rebuttal' ) {
         	$('#callCategoryTypeDiv').show();
     		$('#rebuttalStatusDiv').show();
+    		$('#programPccLocDiv,#datesDiv').show();
+    		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+        }  else if (reportSelectValue == 'Qasp' ) {
+        	$('#callCategoryTypeDiv').hide();
+    		$('#rebuttalStatusDiv').hide();
+    		$('#programPccLocDiv,#datesDiv').hide();
+    		$("#programId,#loc,#fromDateString,#toDateString").removeAttr('required');
+    		
         }  
+        
 
     	var mainReportSelect = $("input[name='mainReportSelect']:selected").val();
 
@@ -88,12 +103,16 @@
             	$('#complianceTypeDiv').hide();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
+        		$('#programPccLocDiv,#datesDiv').show();  
+        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
             	$('#complianceTypeDiv').show();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
+        		$('#programPccLocDiv,#datesDiv').show(); 
+        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);  
         		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
@@ -101,6 +120,16 @@
             	$('#complianceTypeDiv').hide();
             	$('#callCategoryTypeDiv').show();
         		$('#rebuttalStatusDiv').show();
+        		$('#programPccLocDiv,#datesDiv').show();   
+        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+            } else if (mainReportSelect=="Qasp") {
+            	$('#scoreCardTypeDiv').hide();
+            	$('#callResultDiv').hide();
+            	$('#complianceTypeDiv').hide();
+            	$('#callCategoryTypeDiv').hide();
+        		$('#rebuttalStatusDiv').hide();
+        		$('#programPccLocDiv,#datesDiv').hide();
+        		$("#programId,#loc,#fromDateString,#toDateString").removeAttr('required');
             }
 
           
@@ -139,12 +168,17 @@
             	$('#complianceTypeDiv').hide();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
+        		$('#programPccLocDiv,#datesDiv').show();  
+        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
+        		
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
             	$('#complianceTypeDiv').show();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
+        		$('#programPccLocDiv,#datesDiv').show();  
+        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
         		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
@@ -152,6 +186,16 @@
             	$('#complianceTypeDiv').hide();
             	$('#callCategoryTypeDiv').show();
         		$('#rebuttalStatusDiv').show();
+        		$('#programPccLocDiv,#datesDiv').show();   
+        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+            } else if (mainReportSelect=="Qasp") {
+            	$('#scoreCardTypeDiv').hide();
+            	$('#callResultDiv').hide();
+            	$('#complianceTypeDiv').hide();
+            	$('#callCategoryTypeDiv').hide();
+        		$('#rebuttalStatusDiv').hide();
+        		$('#programPccLocDiv,#datesDiv').hide();    
+        		$("#programId,#loc,#fromDateString,#toDateString").removeAttr('required');    		
             }
         });
 
@@ -263,6 +307,16 @@
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                   <input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
+				                   <div class="row">
+			                            <div class="col-sm-10 form-group">
+			                            <label for="reportType"> Report Type:</label>
+											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;Scorecard &nbsp;										                            
+										  	<form:radiobutton path="mainReportSelect" value="Compliance" title="Choose Compliance"/>&nbsp;Compliance &nbsp;
+										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" title="Choose Rebuttal" />&nbsp;Rebuttal &nbsp;
+										  	<form:radiobutton path="mainReportSelect" value="Qasp" title="Choose QASP" />&nbsp;QASP Report &nbsp;
+			                         	     
+			                            </div>
+			                        </div>
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> MAC:</label>
@@ -282,7 +336,7 @@
 										</form:select> 				
 			                            </div>
 			                        </div>
-			                         <div class="row">
+			                         <div class="row" id="programPccLocDiv">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Program:</label>
 										<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
@@ -301,7 +355,7 @@
 			                            </div>
 			                        </div>
 			                        
-			                         <div class="row">
+			                         <div class="row" id="datesDiv">
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> From Date:</label>
 			                             
@@ -312,17 +366,6 @@
 			                                <form:input type = "text" class="form-control required"  id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List"/>
 			                            </div>
 			                        </div>
-			                        
-			                        <div class="row">
-			                            <div class="col-sm-10 form-group">
-			                            <label for="reportType"> Report Type:</label>
-											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;Scorecard &nbsp;										                            
-										  	<form:radiobutton path="mainReportSelect" value="Compliance" title="Choose Compliance"/>&nbsp;Compliance &nbsp;
-										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" title="Choose Rebuttal" />&nbsp;Rebuttal &nbsp;
-			                         	     
-			                            </div>
-			                        </div>
-			                        
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
 			                                <label for="scoreCardType"> Scorecard Type:</label> 

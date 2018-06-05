@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -279,10 +280,23 @@ public class ReportsController {
 			
 		try {
 			
-			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
 			
-			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
-			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
+			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/yyyy");
+				
+				Calendar calendar = Calendar.getInstance();
+				reportsForm.setToDate(calendar.getTime());
+				//reportsForm.setToDateString(calendar.toString());
+				calendar.add(Calendar.YEAR, -1);
+				reportsForm.setFromDate(calendar.getTime());
+				//reportsForm.setFromDateString(calendar.toString());
+				
+			} else {
+				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+				reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
+				reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
+			}
+			
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
@@ -415,11 +429,6 @@ public class ReportsController {
 				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
 				finalResultsMap = generateScoreCardReport(scoreCardList,session);
 				
-				
-				
-				/*Map<Integer, String> treeMap2 = new TreeMap<>( (Comparator<Integer>) (o1, o2) -> o2.compareTo(o1)
-		        );*/
-				
 				finalSortedMap.putAll(finalResultsMap);
 				
 				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
@@ -522,6 +531,24 @@ public class ReportsController {
 				model.addAttribute("rebuttalReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 				
 				model.addAttribute("ReportTitle","Rebuttal Report");
+				
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+				
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getQaspReport");
+				reportsForm.setScoreCardType("Scoreable");
+				
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<ScoreCard> qaspList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+				
+				finalResultsMap = generateQaspReport(qaspList);
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("QASP_REPORT",finalSortedMap);
+				model.addAttribute("QaspReport",true);
+				model.addAttribute("qaspReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				
+				model.addAttribute("ReportTitle","Qasp Report");
 				
 			}
 			
@@ -832,6 +859,130 @@ public class ReportsController {
 		}		
 		
 		//session.setAttribute("COMPLIANCE_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
+		
+		return finalResultsMap;
+	}
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateQaspReport(List<ScoreCard> scoreCardList) {
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();
+		//HashMap<String,ArrayList<ScoreCard>> qaspReportSessionObject = new HashMap<String,ArrayList<ScoreCard>>();
+		
+		for(ScoreCard scoreCard: scoreCardList) {
+			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(scoreCard.getMacId());
+			if(macInfo != null) {
+				String macNameTemp = macInfo.getMacName();
+				String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
+				
+				Calendar calObject = Calendar.getInstance();
+				calObject.setTime(scoreCard.getQamEnddateTime());
+				Integer year = calObject.get(Calendar.YEAR); 
+				String monthName = calObject.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+				
+				//ArrayList<ScoreCard> scoreCardListTemp = qaspReportSessionObject.get(monthName+"_"+year);
+				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(monthName+"_"+year);
+				String scoreCardType = scoreCard.getScorecardType();
+				
+				/*if(scoreCardListTemp == null) {
+					scoreCardListTemp = new ArrayList<ScoreCard>();
+				} 
+				
+				scoreCardListTemp.add(scoreCard);
+				qaspReportSessionObject.put(monthName+"_"+year, scoreCardListTemp);		*/
+				
+				Integer scoreCardProgramId = scoreCard.getProgramId();
+				boolean hhhScoreCard = false;
+				
+				String scoreCardProgramName = HomeController.ALL_PROGRAM_MAP.get(scoreCardProgramId);
+				if(scoreCardProgramName.contains("HHH")) {
+					hhhScoreCard = true;
+				}
+								
+				if(qamMacByJurisdictionReviewReport == null) {
+					qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+					qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
+					qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+					qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+					qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+					qamMacByJurisdictionReviewReport.setMacId(macInfo.getId().intValue());
+					qamMacByJurisdictionReviewReport.setScoreCardType(scoreCardType);
+					qamMacByJurisdictionReviewReport.setMonthYear(monthName+"_"+year);
+					
+					if(hhhScoreCard) {
+						qamMacByJurisdictionReviewReport.setHhhTotalCount(1);
+						
+						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
+							qamMacByJurisdictionReviewReport.setHhhScorableCount(1);
+							if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+								qamMacByJurisdictionReviewReport.setHhhScorablePass(1);
+							} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+								qamMacByJurisdictionReviewReport.setHhhScorableFail(1);
+							}
+						} 
+					} else {
+						qamMacByJurisdictionReviewReport.setTotalCount(1);
+						
+						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
+							qamMacByJurisdictionReviewReport.setScorableCount(1);
+							if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+								qamMacByJurisdictionReviewReport.setScorablePass(1);
+							} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+								qamMacByJurisdictionReviewReport.setScorableFail(1);
+							}
+						} 
+					}
+					
+					
+					
+				} else {
+					if(hhhScoreCard) {
+						qamMacByJurisdictionReviewReport.setHhhTotalCount(qamMacByJurisdictionReviewReport.getHhhTotalCount()+1);
+						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
+							qamMacByJurisdictionReviewReport.setHhhScorableCount(qamMacByJurisdictionReviewReport.getHhhScorableCount()+1);
+							if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+								qamMacByJurisdictionReviewReport.setHhhScorablePass(qamMacByJurisdictionReviewReport.getHhhScorablePass()+1);
+							} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+								qamMacByJurisdictionReviewReport.setHhhScorableFail(qamMacByJurisdictionReviewReport.getHhhScorableFail()+1);
+							}
+						} 
+					} else {
+						qamMacByJurisdictionReviewReport.setTotalCount(qamMacByJurisdictionReviewReport.getTotalCount()+1);
+						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
+							qamMacByJurisdictionReviewReport.setScorableCount(qamMacByJurisdictionReviewReport.getScorableCount()+1);
+							if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+								qamMacByJurisdictionReviewReport.setScorablePass(qamMacByJurisdictionReviewReport.getScorablePass()+1);
+							} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+								qamMacByJurisdictionReviewReport.setScorableFail(qamMacByJurisdictionReviewReport.getScorableFail()+1);
+							}
+						} 
+					}
+					
+					
+				}
+				
+				finalResultsMap.put(monthName+"_"+year, qamMacByJurisdictionReviewReport);
+				
+			}
+		}
+		
+		for(String macJurisKey: finalResultsMap.keySet()) {
+			
+			DecimalFormat twoDForm = new DecimalFormat("#.##");
+			QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macJurisKey);
+			
+			if(qamMacByJurisdictionReviewReport.getScoreCardType().equalsIgnoreCase("Scoreable")) {
+				Float scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+				scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
+				Float scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+				scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
+				qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
+				qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);
+				
+			} 
+			
+			finalResultsMap.put(macJurisKey, qamMacByJurisdictionReviewReport);
+		}
+		
+		//session.setAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
 		
 		return finalResultsMap;
 	}

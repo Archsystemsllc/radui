@@ -314,7 +314,7 @@ public class MacAssignmentController {
 				
 				if(eachCellArray.length > 4) {
 					if(eachCellArray[4] != null && !eachCellArray[4].equalsIgnoreCase("") && !eachCellArray[4].equalsIgnoreCase("NoInput")) {
-						assignedCalls += eachCellArray[4]+","+eachCellArray[5]+","+eachCellArray[6]+","+eachCellArray[7];
+						assignedCalls += eachCellArray[4]+","+eachCellArray[5]+","+eachCellArray[6];
 						
 					}					
 				}

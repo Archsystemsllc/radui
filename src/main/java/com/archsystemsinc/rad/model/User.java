@@ -39,7 +39,7 @@ public class User {
 	private String jurId;
 	
 	private String[] jurisidictionId;
-	private Long orgId;
+	private Long orgIdTemp;
 	private Date lastLoggedinDate;
 	
 	private String token;
@@ -52,9 +52,17 @@ public class User {
 	
 	private String roleString;
 	
+	private Long ignoreCurrentUserId;
 	
 	
 	
+	
+	public Long getIgnoreCurrentUserId() {
+		return ignoreCurrentUserId;
+	}
+	public void setIgnoreCurrentUserId(Long ignoreCurrentUserId) {
+		this.ignoreCurrentUserId = ignoreCurrentUserId;
+	}
 	public String getToken() {
 		return token;
 	}
@@ -183,13 +191,14 @@ public class User {
 		this.status = status;
 	}
 	
-	public Long getOrgId() {
-		return orgId;
-	}
-	public void setOrgId(Long orgId) {
-		this.orgId = orgId;
-	}
 	
+	
+	public Long getOrgIdTemp() {
+		return orgIdTemp;
+	}
+	public void setOrgIdTemp(Long orgIdTemp) {
+		this.orgIdTemp = orgIdTemp;
+	}
 	public String getJurId() {
 		return jurId;
 	}
@@ -253,7 +262,7 @@ public class User {
 		builder.append(", jurId=");
 		builder.append(jurId);
 		builder.append(", orgId=");
-		builder.append(orgId);
+		builder.append(orgIdTemp);
 		builder.append("]");
 		return builder.toString();
 	}

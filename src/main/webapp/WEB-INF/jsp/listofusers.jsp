@@ -69,6 +69,8 @@ $(document).ready(function(){
 
 	var data =eval('${users}');	
 	var role = $('#userRole').val();
+
+	
 	
 	var userListTable = $('#userLists').DataTable( {
 	"aaData": data,
@@ -122,7 +124,7 @@ $(document).ready(function(){
 			} else {
 				statusName = "Active";
 			}
-                       
+			
             return statusName;		
              
         },
@@ -172,6 +174,36 @@ $(document).ready(function(){
 	  "pageLength" : 10,
 	   "ordering" : true,
 	});
+
+
+	$("#userLists").on('dblclick','tr',function() {
+		//alert("aaaaaa:"+$(this).text())
+          var id = $(this).find("td:first-child").text();
+          var updatedBy = "${pageContext.request.userPrincipal.name}";
+          var st = $(this).find("td:nth-child(7)");
+          var replaceSt = "Active";
+          var status = 1;
+          if(st.text() == 'Active'){
+        	  status = 0;
+        	  replaceSt = "Inactive";
+          }
+          
+          var username="qamadmin";
+          var password="123456";
+          $(this).toggleClass("select");
+		 $.ajax({
+			url : "${WEB_SERVICE_URL}updateStatus",
+			 headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+		    method: 'POST',
+		    data: { userId : id, status: status, updatedBy: updatedBy },
+		    success: function(result) {
+		      var jsondata = $.parseJSON(result);
+		       st.html(replaceSt);	
+		       st.css("font-weight","bold");
+		    }
+		  });
+
+ });
 	
 });
 
@@ -230,8 +262,8 @@ $(function(){
 										</div>
 										
 										<div class="col-md-3 col-md-offset-1 form-container">
-											<label for="roleId"> Role:</label> 
-											<form:select path="roleId"
+											<label for="roleIdString"> Role:</label> 
+											<form:select path="roleIdString"
 													class="form-control" id="roleId" title="Select Role ID From the List">
 													<option value="" label="--- Select Role---" />
 													<form:options items="${roleIds}" />
@@ -239,9 +271,9 @@ $(function(){
 										</div>
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
 										<div class="col-md-3 col-md-offset-1 form-container">
-											<label for="organizationId"> Organization:</label>
+											<label for="orgIdString"> Organization:</label>
 											
-											 <form:select path="orgId"
+											 <form:select path="orgIdString"
 													 class="form-control" id="organizationId" title="Select Organization from the List"
 													>
 													<option value="" label="--- Select Org---" />
