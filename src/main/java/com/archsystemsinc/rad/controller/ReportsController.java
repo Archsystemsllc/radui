@@ -261,6 +261,8 @@ public class ReportsController {
 		return "rebuttalreportlist";
 	}
 	 
+	 private static final SimpleDateFormat usEstDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	 
 	@RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
 			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport","/quality_monitor/getMacJurisReport"})			
 	public String getMacJurisReport(@ModelAttribute("reportsForm") ReportsForm reportsForm,  final BindingResult result,
@@ -282,14 +284,15 @@ public class ReportsController {
 			
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/yyyy");
-				
+						
 				Calendar calendar = Calendar.getInstance();
 				reportsForm.setToDate(calendar.getTime());
-				//reportsForm.setToDateString(calendar.toString());
+				String dateValueString = usEstDateFormat.format(calendar.getTime());		
+				reportsForm.setToDateString(dateValueString);
 				calendar.add(Calendar.YEAR, -1);
 				reportsForm.setFromDate(calendar.getTime());
-				//reportsForm.setFromDateString(calendar.toString());
+				dateValueString = usEstDateFormat.format(calendar.getTime());		
+				reportsForm.setFromDateString(dateValueString);
 				
 			} else {
 				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
