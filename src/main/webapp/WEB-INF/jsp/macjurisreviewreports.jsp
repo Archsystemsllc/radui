@@ -651,14 +651,13 @@ $(document).ready(function() {
 		"aaData": qaspScorecardData,
 		"aoColumns": [
 		{ "mData": "monthYear"},
-		{ "mData": "scorableCount"},
+		{ "mData": "scorableCount", className: "dt-body-center"},
 		{ "mData": "hhhScorableCount"},
 		{ "mData": "scorablePass"},
 		{ "mData": "hhhScorablePass"},
 		{ "mData": "scorableFail"},
 		{ "mData": "hhhScorableFail"}
 		],		
-	    
 		 dom: '<lif<t>pB>',
 	     buttons: [
 	         {
@@ -680,8 +679,10 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
+		  "searching": false,
+		 
 		  "footerCallback": function ( row, data, start, end, display ) {
 	            var api = this.api(), data;
 	 
@@ -708,10 +709,10 @@ $(document).ready(function() {
 	            // Total over all pages for Scoreable Pass Count
 	            var scoreableHhhCountTotal = api
               .column( 2 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
+		              .data()
+		              .reduce( function (a, b) {
+		                  return intVal(a) + intVal(b);
+		              }, 0 );
 
 		        // Update footer
 		        $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
@@ -719,22 +720,22 @@ $(document).ready(function() {
 		       
 		     	// Total over all pages for Scoreable Fail Count
 		        var scoreablePassCountTotal = api
-              .column( 3 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
+		              .column( 3 )
+		              .data()
+		              .reduce( function (a, b) {
+		                  return intVal(a) + intVal(b);
+		              }, 0 );
 
 		        // Update footer
 		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
 
 		     // Total over all pages for Scoreable Fail Count
 		        var scoreableHhhPassCountTotal = api
-              .column( 4 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
+		              .column( 4 )
+		              .data()
+		              .reduce( function (a, b) {
+		                  return intVal(a) + intVal(b);
+		              }, 0 );
 
 		        // Update footer
 		        $( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
@@ -742,11 +743,11 @@ $(document).ready(function() {
 		        
 		     	// Total over all pages for Non Scoreable Count
 		        var scoreableFailCountTotal = api
-              .column( 5)
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
+		              .column( 5)
+		              .data()
+		              .reduce( function (a, b) {
+		                  return intVal(a) + intVal(b);
+		              }, 0 );
 
 		        // Update footer
 		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
@@ -761,6 +762,17 @@ $(document).ready(function() {
 		
 		        // Update footer
 		        $( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
+		        
+				var totalScoreCards = scoreableCountTotal + scoreableHhhCountTotal;
+				var totalPassScoreCards = scoreablePassCountTotal + scoreableHhhPassCountTotal;
+				var totalFailScoreCards = scoreableFailCountTotal + scoreableFailHhhCountTotal;
+				var average = (totalPassScoreCards / totalScoreCards) * 100;
+		        $('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
+		        $('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
+		        $('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
+
+		     // Update footer
+		      $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
 		  }
 		     
 	});
@@ -1140,33 +1152,48 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qaspReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left" rowspan="2">Month</th>
-										            <th style="text-align: left" colspan="2"># of QAM Scorecards Completed</th>
-										            <th style="text-align: left" colspan="2"># of QAM Scorecards Passed</th>
-										            <th style="text-align: left" colspan="2"># of QAM Scorecards Failed</th>
+										            <th style="text-align: center" rowspan="2">Month</th>
+										            <th style="text-align: center" colspan="2"># of QAM Scorecards Completed</th>
+										            <th style="text-align: center" colspan="2"># of QAM Scorecards Passed</th>
+										            <th style="text-align: center" colspan="2"># of QAM Scorecards Failed</th>
 										            									                 
 										        </tr>
 										         <tr>
-										        	<th style="text-align: left">Non HHH</th>
-										            <th style="text-align: left">HHH</th>
-										            <th style="text-align: left">Non HHH</th>
-										            <th style="text-align: left">HHH</th>
-										            <th style="text-align: left">Non HHH</th>
-										            <th style="text-align: left">HHH</th>
+										        	<th style="text-align: center">Non HHH</th>
+										            <th style="text-align: center">HHH</th>
+										            <th style="text-align: center">Non HHH</th>
+										            <th style="text-align: center">HHH</th>
+										            <th style="text-align: center">Non HHH</th>
+										            <th style="text-align: center">HHH</th>
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                    <tfoot>
 								            <tr>
 								                <th colspan="1" style="text-align:right">Sub-Totals:</th>
-								                <th style="text-align: left"></th>
-								                <th style="text-align: left"></th>
-								                <th style="text-align: left"></th>
-								                <th style="text-align: left"></th>
-								                <th style="text-align: left"></th>
-								                <th style="text-align: left"></th>
+								                <th style="text-align: center"></th>
+								                <th style="text-align: center"></th>
+								                <th style="text-align: center"></th>
+								                <th style="text-align: center"></th>
+								                <th style="text-align: center"></th>
+								                <th style="text-align: center"></th>
 								               
+								            </tr>
+								            <tr>
+								                <th colspan="1" style="text-align:right"></th>
+								                <th style="text-align: center" colspan="2">Total Completed</th>
+								                <th style="text-align: center" colspan="2">Total Passed</th>
+								                <th style="text-align: center" colspan="2">Total Failed</th>
+								            </tr>
+								            <tr>
+								                <th colspan="1" style="text-align:right">TOTALS</th>
+								                <th style="text-align: center" colspan="2"></th>
+								                <th style="text-align: center" colspan="2"></th>
+								                <th style="text-align: center" colspan="2"></th>
+								            </tr>
+								            <tr>
+								                <th colspan="7" style="text-align:center"></th>								                
 								            </tr>
 								        </tfoot>
 						                </table> 

@@ -257,7 +257,15 @@ public class ScoreCardController {
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
 		
+		//System Screen Access--Start
+		if(scoreCard.getSystemScreenAccess() != null && !scoreCard.getSystemScreenAccess().equalsIgnoreCase("")) {
+			String systemScreenAccessArray[] = scoreCard.getSystemScreenAccess().split(",");
+			
+			scoreCard.setSystemScreenAccessArray(systemScreenAccessArray);
+		}
 		
+		
+		//System Screen Access--End
 		
 		String roles = authentication.getAuthorities().toString();
 		
@@ -335,7 +343,15 @@ public class ScoreCardController {
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
 		
+		//System Screen Access--Start
+		if(scoreCard.getSystemScreenAccess() != null && !scoreCard.getSystemScreenAccess().equalsIgnoreCase("")) {
+			String systemScreenAccessArray[] = scoreCard.getSystemScreenAccess().split(",");
+			
+			scoreCard.setSystemScreenAccessArray(systemScreenAccessArray);
+		}
 		
+		
+		//System Screen Access--End
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
@@ -366,56 +382,6 @@ public class ScoreCardController {
 			callCategorySubCatMsIds = callSubCategoryStringMsTemp.split(",");			
 			scoreCard.setCallCatSubCatMsStringArray(callCategorySubCatMsIds);
 		}
-		
-		
-		/*
-		 * HashMap<Integer, String> callCatMap = new HashMap<Integer, String>();
-		 * if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
-			String[] tempValues = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
-			for(String stringTempValue:tempValues) {
-				String callCategoryName = HomeController.CALL_CATEGORY_MAP.get(Integer.valueOf(stringTempValue));
-				callCatMap.put(Integer.valueOf(stringTempValue), callCategoryName);
-			}
-			
-		}
-		model.addAttribute("callCategoryListView", callCatMap);		
-				
-		HashMap<Integer,String> subCategoryMapFinal = new HashMap<Integer, String>();	
-		if(scoreCard.getCallCategoryIdKnoweledgeSkills() != null) {
-			String[] callCategoryIds = scoreCard.getCallCategoryIdKnoweledgeSkills().split(",");
-			for(String callCategoryIdsSingleValue: callCategoryIds) {
-				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
-					
-					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
-						
-						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
-							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
-							subCategoryMapFinal.putAll(subCategoryMap);
-						}
-						break;
-					}
-					Integer callCategoryId = Integer.valueOf(callCategoryIdsSingleValue);
-					HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);
-					subCategoryMapFinal.putAll(subCategoryMap);
-				}			
-			}			
-		}	*/
-
-		
-		
-		
-		/*HashMap<Integer, String> callSubCatMap = new HashMap<Integer, String>();
-		 if(scoreCard.getCallSubCategoryIdKnoweledgeSkills() != null 
-				&& !scoreCard.getCallSubCategoryIdKnoweledgeSkills().equalsIgnoreCase("")) {
-			String[] tempValues = scoreCard.getCallSubCategoryIdKnoweledgeSkills().split(",");
-			
-			for(String stringTempValue:tempValues) {
-				String callSubCategoryName = subCategoryMapFinal.get(Integer.valueOf(stringTempValue));
-				callSubCatMap.put(Integer.valueOf(stringTempValue), callSubCategoryName);
-			}
-		}
-		model.addAttribute("subCategoryMapListEdit", callSubCatMap);	
-		*/
 		
 		
 		
@@ -620,6 +586,19 @@ public class ScoreCardController {
 				scoreCard.setMacName(HomeController.MAC_ID_MAP.get(scoreCard.getMacId()));
 				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
 				scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);
+				//System Screen Access--Start
+				//System Screen Access--Start
+				if(scoreCard.getSystemScreenAccessArray() != null && scoreCard.getSystemScreenAccessArray().length > 0) {
+					String systemScreenAccess = String.join(",", scoreCard.getSystemScreenAccessArray());
+					
+					scoreCard.setSystemScreenAccess(systemScreenAccess);
+				}
+				
+				
+				//System Screen Access--End
+				
+				
+				//System Screen Access--End
 				ResponseEntity<ScoreCard> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,ScoreCard.class);
 				
 				if(scoreCard.getId() == 0) {

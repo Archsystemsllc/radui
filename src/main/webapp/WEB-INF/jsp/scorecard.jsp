@@ -50,6 +50,7 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery.multi-select.js"></script>
 
 <!-- JavaScript for PQSelect -->
 <script src="${pageContext.request.contextPath}/resources/js/pqselect.dev.js"></script>
@@ -235,7 +236,10 @@
     			var firstName = ui.item.firstName.substr(0,1);
     			var lastName = ui.item.lastName.substr(0,5);
 
-    			var dateString= $('#callMonitoringDate_Alt').val();
+    			//var dateString= $('#callMonitoringDate_Alt').val();
+    			var dateTypeValue = $('#callMonitoringDate').datepicker('getDate');
+    			var dateConvertedValue =$.datepicker.formatDate('yymmdd', dateTypeValue);
+    			//alert("Date Converted Value:"+dateConvertedValue);
     			
     			var callTimString = $('#callTime').val();
     			
@@ -251,7 +255,7 @@
    			    callTimString = callTimString.replace(/:/,'');
    			    callTimString = callTimString.replace(/(AM|PM)/, '');
     			
-                var macRefId = selectedJurisdiction+firstName+lastName+dateString+"_"+callTimString;
+                var macRefId = selectedJurisdiction+firstName+lastName+dateConvertedValue+"_"+callTimString;
 
                 $('#macCallReferenceNumber').val(macRefId);         	 
     	        return false;
@@ -842,10 +846,24 @@
 			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true" title="Choose Call Monitoring Date from the Calendar"/>
 			                            	<input type="hidden" id="callMonitoringDate_Alt"></input>
 			                            </div>
-			                      <!--       <div class="col-lg-6 form-group">
-			                                <label for="email"> </label>
-			                                
-			                            </div> -->
+			                      		<div class="col-lg-6 form-group">
+			                                <label for="systemScreenAccess"> </label>
+			                             <form:select path="systemScreenAccessArray" class="form-control required" id="systemScreenAccess" multiple="true">
+										   <form:option value="" label="---Select---"/>
+										   <form:option value="NPPES" />
+										   <form:option value="HIGLAS" />
+										   <form:option value="FISS" />
+										   <form:option value="MCS" />
+										   <form:option value="HIMR" />
+										   <form:option value="CWF" />
+										   <form:option value="MBD" />
+										   <form:option value="HETS" />
+										   <form:option value="VMS" />
+										   <form:option value="No Screens Accessed" />
+										   
+										</form:select> 		
+										
+			                            </div> 
 			                        </div>
 				                   
 				                    <div class="row">

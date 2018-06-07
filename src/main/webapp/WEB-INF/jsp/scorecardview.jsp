@@ -806,10 +806,24 @@
 			                                <input type="hidden" id="callMonitoringDate_Alt"></input>
 			                                <form:input type = "text" class="form-control required" path="callMonitoringDate" readonly="true"/>
 			                            </div>
-			                            <div class="col-lg-6 form-group">
-			                                <label for="email"> </label>
-			                                
-			                            </div>
+			                           <div class="col-lg-6 form-group">
+			                                <label for="systemScreenAccess"> </label>
+			                             <form:select path="systemScreenAccessArray" class="form-control required" id="systemScreenAccess" multiple="true">
+										   <form:option value="" label="---Select---"/>
+										   <form:option value="NPPES" />
+										   <form:option value="HIGLAS" />
+										   <form:option value="FISS" />
+										   <form:option value="MCS" />
+										   <form:option value="HIMR" />
+										   <form:option value="CWF" />
+										   <form:option value="MBD" />
+										   <form:option value="HETS" />
+										   <form:option value="VMS" />
+										   <form:option value="No Screens Accessed" />
+										   
+										</form:select> 		
+										
+			                            </div> 
 			                        </div>
 				                   
 				                    <div class="row">

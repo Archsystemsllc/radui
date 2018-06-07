@@ -139,6 +139,10 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String finalScoreCardStatus;
 	
+	private String systemScreenAccess;
+	
+	private String[] systemScreenAccessArray;
+	
 	//Temporary Variables
 	private String jurisdictionName;	
 	
@@ -178,6 +182,22 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String[] callCatSubCatMsStringArray;
 	
+
+	public String getSystemScreenAccess() {
+		return systemScreenAccess;
+	}
+
+	public void setSystemScreenAccess(String systemScreenAccess) {
+		this.systemScreenAccess = systemScreenAccess;
+	}
+
+	public String[] getSystemScreenAccessArray() {
+		return systemScreenAccessArray;
+	}
+
+	public void setSystemScreenAccessArray(String[] systemScreenAccessArray) {
+		this.systemScreenAccessArray = systemScreenAccessArray;
+	}
 
 	public String[] getCallCatSubCatMsStringArray() {
 		return callCatSubCatMsStringArray;
