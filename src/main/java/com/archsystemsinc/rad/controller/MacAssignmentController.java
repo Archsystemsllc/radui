@@ -6,6 +6,7 @@ package com.archsystemsinc.rad.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,7 @@ import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.MacAssignmentObject;
+import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,6 +52,13 @@ public class MacAssignmentController {
 	
 	 @Autowired
 	 UtilityFunctions utilityFunctions;
+	 
+	@Value("${user1.id}")
+	Integer user1Id;
+	@Value("${user2.id}")
+	Integer user2Id;
+	@Value("${user3.id}")
+	Integer user3Id;
 	
 	@RequestMapping(value ={"/admin/macassignmentlist", "/quality_manager/macassignmentlist", "/cms_user/macassignmentlist",
 			 "/mac_admin/macassignmentlist","/mac_user/macassignmentlist","/quality_monitor/macassignmentlist"})		
@@ -81,13 +91,13 @@ public class MacAssignmentController {
 			ObjectMapper mapper = new ObjectMapper();
 			macAssignmentObjectTempList = responseEntity.getBody();
 			
-			List<Object[]> macAssignmentObjectList = mapper.convertValue(macAssignmentObjectTempList, new TypeReference<List<Object[]> >() { });
+			List<String> macAssignmentObjectList = mapper.convertValue(macAssignmentObjectTempList, new TypeReference<List<String> >() { });
 			
 			MacAssignmentObject macAssignmentObject = null;
-			for (Object singleObject: macAssignmentObjectList) {
-				Object[] singleObjectArray =  (Object[]) singleObject;
+			for (String singleObject: macAssignmentObjectList) {
+				
 				macAssignmentObject = new MacAssignmentObject();
-				macAssignmentObject.setAssignedMonthYear(singleObjectArray[0]+"_"+singleObjectArray[1]);
+				macAssignmentObject.setAssignedMonthYear(singleObject);
 				resultsList.add(macAssignmentObject);
 			}
 			
@@ -103,23 +113,22 @@ public class MacAssignmentController {
 	}
 	
 	@RequestMapping(value ={"/admin/edit-macassignment/{monthyear}/{action}", "/quality_manager/edit-macassignment/{monthyear}/{action}", "/cms_user/edit-macassignment/{monthyear}/{action}",
-			 "/mac_admin/edit-macassignment/{monthyear}/{action}","/mac_user/edit-macassignment/{monthyear}/{action}","/quality_monitor/edit-macassignment/{monthyear}/{action}"}, method = RequestMethod.GET)		
+			 "/mac_admin/edit-macassignment/{monthyear}/{action}","/mac_user/edit-macassignment/{monthyear}/{action}","/quality_monitor/edit-macassignment/{monthyear}/{action}"})		
 	public String viewNewMacAssignmentScreenGetMethod(@PathVariable("monthyear") final String monthYearPath,@PathVariable("action") final String action,Model model, HttpSession session, Authentication authentication) {
 		log.debug("--> viewNewMacAssignmentScreenGetMethod <--");
-		  
-		
-		
+		  		
 		MacAssignmentObject macAssignmentObject = null;
 		
 		ArrayList<MacAssignmentObject> macAssignmentObjectList = new ArrayList<MacAssignmentObject>();
 		
-		Date today = new Date(); 
+		
 		List<User> macAssignmentListResultsMap = new ArrayList<User> ();
 		
-		
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		Integer user1Count = 0;
+		Integer user2Count = 0;
+		Integer user3Count = 0;
 	
-		
 		try {
 			
 			ObjectMapper mapper = new ObjectMapper();
@@ -135,26 +144,36 @@ public class MacAssignmentController {
 			});
 			MacAssignmentObject macAssignmentSearchObject = new MacAssignmentObject();
 			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM_yyyy");
+			
+			Date today = new Date(); 
 			if(monthYearPath.equalsIgnoreCase("null")) {
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(today);
+				Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+								
+				if(dayOfMonth <= 15) {					
+					cal.add(Calendar.MONTH, -1);					
+				} 
 				
-				String currentMonthYear = mdyFormat.format(today);
+				String currentMonthYear = mdyFormat.format(cal.getTime());
 				macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
 				model.addAttribute("currentMonthYear", currentMonthYear);
 			} else {
 				
-				SimpleDateFormat mydFormat = new SimpleDateFormat("MMM_yyyy_dd");
+				//SimpleDateFormat mydFormat = new SimpleDateFormat("MMM_yyyy_dd");
 				try {
-					Date monthDate = mydFormat.parse(monthYearPath+"_01");
-					String currentMonthYear = mdyFormat.format(monthDate);
-					macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
-					model.addAttribute("currentMonthYear", currentMonthYear);
-				} catch (ParseException e) {
+					/*Date monthDate = mydFormat.parse(monthYearPath+"_01");
+					String currentMonthYear = mdyFormat.format(monthDate);*/
+					macAssignmentSearchObject.setAssignedMonthYear(monthYearPath);
+					model.addAttribute("currentMonthYear", monthYearPath);
+				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			
-			model.addAttribute("action", action);
+			model.addAttribute("action", action);		
+			
 			
 			
 			String ROOT_URI_MAC_ASSIGNMENT = new String(HomeController.RAD_WS_URI + "macAssignmentWithMonthYear");
@@ -168,8 +187,10 @@ public class MacAssignmentController {
 				for(String macJurisCode : macJurisProgramMap.keySet()) {
 					
 					String[] stringList = macJurisCode.split("_");
-					String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(stringList[0]));
-					String jurisdictionName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(stringList[1]));
+					Integer macId = Integer.valueOf(stringList[0]);
+					Integer jurisdictionId = Integer.valueOf(stringList[1]);
+					String macName = HomeController.MAC_ID_MAP.get(macId);
+					String jurisdictionName = HomeController.JURISDICTION_MAP.get(jurisdictionId);
 					HashMap<Integer,String> jurisProgramMap = macJurisProgramMap.get(macJurisCode);
 					
 					for(Integer programId: jurisProgramMap.keySet()) {
@@ -180,12 +201,14 @@ public class MacAssignmentController {
 						macAssignmentObject.setMacName(macName);
 						macAssignmentObject.setJurisdictionName(jurisdictionName);
 						macAssignmentObject.setProgramName(programName);
+						macAssignmentObject.setMacId(macId);
+						macAssignmentObject.setJurisdictionId(jurisdictionId);
+						macAssignmentObject.setProgramId(programId);
 						macAssignmentObject.setPlannedCalls("20");
 						macAssignmentObject.setCreatedMethod("Auto");
-						macAssignmentObject.setAssignedCallsForCindy(0);
-						macAssignmentObject.setAssignedCallsForLydia(0);
-						//macAssignmentObject.setAssignedCallsForKelly(0);
-						macAssignmentObject.setAssignedCallsForJaneene(0);
+						macAssignmentObject.setAssignedCallsForCindy("0");
+						macAssignmentObject.setAssignedCallsForLydia("0");
+						macAssignmentObject.setAssignedCallsForJaneene("0");
 						
 						macAssignmentObjectList.add(macAssignmentObject);
 						
@@ -198,15 +221,74 @@ public class MacAssignmentController {
 					String assignedCalls = macAssignmentObjectTemp.getAssignedCalls();
 					String eachQualityMontiorCalls[] = assignedCalls.split(",");
 					if(eachQualityMontiorCalls.length > 1) {
-						macAssignmentObjectTemp.setAssignedCallsForCindy(Integer.valueOf(eachQualityMontiorCalls[0]));
-						macAssignmentObjectTemp.setAssignedCallsForLydia(Integer.valueOf(eachQualityMontiorCalls[1]));
-						//macAssignmentObjectTemp.setAssignedCallsForKelly(Integer.valueOf(eachQualityMontiorCalls[2]));
-						macAssignmentObjectTemp.setAssignedCallsForJaneene(Integer.valueOf(eachQualityMontiorCalls[2]));
+						
+						
+						if(action.equalsIgnoreCase("View")) {
+							ScoreCard scoreCard;
+							String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchScoreCard");
+							ResponseEntity<List> responseEntity;
+							List<ScoreCard> scoreCardRsultsMap;
+							List<ScoreCard> scoreCardList;
+							Calendar cal = Calendar.getInstance();
+							Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+							Date filterToDate;
+							Date filterFromDate;
+							
+							filterToDate = cal.getTime();
+							if(dayOfMonth <= 15) {					
+								cal.add(Calendar.MONTH, -1);					
+							} 
+							
+							cal.set(Calendar.DAY_OF_MONTH, 15);
+							filterFromDate = cal.getTime();
+							
+							scoreCard = new ScoreCard();
+							scoreCard.setFilterFromDate(filterFromDate);
+							scoreCard.setFilterToDate(filterToDate);
+							scoreCard.setMacId(macAssignmentObjectTemp.getMacId());
+							scoreCard.setJurId(macAssignmentObjectTemp.getJurisdictionId());
+							scoreCard.setProgramId(macAssignmentObjectTemp.getProgramId());
+							
+							//Scorecard List Count for First User
+							
+							
+							scoreCard.setUserId(user1Id);
+							responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard, List.class);
+							
+							scoreCardRsultsMap = responseEntity.getBody();
+							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
+							user1Count = scoreCardList.size();
+							
+							//Scorecard List Count for Second User						
+							scoreCard.setUserId(user2Id);
+							responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard, List.class);
+							
+							scoreCardRsultsMap = responseEntity.getBody();
+							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
+							user2Count = scoreCardList.size();
+							
+							//Scorecard List Count for Second User
+														
+							scoreCard.setUserId(user3Id);
+							responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard, List.class);
+							
+							scoreCardRsultsMap = responseEntity.getBody();
+							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
+							user3Count = scoreCardList.size();
+							
+							macAssignmentObjectTemp.setAssignedCallsForCindy(eachQualityMontiorCalls[0]+"("+user1Count+")");
+							macAssignmentObjectTemp.setAssignedCallsForLydia(eachQualityMontiorCalls[1]+"("+user2Count+")");						
+							macAssignmentObjectTemp.setAssignedCallsForJaneene(eachQualityMontiorCalls[2]+"("+user3Count+")");
+						} else {
+							macAssignmentObjectTemp.setAssignedCallsForCindy(eachQualityMontiorCalls[0]);
+							macAssignmentObjectTemp.setAssignedCallsForLydia(eachQualityMontiorCalls[1]);						
+							macAssignmentObjectTemp.setAssignedCallsForJaneene(eachQualityMontiorCalls[2]);
+						}
+						
 					} else {
-						macAssignmentObjectTemp.setAssignedCallsForCindy(Integer.valueOf(eachQualityMontiorCalls[0]));
-						macAssignmentObjectTemp.setAssignedCallsForLydia(0);
-						//macAssignmentObjectTemp.setAssignedCallsForKelly(0);
-						macAssignmentObjectTemp.setAssignedCallsForJaneene(0);
+						macAssignmentObjectTemp.setAssignedCallsForCindy("0");
+						macAssignmentObjectTemp.setAssignedCallsForLydia("0");						
+						macAssignmentObjectTemp.setAssignedCallsForJaneene("0");
 					}
 					
 					macAssignmentMap.put(macAssignmentObjectTemp.getId(),macAssignmentObjectTemp);
@@ -260,7 +342,7 @@ public class MacAssignmentController {
 	
 	@RequestMapping(value ={"/admin/save-macassignmentlist", "/quality_manager/save-macassignmentlist", "/cms_user/save-macassignmentlist",
 			 "/mac_admin/save-macassignmentlist","/mac_user/save-macassignmentlist","/quality_monitor/save-macassignmentlist"}, method = RequestMethod.GET)	
-	public String saveMacAssignmentScreenGetMethod(@RequestParam("monthNumber") final String assignedMonthYear, @RequestParam("finalDataSet[]") String[] saveDataSet,final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
+	public void saveMacAssignmentScreenGetMethod(@RequestParam("monthNumber") final String assignedMonthYear, @RequestParam("finalDataSet[]") String[] saveDataSet,final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
 		log.debug("--> saveMacAssignmentScreenGetMethod <--");
 		  
 		String returnView = "";
@@ -304,6 +386,9 @@ public class MacAssignmentController {
 					macAssignmentObject.setMacName(eachCellArray[0]);
 					macAssignmentObject.setJurisdictionName(eachCellArray[1]);
 					macAssignmentObject.setProgramName(eachCellArray[2]);
+					macAssignmentObject.setMacId(Integer.valueOf(eachCellArray[7]));
+					macAssignmentObject.setJurisdictionId(Integer.valueOf(eachCellArray[8]));
+					macAssignmentObject.setProgramId(Integer.valueOf(eachCellArray[9]));
 					macAssignmentObject.setPlannedCalls("20");
 					macAssignmentObject.setCreatedMethod("Auto");
 					//macAssignmentObject.setCreatedDate(new Date());
@@ -331,11 +416,11 @@ public class MacAssignmentController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String url = "redirect:/"+userFolder+"/macassignmentlist";
+		/*String url = "redirect:/"+userFolder+"/macassignmentlist";
 		url = response.encodeRedirectURL(url);
 		returnView =  url;		
 
-		return returnView;
+		return returnView;*/
 		
 	}
 	

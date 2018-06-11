@@ -182,6 +182,16 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String[] callCatSubCatMsStringArray;
 	
+	private String macAssignmentSearchString;	
+	
+
+	public String getMacAssignmentSearchString() {
+		return macAssignmentSearchString;
+	}
+
+	public void setMacAssignmentSearchString(String macAssignmentSearchString) {
+		this.macAssignmentSearchString = macAssignmentSearchString;
+	}
 
 	public String getSystemScreenAccess() {
 		return systemScreenAccess;

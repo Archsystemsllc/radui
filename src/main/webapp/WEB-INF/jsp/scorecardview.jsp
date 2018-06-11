@@ -807,7 +807,7 @@
 			                                <form:input type = "text" class="form-control required" path="callMonitoringDate" readonly="true"/>
 			                            </div>
 			                           <div class="col-lg-6 form-group">
-			                                <label for="systemScreenAccess"> </label>
+			                              <label for="systemScreenAccess">IMD-System Screen Access</label>
 			                             <form:select path="systemScreenAccessArray" class="form-control required" id="systemScreenAccess" multiple="true">
 										   <form:option value="" label="---Select---"/>
 										   <form:option value="NPPES" />

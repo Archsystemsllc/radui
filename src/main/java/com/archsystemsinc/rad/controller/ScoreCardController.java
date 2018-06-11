@@ -105,8 +105,7 @@ public class ScoreCardController {
 					
 					scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
-					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-					
+					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);					
 					
 					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					

@@ -62,7 +62,6 @@ $(document).ready(function() {
 		{ "mData": "createdMethod"},
 		{ "mData": "assignedCallsForCindy"},
 		{ "mData": "assignedCallsForLydia"},
-		
 		{ "mData": "assignedCallsForJaneene"}
 		],	
 		 "columnDefs": [ 
@@ -70,11 +69,10 @@ $(document).ready(function() {
 		           "render" : function(data, type, row) {
 		        	   var linkData = "";
 			        if(data != null) {				        
-				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
+				        	linkData = "<span><input type='text' value='"+data+"' size='6'></input></span>";	
 				    } else {
-				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
-					}
-					
+				    		linkData = "<span><input type='text' value='' readonly size='6'></input></span>";
+					}					
 					return linkData;
 		        },
 			   "targets" : 5
@@ -83,11 +81,10 @@ $(document).ready(function() {
 		           "render" : function(data, type, row) {
 		        	   var linkData = "";
 			        if(data != null) {				        
-				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
+				        	linkData = "<span><input type='text' value='"+data+"' size='6'></input></span>";	
 				    } else {
-				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
-					}
-					
+				    		linkData = "<span><input type='text' value='' readonly size='6'></input></span>";
+					}					
 					return linkData;
 		        },
 			   "targets" : 6
@@ -97,32 +94,14 @@ $(document).ready(function() {
 		           "render" : function(data, type, row) {
 		        	   var linkData = "";
 			        if(data != null) {				        
-				        	linkData = "<span><input type='text' value='"+data+"' size='4'></input></span>";	
+				        	linkData = "<span><input type='text' value='"+data+"' size='6'></input></span>";	
 				    } else {
-				    		linkData = "<span><input type='text' value='' readonly size='4'></input></span>";
-					}
-					
+				    		linkData = "<span><input type='text' value='' readonly size='6'></input></span>";
+					}					
 					return linkData;
 		        },
 			   "targets" : 7
-			   }/* ,
-			   { 
-				   "render" : function(data, type, row) {
-						
-						var linkData = '<span><select readonly><option value="">Select</option>';	
-						$.each(${pccContactPersonMap}, function (key,obj) {
-							
-							if(key == data) {
-								linkData += '<option value="'+key+'" selected>'+obj+'</option>';
-							} else {
-								linkData += '<option value="'+key+'">'+obj+'</option>';
-							}  	  	    		
-		  	  	    	});  	   
-		  	  	    	linkData +="</select></span>"
-		  	  	    	return linkData;
-			        },
-				   "targets" : 6
-			   }		 */
+			   }
 			 ],	   
 		 dom: '<lif<t>pB>',
 	     buttons: [
@@ -149,12 +128,7 @@ $(document).ready(function() {
 		  "ordering" : true,
 	});
 
-
-	
-
 	$('button[id=save]').click(function() {	
-		
-		
         var data = macAssignmentDataTable.rows().data();
         var eachRecord = "";
         var finalDataSet = new Array();
@@ -175,35 +149,26 @@ $(document).ready(function() {
 				 riveraLydiaInputValue = "NoInput";
 			 }
 
-			 /* var reillyKellyInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
-			 if(reillyKellyInputValue == "") {
-				 reillyKellyInputValue = "NoInput";
-			 } */
-
 			 var galtinJaneeneInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
 			 if(galtinJaneeneInputValue == "") {
 				 galtinJaneeneInputValue = "NoInput";
 			 }
-			/*  var selectValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('select').val();
-			 if(selectValue == "") {
-				selectValue = "NoSelect";
-			 } */
+			
 		     eachRecord = value.macName +","+value.jurisdictionName
 		     				+","+value.programName+","+idValue+","+rifkinCindyInputValue
-		     				+","+riveraLydiaInputValue+"," +galtinJaneeneInputValue;		    
+		     				+","+riveraLydiaInputValue+"," +galtinJaneeneInputValue
+		     				+"," +value.macId+"," +value.jurisdictionId+"," +value.programId;		    
 		     
 		     finalDataSet[index] = eachRecord;
 		 }); 
 
-		 //console.log(finalDataSet);
 		var monthYear = "${currentMonthYear}";
 		 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/save-macassignmentlist",                    
 	             {monthNumber: monthYear, finalDataSet: finalDataSet}, function(){
 	            	
 	         
-	     });
-		
-		 $("#reportsForm").submit();
+	     })
+	     .complete(function() { $("#reportsForm").submit(); });
         
     } );
 
@@ -226,11 +191,7 @@ $(document).ready(function() {
               }
         });
      }); 
-
-	
 });
-
-
 </script>
 
 </head>
@@ -247,36 +208,23 @@ $(document).ready(function() {
 					<div id="updates" class="boxed">					
 						
 						<div class="content">
-						
-						 		
 								 			
 								<div class="table-users" style="width: 98%">
 									<div class="header">MAC Assignment Screen</div>
 									
 								<div class="row " style="margin-top: 10px">
 									<div class="col-lg-12 col-lg-offset-1 form-container">
-				                    <%-- <h2>"${reportName}"</h2>  --%>
-				                    <!-- <p> Please provide your feedback below: </p> -->
-				                    
-				                   
 				                	</div>
 				                </div>
-									
 								
-								 <div class="row" id="allScoreCardMainDiv">	
-					             <div class="col-lg-12 col-lg-offset-1 form-container">
-					                
+								<div class="row" id="allScoreCardMainDiv">	
+					             <div class="col-lg-12 col-lg-offset-1 form-container">					                
 					                    <h2>MAC Assignment for: ${currentMonthYear}</h2> 
-					                  	
-				                   
-				                        
-				               
-				                   
-				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+					                    			                   
 				                   <div class="row" id="allScoreCardDiv">
 			                            <div class="col-lg-10 form-group">
 			                           <c:if test="${action == 'view'}">
-			                           	<fieldset disabled>
+			                           		<fieldset disabled>
 			                           </c:if>
 			                        	
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="macAssignmentTableId" style="width: 95%">
@@ -293,8 +241,7 @@ $(document).ready(function() {
 										        </tr>
 										        <tr>
 										        	<th style="text-align: left">Rifkin,Cindy</th>
-										            <th style="text-align: left">Rivera,Lydia</th>
-										            
+										            <th style="text-align: left">Rivera,Lydia</th>										            
 										            <th style="text-align: left">Galtin,Janeene</th>
 										        </tr>
 										    </thead>
