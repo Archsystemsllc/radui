@@ -88,8 +88,8 @@
         }  else if (reportSelectValue == 'Qasp' ) {
         	$('#callCategoryTypeDiv').hide();
     		$('#rebuttalStatusDiv').hide();
-    		$('#programPccLocDiv,#datesDiv').hide();
-    		$("#programId,#loc,#fromDateString,#toDateString").removeAttr('required');
+    		$('#programPccLocDiv').hide();
+    		$("#programId,#loc").removeAttr('required');
     		
         }  
         
@@ -128,8 +128,8 @@
             	$('#complianceTypeDiv').hide();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
-        		$('#programPccLocDiv,#datesDiv').hide();
-        		$("#programId,#loc,#fromDateString,#toDateString").removeAttr('required');
+        		$('#programPccLocDiv').hide();
+        		$("#programId,#loc").removeAttr('required');
             }
 
           
@@ -194,8 +194,8 @@
             	$('#complianceTypeDiv').hide();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
-        		$('#programPccLocDiv,#datesDiv').hide();    
-        		$("#programId,#loc,#fromDateString,#toDateString").removeAttr('required');    		
+        		$('#programPccLocDiv').hide();    
+        		$("#programId,#loc").removeAttr('required');    		
             }
         });
 

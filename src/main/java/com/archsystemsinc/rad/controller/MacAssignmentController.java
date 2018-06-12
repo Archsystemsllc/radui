@@ -258,6 +258,9 @@ public class MacAssignmentController {
 							scoreCardRsultsMap = responseEntity.getBody();
 							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
 							user1Count = scoreCardList.size();
+							if(user1Count >0 ) {
+								System.out.println("Test");
+							}
 							
 							//Scorecard List Count for Second User						
 							scoreCard.setUserId(user2Id);
@@ -266,7 +269,9 @@ public class MacAssignmentController {
 							scoreCardRsultsMap = responseEntity.getBody();
 							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
 							user2Count = scoreCardList.size();
-							
+							if(user2Count > 0 ) {
+								System.out.println("Test");
+							}
 							//Scorecard List Count for Second User
 														
 							scoreCard.setUserId(user3Id);
@@ -275,7 +280,9 @@ public class MacAssignmentController {
 							scoreCardRsultsMap = responseEntity.getBody();
 							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
 							user3Count = scoreCardList.size();
-							
+							if(user3Count > 0) {
+								System.out.println("Test");
+							}
 							macAssignmentObjectTemp.setAssignedCallsForCindy(eachQualityMontiorCalls[0]+"("+user1Count+")");
 							macAssignmentObjectTemp.setAssignedCallsForLydia(eachQualityMontiorCalls[1]+"("+user2Count+")");						
 							macAssignmentObjectTemp.setAssignedCallsForJaneene(eachQualityMontiorCalls[2]+"("+user3Count+")");

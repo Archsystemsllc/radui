@@ -282,25 +282,9 @@ public class ReportsController {
 			
 		try {
 			
-			
-			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
-						
-				Calendar calendar = Calendar.getInstance();
-				reportsForm.setToDate(calendar.getTime());
-				String dateValueString = usEstDateFormat.format(calendar.getTime());		
-				reportsForm.setToDateString(dateValueString);
-				calendar.add(Calendar.YEAR, -1);
-				reportsForm.setFromDate(calendar.getTime());
-				dateValueString = usEstDateFormat.format(calendar.getTime());		
-				reportsForm.setFromDateString(dateValueString);
-				
-			} else {
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-				reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
-				reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
-			}
-			
-			
+			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
+			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 				
@@ -333,8 +317,7 @@ public class ReportsController {
 							}
 							
 							programTempMap = null;
-						}
-						
+						}						
 					}
 					reportsForm.setJurIdList(jurIdArrayList);			
 					
@@ -375,7 +358,7 @@ public class ReportsController {
 					String jurisdictionNamesValues = "";
 					for (String jurisIdSingleValue: jurisIds) {
 						if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
-							reportsForm.setJurisdictionName("ALL");
+							jurisdictionNamesValues = "ALL";
 							break;
 						}
 						jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
@@ -514,8 +497,14 @@ public class ReportsController {
 				model.addAttribute("ComplianceReport",true);
 				model.addAttribute("complianceReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 				
+				if(reportsForm.getComplianceReportType().equalsIgnoreCase("")) {
+					model.addAttribute("ReportTitle","Compliance Report (ALL)");
+				} else if(reportsForm.getComplianceReportType().equalsIgnoreCase("Compliant")) {
+					model.addAttribute("ReportTitle","Compliance Report");
+				} else if(reportsForm.getComplianceReportType().equalsIgnoreCase("Non-Compliant")) {
+					model.addAttribute("ReportTitle","Non-Compliance Report");
+				}
 				
-				model.addAttribute("ReportTitle","Non-Compliance Report (ALL)");
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
 				
@@ -551,7 +540,7 @@ public class ReportsController {
 				model.addAttribute("QaspReport",true);
 				model.addAttribute("qaspReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 				
-				model.addAttribute("ReportTitle","Qasp Report");
+				model.addAttribute("ReportTitle","QASP Report");
 				
 			}
 			

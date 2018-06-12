@@ -280,15 +280,14 @@ $(document).ready(function(){
 										</div>
 									</div>
 							</c:if>
-								<c:if test="${ReportFlag == true}">
-									<div class="row" style="margin-top: 10px">
-										<div class="col-lg-12 col-lg-offset-1 form-container">
-											<!-- <span><a class="action-icons c-approve"	href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Create"> -->
-											<button class="btn btn-primary" id="back" type="button">Back</button></a></span>
-										</div>
+							<c:if test="${ReportFlag == true}">
+								<div class="row" style="margin-top: 10px">
+									<div class="col-lg-12 col-lg-offset-1 form-container">
+										<button class="btn btn-primary" id="back" type="button">Back</button></a></span>
 									</div>
-									<br/>
-								</c:if>		
+								</div>
+								<br/>
+							</c:if>		
 								
 								<div class="row" id="scorecardlistdatatablediv">
 				                <div class="col-lg-12 col-lg-offset-1 form-container">

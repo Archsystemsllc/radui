@@ -77,26 +77,57 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
-		   }	
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 4
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 6
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 8
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 10
+		   }		
 		 ], 
 		 dom: '<lif<t>pB>',
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
 	             messageTop: messageOnTop,
-	             title: reportTitle
+	             title: reportTitle,
+	             footer: true
 	         },
 	         {
 	             extend: 'excelHtml5',
 	             messageTop: messageOnTop,
-	             title: reportTitle
+	             title: reportTitle,
+	             footer: true
 	         },
 	         {
 	             extend: 'pdfHtml5',
 	             messageTop: messageOnTop,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
-	             title: reportTitle
+	             title: reportTitle,
+	             footer: true
 	         }	        
 	     ],
 		  "paging" : true,
@@ -216,8 +247,6 @@ $(document).ready(function() {
 	        }
 	});
 
-	
-
 	var allPassScorecardData =eval('${allPassScoreCardList}');
 	var allPassScorecardDataTable = $('#allPassScorecardDTId').DataTable( {
 		"aaData": allPassScorecardData,
@@ -241,19 +270,42 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
-		   }	
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 4
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 6
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+	        "targets" : 8
+		   }
 		 ], 
 		 dom: '<lif<t>pB>',
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
 	             messageTop: messageOnTop,
-	             title: reportTitle
+	             title: reportTitle,
+	             footer: true
 	         },
 	         {
 	             extend: 'excelHtml5',
 	             messageTop: messageOnTop,
-	             title: reportTitle
+	             title: reportTitle,
+	             footer: true
 	         },
 	         {
 	             extend: 'pdfHtml5',
@@ -261,11 +313,124 @@ $(document).ready(function() {
 	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
+	             footer: true
 	         }	        
 	     ],
 		  "paging" : true,
 		  "pageLength" : 10,
 		  "ordering" : true,
+		  "footerCallback": function ( row, data, start, end, display ) {
+	            var api = this.api(), data;
+	 
+	            // Remove the formatting to get integer data for summation
+	            var intVal = function ( i ) {
+	                return typeof i === 'string' ?
+	                    i.replace(/[\$,]/g, '')*1 :
+	                    typeof i === 'number' ?
+	                        i : 0;
+	            };
+	            var totalRows = api .column( 4 ) .data() . count();
+
+	            // Total over all pages for Scoreable Count
+	            var scoreableCountTotal = api
+	                .column( 2 )
+	                .data()
+	                .reduce( function (a, b) {
+	                    return intVal(a) + intVal(b);
+	                }, 0 );
+	 
+	            // Update footer
+	            $( api.column( 2 ).footer() ).html( scoreableCountTotal );
+
+	            // Total over all pages for Scoreable Pass Count
+	            var scoreablePassCountTotal = api
+              .column( 3 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var scoreablePassPercentAverage = api
+		            .column( 4 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 4 ).footer() ).html(scoreablePassPercentAverage.toFixed(0) +"%");
+
+		     	// Total over all pages for Scoreable Fail Count
+		        var scoreableFailCountTotal = api
+              .column( 5 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var scoreableFailPercentAverage = api
+		            .column( 6 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 6 ).footer() ).html(scoreableFailPercentAverage.toFixed(0) +"%");
+
+		     	// Total over all pages for Non Scoreable Count
+		        var nonScoreableCountTotal = api
+              .column( 7 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 7 ).footer() ).html( nonScoreableCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var nonScoreablePercentAverage = api
+		            .column( 8 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 8 ).footer() ).html(nonScoreablePercentAverage.toFixed(0) +"%");
+
+		     // Total over all pages for Does Not Count
+		        var doesNotCountTotal = api
+              .column( 9 )
+              .data()
+              .reduce( function (a, b) {
+                  return intVal(a) + intVal(b);
+              }, 0 );
+
+		        // Update footer
+		        $( api.column( 9 ).footer() ).html( doesNotCountTotal );
+
+		        // Average over all pages for Scoreable Pass
+		        var doesNotCountPercentAverage = api
+		            .column( 10 )
+		            .data()
+		            .reduce( function (a, b) {
+		                return intVal(a) + intVal(b);
+		            }, 0) / totalRows;
+		
+		        // Update footer
+		        $( api.column( 10 ).footer() ).html(doesNotCountPercentAverage.toFixed(0) +"%");
+
+	        }
 	});
 
 	//Fail Scorecard Data Table Code
@@ -567,7 +732,7 @@ $(document).ready(function() {
 		{ "mData": "qamStartDate"},
 		{ "mData": "qamEndDate"}
 		],
-	    "columnDefs": [ 
+	    /* "columnDefs": [ 
 	        { 
 	           "render" : function(data, type, row) {
 				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/PASS'>"+data+"</a></span>";
@@ -575,7 +740,7 @@ $(document).ready(function() {
 	        },
 		   "targets" : 0
 		   }	
-		 ], 
+		 ],  */
 		 dom: '<lif<t>pB>',
 	     buttons: [
 	         {
@@ -811,7 +976,7 @@ $(document).ready(function() {
 								  <form:hidden path="rebuttalStatus" />
 								 
 								 			
-								<div class="table-users" style="width: 95%">
+								<div class="table-users" style="width: 98%">
 									<div class="header">Report Results Screen</div>
 									
 								<div class="row " style="margin-top: 10px">
@@ -867,40 +1032,40 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allScoreCardId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Scoreable Count</th>
-										            <th style="text-align: left">Scoreable Pass Count</th>
-										            <th style="text-align: left">Scoreable Pass Percent</th> 
-										            <th style="text-align: left">Scoreable Fail Count</th>
-										            <th style="text-align: left">Scoreable Fail Percent</th>
-										            <th style="text-align: left">Non-Scoreable Count</th>										            
-										            <th style="text-align: left">Non-Scoreable Percent</th> 
-										            <th style="text-align: left">Does Not Count</th>
-										            <th style="text-align: left">Does Not Count Percent</th>
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>		
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Scoreable Count</th>
+										            <th style="text-align: center">Scoreable Pass Count</th>
+										            <th style="text-align: center">Scoreable Pass Percent</th> 
+										            <th style="text-align: center">Scoreable Fail Count</th>
+										            <th style="text-align: center">Scoreable Fail Percent</th>
+										            <th style="text-align: center">Non-Scoreable Count</th>										            
+										            <th style="text-align: center">Non-Scoreable Percent</th> 
+										            <th style="text-align: center">Does Not Count</th>
+										            <th style="text-align: center">Does Not Count Percent</th>
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>		
 										          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
-						                     <tfoot>
-								            <tr>
-								                <th colspan="2" style="text-align:right">Total and Average:</th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th></th>
-								                <th>NA</th>
-								                <th>NA</th>
-								            </tr>
-								        </tfoot>
+							               <tfoot>
+									            <tr>
+									                <th colspan="2" style="text-align:right">Total and Average:</th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th></th>
+									                <th>NA</th>
+									                <th>NA</th>
+									            </tr>
+									        </tfoot>
 						                </table> 
 						                </div>
 						                </div>
@@ -915,20 +1080,20 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allPassScorecardDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Scoreable Count</th>
-										            <th style="text-align: left">Scoreable Pass Count</th>
-										            <th style="text-align: left">Scoreable Pass Percent</th> 
-										            <th style="text-align: left">Non-Scoreable Count</th>										            
-										            <th style="text-align: left">Non-Scoreable Percent</th> 
-										            <th style="text-align: left">Does Not Count</th>
-										            <th style="text-align: left">Does Not Count Percent</th>	
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>											          										           
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Scoreable Count</th>
+										            <th style="text-align: center">Scoreable Pass Count</th>
+										            <th style="text-align: center">Scoreable Pass Percent</th> 
+										            <th style="text-align: center">Non-Scoreable Count</th>										            
+										            <th style="text-align: center">Non-Scoreable Percent</th> 
+										            <th style="text-align: center">Does Not Count</th>
+										            <th style="text-align: center">Does Not Count Percent</th>	
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>											          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -945,19 +1110,19 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allFailScorecardDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Scoreable Fail Count</th>
-										            <th style="text-align: left">Scoreable Fail Percent</th>
-										            <th style="text-align: left">Non-Scoreable Count</th>										            
-										            <th style="text-align: left">Non-Scoreable Percent</th> 
-										            <th style="text-align: left">Does Not Count</th>
-										            <th style="text-align: left">Does Not Count Percent</th>	
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>											          										           
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Scoreable Fail Count</th>
+										            <th style="text-align: center">Scoreable Fail Percent</th>
+										            <th style="text-align: center">Non-Scoreable Count</th>										            
+										            <th style="text-align: center">Non-Scoreable Percent</th> 
+										            <th style="text-align: center">Does Not Count</th>
+										            <th style="text-align: center">Does Not Count Percent</th>	
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>											          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -973,19 +1138,19 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreableReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Scoreable Count</th>
-										            <th style="text-align: left">Scoreable Pass Count</th>
-										            <th style="text-align: left">Scoreable Pass Percent</th>										            
-										            <th style="text-align: left">Scoreable Fail Count</th> 
-										            <th style="text-align: left">Scoreable Fail Percent</th>
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>		
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Scoreable Count</th>
+										            <th style="text-align: center">Scoreable Pass Count</th>
+										            <th style="text-align: center">Scoreable Pass Percent</th>										            
+										            <th style="text-align: center">Scoreable Fail Count</th> 
+										            <th style="text-align: center">Scoreable Fail Percent</th>
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>		
 										            								          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1001,18 +1166,18 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreablePassReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Scoreable Count</th>
-										            <th style="text-align: left">Scoreable Pass Count</th>
-										            <th style="text-align: left">Scoreable Pass Percent</th>
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>												            
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Scoreable Count</th>
+										            <th style="text-align: center">Scoreable Pass Count</th>
+										            <th style="text-align: center">Scoreable Pass Percent</th>
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>												            
 										            
 										            								          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1028,18 +1193,18 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreableFailReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Scoreable Count</th>
-										            <th style="text-align: left">Scoreable Fail Count</th>
-										            <th style="text-align: left">Scoreable Fail Percent</th>
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>												            
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Scoreable Count</th>
+										            <th style="text-align: center">Scoreable Fail Count</th>
+										            <th style="text-align: center">Scoreable Fail Percent</th>
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>												            
 										            
 										            								          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1055,16 +1220,16 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="nonScoreableDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Non-Scoreable Count</th>
-										            <th style="text-align: left">Non-Scoreable Percent</th>
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>		
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Non-Scoreable Count</th>
+										            <th style="text-align: center">Non-Scoreable Percent</th>
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>		
 										            								          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1080,16 +1245,16 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="doesNotCountDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Does Not Count</th>
-										            <th style="text-align: left">Does Not Count Percent</th>
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>		
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Does Not Count</th>
+										            <th style="text-align: center">Does Not Count Percent</th>
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>		
 										            								          										           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1105,15 +1270,15 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="complianceReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Month, Year</th>
-										            <th style="text-align: left">Compliance Status</th>	
-										             <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>							           
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Month, Year</th>
+										            <th style="text-align: center">Compliance Status</th>	
+										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>							           
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1129,14 +1294,14 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="rebuttalReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">Number of Rebuttals</th>
-										            <th style="text-align: left">QAM Start Date</th>
-										            <th style="text-align: left">QAM End Date</th>										                 
+										            <th style="text-align: center">MAC</th>
+										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Number of Rebuttals</th>
+										            <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM End Date</th>										                 
 										        </tr>
 										    </thead>
-						                    <tbody>  
+						                    <tbody style="text-align: center">  
 						                    </tbody>
 						                </table> 
 						                </div>
@@ -1200,7 +1365,8 @@ $(document).ready(function() {
 						                </div>
 						                </div>
 				                     </c:if>
-					                
+					                </div>
+					                </div>
 					            </div>  <!-- Main Row Div -->
 													
 						
