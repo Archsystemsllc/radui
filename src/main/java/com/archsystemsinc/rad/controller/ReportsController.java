@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
+import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.CsrLog;
 import com.archsystemsinc.rad.model.MacInfo;
@@ -260,6 +263,9 @@ public class ReportsController {
 	}
 	 
 	 private static final SimpleDateFormat usEstDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	 @Autowired
+	 UtilityFunctions utilityFunctions;
+	 
 	 
 	@RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
 			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport","/quality_monitor/getMacJurisReport"})			
@@ -281,8 +287,26 @@ public class ReportsController {
 		try {
 			
 			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
-			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
+			
+			if(reportsForm.getFromDateString() != null && 
+					!reportsForm.getFromDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				reportsForm.setFromDate(filterFromDate);			
+			}
+			
+			
+			if(reportsForm.getToDateString() != null && 
+					!reportsForm.getToDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				reportsForm.setToDate(filterToDate);
+				
+				
+			}
+			
+			/*reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
+			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));*/
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 				
@@ -497,8 +521,10 @@ public class ReportsController {
 					
 					model.addAttribute("doesNotCountList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 					
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
 				}
+				session.setAttribute("SS_MAC_JURIS_REPORT", finalSortedMap);
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getComplianceReport");
@@ -513,8 +539,9 @@ public class ReportsController {
 				model.addAttribute("COMPLIANCE_REPORT",finalSortedMap);
 				model.addAttribute("ComplianceReport",true);
 				model.addAttribute("complianceReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				session.setAttribute("SS_COMPLIANCE_REPORT", finalSortedMap);
 				
-				if(reportsForm.getComplianceReportType().equalsIgnoreCase("")) {
+				if(reportsForm.getComplianceReportType().equalsIgnoreCase("ALL")) {
 					model.addAttribute("ReportTitle","Compliance Report (ALL)");
 				} else if(reportsForm.getComplianceReportType().equalsIgnoreCase("Compliant")) {
 					model.addAttribute("ReportTitle","Compliance Report");
@@ -538,6 +565,7 @@ public class ReportsController {
 				model.addAttribute("RebuttalReport",true);
 				
 				model.addAttribute("rebuttalReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				session.setAttribute("SS_REBUTTAL_REPORT", finalSortedMap);
 				
 				model.addAttribute("ReportTitle","Rebuttal Report");
 				
@@ -556,6 +584,7 @@ public class ReportsController {
 				model.addAttribute("QASP_REPORT",finalSortedMap);
 				model.addAttribute("QaspReport",true);
 				model.addAttribute("qaspReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				session.setAttribute("SS_QASP_REPORT", finalSortedMap);
 				
 				model.addAttribute("ReportTitle","QASP Report");
 				
@@ -574,101 +603,67 @@ public class ReportsController {
 	@RequestMapping(value ={"/admin/getMacJurisReportFromSession", "/quality_manager/getMacJurisReportFromSession", "/cms_user/getMacJurisReportFromSession",
 			 "/mac_admin/getMacJurisReportFromSession","/mac_user/getMacJurisReportFromSession","/quality_monitor/getMacJurisReportFromSession"})			
 	public String getMacJurisReportFromSession(HttpServletRequest request, final Model model, HttpSession session) {
+		
 		ReportsForm reportsForm= (ReportsForm) session.getAttribute("ReportsFormSession");
 		
 		String returnView = "";
-		log.debug("--> getMacJurisReport <--");
+		log.debug("--> getMacJurisReportFromSession <--");
 		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer, ScoreCard> ();
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI;
 		
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();	
+		HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+		HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
 			
 		try {
 			
-			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-			
-			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
-			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
-			
-			if (reportsForm.getJurisdictionIds() != null && !reportsForm.getJurisdictionIds().toString().contains((UIGenericConstants.ALL_STRING))) {
-				String[] jurisIds = reportsForm.getJurisdictionIds();
-				
-				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
-				ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
-				String jurisdictionNamesValues = "";
-				for (String jurisIdSingleValue: jurisIds) {
-					jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
-					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
-					jurisdictionNameArrayList.add(jurisdictionTempName);
-					jurisdictionNamesValues += jurisdictionTempName+ " ";
-				}
-				
-				reportsForm.setJurIdList(jurisIdArrayList);			
-				reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
-				reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
-				reportsForm.setJurisId("");
-				
-			} else {
-				reportsForm.setJurisdictionName(UIGenericConstants.ALL_STRING);
-			}
-			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
-				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
-				reportsForm.setMacName(macName);
-			} 
-			
-			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = new TreeMap<String, QamMacByJurisdictionReviewReport>(
-	                new Comparator<String>() {
-
-	                    @Override
-	                    public int compare(String o1, String o2) {
-	                        return o1.compareTo(o2);
-	                    }
-
-	                });
+			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = null;
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
-				ROOT_URI = new String(HomeController.RAD_WS_URI + "getMacJurisReport");
-				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
-				resultsMap = responseEntity.getBody();
-				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
-				finalResultsMap = generateScoreCardReport(scoreCardList,session);
+				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_MAC_JURIS_REPORT");
 				
-				
-				
-				/*Map<Integer, String> treeMap2 = new TreeMap<>( (Comparator<Integer>) (o1, o2) -> o2.compareTo(o1)
-		        );*/
-				
-				finalSortedMap.putAll(finalResultsMap);
-				
-				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+				if(reportsForm.getScoreCardType().equalsIgnoreCase(UIGenericConstants.ALL_STRING) && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					model.addAttribute("AllScoreCardReport_All",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("scoreCardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (All Records)");
 					
 					
-				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase(UIGenericConstants.ALL_STRING) && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("AllScoreCardReport_Pass",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("allPassScoreCardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Pass Records)");
 					
 					
-				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase(UIGenericConstants.ALL_STRING) && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
 					model.addAttribute("AllScoreCardReport_Fail",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("allFailScorecardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Fail Records)");
 					
 					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					model.addAttribute("ScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("scoreableReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Both Pass and Fail Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("ScoreablePassReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("scoreablePassReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Pass Records)");
 					
 				}  else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("Fail") ) {
@@ -676,45 +671,67 @@ public class ReportsController {
 					model.addAttribute("ScoreableFailReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
+					model.addAttribute("scoreableFailReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Only Fail Records)");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Non-Scoreable")) {
-					model.addAttribute("NonScoreable",true);
+					model.addAttribute("NonScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("nonScoreableList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
-					model.addAttribute("ScoreableReport",true);
+					model.addAttribute("DoesNotCountReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
+					
+					model.addAttribute("doesNotCountList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
+					
 					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
 				}
+				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
-				ROOT_URI = new String(HomeController.RAD_WS_URI + "getComplianceReport");
 				
-				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
-				resultsMap = responseEntity.getBody();
-				List<CsrLog> complianceList = mapper.convertValue(resultsMap.values(), new TypeReference<List<CsrLog>>() { });
+				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_COMPLIANCE_REPORT");
 				
-				finalResultsMap = generateComplianceReport(complianceList,session);
-				finalSortedMap.putAll(finalResultsMap);
 				model.addAttribute("COMPLIANCE_REPORT",finalSortedMap);
 				model.addAttribute("ComplianceReport",true);
-				model.addAttribute("ReportTitle","Compliance Report");
+				model.addAttribute("complianceReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				
+				
+				if(reportsForm.getComplianceReportType().equalsIgnoreCase("ALL")) {
+					model.addAttribute("ReportTitle","Compliance Report (ALL)");
+				} else if(reportsForm.getComplianceReportType().equalsIgnoreCase("Compliant")) {
+					model.addAttribute("ReportTitle","Compliance Report");
+				} else if(reportsForm.getComplianceReportType().equalsIgnoreCase("Non-Compliant")) {
+					model.addAttribute("ReportTitle","Non-Compliance Report");
+				}
+				
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
 				
-				ROOT_URI = new String(HomeController.RAD_WS_URI + "getRebuttalReport");
-				
-				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
-				resultsMap = responseEntity.getBody();
-				List<Rebuttal> rebuttalList = mapper.convertValue(resultsMap.values(), new TypeReference<List<Rebuttal>>() { });
-				
-				finalResultsMap = generateRebuttalReport(rebuttalList,session);
-				finalSortedMap.putAll(finalResultsMap);
+				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_REBUTTAL_REPORT");
 				model.addAttribute("REBUTTAL_REPORT",finalSortedMap);
 				model.addAttribute("RebuttalReport",true);
+				
+				model.addAttribute("rebuttalReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
 				model.addAttribute("ReportTitle","Rebuttal Report");
+				
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+				
+				ObjectMapper mapper = new ObjectMapper();
+				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_QASP_REPORT");
+				
+				model.addAttribute("QASP_REPORT",finalSortedMap);
+				model.addAttribute("QaspReport",true);
+				model.addAttribute("qaspReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));				
+				
+				model.addAttribute("ReportTitle","QASP Report");
 				
 			}
 			

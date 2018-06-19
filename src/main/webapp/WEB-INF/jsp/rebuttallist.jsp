@@ -86,7 +86,7 @@ function resetFields() {
 
 		//Back Button Functionality
 		$('#back').click(function(e) {	
-			window.history.back();
+			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession";	
 	    }); 
 
 	});

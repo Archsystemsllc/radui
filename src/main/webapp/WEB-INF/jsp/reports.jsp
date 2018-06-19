@@ -99,6 +99,7 @@
     		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
+    		$('select[id="macId"] > option[value="ALL"]').show();
         } else if (reportSelectValue == 'ScoreCard' ) {
         	$('input:radio[name=mainReportSelect]')[0].checked = true;
     		$('#scoreCardTypeDiv').show();
@@ -107,12 +108,14 @@
     		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
+    		$('select[id="macId"] > option[value="ALL"]').show();
         } else if (reportSelectValue == 'Compliance' ) {
         	$('#complianceTypeDiv').show();
         	$('#programPccLocDiv,#datesDiv').show();   
         	$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
         	$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
+    		$('select[id="macId"] > option[value="ALL"]').show();
         } else if (reportSelectValue == 'Rebuttal' ) {
         	$('#callCategoryTypeDiv').show();
     		$('#rebuttalStatusDiv').show();
@@ -120,6 +123,7 @@
     		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
+    		$('select[id="macId"] > option[value="ALL"]').show();
         }  else if (reportSelectValue == 'Qasp' ) {
         	$('#scoreCardTypeDiv').hide();
         	$('#callResultDiv').hide();
@@ -130,7 +134,10 @@
     		$("#programId,#loc,#jurisdictionIds").removeAttr('required');
     		$('#jurisMultiSelect').hide();
     		$('#jurisSingleSelect').show();
-    		$("#jurisId").attr('required',true);
+    		$("#jurisId").attr('required',true);    		
+    		$("#macId option[value='ALL']").remove();
+    		$('select[id="macId"] > option[value="ALL"]').hide();
+    		
     		
         }  
         
@@ -148,6 +155,7 @@
         		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
@@ -158,6 +166,7 @@
         		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);  
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();
         		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
@@ -169,6 +178,7 @@
         		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();
             } else if (mainReportSelect=="Qasp") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
@@ -179,13 +189,14 @@
         		$("#programId,#loc,#jurisdictionIds").removeAttr('required');
         		$('#jurisMultiSelect').hide();
         		$('#jurisSingleSelect').show();
-        		$("#jurisId").attr('required',true);
+        		$("#jurisId").attr('required',true);        		
+        		$('select[id="macId"] > option[value="ALL"]').hide();
             }
 
           
  		var scoreCardType = $("select#scoreCardType").val();
            if (scoreCardType=="Scoreable") {
-           	alert(scoreCardType);
+           
            	$('#callResultDiv').show();
            } else if (scoreCardType=="Non-Scoreable") {
            	
@@ -222,6 +233,7 @@
         		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();
         		
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
@@ -233,6 +245,7 @@
         		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();
         		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
@@ -244,6 +257,7 @@
         		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();
             } else if (mainReportSelect=="Qasp") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
@@ -255,6 +269,7 @@
         		$('#jurisMultiSelect').hide();
         		$('#jurisSingleSelect').show();
         		$("#jurisId").attr('required',true);		
+        		$('select[id="macId"] > option[value="ALL"]').hide();
             }
         });
 

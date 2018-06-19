@@ -131,7 +131,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 		  "footerCallback": function ( row, data, start, end, display ) {
 	            var api = this.api(), data;
@@ -278,27 +278,28 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
+	             footer: true,
 	             messageTop: messageOnTop,
-	             title: reportTitle,
-	             footer: true
+	             title: reportTitle
+	             
 	         },
 	         {
-	             extend: 'excelHtml5',
+	             extend: 'excelHtml5', 
+	             footer: true,
 	             messageTop: messageOnTop,
-	             title: reportTitle,
-	             footer: true
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'pdfHtml5',
+	             footer: true,
 	             messageTop: messageOnTop,
 	             title: reportTitle,
 	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
-	             footer: true
+	             pageSize : 'LEGAL'
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 		  "footerCallback": function ( row, data, start, end, display ) {
 	            var api = this.api(), data;
@@ -460,7 +461,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 	});
 
@@ -509,7 +510,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 	});
 
@@ -556,7 +557,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 	});
 
@@ -604,7 +605,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 	});
 
@@ -651,7 +652,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 	});
 
@@ -697,7 +698,7 @@ $(document).ready(function() {
 	         }	        
 	     ],
 		  "paging" : true,
-		  "pageLength" : 10,
+		  "pageLength" : 20,
 		  "ordering" : true,
 	});
 
@@ -808,20 +809,26 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
+	             footer: true,
 	             messageTop: messageOnTop,
 	             title: reportTitle
+	            
 	         },
 	         {
 	             extend: 'excelHtml5',
+	             footer: true,
 	             messageTop: messageOnTop,
 	             title: reportTitle
+	             
 	         },
 	         {
 	             extend: 'pdfHtml5',
+	             footer: true,
 	             messageTop: messageOnTop,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	             title: reportTitle
+	             
 	         }	        
 	     ],
 		  "paging" : true,
