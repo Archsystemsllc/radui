@@ -28,4 +28,6 @@ public class UIGenericConstants {
 	public static final String QUALITY_MANAGER_FAIL_STRING = "Quality Monitor Fail";
 	
 	public static final Long RECORD_STATUS_ACTIVE = 1l;
+	
+	public static final String ALL_STRING = "ALL";
 }

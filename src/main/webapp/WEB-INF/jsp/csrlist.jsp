@@ -475,6 +475,9 @@ $(function() {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
+    		onSelect: function(selected) {
+    			$("#toDate").datepicker("option","minDate", selected)
+    		},
 
             onClose: function(dateText, inst) {  
                 var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
@@ -498,6 +501,9 @@ $(function() {
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
+            onSelect: function(selected) {
+    			$("#fromDate").datepicker("option","maxDate", selected)
+    		},
 
             onClose: function(dateText, inst) {  
                 var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 

@@ -69,11 +69,17 @@
 		});
 
 		$('#filterFromDateString').datepicker({
-			maxDate : 0
+			maxDate : 0,
+    		onSelect: function(selected) {
+    			$("#filterToDateString").datepicker("option","minDate", selected)
+    		}
 		});
 
 		$('#filterToDateString').datepicker({
-			maxDate : 0
+			maxDate : 0,
+    		onSelect: function(selected) {
+    			$("#filterFromDateString").datepicker("option","maxDate", selected)
+    		}
 		});
 
 		

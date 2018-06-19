@@ -239,7 +239,7 @@
     			//var dateString= $('#callMonitoringDate_Alt').val();
     			var dateTypeValue = $('#callMonitoringDate').datepicker('getDate');
     			var dateConvertedValue =$.datepicker.formatDate('yymmdd', dateTypeValue);
-    			//alert("Date Converted Value:"+dateConvertedValue);
+    			
     			
     			var callTimString = $('#callTime').val();
     			
@@ -600,7 +600,7 @@
 	            checkbox: true //adds checkbox to options    
 	        }).on("change", function(evt) {
 	            var val = $(this).val();
-	            alert(val);
+	           
 	        }); 
 
 	});
@@ -664,18 +664,40 @@
 				return;								
 			} else if(callResultValue=="") {				
 				$("#finalScoreCardStatus").val("");												
+			} else {
+				if ($("#callResult").length && $("#callResult").val().length > 1) {				 
+					
+					if (callResultValue.toLowerCase().indexOf("pass") >= 0) {
+						callResultValue = "Pass";
+					} else {
+						callResultValue = "Fail";
+					}	 
+				}
 			}
 			var qamCalibrationStatusValue = "";			
-			if ( $("#qamCalibrationStatus").length ) {				 
-				qamCalibrationStatusValue = $("#qamCalibrationStatus").val();			 
-			}
-
-			
+			if ($("#qamCalibrationStatus").length && $("#qamCalibrationStatus").val().length > 1) {	
+					 
+				qamCalibrationStatusValue = $("#qamCalibrationStatus").val();
+							
+				if (qamCalibrationStatusValue.toLowerCase().indexOf("pass") >= 0) {
+					qamCalibrationStatusValue = "Pass";
+				} else {
+					qamCalibrationStatusValue = "Fail";
+				}
+			}			
 
 			var cmsCalibrationStatusValue = "";
-			if ( $("#cmsCalibrationStatus").length ) {				 
-				cmsCalibrationStatusValue = $("#cmsCalibrationStatus").val();			 
+			if ($("#cmsCalibrationStatus").length && $("#cmsCalibrationStatus").val().length > 1) {		
+				
+				cmsCalibrationStatusValue = $("#cmsCalibrationStatus").val();		
+				 
+				if (cmsCalibrationStatusValue.toLowerCase().indexOf("pass") >= 0) {
+					cmsCalibrationStatusValue = "Pass";
+				} else {
+					cmsCalibrationStatusValue = "Fail";
+				}	 
 			}
+			
 			
 			
 			if(cmsCalibrationStatusValue != "") {			

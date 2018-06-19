@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.archsystemsinc.rad.common.utils.UIGenericConstants;
+
 
 
 /**
@@ -90,7 +92,7 @@ public class CommonController {
 			for(String macIdSingleValue: macIds) {
 				if(!macIdSingleValue.equalsIgnoreCase("")) {
 					
-					if(macIdSingleValue.equalsIgnoreCase("ALL")) {
+					if(macIdSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 						jurisFinalMap = HomeController.JURISDICTION_MAP;
 						break;
 					}
@@ -101,7 +103,7 @@ public class CommonController {
 			}
 		} else {
 			if(!macIdString.equalsIgnoreCase("")) {
-				if(macIdString.equalsIgnoreCase("ALL") || macIdString.equalsIgnoreCase("0")) {
+				if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) || macIdString.equalsIgnoreCase("0")) {
 					jurisFinalMap = HomeController.JURISDICTION_MAP;
 					
 				} else {
@@ -124,14 +126,14 @@ public class CommonController {
 		HashMap<Integer,String> programTempMap = new HashMap<Integer,String>();
 		
 		if(!macIdString.equalsIgnoreCase("") && !jurisIdString.equalsIgnoreCase("")) {
-			if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL")) {
+			if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && jurisIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				programMap = HomeController.ALL_PROGRAM_MAP;
-			} else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL")) {
+			} else if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && !jurisIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				String[] jurisIds = jurisIdString.split(",");
 				for(String jurisSingleValue: jurisIds) {
 					if(!jurisSingleValue.equalsIgnoreCase("")) {
 						
-						if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+						if(jurisSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 							programMap = HomeController.ALL_PROGRAM_MAP;
 							break;
 						}
@@ -143,7 +145,7 @@ public class CommonController {
 				}
 				
 				
-			} else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.equalsIgnoreCase("ALL")) {
+			} else if(!macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && jurisIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 				
 				for(Object jurisKey: jurisIdMap.keySet()) {
@@ -153,12 +155,12 @@ public class CommonController {
 					programMapTemp = null;
 				}
 				
-			} else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.equalsIgnoreCase("ALL")) {
+			} else if(!macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && !jurisIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				String[] jurisIds = jurisIdString.split(",");
 				for(String jurisSingleValue: jurisIds) {
 					if(!jurisSingleValue.equalsIgnoreCase("")) {
 						
-						if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+						if(jurisSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 							HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 							programMap = new HashMap<Integer,String>();
 							for(Object jurisKey: jurisIdMap.keySet()) {
@@ -194,23 +196,23 @@ public class CommonController {
 		HashMap<Integer,String> locationTempMap = new HashMap<Integer,String>();
 		
 		if(programIdAvailableFlag == false) {
-			programIdString = "ALL";
+			programIdString = UIGenericConstants.ALL_STRING;
 		}
 		
 		if(!macIdString.equalsIgnoreCase("") && !jurisIdString.equalsIgnoreCase("") && !programIdString.equalsIgnoreCase("")) {
 			// ALL ALL ALL
-			if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && jurisIdString.contains(UIGenericConstants.ALL_STRING) && programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
 			} 
 			//Value Value Value
-			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && !jurisIdString.contains(UIGenericConstants.ALL_STRING) && !programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				
 				
 				String[] jurisIds = jurisIdString.split(",");
 				for(String jurisSingleValue: jurisIds) {
 					if(!jurisSingleValue.equalsIgnoreCase("")) {
 						
-						if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+						if(jurisSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 							HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 							
 							for(Object jurisKey: jurisIdMap.keySet()) {
@@ -234,7 +236,7 @@ public class CommonController {
 				
 			} 
 			//Value All All
-			else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && jurisIdString.contains(UIGenericConstants.ALL_STRING) && programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				HashMap jurisIdMapTemp = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 				locationMap = new HashMap<Integer,String>();
 				
@@ -251,7 +253,7 @@ public class CommonController {
 				}			
 			} 
 			//ALL ALL Value
-			else if(macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {				
+			else if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && jurisIdString.contains(UIGenericConstants.ALL_STRING) && !programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {				
 				HashMap macIdMap = HomeController.MAC_ID_MAP;				
 				locationMap = new HashMap<Integer,String>();
 				for(Object macKey: macIdMap.keySet()) {					
@@ -266,7 +268,7 @@ public class CommonController {
 				}			
 			} 
 			//All Value All
-			else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			else if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && !jurisIdString.contains(UIGenericConstants.ALL_STRING) && programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				HashMap macIdMap = HomeController.MAC_ID_MAP;				
 				locationMap = new HashMap<Integer,String>();
 				for(Object macKey: macIdMap.keySet()) {	
@@ -275,7 +277,7 @@ public class CommonController {
 					for(String jurisSingleValue: jurisIds) {
 						if(!jurisSingleValue.equalsIgnoreCase("")) {
 							
-							if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+							if(jurisSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 								HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 								
 								for(Object jurisKey: jurisIdMap.keySet()) {
@@ -309,7 +311,7 @@ public class CommonController {
 				
 			} 
 			//Value Value All
-			else if(!macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && !jurisIdString.contains(UIGenericConstants.ALL_STRING) && programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				
 				locationMap = new HashMap<Integer,String>();
 				
@@ -322,7 +324,7 @@ public class CommonController {
 						for(Object programKey: programMapTemp.keySet()) {
 							if(!jurisSingleValue.equalsIgnoreCase("")) {
 								
-								if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+								if(jurisSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 									HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));
 									
 									for(Object jurisKey: jurisIdMap.keySet()) {									
@@ -350,7 +352,7 @@ public class CommonController {
 			
 			} 
 			//Value All Value
-			else if(!macIdString.equalsIgnoreCase("ALL") && jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+			else if(!macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && jurisIdString.contains(UIGenericConstants.ALL_STRING) && !programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(macIdString));			
 				locationMap = new HashMap<Integer,String>();
 				
@@ -363,7 +365,7 @@ public class CommonController {
 			
 			} 
 			//All Value Value
-			else if(macIdString.equalsIgnoreCase("ALL") && !jurisIdString.contains("ALL") && !programIdString.equalsIgnoreCase("ALL")) {
+			else if(macIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && !jurisIdString.contains(UIGenericConstants.ALL_STRING) && !programIdString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				
 				HashMap macIdMap = HomeController.MAC_ID_MAP;				
 				locationMap = new HashMap<Integer,String>();
@@ -373,7 +375,7 @@ public class CommonController {
 					for(String jurisSingleValue: jurisIds) {
 						if(!jurisSingleValue.equalsIgnoreCase("")) {
 							
-							if(jurisSingleValue.equalsIgnoreCase("ALL")) {
+							if(jurisSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 								HashMap jurisIdMap = HomeController.MAC_JURISDICTION_MAP.get(macKey);
 								
 								for(Object jurisKey: jurisIdMap.keySet()) {
@@ -413,7 +415,7 @@ public class CommonController {
 			for(String callCategoryIdsSingleValue: callCategoryIds) {
 				if(!callCategoryIdsSingleValue.equalsIgnoreCase("")) {
 					
-					if(callCategoryIdsSingleValue.equalsIgnoreCase("ALL")) {
+					if(callCategoryIdsSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 						
 						for(Integer callCategoryId : HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.keySet()) {
 							HashMap<Integer,String> subCategoryMap = HomeController.CALL_CATEGORY_SUB_CATEGORY_MAP.get(callCategoryId);

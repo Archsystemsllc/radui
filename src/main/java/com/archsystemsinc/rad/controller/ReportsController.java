@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,7 +33,6 @@ import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ReportsForm;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -96,7 +94,7 @@ public class ReportsController {
 			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
 			
 		} else {
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")) {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
 				
 			} else {
@@ -107,8 +105,8 @@ public class ReportsController {
 			model.addAttribute("jurisMapEdit", jurisMap);
 			
 			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
-					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")) {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)
+					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
 				
 			} else {
@@ -118,9 +116,9 @@ public class ReportsController {
 			
 			model.addAttribute("programMapEdit", programMap);
 			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL")
-					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase("ALL")
-							&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)
+					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)
+							&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
 				
 			} else {
@@ -196,7 +194,7 @@ public class ReportsController {
 			for(ScoreCard scoreCard: scoreCardList) {
 				scoreCard.setMacName(macIdString);
 				scoreCard.setJurisdictionName(jurIdString);
-				if(searchString.equalsIgnoreCase("ALL")) {
+				if(searchString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					resultsMap.put(scoreCard.getId(), scoreCard);
 				} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
 					if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"))
@@ -241,12 +239,12 @@ public class ReportsController {
 		ArrayList<Rebuttal> rebuttalList = rebuttalSessionMap.get(macIdString+"_"+jurIdString);
 		
 		for(Rebuttal rebuttal: rebuttalList) {
-			if(callCategoryId.equalsIgnoreCase("ALL") && rebuttalStatus.equalsIgnoreCase("ALL")) {
+			if(callCategoryId.equalsIgnoreCase(UIGenericConstants.ALL_STRING) && rebuttalStatus.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				resultsMap.put(rebuttal.getId(), rebuttal);
-			} else if(callCategoryId.equalsIgnoreCase("ALL")) {
+			} else if(callCategoryId.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				if(rebuttal.getRebuttalStatus().equalsIgnoreCase(rebuttalStatus))
 					resultsMap.put(rebuttal.getId(), rebuttal);
-			}else if(rebuttalStatus.equalsIgnoreCase("ALL")) {
+			}else if(rebuttalStatus.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 				if(rebuttal.getCallCategory().equalsIgnoreCase(callCategoryId)) 
 					resultsMap.put(rebuttal.getId(), rebuttal);
 			}else {
@@ -294,100 +292,119 @@ public class ReportsController {
 				String jurIds = reportsForm.getJurisdictionIds().toString();
 				
 				ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
-				
-				if(jurisIds[0].equalsIgnoreCase("ALL")) {
-					reportsForm.setJurisdictionName("ALL");
-					
-					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
-						jurIdArrayList.add(jurisIdSingle);
-						
-						if(reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
-							reportsForm.setProgramName(reportsForm.getProgramId());
-							HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
-							if (programTempMap == null) continue;
-							
-							programMap.putAll(programTempMap);
-							if(reportsForm.getLoc().equalsIgnoreCase("ALL")) {
-								for(Integer programIdSingle: programTempMap.keySet()) {
-									HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
-									if (locationTempMap == null) continue;
-									locationMap.putAll(locationTempMap);
-									locationTempMap = null;
-								}
-							}
-							
-							programTempMap = null;
-						}						
-					}
-					reportsForm.setJurIdList(jurIdArrayList);			
+				if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
+					reportsForm.setJurisdictionNameValues(jurisdictionTempName);
+					reportsForm.setJurisdictionName(jurisdictionTempName);
 					
 				} else {
-					
-					String jurisdictionNamesValues = "";
-					for (String jurisIdSingleValue: jurisIds) {
-						jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+					if(jurisIds[0].equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+						reportsForm.setJurisdictionName(UIGenericConstants.ALL_STRING);
 						
-						String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+						for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+							jurIdArrayList.add(jurisIdSingle);
+							
+							if(reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+								reportsForm.setProgramName(reportsForm.getProgramId());
+								HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+								if (programTempMap == null) continue;
+								
+								programMap.putAll(programTempMap);
+								if(reportsForm.getLoc().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+									for(Integer programIdSingle: programTempMap.keySet()) {
+										HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+										if (locationTempMap == null) continue;
+										locationMap.putAll(locationTempMap);
+										locationTempMap = null;
+									}
+								}
+								
+								programTempMap = null;
+							}						
+						}
+						reportsForm.setJurIdList(jurIdArrayList);			
 						
-						jurisdictionNamesValues += jurisdictionTempName+ " ";
-					}
-					
-					reportsForm.setJurIdList(jurIdArrayList);		
-					reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
-					reportsForm.setJurisdictionName(jurisdictionNamesValues);
-					
-					if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
-						String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
-						reportsForm.setMacName(macName);
-					}
-					
-					if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
-						String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
-						reportsForm.setProgramName(programName);
-					}
-				}				
+					} else {
+						
+							String jurisdictionNamesValues = "";
+							for (String jurisIdSingleValue: jurisIds) {
+								jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+								
+								String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+								
+								jurisdictionNamesValues += jurisdictionTempName+ " ";
+							}
+							
+							reportsForm.setJurIdList(jurIdArrayList);		
+							reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+							reportsForm.setJurisdictionName(jurisdictionNamesValues);
+						}
+						
+						
+						
+						if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
+							String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+							reportsForm.setMacName(macName);
+						}
+						
+						if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
+							String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
+							reportsForm.setProgramName(programName);
+						}
+					}				
+				
+				
 				
 			} else {
 				
-				if (reportsForm.getJurisdictionIds() != null ) {
+				if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
+					reportsForm.setJurisdictionNameValues(jurisdictionTempName);
+					reportsForm.setJurisdictionName(jurisdictionTempName);
 					
-					String[] jurisIds = reportsForm.getJurisdictionIds();
-					
-					ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
-					ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
-					String jurisdictionNamesValues = "";
-					for (String jurisIdSingleValue: jurisIds) {
-						if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
-							jurisdictionNamesValues = "ALL";
-							break;
+				} else {
+					if (reportsForm.getJurisdictionIds() != null ) {
+						
+						String[] jurisIds = reportsForm.getJurisdictionIds();
+						
+						ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
+						ArrayList<String> jurisdictionNameArrayList = new ArrayList<String> ();
+						String jurisdictionNamesValues = "";
+						for (String jurisIdSingleValue: jurisIds) {
+							if(jurisIdSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+								jurisdictionNamesValues = UIGenericConstants.ALL_STRING;
+								break;
+							}
+							jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
+							String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
+							jurisdictionNameArrayList.add(jurisdictionTempName);
+							jurisdictionNamesValues += jurisdictionTempName+ " ";
 						}
-						jurisIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
-						String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));
-						jurisdictionNameArrayList.add(jurisdictionTempName);
-						jurisdictionNamesValues += jurisdictionTempName+ " ";
-					}
-					reportsForm.setJurIdList(jurisIdArrayList);			
-					reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
-					reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
-					reportsForm.setJurisdictionName(jurisdictionNamesValues);
-					reportsForm.setJurisId("");
-				} 
+						reportsForm.setJurIdList(jurisIdArrayList);			
+						reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+						reportsForm.setJurisdictionNameList(jurisdictionNameArrayList);
+						reportsForm.setJurisdictionName(jurisdictionNamesValues);
+						reportsForm.setJurisId("");
+					} 
+					
+				}
 				
-				if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+				
+				if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
 					String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 					reportsForm.setMacName(macName);
 				} else {
-					reportsForm.setMacName("ALL");
+					reportsForm.setMacName(UIGenericConstants.ALL_STRING);
 				}
 				
-				if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase("ALL") ) {
+				if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
 					String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
 					reportsForm.setProgramName(programName);
 				} else {
 					reportsForm.setProgramName(reportsForm.getProgramId());
 				}
 				
-				if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase("ALL") ) {
+				if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
 					/*String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 					reportsForm.setMacName(macName);*/
 				} else {
@@ -417,7 +434,7 @@ public class ReportsController {
 				
 				finalSortedMap.putAll(finalResultsMap);
 				
-				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+				if(reportsForm.getScoreCardType().equalsIgnoreCase(UIGenericConstants.ALL_STRING) && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					model.addAttribute("AllScoreCardReport_All",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
@@ -425,7 +442,7 @@ public class ReportsController {
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (All Records)");
 					
 					
-				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase(UIGenericConstants.ALL_STRING) && reportsForm.getCallResult().equalsIgnoreCase("Pass")) {
 					model.addAttribute("AllScoreCardReport_Pass",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
@@ -434,7 +451,7 @@ public class ReportsController {
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Pass Records)");
 					
 					
-				} else if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
+				} else if(reportsForm.getScoreCardType().equalsIgnoreCase(UIGenericConstants.ALL_STRING) && reportsForm.getCallResult().equalsIgnoreCase("Fail")) {
 					model.addAttribute("AllScoreCardReport_Fail",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
@@ -443,7 +460,7 @@ public class ReportsController {
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Fail Records)");
 					
 					
-				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					model.addAttribute("ScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					
@@ -527,7 +544,7 @@ public class ReportsController {
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
 				
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getQaspReport");
-				reportsForm.setScoreCardType("Scoreable");
+				//reportsForm.setScoreCardType("Scoreable");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
 				ObjectMapper mapper = new ObjectMapper();
@@ -574,7 +591,7 @@ public class ReportsController {
 			reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
 			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));
 			
-			if (reportsForm.getJurisdictionIds() != null && !reportsForm.getJurisdictionIds().toString().contains(("ALL"))) {
+			if (reportsForm.getJurisdictionIds() != null && !reportsForm.getJurisdictionIds().toString().contains((UIGenericConstants.ALL_STRING))) {
 				String[] jurisIds = reportsForm.getJurisdictionIds();
 				
 				ArrayList<Integer> jurisIdArrayList = new ArrayList<Integer> ();
@@ -593,10 +610,10 @@ public class ReportsController {
 				reportsForm.setJurisId("");
 				
 			} else {
-				reportsForm.setJurisdictionName("ALL");
+				reportsForm.setJurisdictionName(UIGenericConstants.ALL_STRING);
 			}
 			
-			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase("ALL") ) {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
 				String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 				reportsForm.setMacName(macName);
 			} 
@@ -626,7 +643,7 @@ public class ReportsController {
 				
 				finalSortedMap.putAll(finalResultsMap);
 				
-				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+				if(reportsForm.getScoreCardType().equalsIgnoreCase("") && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					model.addAttribute("AllScoreCardReport_All",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (All Records)");
@@ -644,7 +661,7 @@ public class ReportsController {
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable, Non-Scoreable, Does Not Count Records (Fail Records)");
 					
 					
-				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase("All")) {
+				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Scoreable") && reportsForm.getCallResult().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					model.addAttribute("ScoreableReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
 					model.addAttribute("ReportTitle","Scorecard Report - Scoreable (Both Pass and Fail Records)");
@@ -744,9 +761,9 @@ public class ReportsController {
 					
 					if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 						qamMacByJurisdictionReviewReport.setScorableCount(1);
-						if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+						if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorablePass(1);
-						} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+						} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorableFail(1);
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
@@ -760,9 +777,9 @@ public class ReportsController {
 					qamMacByJurisdictionReviewReport.setTotalCount(qamMacByJurisdictionReviewReport.getTotalCount()+1);
 					if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 						qamMacByJurisdictionReviewReport.setScorableCount(qamMacByJurisdictionReviewReport.getScorableCount()+1);
-						if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+						if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorablePass(qamMacByJurisdictionReviewReport.getScorablePass()+1);
-						} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+						} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorableFail(qamMacByJurisdictionReviewReport.getScorableFail()+1);
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
@@ -904,9 +921,9 @@ public class ReportsController {
 						
 						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 							qamMacByJurisdictionReviewReport.setHhhScorableCount(1);
-							if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+							if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 								qamMacByJurisdictionReviewReport.setHhhScorablePass(1);
-							} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+							} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {
 								qamMacByJurisdictionReviewReport.setHhhScorableFail(1);
 							}
 						} 
@@ -915,9 +932,9 @@ public class ReportsController {
 						
 						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 							qamMacByJurisdictionReviewReport.setScorableCount(1);
-							if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) {
+							if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 								qamMacByJurisdictionReviewReport.setScorablePass(1);
-							} else if(scoreCard.getCallResult().equalsIgnoreCase("Fail")) {
+							} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {
 								qamMacByJurisdictionReviewReport.setScorableFail(1);
 							}
 						} 

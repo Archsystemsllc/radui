@@ -38,6 +38,23 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
 
 <script type="text/javascript">
+	function resetFields() {
+		
+		$('input:radio[name=mainReportSelect]')[0].checked = true;
+		$('#scoreCardTypeDiv').show();
+		$('#callResultDiv').show();
+		$('#complianceTypeDiv').hide();
+		$('#callCategoryTypeDiv').hide();
+		$('#rebuttalStatusDiv').hide();
+		$('#jurisSingleSelect').hide();
+		$('#jurisMultiSelect').show();
+		$('#callResult').prop('selectedIndex',0);
+		$('#scorecardType').prop('selectedIndex',0);
+		
+		$('#fromDateString').val("");
+		$('#toDateString').val("");
+		
+	}
 
 	$(document).ready(function () {    	
 
@@ -46,15 +63,25 @@
 		$('#complianceTypeDiv').hide();
 		$('#callCategoryTypeDiv').hide();
 		$('#rebuttalStatusDiv').hide();
+		$('#jurisSingleSelect').hide();
+		
 
     	$('#fromDateString').datepicker({
     		maxDate: 0,
-    		format: "mm/dd/yyyy"
+    		format: "mm/dd/yyyy",
+    		onSelect: function(selected) {
+    			$("#toDateString").datepicker("option","minDate", selected)
+    		}
+
     	});    
 
     	$('#toDateString').datepicker({
     		maxDate: 0,
-    		format: "mm/dd/yyyy"
+    		format: "mm/dd/yyyy",
+    		onSelect: function(selected) {
+    			$("#fromDateString").datepicker("option","maxDate", selected)
+    		}
+    			    		
     	});  
 
     	$('.required').each(function(){
@@ -69,27 +96,41 @@
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();   
-    		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+    		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+    		$('#jurisMultiSelect').show();
+    		$('#jurisSingleSelect').hide();
         } else if (reportSelectValue == 'ScoreCard' ) {
         	$('input:radio[name=mainReportSelect]')[0].checked = true;
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();  
-    		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
+    		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+    		$('#jurisMultiSelect').show();
+    		$('#jurisSingleSelect').hide();
         } else if (reportSelectValue == 'Compliance' ) {
         	$('#complianceTypeDiv').show();
         	$('#programPccLocDiv,#datesDiv').show();   
-        	$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+        	$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        	$('#jurisMultiSelect').show();
+    		$('#jurisSingleSelect').hide();
         } else if (reportSelectValue == 'Rebuttal' ) {
         	$('#callCategoryTypeDiv').show();
     		$('#rebuttalStatusDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();
-    		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+    		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+    		$('#jurisMultiSelect').show();
+    		$('#jurisSingleSelect').hide();
         }  else if (reportSelectValue == 'Qasp' ) {
+        	$('#scoreCardTypeDiv').hide();
+        	$('#callResultDiv').hide();
+        	$('#complianceTypeDiv').hide();
         	$('#callCategoryTypeDiv').hide();
     		$('#rebuttalStatusDiv').hide();
     		$('#programPccLocDiv').hide();
-    		$("#programId,#loc").removeAttr('required');
+    		$("#programId,#loc,#jurisdictionIds").removeAttr('required');
+    		$('#jurisMultiSelect').hide();
+    		$('#jurisSingleSelect').show();
+    		$("#jurisId").attr('required',true);
     		
         }  
         
@@ -104,7 +145,9 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv,#datesDiv').show();  
-        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
+        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$('#jurisMultiSelect').show();
+        		$('#jurisSingleSelect').hide();
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
@@ -112,7 +155,9 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv,#datesDiv').show(); 
-        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);  
+        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);  
+        		$('#jurisMultiSelect').show();
+        		$('#jurisSingleSelect').hide();
         		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
@@ -121,7 +166,9 @@
             	$('#callCategoryTypeDiv').show();
         		$('#rebuttalStatusDiv').show();
         		$('#programPccLocDiv,#datesDiv').show();   
-        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        		$('#jurisMultiSelect').show();
+        		$('#jurisSingleSelect').hide();
             } else if (mainReportSelect=="Qasp") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
@@ -129,13 +176,16 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv').hide();
-        		$("#programId,#loc").removeAttr('required');
+        		$("#programId,#loc,#jurisdictionIds").removeAttr('required');
+        		$('#jurisMultiSelect').hide();
+        		$('#jurisSingleSelect').show();
+        		$("#jurisId").attr('required',true);
             }
 
           
  		var scoreCardType = $("select#scoreCardType").val();
            if (scoreCardType=="Scoreable") {
-           	
+           	alert(scoreCardType);
            	$('#callResultDiv').show();
            } else if (scoreCardType=="Non-Scoreable") {
            	
@@ -149,16 +199,16 @@
 	$(function(){
 
 
-		$("#toDateString").change(function () {
+		/* $("#toDateString").change(function () {
 		    var startDate = $("#fromDateString").val();
 		    var endDate = $("#toDateString").val();
-
+			//alert("Test");
 		    if ((Date.parse(startDate) >= Date.parse(endDate))) {
 		        alert("To Date should be greater than From Date");
 		        $("#fromDateString").val("");
 		        $("#toDateString").val("");
 		    }
-		});
+		}); */
 
 		$("input[name='mainReportSelect']").change(function(){
             var mainReportSelect = $(this).val();
@@ -169,7 +219,9 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv,#datesDiv').show();  
-        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
+        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$('#jurisMultiSelect').show();
+        		$('#jurisSingleSelect').hide();
         		
             } else if (mainReportSelect=="Compliance") {
             	$('#scoreCardTypeDiv').hide();
@@ -178,7 +230,9 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv,#datesDiv').show();  
-        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true); 
+        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$('#jurisMultiSelect').show();
+        		$('#jurisSingleSelect').hide();
         		
             } else if (mainReportSelect=="Rebuttal") {
             	$('#scoreCardTypeDiv').hide();
@@ -187,7 +241,9 @@
             	$('#callCategoryTypeDiv').show();
         		$('#rebuttalStatusDiv').show();
         		$('#programPccLocDiv,#datesDiv').show();   
-        		$("#programId,#loc,#fromDateString,#toDateString").attr('required',true);
+        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        		$('#jurisMultiSelect').show();
+        		$('#jurisSingleSelect').hide();
             } else if (mainReportSelect=="Qasp") {
             	$('#scoreCardTypeDiv').hide();
             	$('#callResultDiv').hide();
@@ -195,7 +251,10 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv').hide();    
-        		$("#programId,#loc").removeAttr('required');    		
+        		$("#programId,#loc,#jurisdictionIds").removeAttr('required');   
+        		$('#jurisMultiSelect').hide();
+        		$('#jurisSingleSelect').show();
+        		$("#jurisId").attr('required',true);		
             }
         });
 
@@ -221,17 +280,54 @@
 			
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
 	                    {macId: macIdValue , multipleInput: false}, function(data){
-	               
+	                    	
 	                 $("#jurisId").get(0).options.length = 0;	           
-	      	      	 $("#jurisId").get(0).options[0] = new Option("---Select All---", "ALL");
-	      	  	    	$.each(data, function (key,obj) {
+	      	      	 $.each(data, function (key,obj) {
 	      	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    	});  
+
+	      	  	     $("#jurisdictionIds").get(0).options.length = 0;	           
+	      	      	 $("#jurisdictionIds").get(0).options[0] = new Option("---Select All---", "ALL");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#jurisdictionIds").get(0).options[$("#jurisdictionIds").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    	});  
+	      	  	    	   
+	               });
+
+	               
+			}
+        });
+
+		$("#jurisdictionIds").change(function(){
+
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+				var macIdValue = $('#macId').val();
+				
+				var selectedJurisdiction =""; 
+				
+				
+				$("#jurisdictionIds :selected").each(function() {
+					 selectedJurisdiction+=($(this).attr('value'))+",";
+				}); 
+				
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
+	                
+	                 $("#programId").get(0).options.length = 0;	           
+	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
 	      	  	    	});  	   
 	               });
-			}
+			} 
         });
-        
+
+		
 		$("#jurisId").change(function(){
 
 			var userRole = $('#userRole').val();			
@@ -264,9 +360,19 @@
 			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
 
 				var selectedJurisdiction =""; 
-				 $("#jurisId :selected").each(function() {
-					 selectedJurisdiction+=($(this).attr('value'))+",";
-				});
+				var mainReportSelect = $("input[name='mainReportSelect']:selected").val();
+
+		    	
+	            if (mainReportSelect=="Qasp") {
+	            	 $("#jurisId :selected").each(function() {
+						 selectedJurisdiction+=($(this).attr('value'))+",";
+					});
+	            } else {
+	            	 $("#jurisdictionIds :selected").each(function() {
+						 selectedJurisdiction+=($(this).attr('value'))+",";
+					});
+		        }
+				
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val(),programIdAvailableFlag: true}, function(data){
 	                
 	                 $("#loc").get(0).options.length = 0;	           
@@ -323,15 +429,22 @@
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:option value="ALL" label="---Select All---"/>
+										   <form:option value="ALL" label="---Select ALL---"/>
 										   <form:options items="${macIdMap}" />
 										</form:select> 									
 										
 			                            </div>
-			                            <div class="col-sm-6 form-group">
+			                            <div class="col-sm-6 form-group" id="jurisMultiSelect">
 			                                <label for="jurisdictionIds"> Jurisdiction:</label>
-										<form:select path="jurisdictionIds" class="form-control required" id="jurisId" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
-										  <form:option value="ALL" label="---Select All---"/>
+										<form:select path="jurisdictionIds" class="form-control required" id="jurisdictionIds" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
+										  <form:option value="ALL" label="---Select ALL---"/>
+										   <form:options items="${jurisMapEdit}" />
+										</form:select> 				
+			                            </div>
+			                            <div class="col-sm-6 form-group" id="jurisSingleSelect">
+			                                <label for="jurisId"> Jurisdiction:</label>
+										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" title="Select one Jurisdiction from the list">
+										  
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
@@ -341,7 +454,7 @@
 			                                <label for="name"> Program:</label>
 										<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
 										   <form:option value="" label="---Select Program---"/>
-										    <form:option value="ALL" label="---Select All---"/>
+										    <form:option value="ALL" label="---Select ALL---"/>
 										   <form:options items="${programMapEdit}" />
 										</form:select> 	
 			                            </div>
@@ -349,7 +462,7 @@
 			                                <label for="email"> PCC/Location:</label>
 			                                <form:select path="loc" class="form-control required" id="loc" title="Select one Provider Contact Centers/Location from the List">
 			                                	<form:option value="" label="---Select PCC/Location---"/>
-											   <form:option value="ALL" label="---Select All---"/>
+											   <form:option value="ALL" label="---Select ALL---"/>
 										   		<form:options items="${locationMapEdit}" />
 											</form:select> 
 			                            </div>
@@ -370,7 +483,7 @@
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
 			                                <label for="scoreCardType"> Scorecard Type:</label> 
 										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" title="Select one ScoreCard Type from the List" >
-											   	<form:option value="" label="ALL"/>
+											   	<form:option value="ALL" label="ALL"/>
 											  	<form:option value="Scoreable" />
 											  	<form:option value="Non-Scoreable" />
 											  	<form:option value="Does Not Count" />											  	
@@ -379,7 +492,7 @@
 			                            <div class="col-sm-6 form-group" id="complianceTypeDiv">
 			                                <label for="complianceReportType"> Compliance Type:</label> 
 										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" title="Select one Compliance Type from the List" >
-											   	<form:option value="" label="ALL"/>
+											   	<form:option value="ALL" label="ALL"/>
 											  	<form:option value="Compliant" />
 											  	<form:option value="Non-Compliant" /> 	
 											</form:select> 
@@ -387,7 +500,7 @@
 			                            <div class="col-sm-6 form-group" id="callResultDiv">
 			                            <label for="callResult"> Call Result:</label> 
 			                                <form:select path="callResult" class="form-control required" id="callResult" title="Select one Call Result from the List" >
-											   	<form:option value="All" Label="Both Pass and Fail"/>
+											   	<form:option value="ALL" Label="Both Pass and Fail"/>
 											  	<form:option value="Pass" />
 											  	<form:option value="Fail" />											  										  	
 											</form:select> 
@@ -402,7 +515,7 @@
 			                            <div class="col-sm-6 form-group" id="rebuttalStatusDiv">
 			                            <label for="rebuttalStatus"> Rebuttal Status:</label> 
 			                                <form:select path="rebuttalStatus" class="form-control required" id="rebuttalStatus" title="Select one Rebuttal Status from the List">
-											   	<form:option value="All" Label="ALL"/>
+											   	<form:option value="ALL" Label="ALL"/>
 											  	<form:option value="Completed" />
 											  	<form:option value="Pending" />											  										  	
 											</form:select> 
@@ -412,7 +525,7 @@
 			                          <table style="border-collapse: separate; border-spacing: 2px;valign:middle" id='table1'>
 									<tr>
 									<td><span><button class="btn btn-primary" id="generateReport" type="submit" title="Select Generate Report button to Generate Report">Generate Report</button></span>
-									<span><button class="btn btn-primary" id="reset" type="reset" title="Select Reset button to reset the Form">Reset</button></span></td>
+									<span><button class="btn btn-primary" onclick="resetFields();" type="button" title="Select Reset button to Reset the results">Reset</button></span></td>
 							       </tr>
 							</table>
 				                    

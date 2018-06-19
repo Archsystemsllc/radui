@@ -101,7 +101,7 @@ public class RebuttalController {
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				rebuttalNew = new Rebuttal();
-				String[] tempValues = {"ALL"};
+				String[] tempValues = {UIGenericConstants.ALL_STRING};
 				rebuttalNew.setJurisIdReportSearchString(tempValues);
 			}
 			
@@ -137,7 +137,7 @@ public class RebuttalController {
 				String[] jurisIds = rebuttalNew.getJurisIdReportSearchString();
 				
 				for (String jurisIdSingleValue: jurisIds) {
-					if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
+					if(jurisIdSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 						break;
 					}
 					jurisdictionArrayList.add(Integer.valueOf(jurisIdSingleValue));

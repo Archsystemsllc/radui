@@ -134,6 +134,22 @@ function activateButton(element) {
 			                            </div>
 			                           
 			                        </div>
+			                        <div class="row" >
+			                        <div class="col-lg-6 form-group">
+			                            <table border="1">
+			                            <tr><td>
+			                            <h2>Password Rules</h2>
+			                              <ul>Your new password must:
+			                              	<li>Contain a minimum of 8 characters</li>
+			                              	<li>Contain at least 1 letter</li>
+			                              	<li>Contain at least 1 number</li>
+			                              	<li>Contain at least 1 of the following characters: !@#$/-_+\</li>
+			                              	<li>Be different from the last six passwords</li>
+			                              </ul>
+			                              </td></tr>
+			                           </table>
+			                            </div>
+			                        </div>
 			                        	
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
@@ -145,6 +161,10 @@ function activateButton(element) {
 								            </div>
 								            </spring:bind>
 			                            </div>
+			                            
+			                        </div>
+			                         <div class="row">
+			                            
 			                            <div class="col-lg-6 form-group">
 			                                <label for="passwordConfirm"> Confirm your new password:</label> 
 											<spring:bind path="passwordConfirm">

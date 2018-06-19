@@ -168,15 +168,10 @@ $(document).ready(function() {
 		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
 
 		        // Average over all pages for Scoreable Pass
-		        var scoreablePassPercentAverage = api
-		            .column( 4 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
+		        var scoreablePassPercentAverage = scoreablePassCountTotal / scoreableCountTotal * 100;
 		
 		        // Update footer
-		        $( api.column( 4 ).footer() ).html(scoreablePassPercentAverage.toFixed(0) +"%");
+		        $( api.column( 4 ).footer() ).html(scoreablePassPercentAverage.toFixed(2)  +"%");
 
 		     	// Total over all pages for Scoreable Fail Count
 		        var scoreableFailCountTotal = api
@@ -190,19 +185,22 @@ $(document).ready(function() {
 		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
 
 		        // Average over all pages for Scoreable Pass
-		        var scoreableFailPercentAverage = api
-		            .column( 6 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
+		        var scoreableFailPercentAverage = scoreableFailCountTotal / scoreableCountTotal * 100;
 		
 		        // Update footer
-		        $( api.column( 6 ).footer() ).html(scoreableFailPercentAverage.toFixed(0) +"%");
+		        $( api.column( 6 ).footer() ).html(scoreableFailPercentAverage.toFixed(2)  +"%");
 
 		     	// Total over all pages for Non Scoreable Count
 		        var nonScoreableCountTotal = api
                 .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+		        // Total over all pages for Does Not Count
+		        var doesNotCountTotal = api
+                .column( 9 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -212,37 +210,20 @@ $(document).ready(function() {
 		        $( api.column( 7 ).footer() ).html( nonScoreableCountTotal );
 
 		        // Average over all pages for Scoreable Pass
-		        var nonScoreablePercentAverage = api
-		            .column( 8 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
+		        var nonScoreablePercentAverage = nonScoreableCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
 		
 		        // Update footer
-		        $( api.column( 8 ).footer() ).html(nonScoreablePercentAverage.toFixed(0) +"%");
+		        $( api.column( 8 ).footer() ).html(nonScoreablePercentAverage.toFixed(2)  +"%");
 
-		     // Total over all pages for Does Not Count
-		        var doesNotCountTotal = api
-                .column( 9 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
+		   
  
 		        // Update footer
 		        $( api.column( 9 ).footer() ).html( doesNotCountTotal );
 
 		        // Average over all pages for Scoreable Pass
-		        var doesNotCountPercentAverage = api
-		            .column( 10 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
-		
+		        var doesNotCountPercentAverage = doesNotCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
 		        // Update footer
-		        $( api.column( 10 ).footer() ).html(doesNotCountPercentAverage.toFixed(0) +"%");
+		        $( api.column( 10 ).footer() ).html(doesNotCountPercentAverage.toFixed(2) +"%");
 
 	        }
 	});
@@ -816,7 +797,7 @@ $(document).ready(function() {
 		"aaData": qaspScorecardData,
 		"aoColumns": [
 		{ "mData": "monthYear"},
-		{ "mData": "scorableCount", className: "dt-body-center"},
+		{ "mData": "scorableCount"},
 		{ "mData": "hhhScorableCount"},
 		{ "mData": "scorablePass"},
 		{ "mData": "hhhScorablePass"},

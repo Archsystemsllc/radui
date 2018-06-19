@@ -81,7 +81,7 @@ public class ScoreCardController {
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				scoreCardNew = new ScoreCard();
-				String[] tempValues = {"ALL"};
+				String[] tempValues = {UIGenericConstants.ALL_STRING};
 				scoreCardNew.setJurisIdReportSearchString(tempValues);
 			}
 			
@@ -164,7 +164,7 @@ public class ScoreCardController {
 				String[] jurisIds = scoreCardModelObject.getJurisIdReportSearchString();
 				
 				for (String jurisIdSingleValue: jurisIds) {
-					if(jurisIdSingleValue.equalsIgnoreCase("ALL")) {
+					if(jurisIdSingleValue.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 						break;
 					}
 					jurisdictionArrayList.add(Integer.valueOf(jurisIdSingleValue));
@@ -547,10 +547,10 @@ public class ScoreCardController {
 				if (existingScoreCard != null && existingScoreCard.getCmsCalibrationStatus() != null && !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) {
 					scoreCard.setCmsCalibrationUpdateDateTime(currentDateTime);
 					
-				} else if (	existingScoreCard != null &&
-						( (existingScoreCard.getQamCalibrationStatus() != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus())) || 
-								( existingScoreCard.getCmsCalibrationStatus() != null 
-								&& !existingScoreCard.getCmsCalibrationStatus().equalsIgnoreCase(scoreCard.getCmsCalibrationStatus()) ) ) ) {
+				} 
+				
+				if (existingScoreCard != null &&
+						 existingScoreCard.getQamCalibrationStatus() != null && !existingScoreCard.getQamCalibrationStatus().equalsIgnoreCase(scoreCard.getQamCalibrationStatus()) ) {
 					scoreCard.setQamCalibrationUpdateDateTime(currentDateTime);
 					
 				}  
