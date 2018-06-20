@@ -860,7 +860,7 @@ $(document).ready(function() {
 	                }, 0 );
 	 
 	            // Update footer
-	           // $( api.column( 1 ).footer() ).html( scoreableCountTotal );
+	           $( api.column( 1 ).footer() ).html( scoreableCountTotal );
 
 	            // Total over all pages for Scoreable Pass Count
 	            var scoreableHhhCountTotal = api
@@ -871,7 +871,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		       // $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
+		        $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
 
 		       
 		     	// Total over all pages for Scoreable Fail Count
@@ -883,7 +883,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		        //$( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
+		       $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
 
 		     // Total over all pages for Scoreable Fail Count
 		        var scoreableHhhPassCountTotal = api
@@ -894,7 +894,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		        //$( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
+		        $( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
 
 		        
 		     	// Total over all pages for Non Scoreable Count
@@ -906,7 +906,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		       // $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
+		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
 
 		        // Average over all pages for Scoreable Pass
 		        var scoreableFailHhhCountTotal = api
@@ -917,20 +917,20 @@ $(document).ready(function() {
 		            }, 0) ;
 		
 		        // Update footer
-		        //$( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
+		        $( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
 		        
 				var totalScoreCards = scoreableCountTotal + scoreableHhhCountTotal;
 				var totalPassScoreCards = scoreablePassCountTotal + scoreableHhhPassCountTotal;
 				var totalFailScoreCards = scoreableFailCountTotal + scoreableFailHhhCountTotal;
 				var average = (totalPassScoreCards / totalScoreCards) * 100;
-		        //$('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
-		        //$('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
-		        //$('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
+		        $('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
+		        $('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
+		        $('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
 
 		     // Update footer
-		     // $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
+		      $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
 
-		      var footerContent = 
+		     /*  var footerContent = 
 
 		      '<div style="display: table;width:100%" class="col-lg-10 form-group">'+
 		      '<div class="row" style="width:100%">'+
@@ -960,7 +960,7 @@ $(document).ready(function() {
 		      '</div>'+
 		      '</div>';
 
-		      $( api.column( 0 ).footer() ).html( footerContent );
+		      $( api.column( 0 ).footer() ).html( footerContent ); */
 		  }
 		     
 	});
@@ -1358,17 +1358,17 @@ $(document).ready(function() {
 						                    </tbody>
 						                    <tfoot >
 								            <tr >
-								             <th colspan="7" style="text-align:center" class="col-lg-10 form-group"></th>
-								               <!--  <th colspan="1" style="text-align:right">Sub-Totals:</th>
+								            <!--  <th colspan="7" style="text-align:center" class="col-lg-10 form-group"></th> -->
+								             <th colspan="1" style="text-align:right">Sub-Totals:</th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th> -->
+								                <th style="text-align: center"></th> 
 								               
 								            </tr>
-								           <!--  <tr>
+								            <tr>
 								                <th colspan="1" style="text-align:right"></th>
 								                <th style="text-align: center" colspan="2">Total Completed</th>
 								                <th style="text-align: center" colspan="2">Total Passed</th>
@@ -1382,7 +1382,7 @@ $(document).ready(function() {
 								            </tr>
 								            <tr>
 								                <th colspan="7" style="text-align:center"></th>								                
-								            </tr> -->
+								            </tr> 
 								        </tfoot>
 						                </table> 
 						                </div>
