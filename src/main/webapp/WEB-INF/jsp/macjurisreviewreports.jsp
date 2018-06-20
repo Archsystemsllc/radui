@@ -227,7 +227,9 @@ $(document).ready(function() {
 
 	        }
 	});
-
+	
+	allScoreCardDataTable.columns.adjust().draw();
+	
 	var allPassScorecardData =eval('${allPassScoreCardList}');
 	var allPassScorecardDataTable = $('#allPassScorecardDTId').DataTable( {
 		"aaData": allPassScorecardData,
@@ -414,6 +416,7 @@ $(document).ready(function() {
 
 	        }
 	});
+	allPassScorecardDataTable.columns.adjust().draw();
 
 	//Fail Scorecard Data Table Code
 	var allFailScorecardData =eval('${allFailScorecardList}');
@@ -465,6 +468,8 @@ $(document).ready(function() {
 		  "ordering" : true,
 	});
 
+	failScorecardDataTable.columns.adjust().draw();
+
 	//Scorecard Data Table Code
 	var scoreableReportData =eval('${scoreableReportList}');
 	var scoreableReportDataTable = $('#scoreableReportDTId').DataTable( {
@@ -514,6 +519,9 @@ $(document).ready(function() {
 		  "ordering" : true,
 	});
 
+	scoreableReportDataTable.columns.adjust().draw();
+	
+
 	//Scorecard Pass Data Table Code
 	var scoreablePassReportData =eval('${scoreablePassReportList}');
 	var scoreablePassReportDataTable = $('#scoreablePassReportDTId').DataTable( {
@@ -560,7 +568,8 @@ $(document).ready(function() {
 		  "pageLength" : 20,
 		  "ordering" : true,
 	});
-
+	scoreablePassReportDataTable.columns.adjust().draw();
+	
 
 	//Scorecard Fail Data Table Code
 	var scoreableFailReportData =eval('${scoreableFailReportList}');
@@ -609,7 +618,8 @@ $(document).ready(function() {
 		  "ordering" : true,
 	});
 
-
+	scoreableFailReportTable.columns.adjust().draw();
+	
 	//Non-Scoreable Data Table Code
 	var nonScoreableData =eval('${nonScoreableList}');
 	var nonScoreableDataTable = $('#nonScoreableDTId').DataTable( {
@@ -655,6 +665,7 @@ $(document).ready(function() {
 		  "pageLength" : 20,
 		  "ordering" : true,
 	});
+	nonScoreableDataTable.columns.adjust().draw();	
 
 	//Does Not Count Data Table Code
 	var doesNotCountData =eval('${doesNotCountList}');
@@ -701,7 +712,8 @@ $(document).ready(function() {
 		  "pageLength" : 20,
 		  "ordering" : true,
 	});
-
+	doesNotCountDataTable.columns.adjust().draw();
+	
 	//Compliance Data Table Code
 	var complianceReportData =eval('${complianceReportList}');
 	var complianceReportDataTable = $('#complianceReportDTId').DataTable( {
@@ -710,20 +722,9 @@ $(document).ready(function() {
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
 		{ "mData": "monthYear"},
-		{ "mData": "complianceStatus"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "complianceStatus"}
 		],
-	    /* "columnDefs": [ 
-	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/PASS'>"+data+"</a></span>";
-				return linkData;
-	        },
-		   "targets" : 0
-		   }	
-		 ],  */
-		 dom: '<lif<t>pB>',
+	   	 dom: '<lif<t>pB>',
 	     buttons: [
 	         {
 	             extend: 'copyHtml5',
@@ -747,9 +748,12 @@ $(document).ready(function() {
 		  "pageLength" : 10,
 		  "ordering" : true,
 	});
-
-	//Compliance Data Table Code
+	complianceReportDataTable.columns.adjust().draw();
+	
+	//Rebuttal Data Table Code
 	var rebuttalReportData =eval('${rebuttalReportList}');
+	var callCatTypeVar = $('#callCategoryType').val();
+	var rebuttalStatusVar = $('#rebuttalStatus').val();
 	var rebuttalReportDataTable = $('#rebuttalReportDTId').DataTable( {
 		"aaData": rebuttalReportData,
 		"aoColumns": [
@@ -762,7 +766,7 @@ $(document).ready(function() {
 	    "columnDefs": [ 
 	        { 
 	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/PASS'>"+data+"</a></span>";
+	        	var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttal-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+callCatTypeVar+"/"+rebuttalStatusVar+"'>"+data+"</a></span>";
 				return linkData;
 	        },
 		   "targets" : 0
@@ -792,7 +796,8 @@ $(document).ready(function() {
 		  "pageLength" : 10,
 		  "ordering" : true,
 	});
-
+	rebuttalReportDataTable.columns.adjust().draw();
+	
 	var qaspScorecardData =eval('${qaspReportList}');
 	var qaspScorecardDataTable = $('#qaspReportDTId').DataTable( {
 		"aaData": qaspScorecardData,
@@ -811,24 +816,22 @@ $(document).ready(function() {
 	             extend: 'copyHtml5',
 	             footer: true,
 	             messageTop: messageOnTop,
-	             title: reportTitle
-	            
+	             title: reportTitle	            
 	         },
 	         {
 	             extend: 'excelHtml5',
 	             footer: true,
 	             messageTop: messageOnTop,
-	             title: reportTitle
-	             
+	             title: reportTitle	             
 	         },
 	         {
 	             extend: 'pdfHtml5',
 	             footer: true,
+	             stripNewlines: false,
 	             messageTop: messageOnTop,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
-	             title: reportTitle
-	             
+	             title: reportTitle	             
 	         }	        
 	     ],
 		  "paging" : true,
@@ -857,7 +860,7 @@ $(document).ready(function() {
 	                }, 0 );
 	 
 	            // Update footer
-	            $( api.column( 1 ).footer() ).html( scoreableCountTotal );
+	           // $( api.column( 1 ).footer() ).html( scoreableCountTotal );
 
 	            // Total over all pages for Scoreable Pass Count
 	            var scoreableHhhCountTotal = api
@@ -868,7 +871,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		        $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
+		       // $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
 
 		       
 		     	// Total over all pages for Scoreable Fail Count
@@ -880,7 +883,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
+		        //$( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
 
 		     // Total over all pages for Scoreable Fail Count
 		        var scoreableHhhPassCountTotal = api
@@ -891,7 +894,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		        $( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
+		        //$( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
 
 		        
 		     	// Total over all pages for Non Scoreable Count
@@ -903,7 +906,7 @@ $(document).ready(function() {
 		              }, 0 );
 
 		        // Update footer
-		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
+		       // $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
 
 		        // Average over all pages for Scoreable Pass
 		        var scoreableFailHhhCountTotal = api
@@ -914,21 +917,54 @@ $(document).ready(function() {
 		            }, 0) ;
 		
 		        // Update footer
-		        $( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
+		        //$( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
 		        
 				var totalScoreCards = scoreableCountTotal + scoreableHhhCountTotal;
 				var totalPassScoreCards = scoreablePassCountTotal + scoreableHhhPassCountTotal;
 				var totalFailScoreCards = scoreableFailCountTotal + scoreableFailHhhCountTotal;
 				var average = (totalPassScoreCards / totalScoreCards) * 100;
-		        $('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
-		        $('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
-		        $('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
+		        //$('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
+		        //$('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
+		        //$('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
 
 		     // Update footer
-		      $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
+		     // $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
+
+		      var footerContent = 
+
+		      '<div style="display: table;width:100%" class="col-lg-10 form-group">'+
+		      '<div class="row" style="width:100%">'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:15%;">Sub-Totals:</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:14%;">'+scoreableCountTotal+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:14%;">'+scoreableHhhCountTotal+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:14%;">'+scoreablePassCountTotal+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:14%;">'+scoreableHhhPassCountTotal+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:14%;">'+scoreableFailCountTotal+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 30px;width:14%;">'+scoreableFailHhhCountTotal+'</div>'+
+		      '</div>'+
+		      '<div class="row" style="width:100%">'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:14%;">&nbsp;</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:27%;">Total Completed</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:27%;">Total Passed</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:27%;">Total Failed</div>'+
+		      '</div>'+
+		      '<div class="row" style="width:100%">'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:14%;">TOTALS</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:27%;">'+totalScoreCards+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:27%;">'+totalPassScoreCards+'</div>'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 6px 30px;width:27%;">'+totalFailScoreCards+'</div>'+
+		      '</div>'+
+		      '<div class="row" style="width:100%">'+
+		      '<div style="border: 1px solid #999999; display: table-cell; padding: 3px 10px;text-align: center;"> Average Quality Rate: '+average.toFixed(0) +'%</div>'+
+		      '</div>'+
+		      '</div>'+
+		      '</div>';
+
+		      $( api.column( 0 ).footer() ).html( footerContent );
 		  }
 		     
 	});
+	qaspScorecardDataTable.columns.adjust().draw();
 
 });
 </script>
@@ -1031,7 +1067,7 @@ $(document).ready(function() {
 										            <th style="text-align: center">Non-Scoreable Percent</th> 
 										            <th style="text-align: center">Does Not Count</th>
 										            <th style="text-align: center">Does Not Count Percent</th>
-										             <th style="text-align: center">QAM Start Date</th>
+										            <th style="text-align: center">QAM Start Date</th>
 										            <th style="text-align: center">QAM End Date</th>		
 										          										           
 										        </tr>
@@ -1261,9 +1297,7 @@ $(document).ready(function() {
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
 										            <th style="text-align: center">Month, Year</th>
-										            <th style="text-align: center">Compliance Status</th>	
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>							           
+										            <th style="text-align: center">Compliance Status</th>										           		           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1322,18 +1356,19 @@ $(document).ready(function() {
 										    </thead>
 						                    <tbody style="text-align: center">  
 						                    </tbody>
-						                    <tfoot>
-								            <tr>
-								                <th colspan="1" style="text-align:right">Sub-Totals:</th>
+						                    <tfoot >
+								            <tr >
+								             <th colspan="7" style="text-align:center" class="col-lg-10 form-group"></th>
+								               <!--  <th colspan="1" style="text-align:right">Sub-Totals:</th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
 								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th>
+								                <th style="text-align: center"></th> -->
 								               
 								            </tr>
-								            <tr>
+								           <!--  <tr>
 								                <th colspan="1" style="text-align:right"></th>
 								                <th style="text-align: center" colspan="2">Total Completed</th>
 								                <th style="text-align: center" colspan="2">Total Passed</th>
@@ -1347,7 +1382,7 @@ $(document).ready(function() {
 								            </tr>
 								            <tr>
 								                <th colspan="7" style="text-align:center"></th>								                
-								            </tr>
+								            </tr> -->
 								        </tfoot>
 						                </table> 
 						                </div>

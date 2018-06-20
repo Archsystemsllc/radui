@@ -48,8 +48,17 @@
 		$('#rebuttalStatusDiv').hide();
 		$('#jurisSingleSelect').hide();
 		$('#jurisMultiSelect').show();
+		$('#macId').prop('selectedIndex',0);
+		$("#jurisdictionIds").get(0).options.length = 0;	          
+		$('#programId').prop('selectedIndex',0);
+		$('#loc').prop('selectedIndex',0);
 		$('#callResult').prop('selectedIndex',0);
 		$('#scorecardType').prop('selectedIndex',0);
+		
+		
+		
+		$('#programPccLocDiv,#datesDiv').show();  
+		
 		
 		$('#fromDateString').val("");
 		$('#toDateString').val("");
