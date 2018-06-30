@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
@@ -375,16 +376,19 @@
 			                            </div>
 			                         </div>			                        
 			                        <div class="row">
-			                             
+			                             <div class="col-sm-6 form-group" id="datePostedDiv">
+			                                <label for="name"> Date Posted:</label>
+			                                <form:input type = "text" class="form-control" id="datePostedString" name = "datePostedString" path="datePostedString" readonly="true"/>
+			                            </div>
+			                            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User') ">
+									
 			                         	<div class="col-sm-6 form-group">
 			                                <label for="name"> QM Name/ID:</label>
 			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
 			                                <form:input type = "hidden" name = "id" path="id" />
 			                            </div>
-			                            <div class="col-sm-6 form-group" id="datePostedDiv">
-			                                <label for="name"> Date Posted:</label>
-			                                <form:input type = "text" class="form-control" id="datePostedString" name = "datePostedString" path="datePostedString" readonly="true"/>
-			                            </div>
+			                            </sec:authorize>
+			                            
 			                        </div>
 			                         <div class="row">
 			                             <div class="col-sm-6 form-group">

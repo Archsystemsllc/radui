@@ -119,7 +119,7 @@
 				$("#section6Div").show();	
 				$("#callResultDiv").show();	
 				$("#callFailureReasonDiv").show();
-				$("#failReasonCommentsDiv").show();
+				
 				$('#section7HeaderDiv').show();		
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$('#section4HeaderDiv').hide();	
@@ -132,6 +132,14 @@
 				$('#nonScoreableReason').attr("required",false);
 
 				$("#Section8Div").show();
+				var final_status ="${scorecard.finalScoreCardStatus}"; 
+
+				
+				if(final_status=="Fail") {	
+					$("#failReasonCommentsDiv").show();			
+				} else {
+					$("#failReasonCommentsDiv").hide();		
+				}
 								
 			}  else if(selected_value=="Does Not Count") {
 				
@@ -581,7 +589,7 @@
 	            checkbox: true //adds checkbox to options    
 	        }).on("change", function(evt) {
 	            var val = $(this).val();
-	            alert(val);
+	            //alert(val);
 	        }); 
 
 	});
@@ -772,7 +780,13 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> QM Name/QM ID:</label>
-			                                <form:input type = "text" class="form-control" path="qamFullName" readonly="true"/>			                                
+			                               
+			                                  <sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User') ">
+													 <form:input type = "text" class="form-control" path="id" readonly="true"/>				                                
+					                      </sec:authorize>
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
+													 <form:input type = "text" class="form-control" path="qamFullName" readonly="true"/>				                                
+					                      </sec:authorize>	                                
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> Scorecard Type:</label></br>

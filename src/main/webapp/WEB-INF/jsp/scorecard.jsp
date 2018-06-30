@@ -10,7 +10,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM - Add New Scorecard</title>
+<title>QAM - Scorecard</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -86,8 +86,6 @@
     	$('#failReasonComments').attr("required",false);	
 		//Section 8 Div
 		//$("#Section8Div").hide();
-		
-	
 			
 			var selected_value ="${scorecard.scorecardType}"; 
 
@@ -120,7 +118,7 @@
 				$("#section6Div").show();	
 				$("#callResultDiv").show();	
 				$("#callFailureReasonDiv").show();
-				$("#failReasonCommentsDiv").show();
+				
 				$('#section7HeaderDiv').show();		
 				$("#nonScoreableReasonCommentsDiv").hide();	
 				$('#section4HeaderDiv').hide();	
@@ -133,6 +131,14 @@
 				$('#nonScoreableReason').attr("required",false);
 
 				$("#Section8Div").show();
+				var final_status ="${scorecard.finalScoreCardStatus}"; 
+
+				
+				if(final_status=="Fail") {	
+					$("#failReasonCommentsDiv").show();			
+				} else {
+					$("#failReasonCommentsDiv").hide();		
+				}
 								
 			}  else if(selected_value=="Does Not Count") {
 				
@@ -336,7 +342,8 @@
 			
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
                     {macId: macIdValue, multipleInput: false}, function(data){
-               
+             	 $("#programId").get(0).options.length = 0;	           
+       	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
                  $("#jurId").get(0).options.length = 0;	           
       	      	 $("#jurId").get(0).options[0] = new Option("---Select Jurisdiction---", "");
       	  	    	$.each(data, function (key,obj) {
@@ -352,7 +359,7 @@
 			$("#csrFullName").val("");
 			var userRole = $('#userRole').val();			
 			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
-
+			
 			var macIdValue = $('#macId').val();
             $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: $(this).val()}, function(data){
                 
@@ -777,7 +784,7 @@
 <body>
 	<jsp:include page="admin_header.jsp"></jsp:include>
 	<div id="dialog-confirm" title="Close Scorecard Confirmation?">
-  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the scorecard without saving?</p>
+  		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Do you want to close the Scorecard without saving?</p>
 	</div>
 
 	<table id="mid">
@@ -828,8 +835,13 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamFullName"> QM Name/QM ID: </label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
-			                            </div>
+			                                <sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User') ">
+													<form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="id" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
+					                      </sec:authorize>
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
+													<form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
+					                      </sec:authorize>
+			                                      </div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="email"> Scorecard Type:</label></br>
 			                                <c:if test="${scorecardType==null}">
@@ -848,10 +860,10 @@
 			                                <input type="hidden" id="DatePickerHidden" />
 			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true" title="Choose Quality Manager Start Date/Time from the Calendar"/>
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                           <%--  <div class="col-lg-6 form-group">
 			                                <label for="email"> QM End Date/Time:</label>
 			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true" title="Choose Quality Manager End Date/Time from the Calendar"/>
-			                            </div>
+			                            </div> --%>
 			                        </div>
 				                    
 				                </div>

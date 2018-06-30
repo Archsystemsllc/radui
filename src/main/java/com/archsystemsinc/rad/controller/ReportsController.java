@@ -197,16 +197,18 @@ public class ReportsController {
 			for(ScoreCard scoreCard: scoreCardList) {
 				scoreCard.setMacName(macIdString);
 				scoreCard.setJurisdictionName(jurIdString);
+				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
+				scoreCard.setQamStartdateTimeString(qamStartdateTimeString);
 				if(searchString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					resultsMap.put(scoreCard.getId(), scoreCard);
 				} else if(searchString.equalsIgnoreCase("ScoreableOnly")) {
 					if(scoreCard.getScorecardType().equalsIgnoreCase("Scoreable"))
 						resultsMap.put(scoreCard.getId(), scoreCard);
 				}else if(searchString.equalsIgnoreCase("ScoreablePass")) {
-					if(scoreCard.getCallResult().equalsIgnoreCase("Pass")) 
+					if(scoreCard.getFinalScoreCardStatus().equalsIgnoreCase("Pass")) 
 					 resultsMap.put(scoreCard.getId(), scoreCard);
 				}else if(searchString.equalsIgnoreCase("ScoreableFail")) {
-					if(scoreCard.getCallResult().equalsIgnoreCase("Fail"))
+					if(scoreCard.getFinalScoreCardStatus().equalsIgnoreCase("Fail"))
 							 resultsMap.put(scoreCard.getId(), scoreCard);
 				} else if(searchString.equalsIgnoreCase("Non-Scoreable")) {
 					if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable"))
@@ -305,8 +307,7 @@ public class ReportsController {
 				
 			}
 			
-			/*reportsForm.setFromDate(mdyFormat.parse(reportsForm.getFromDateString()));
-			reportsForm.setToDate(mdyFormat.parse(reportsForm.getToDateString()));*/
+			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 				
@@ -369,11 +370,22 @@ public class ReportsController {
 						if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
 							String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
 							reportsForm.setMacName(macName);
+						} else {
+							reportsForm.setMacName(UIGenericConstants.ALL_STRING);
 						}
 						
 						if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
 							String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
 							reportsForm.setProgramName(programName);
+						}  else {
+							reportsForm.setProgramName(UIGenericConstants.ALL_STRING);
+						}
+						
+						if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
+							String pccLocationName = HomeController.PCC_LOC_MAP.get(Integer.valueOf(reportsForm.getLoc()));				
+							reportsForm.setPccLocationName(pccLocationName);
+						} else {
+							reportsForm.setPccLocationName(UIGenericConstants.ALL_STRING);
 						}
 					}				
 				
@@ -425,14 +437,14 @@ public class ReportsController {
 					String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
 					reportsForm.setProgramName(programName);
 				} else {
-					reportsForm.setProgramName(reportsForm.getProgramId());
+					reportsForm.setProgramName(UIGenericConstants.ALL_STRING);
 				}
 				
 				if (!reportsForm.getLoc().equalsIgnoreCase("") && !reportsForm.getLoc().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
-					/*String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
-					reportsForm.setMacName(macName);*/
+					String pccLocationName = HomeController.PCC_LOC_MAP.get(Integer.valueOf(reportsForm.getLoc()));				
+					reportsForm.setPccLocationName(pccLocationName);
 				} else {
-					/**/
+					reportsForm.setPccLocationName(UIGenericConstants.ALL_STRING);
 				}
 				
 			}
@@ -455,6 +467,8 @@ public class ReportsController {
 				resultsMap = responseEntity.getBody();
 				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
 				finalResultsMap = generateScoreCardReport(scoreCardList,session);
+				
+				returnView = "scorecardreports";
 				
 				finalSortedMap.putAll(finalResultsMap);
 				
@@ -527,6 +541,8 @@ public class ReportsController {
 				session.setAttribute("SS_MAC_JURIS_REPORT", finalSortedMap);
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
+				returnView = "compliancereports";
+				
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getComplianceReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
@@ -552,6 +568,8 @@ public class ReportsController {
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
 				
+				returnView = "rebuttalreports";
+				
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getRebuttalReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
@@ -571,6 +589,8 @@ public class ReportsController {
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
 				
+				returnView = "qaspreports";
+				
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getQaspReport");
 				//reportsForm.setScoreCardType("Scoreable");
 				
@@ -582,7 +602,7 @@ public class ReportsController {
 				finalResultsMap = generateQaspReport(qaspList);
 				finalSortedMap.putAll(finalResultsMap);
 				model.addAttribute("QASP_REPORT",finalSortedMap);
-				model.addAttribute("QaspReport",true);
+				model.addAttribute("QaspReport",true);				
 				model.addAttribute("qaspReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 				session.setAttribute("SS_QASP_REPORT", finalSortedMap);
 				
@@ -596,7 +616,7 @@ public class ReportsController {
 		}
 		session.setAttribute("ReportsFormSession", reportsForm);
 		model.addAttribute("reportsForm", reportsForm);
-		return "macjurisreviewreports";
+		return returnView;
 	}
 
 
@@ -621,6 +641,7 @@ public class ReportsController {
 			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = null;
 			
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
+				returnView = "scorecardreports";
 				ObjectMapper mapper = new ObjectMapper();
 				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_MAC_JURIS_REPORT");
 				
@@ -693,7 +714,7 @@ public class ReportsController {
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
-				
+				returnView = "compliancereports";
 				ObjectMapper mapper = new ObjectMapper();
 				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_COMPLIANCE_REPORT");
 				
@@ -712,6 +733,7 @@ public class ReportsController {
 				
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
+				returnView = "rebuttalreports";
 				
 				ObjectMapper mapper = new ObjectMapper();
 				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_REBUTTAL_REPORT");
@@ -723,7 +745,7 @@ public class ReportsController {
 				model.addAttribute("ReportTitle","Rebuttal Report");
 				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
-				
+				returnView = "qaspreports";
 				ObjectMapper mapper = new ObjectMapper();
 				finalSortedMap = (Map<String, QamMacByJurisdictionReviewReport>) session.getAttribute("SS_QASP_REPORT");
 				
@@ -741,7 +763,7 @@ public class ReportsController {
 		}
 		
 		model.addAttribute("reportsForm", reportsForm);
-		return "macjurisreviewreports";
+		return returnView;
 	}
 	
 	

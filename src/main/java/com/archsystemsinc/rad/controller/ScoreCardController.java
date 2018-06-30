@@ -100,18 +100,19 @@ public class ScoreCardController {
 						}
 											
 						scoreCardNew.setJurIdList(jurIdArrayList);
-						scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
+						//scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
 					}
 					
-					scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
+					//scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
-					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);					
+					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);		
+					scoreCardNew.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
-					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+					//scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
-					scoreCardFailObject.setJurIdList(jurIdArrayList);
+					//scoreCardFailObject.setJurIdList(jurIdArrayList);
 					
-					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.CMS_FAIL_STRING);
+					//scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);	
@@ -128,7 +129,7 @@ public class ScoreCardController {
 				scoreCardNew.setUserId(userFormFromSession.getId().intValue());
 			}
 			
-			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew,scoreCardFailObject);
+			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew);
 			ObjectMapper mapper = new ObjectMapper();
 			//Convert the result set to string and replace single character with spaces
 			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
@@ -147,7 +148,7 @@ public class ScoreCardController {
 	}
 	
 	
-	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject, ScoreCard scoreCardFailObject) {	
+	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject) {	
 		log.debug("--> Enter retrieveScoreCardList <--");
 		
 		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
@@ -179,9 +180,9 @@ public class ScoreCardController {
 				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
 				scoreCardModelObject.setFilterFromDate(filterFromDate);
 				
-				if (scoreCardFailObject != null) {
+				/*if (scoreCardFailObject != null) {
 					scoreCardFailObject.setFilterFromDate(filterFromDate);
-				}
+				}*/
 			}
 			
 			
@@ -191,9 +192,9 @@ public class ScoreCardController {
 				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
 				scoreCardModelObject.setFilterToDate(filterToDate);
 				
-				if (scoreCardFailObject != null) {
+				/*if (scoreCardFailObject != null) {
 					scoreCardFailObject.setFilterToDate(filterToDate);
-				}
+				}*/
 			}
 			
 			
@@ -207,7 +208,7 @@ public class ScoreCardController {
 			List<ScoreCard> scoreCardFailList = null;
 			//Scorecard Fail List
 			
-			if (scoreCardFailObject != null) {
+			/*if (scoreCardFailObject != null) {
 				BasicAuthRestTemplate basicAuthRestTemplate2 = new BasicAuthRestTemplate("qamadmin", "123456");
 				ResponseEntity<List> responseEntity2 = basicAuthRestTemplate2.postForEntity(ROOT_URI, scoreCardFailObject, List.class);
 				
@@ -222,7 +223,7 @@ public class ScoreCardController {
 						scoreCardList.addAll(scoreCardFailList);
 					}
 				}
-			}
+			}*/
 			
 			for(ScoreCard scoreCardTemp: scoreCardList) {
 				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCardTemp.getQamStartdateTime());
@@ -670,12 +671,7 @@ public class ScoreCardController {
 				validationResultString+="Non-Scoreable Reason";
 			}
     		
-    	} else if(scoreCard.getScorecardType().equalsIgnoreCase("Does Not Count")) {
-    		
-    			if(scoreCard.getFailReasonAdditionalComments().equalsIgnoreCase("")) {
-    				validationResultString+="Additional Comments";
-    			}    		
-    	}
+    	} 
     	
     	if(validationResultString.equalsIgnoreCase("Please Provide Following Fields:")) {
     		validationResultString = "Validation Succesfull";

@@ -5,9 +5,12 @@ package com.archsystemsinc.rad.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
@@ -22,13 +25,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
+import com.archsystemsinc.rad.common.utils.UtilityFunctions;
+import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+import com.archsystemsinc.rad.model.JurisdictionInfo;
+import com.archsystemsinc.rad.model.Location;
 import com.archsystemsinc.rad.model.MacInfo;
 import com.archsystemsinc.rad.model.MacProgJurisPccMapping;
+import com.archsystemsinc.rad.model.Program;
+import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.service.UserService;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -91,6 +104,10 @@ public class HomeController {
 	
 	public static String LOGGED_IN_USER_JURISDICTION_NAMES;
 	
+	@Autowired
+	UtilityFunctions utilityFunctions;
+	 
+	
 	/**
      * This method provides the functionalities for the User Registration.
      * 
@@ -116,6 +133,323 @@ public class HomeController {
        
         return "resources";
     }
+    
+    @RequestMapping(value ={"/admin/macmappinglist", "/quality_manager/macmappinglist", "/cms_user/macmappinglist",
+			 "/mac_admin/macmappinglist","/mac_user/macmappinglist","/quality_monitor/macmappinglist"})		
+	public String getMacMappingList(final Model model,HttpServletRequest request, Authentication authentication,HttpServletResponse response) {
+		log.debug("--> getMacMappingList Screen <--");
+		
+		HashMap<Integer,MacInfo> resultsMap = new HashMap<Integer,MacInfo>();
+		
+		List<MacInfo> macInfoTempList = null;
+		String plainCreds = "qamadmin:123456";
+		byte[] plainCredsBytes = plainCreds.getBytes();
+		byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+		String base64Creds = new String(base64CredsBytes);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Accept", "application/json");
+		headers.add("Authorization", "Basic " + base64Creds);
+
+		headers.set("Content-Length", "35");
+		RestTemplate restTemplate = new RestTemplate();
+		
+		ArrayList<MacInfo> resultsList= new ArrayList<MacInfo>();
+		try {
+			
+			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
+			
+			String roles = authentication.getAuthorities().toString();
+			Date today = new Date(); 			
+			
+			ResponseEntity<String> webServiceExchange = null;			
+			
+			ObjectMapper mapper = new ObjectMapper();
+			
+			List<MacProgJurisPccMapping> macProgJurisPccMappingList = null;
+			
+			webServiceExchange = restTemplate.exchange(RAD_WS_URI2 + "macPrgmJurisPccList", HttpMethod.GET,new HttpEntity<String>(headers), String.class);
+			
+			macProgJurisPccMappingList = mapper.readValue(webServiceExchange.getBody(), new TypeReference<List<MacProgJurisPccMapping>>(){});
+			
+			ArrayList<MacProgJurisPccMapping> finalList = new ArrayList<MacProgJurisPccMapping>();
+			
+			for (MacProgJurisPccMapping macProgJurisPccMapping: macProgJurisPccMappingList) {					
+				
+				String macName = MAC_ID_MAP.get(macProgJurisPccMapping.getMacId());
+				macProgJurisPccMapping.setMacName(macName);
+				//MAC Jurisdiction Map Code
+				String jurisName = JURISDICTION_MAP.get(macProgJurisPccMapping.getJurisdictionId());				
+				macProgJurisPccMapping.setJurisdictionName(jurisName);
+				//MAC Jurisdiction Program Map Code
+				String programName = ALL_PROGRAM_MAP.get(macProgJurisPccMapping.getProgramId());		
+				macProgJurisPccMapping.setProgramName(programName);
+				
+				String locationName = PCC_LOC_MAP.get(macProgJurisPccMapping.getPccId());	
+				macProgJurisPccMapping.setPccLocationName(locationName);
+				finalList.add(macProgJurisPccMapping);
+			}
+			
+			model.addAttribute("macmappingObjectList",mapper.writeValueAsString(finalList).replaceAll("'", " "));	
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		
+		
+		return "macmappinglist";
+	}
+    
+    @RequestMapping(value ={"/admin/edit-macmapping/{id}", "/quality_manager/edit-macmapping/{id}", "/cms_user/edit-macmapping/{id}",
+			 "/mac_admin/edit-macmapping/{id}","/mac_user/edit-macmapping/{id}","/quality_monitor/edit-macmapping/{id}"})		
+	public String viewNewMacInfoScreenGetMethod(@PathVariable("id") final Integer macProgJurisPccMappingId,Model model, HttpSession session, Authentication authentication) {
+		log.debug("--> viewNewMacInfoScreenGetMethod <--");
+		  		
+				
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		
+		ObjectMapper mapper = new ObjectMapper();
+			
+		String ROOT_URI_MAC_INFO = new String(HomeController.RAD_WS_URI + "searchMacProgJurisPccMapping");
+		ResponseEntity<MacProgJurisPccMapping> macInfoResponseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI_MAC_INFO, macProgJurisPccMappingId, MacProgJurisPccMapping.class);
+		MacProgJurisPccMapping macProgJurisPccMappingReturnObject = macInfoResponseEntity.getBody();
+		model.addAttribute("macProgJurisPccMapping", macProgJurisPccMappingReturnObject);
+		
+		 HashMap<Integer, String> programMap = new HashMap<Integer,String> ();
+			
+			HashMap<Integer, String> pccLocationMap = new HashMap<Integer,String> ();
+			
+			HashMap<Integer, String> macIdMap = new HashMap<Integer,String> ();
+			
+			HashMap<Integer, String> jurisdictionMap = new HashMap<Integer,String> ();
+		
+		 MacProgJurisPccMapping macProgJurisPccMapping = new MacProgJurisPccMapping();
+		
+		 model.addAttribute("menu_highlight", "scorecard");
+			List<MacInfo> macInfoTempList = null;
+			String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+			List<MacInfo> resultsListMac= new ArrayList<MacInfo>();
+			MacInfo macInfoSearchObject = new MacInfo();
+			basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(HomeController.RAD_WS_URI + "macInfoList");
+			ResponseEntity<List> responseEntityMac = basicAuthRestTemplate.postForEntity(ROOT_URI, macInfoSearchObject, List.class);
+			mapper = new ObjectMapper();
+			resultsListMac = mapper.convertValue(responseEntityMac.getBody(), new TypeReference<List<MacInfo>>(){});
+			
+			
+			for(MacInfo macInfo: resultsListMac) {
+				macIdMap.put(macInfo.getId().intValue(), macInfo.getMacName());
+			}
+			
+			
+			
+			model.addAttribute("macIdMap", macIdMap);
+		
+		
+		
+		
+		List<JurisdictionInfo> jurisdictionInfoTempList = null;
+		
+		JurisdictionInfo jurisdictionInfoSearchObject = new JurisdictionInfo();
+		ArrayList<JurisdictionInfo> resultsListJuris= new ArrayList<JurisdictionInfo>();
+		ROOT_URI = new String(HomeController.RAD_WS_URI + "jurisdictionList");
+		ResponseEntity<List> responseEntityJuris = basicAuthRestTemplate.postForEntity(ROOT_URI, jurisdictionInfoSearchObject, List.class);
+		jurisdictionInfoTempList = responseEntityJuris.getBody();
+		
+		List<JurisdictionInfo> jurisdictionInfoObjectList = mapper.convertValue(jurisdictionInfoTempList, new TypeReference<List<JurisdictionInfo> >() { });
+		
+		for(JurisdictionInfo jurisdictionTemp: jurisdictionInfoObjectList) {
+			jurisdictionMap.put(jurisdictionTemp.getId().intValue(), jurisdictionTemp.getJurisdictionName());
+		}
+		
+		model.addAttribute("jurisMapEdit", jurisdictionMap);
+		
+		List<Program> programTempList = null;
+		Program programSearchObject = new Program();
+		
+		ROOT_URI = new String(HomeController.RAD_WS_URI + "programList");
+		ResponseEntity<List> responseEntityProgram = basicAuthRestTemplate.postForEntity(ROOT_URI, programSearchObject, List.class);
+		programTempList = responseEntityProgram.getBody();
+		
+		List<Program> programObjectList = mapper.convertValue(programTempList, new TypeReference<List<Program> >() { });
+		
+		for(Program program: programObjectList) {
+			programMap.put(program.getId().intValue(), program.getProgramName());
+		}
+		
+		model.addAttribute("programMapEdit", programMap);
+		
+		
+		Location locationSearchObject = new Location();
+		
+		ROOT_URI = new String(HomeController.RAD_WS_URI + "locationList");
+		ResponseEntity<List> responseEntityLocation = basicAuthRestTemplate.postForEntity(ROOT_URI, locationSearchObject, List.class);
+		List<Location> locationTempList = null;
+		locationTempList = responseEntityLocation.getBody();
+		
+		List<Location> locationObjectList = mapper.convertValue(locationTempList, new TypeReference<List<Location> >() { });
+		for(Location location: locationObjectList) {
+			pccLocationMap.put(location.getId().intValue(), location.getPccLocationName());
+		}
+		
+		model.addAttribute("locationMapEdit", pccLocationMap);
+		
+		
+		
+		return "macmapping";
+	}
+	
+	@RequestMapping(value ={"/admin/saveOrUpdateMacProgJurisPccMapping", "/quality_manager/saveOrUpdateMacProgJurisPccMapping", "/cms_user/saveOrUpdateMacProgJurisPccMapping",
+			 "/mac_admin/saveOrUpdateMacProgJurisPccMapping","/mac_user/saveOrUpdateMacMacProgJurisPccMapping","/quality_monitor/saveOrUpdateMacProgJurisPccMapping"})	
+	public String savemacInfoScreenGetMethod(@ModelAttribute("macProgJurisPccMapping") MacProgJurisPccMapping macProgJurisPccMapping, final BindingResult result,
+			final RedirectAttributes redirectAttributes, final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
+		log.debug("--> saveOrUpdateMacProgJurisPccMapping <--");
+		  
+		String returnView = "";
+		log.debug("--> saveOrUpdateMacProgJurisPccMapping <--");
+		
+		User userForm = (User) session.getAttribute("LoggedInUserForm");
+		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		
+			try {
+				
+				
+				String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateMacProgJurisPccMapping");
+				
+				Date currentDateTime = new Date();
+				  
+				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);
+				
+				/*if(macProgJurisPccMapping.getId() == null || macProgJurisPccMapping.getId()== 0) {
+					macProgJurisPccMapping.setCreatedBy(userForm.getUserName());
+					macProgJurisPccMapping.setCreatedDate(currentDateString);
+				} else {
+					macProgJurisPccMapping.setUpdatedBy(userForm.getUserName());
+					macProgJurisPccMapping.setUpdateddDate(currentDateString);
+				}*/
+				
+				
+				
+				ResponseEntity<String> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, macProgJurisPccMapping, String.class);
+				
+				
+				
+				if(macProgJurisPccMapping.getId() == 0) {
+					redirectAttributes.addFlashAttribute("success",
+							"success.create.macmapping");
+				} else {
+					redirectAttributes.addFlashAttribute("success",
+							"success.edit.macmapping");
+				}
+				
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String url = "redirect:/"+userFolder+"/macmappinglist";
+			url = response.encodeRedirectURL(url);
+			returnView =  url;
+		
+
+		return returnView;
+		
+	}
+	
+	 @RequestMapping(value ={"/admin/new-macProgJurisPccMapping", "/quality_manager/new-macProgJurisPccMapping", "/cms_user/new-macProgJurisPccMapping",
+			 "/mac_admin/new-macProgJurisPccMapping","/mac_user/new-macProgJurisPccMapping","/quality_monitor/new-macProgJurisPccMapping"}, method = RequestMethod.GET)
+	
+	public String newMacInfoGet(@ModelAttribute("userForm") User userForm,final Model model,Authentication authentication,
+			HttpSession session) {
+		 
+		 HashMap<Integer, String> programMap = new HashMap<Integer,String> ();
+			
+			HashMap<Integer, String> pccLocationMap = new HashMap<Integer,String> ();
+			
+			HashMap<Integer, String> macIdMap = new HashMap<Integer,String> ();
+			
+			HashMap<Integer, String> jurisdictionMap = new HashMap<Integer,String> ();
+		
+		 MacProgJurisPccMapping macProgJurisPccMapping = new MacProgJurisPccMapping();
+		
+		model.addAttribute("menu_highlight", "scorecard");
+		List<MacInfo> macInfoTempList = null;
+		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		List<MacInfo> resultsListMac= new ArrayList<MacInfo>();
+		MacInfo macInfoSearchObject = new MacInfo();
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "macInfoList");
+		ResponseEntity<List> responseEntityMac = basicAuthRestTemplate.postForEntity(ROOT_URI, macInfoSearchObject, List.class);
+		ObjectMapper mapper = new ObjectMapper();
+		resultsListMac = mapper.convertValue(responseEntityMac.getBody(), new TypeReference<List<MacInfo>>(){});
+		
+		
+		for(MacInfo macInfo: resultsListMac) {
+			macIdMap.put(macInfo.getId().intValue(), macInfo.getMacName());
+		}
+		
+		
+		
+		model.addAttribute("macIdMap", macIdMap);
+		
+		List<JurisdictionInfo> jurisdictionInfoTempList = null;
+		
+		JurisdictionInfo jurisdictionInfoSearchObject = new JurisdictionInfo();
+		ArrayList<JurisdictionInfo> resultsListJuris= new ArrayList<JurisdictionInfo>();
+		ROOT_URI = new String(HomeController.RAD_WS_URI + "jurisdictionList");
+		ResponseEntity<List> responseEntityJuris = basicAuthRestTemplate.postForEntity(ROOT_URI, jurisdictionInfoSearchObject, List.class);
+		jurisdictionInfoTempList = responseEntityJuris.getBody();
+		
+		List<JurisdictionInfo> jurisdictionInfoObjectList = mapper.convertValue(jurisdictionInfoTempList, new TypeReference<List<JurisdictionInfo> >() { });
+		
+		for(JurisdictionInfo jurisdictionTemp: jurisdictionInfoObjectList) {
+			jurisdictionMap.put(jurisdictionTemp.getId().intValue(), jurisdictionTemp.getJurisdictionName());
+		}
+		
+		model.addAttribute("jurisMapEdit", jurisdictionMap);
+		
+		List<Program> programTempList = null;
+		Program programSearchObject = new Program();
+		
+		ROOT_URI = new String(HomeController.RAD_WS_URI + "programList");
+		ResponseEntity<List> responseEntityProgram = basicAuthRestTemplate.postForEntity(ROOT_URI, programSearchObject, List.class);
+		programTempList = responseEntityProgram.getBody();
+		
+		List<Program> programObjectList = mapper.convertValue(programTempList, new TypeReference<List<Program> >() { });
+		
+		for(Program program: programObjectList) {
+			programMap.put(program.getId().intValue(), program.getProgramName());
+		}
+		
+		model.addAttribute("programMapEdit", programMap);
+		
+		
+		Location locationSearchObject = new Location();
+		
+		ROOT_URI = new String(HomeController.RAD_WS_URI + "locationList");
+		ResponseEntity<List> responseEntityLocation = basicAuthRestTemplate.postForEntity(ROOT_URI, locationSearchObject, List.class);
+		List<Location> locationTempList = null;
+		locationTempList = responseEntityLocation.getBody();
+		
+		List<Location> locationObjectList = mapper.convertValue(locationTempList, new TypeReference<List<Location> >() { });
+		for(Location location: locationObjectList) {
+			pccLocationMap.put(location.getId().intValue(), location.getPccLocationName());
+		}
+		
+		model.addAttribute("locationMapEdit", pccLocationMap);
+		
+		model.addAttribute("macProgJurisPccMapping", macProgJurisPccMapping);
+		
+		String roles = authentication.getAuthorities().toString();
+		
+		return "macmapping";
+	}
+
     
 	
 	 @RequestMapping(value = "/admin/dashboard")

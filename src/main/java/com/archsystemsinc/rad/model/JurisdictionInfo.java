@@ -1,85 +1,61 @@
 package com.archsystemsinc.rad.model;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 /**
  * This persistent class for the user database table.
  */
 
 public class JurisdictionInfo {
-    private Long id;
-    private String username;
-    private String password;
-    private String passwordConfirm;
-    private String name;
-    private String email;
-    private Set<Role> roles = new HashSet<Role>();
-
-    private List<Long> rolesList;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-  
-    public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+	private Long id;
+	private String jurisdictionName;	
+	private String createdBy;
+	private String updatedBy;
+	private String createdDate;	
+	private String updateddDate;
 	
-	public List<Long> getRolesList() {
-		return rolesList;
+	private String description;	
+	
+	
+	public String getDescription() {
+		return description;
 	}
 
-	public void setRolesList(List<Long> rolesList) {
-		this.rolesList = rolesList;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
-	public String getEmail() {
-		return email;
+	public Long getId() {
+		return id;
 	}
-
-	public void setEmail(String email) {
-		this.email = email;
+	public void setId(Long id) {
+		this.id = id;
 	}
-
-	public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+	public String getJurisdictionName() {
+		return jurisdictionName;
+	}
+	public void setJurisdictionName(String jurisdictionName) {
+		this.jurisdictionName = jurisdictionName;
+	}
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public String getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+	public String getUpdateddDate() {
+		return updateddDate;
+	}
+	public void setUpdateddDate(String updateddDate) {
+		this.updateddDate = updateddDate;
+	}
 }

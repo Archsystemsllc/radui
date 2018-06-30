@@ -3,17 +3,38 @@
  */
 package com.archsystemsinc.rad.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
+import com.archsystemsinc.rad.common.utils.UtilityFunctions;
+import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
+import com.archsystemsinc.rad.model.MacInfo;
+import com.archsystemsinc.rad.model.ScoreCard;
+import com.archsystemsinc.rad.model.User;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -444,4 +465,9 @@ public class CommonController {
 		return subCategoryMapFinal;
 	
 	}
+	
+	 @Autowired
+	 UtilityFunctions utilityFunctions;
+	
+	 
 }

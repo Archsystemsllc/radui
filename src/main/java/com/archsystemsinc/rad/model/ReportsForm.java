@@ -37,6 +37,8 @@ public class ReportsForm {
     
     private String programName;
     
+    private String pccLocationName;
+    
     private String fromDateString;
     
     private String toDateString;
@@ -54,7 +56,17 @@ public class ReportsForm {
     private String jurisdictionNameValues;
     
     private String[] jurisdictionIds;
+    
+    
 	
+	public String getPccLocationName() {
+		return pccLocationName;
+	}
+
+	public void setPccLocationName(String pccLocationName) {
+		this.pccLocationName = pccLocationName;
+	}
+
 	public String[] getJurisdictionIds() {
 		return jurisdictionIds;
 	}

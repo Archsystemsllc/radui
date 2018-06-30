@@ -2,9 +2,11 @@ package com.archsystemsinc.rad.configuration;
 
 import java.io.IOException;
 
+import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 
+import org.displaytag.filter.ResponseOverrideFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,11 +31,11 @@ public class SpringWebInitializer extends AbstractAnnotationConfigDispatcherServ
         return new String[] { "/" };
     }
     
-   /* @Override
+    @Override
     protected Filter[] getServletFilters() {
-    	Filter [] singleton = { new CORSFilter() };
+    	Filter [] singleton = { new ResponseOverrideFilter() };
     	return singleton;
-	}*/
+	}
  
    /* @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {

@@ -117,13 +117,23 @@ $(document).ready(function(){
 	//alert("Testing");
 	var role = $('#userRole').val();
 	//alert("Role is:"+role);
+	var reportTitle = 'Scorecard List';
+	var messageOnTop = 'Scorecard List From Date:${scorecard.filterFromDateString}'+'  '+'Scorecard List To Date:${scorecard.filterToDateString}';
 	var scoreCardListTable = $('#scoreCardLists').DataTable( {
 	"aaData": data,
 	"aoColumns": [
 	{ "mData": "macName"},
 	{ "mData": "jurisdictionName"},
-	{ "mData": "macCallReferenceNumber"},
-	{ "mData": "qamFullName"},
+	{ "mData": "macCallReferenceNumber"},	
+	{ "mData": function (data, type, dataToSet) {
+		var returnData='';
+		if (role == 'MAC Admin' || role == 'MAC User') {
+			returnData = data.id;
+		} else {
+			returnData = data.qamFullName
+		}
+        return returnData;
+    }},
 	{ "mData": "qamStartdateTimeString"},
 	{ "mData": "scorecardType"},
 	{ "mData": "finalScoreCardStatus"},
@@ -152,28 +162,31 @@ $(document).ready(function(){
              exportOptions: {
                  columns: [ 0, 1, 2, 3, 4, 5, 6 ]
              },
-             messageTop: 'Scorecard List Report.'
+             messageTop: messageOnTop,
+             title: reportTitle,
          },
          {
              extend: 'excelHtml5',
              exportOptions: {
                  columns: [ 0, 1, 2, 3, 4, 5, 6 ]
              },
-             messageTop: 'Scorecard List Report.'
+             messageTop: messageOnTop,
+             title: reportTitle,
          },
          {
              extend: 'pdfHtml5',
              exportOptions: {
                  columns: [ 0, 1, 2, 3, 4, 5, 6 ]
              },
-             messageTop: 'Scorecard List Report.',
              orientation : 'landscape',
-             pageSize : 'LEGAL'
+             pageSize : 'LEGAL',
+             messageTop: messageOnTop,
+             title: reportTitle
          }
          //,'colvis'
      ],
 	  "paging" : true,
-	  "pageLength" : 10,
+	  "pageLength" : 20,
 	   "ordering" : true,
 	});
 });
@@ -220,6 +233,8 @@ $(document).ready(function(){
 													</form:select>
 												</div>
 											</div>
+											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
+												
 											<div class="row">
 												
 												<div class="col-lg-4 form-group">
@@ -232,11 +247,13 @@ $(document).ready(function(){
 													</form:select>
 												</div>
 												<div class="col-lg-4 form-group">
-													<label for="name"> QM Name/QM ID:</label>
+													<label for="name"> QM Name:</label>
 													<form:input type="text" class="form-control"
 														id="qamFullName" name="qamFullName" path="qamFullName" title="Enter Qualtiy Monitor Name/ID" />
+												
 												</div>
 											</div>
+											</sec:authorize>
 											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
 											<div class="row">
 												
@@ -257,12 +274,12 @@ $(document).ready(function(){
 													<label for="name"> From Date:</label>
 
 													<form:input type="text" class="form-control"
-														path="filterFromDateString" title="Choose From Date from the Calendar" />
+														path="filterFromDateString" title="Choose From Date from the Calendar" readonly="true" />
 												</div>
 												<div class="col-lg-4 form-group">
 													<label for="email"> To Date:</label>
 													<form:input type="text" class="form-control"
-														path="filterToDateString" title="Choose To Date from the Calendar" />
+														path="filterToDateString" title="Choose To Date from the Calendar" readonly="true" />
 												</div>
 											</div>
 										</div>
@@ -329,6 +346,12 @@ $(document).ready(function(){
 										    </thead>
 						                    <tbody>  
 						                    </tbody>
+						                    <tfoot>
+									            <tr>
+									            	<th style="text-align:left" colspan="8">Note: Content of the table is copied to the clipboard when user clicks on the "Copy" Button </th>
+									               
+									            </tr>
+									        </tfoot>
 						                </table> 
 			                            </div>		                           
 			                        </div>         

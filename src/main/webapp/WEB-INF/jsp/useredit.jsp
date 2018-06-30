@@ -190,7 +190,7 @@
 	
 	<script>
 	function reset(){
-		alert("this is a reset");
+		//alert("this is a reset");
 		var id = document.getElementById('email');
 		id.innerHTML = "";
 		id = document.getElementById('lastname');

@@ -39,29 +39,20 @@
 
 <script type="text/javascript">
 	function resetFields() {
-		
-		$('input:radio[name=mainReportSelect]')[0].checked = true;
-		$('#scoreCardTypeDiv').show();
-		$('#callResultDiv').show();
-		$('#complianceTypeDiv').hide();
-		$('#callCategoryTypeDiv').hide();
-		$('#rebuttalStatusDiv').hide();
-		$('#jurisSingleSelect').hide();
-		$('#jurisMultiSelect').show();
-		$('#macId').prop('selectedIndex',0);
-		$("#jurisdictionIds").get(0).options.length = 0;	          
-		$('#programId').prop('selectedIndex',0);
-		$('#loc').prop('selectedIndex',0);
-		$('#callResult').prop('selectedIndex',0);
-		$('#scorecardType').prop('selectedIndex',0);
-		
-		
-		
-		$('#programPccLocDiv,#datesDiv').show();  
-		
-		
+			
 		$('#fromDateString').val("");
 		$('#toDateString').val("");
+		$('#macId').prop('selectedIndex',0);
+		$("#jurisdictionIds").get(0).options.length = 0;	    
+		$("#jurisId").get(0).options.length = 0;	  
+		$('#programId').prop('selectedIndex',0);
+		$('#loc').prop('selectedIndex',0);
+		
+		$('#scoreCardType').prop('selectedIndex',0);  
+		$('#complianceReportType').prop('selectedIndex',0);
+		$('#callResult').prop('selectedIndex',0);
+		$('#callCategoryType').prop('selectedIndex',0);
+		$('#rebuttalStatus').prop('selectedIndex',0);
 		
 	}
 
@@ -106,6 +97,7 @@
     		$('#callResultDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();   
     		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+    		$("#jurisId").removeAttr('required');
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
     		$('select[id="macId"] > option[value="ALL"]').show();
@@ -115,21 +107,26 @@
     		$('#callResultDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();  
     		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+    		$("#jurisId").removeAttr('required');
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
     		$('select[id="macId"] > option[value="ALL"]').show();
         } else if (reportSelectValue == 'Compliance' ) {
         	$('#complianceTypeDiv').show();
-        	$('#programPccLocDiv,#datesDiv').show();   
-        	$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        	$('#datesDiv').show();   
+        	$("#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        	$("#jurisId").removeAttr('required');
         	$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
     		$('select[id="macId"] > option[value="ALL"]').show();
+    		$('#programPccLocDiv').hide();
+    		$("#programId,#loc").removeAttr('required');
         } else if (reportSelectValue == 'Rebuttal' ) {
         	$('#callCategoryTypeDiv').show();
     		$('#rebuttalStatusDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();
     		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+    		$("#jurisId").removeAttr('required');
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
     		$('select[id="macId"] > option[value="ALL"]').show();
@@ -171,8 +168,10 @@
             	$('#complianceTypeDiv').show();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
-        		$('#programPccLocDiv,#datesDiv').show(); 
-        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);  
+        		$('#datesDiv').show(); 
+        		$("#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);  
+        		$('#programPccLocDiv').hide();
+        		$("#programId,#loc").removeAttr('required');
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -219,17 +218,6 @@
 	$(function(){
 
 
-		/* $("#toDateString").change(function () {
-		    var startDate = $("#fromDateString").val();
-		    var endDate = $("#toDateString").val();
-			//alert("Test");
-		    if ((Date.parse(startDate) >= Date.parse(endDate))) {
-		        alert("To Date should be greater than From Date");
-		        $("#fromDateString").val("");
-		        $("#toDateString").val("");
-		    }
-		}); */
-
 		$("input[name='mainReportSelect']").change(function(){
             var mainReportSelect = $(this).val();
             if (mainReportSelect=="ScoreCard") {
@@ -250,8 +238,10 @@
             	$('#complianceTypeDiv').show();
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
-        		$('#programPccLocDiv,#datesDiv').show();  
-        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$('#datesDiv').show();  
+        		$("#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$('#programPccLocDiv').hide();
+        		$("#programId,#loc").removeAttr('required');
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -305,14 +295,16 @@
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectJuris",                    
 	                    {macId: macIdValue , multipleInput: false}, function(data){
 	                    	
-	                 $("#jurisId").get(0).options.length = 0;	           
+	                 $("#jurisId").get(0).options.length = 0;	    
+	                 //$("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");        
 	      	      	 $.each(data, function (key,obj) {
 	      	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
 	      	  	    	});  
 
-	      	  	     $("#jurisdictionIds").get(0).options.length = 0;	           
-	      	      	 $("#jurisdictionIds").get(0).options[0] = new Option("---Select All---", "ALL");
+	      	  	     $("#jurisdictionIds").get(0).options.length = 0;	    
+	      	  	 	 $("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       
+	      	      	 $("#jurisdictionIds").get(0).options[1] = new Option("---Select All---", "ALL");
 	      	  	    	$.each(data, function (key,obj) {
 	      	  	    		$("#jurisdictionIds").get(0).options[$("#jurisdictionIds").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -461,14 +453,15 @@
 			                            <div class="col-sm-6 form-group" id="jurisMultiSelect">
 			                                <label for="jurisdictionIds"> Jurisdiction:</label>
 										<form:select path="jurisdictionIds" class="form-control required" id="jurisdictionIds" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
-										  <form:option value="ALL" label="---Select ALL---"/>
+										  <form:option value="" label="---Select Jurisdiction---"/>
+										   <form:option value="ALL" label="---Select ALL---"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="jurisSingleSelect">
 			                                <label for="jurisId"> Jurisdiction:</label>
 										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" title="Select one Jurisdiction from the list">
-										  
+										  <form:option value="" label="---Select Jurisdiction---"/>										   
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
@@ -496,18 +489,19 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> From Date:</label>
 			                             
-										<form:input type = "text" class="form-control required"  id="fromDateString" name = "fromDateString" path="fromDateString" required="true" title="Choose From Date from the Calendar"/>
+										<form:input type = "text" class="form-control required" id="fromDateString" name = "fromDateString" path="fromDateString" required="true" title="Choose From Date from the Calendar" readonly="true"/>
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> To Date:</label>
-			                                <form:input type = "text" class="form-control required"  id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List"/>
+			                                <form:input type = "text" class="form-control required"  id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List" readonly="true"/>
 			                            </div>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
 			                                <label for="scoreCardType"> Scorecard Type:</label> 
 										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" title="Select one ScoreCard Type from the List" >
-											   	<form:option value="ALL" label="ALL"/>
+											   	<form:option value="" label="---Select Scorecard Type---"/>
+											   	<form:option value="ALL" label="---Select ALL---"/>
 											  	<form:option value="Scoreable" />
 											  	<form:option value="Non-Scoreable" />
 											  	<form:option value="Does Not Count" />											  	
@@ -516,7 +510,8 @@
 			                            <div class="col-sm-6 form-group" id="complianceTypeDiv">
 			                                <label for="complianceReportType"> Compliance Type:</label> 
 										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" title="Select one Compliance Type from the List" >
-											   	<form:option value="ALL" label="ALL"/>
+											   <form:option value="" label="---Select Compliance Type---"/>
+											   	<form:option value="ALL" label="---Select ALL---"/>
 											  	<form:option value="Compliant" />
 											  	<form:option value="Non-Compliant" /> 	
 											</form:select> 
@@ -524,22 +519,24 @@
 			                            <div class="col-sm-6 form-group" id="callResultDiv">
 			                            <label for="callResult"> Call Result:</label> 
 			                                <form:select path="callResult" class="form-control required" id="callResult" title="Select one Call Result from the List" >
-											   	<form:option value="ALL" Label="Both Pass and Fail"/>
-											  	<form:option value="Pass" />
+											   	<form:option value="" label="---Select Call Result---"/>
+											   	<form:option value="ALL" label="---Select ALL---"/>
 											  	<form:option value="Fail" />											  										  	
 											</form:select> 
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="callCategoryTypeDiv">
 			                            <label for="callCategoryType"> Call Category:</label> 
 			                               <form:select path="callCategoryType" class="form-control required" id="callCategoryType" title="Select one Call Category Type from the List">
-											   	<form:option value="ALL" label="ALL"/>
+											   	<form:option value="" label="---Select Call Category---"/>
+											   	<form:option value="ALL" label="---Select ALL---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 		
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="rebuttalStatusDiv">
 			                            <label for="rebuttalStatus"> Rebuttal Status:</label> 
 			                                <form:select path="rebuttalStatus" class="form-control required" id="rebuttalStatus" title="Select one Rebuttal Status from the List">
-											   	<form:option value="ALL" Label="ALL"/>
+											   <form:option value="" label="---Select Rebuttal Status---"/>
+											   	<form:option value="ALL" label="---Select ALL---"/>
 											  	<form:option value="Completed" />
 											  	<form:option value="Pending" />											  										  	
 											</form:select> 

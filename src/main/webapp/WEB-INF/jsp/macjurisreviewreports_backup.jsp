@@ -15,53 +15,203 @@
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+
 <link rel="stylesheet" href="/resources/demos/style.css" />
-
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 <!-- CSS for Bootstrap -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
 
-
-
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
 
-
-
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.1.1/css/autoFill.dataTables.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/colreorder/1.3.1/css/colReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.1/css/fixedColumns.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.1/css/fixedHeader.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/keytable/2.1.1/css/keyTable.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.1.1/css/rowReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/1.4.1/css/scroller.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css"/>
- 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/autofill/2.1.1/js/dataTables.autoFill.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.colVis.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.html5.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.flash.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.print.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.1/js/dataTables.colReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.1/js/dataTables.fixedHeader.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.1.1/js/dataTables.keyTable.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.1.1/js/dataTables.rowReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.1/js/dataTables.scroller.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
 
 
 <script type="text/javascript">
-$(document).ready(function() {		
+$(document).ready(function() {	
+
+	// Example: add subtotals by letter of first name
+	function addSubtotals(settings){
+	  var api = this.api(),
+	      rows = api.rows({ page: 'current' }),
+	      cols = api.columns({ page: 'current' }),
+	      last = null,
+	      next = null,
+	      agg  = {},
+	      sum_colNum = 5;
+	  
+	 /*  // only generate subtotals on initial display and when first column is sorted, but not other columns
+	  if ( api.order().length && api.order()[0][0] !== 0 )
+	    return; */
+	 // Remove the formatting to get integer data for summation
+        var intVal = function ( i ) {
+            return typeof i === 'string' ?
+                i.replace(/[\$,]/g, '')*1 :
+                typeof i === 'number' ?
+                    i : 0;
+        };
+	    var totalRows = api .column( 4 ) .data() . count();
+
+        // Total over all pages for Scoreable Count
+        var scoreableCountTotal = api
+            .column( 2 )
+            .data()
+            .reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+		
+        var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
+        cols.header().each(function(el, colNum){
+	        var $td = $('<td></td>');
+	        if (colNum === 2) {
+	          $td.text( scoreableCountTotal );
+	        } else if (colNum === 0) {
+	          $td.text( ["Total and Average"].join('') );
+	        }
+	        $subtotal.append($td);
+	      });
+       
+        $('#allScoreCardId').find( 'tbody' ).append( $subtotal).draw();
+	  
+	}
+
+	// for output formatting
+	function includeSubtotals( data, button, exportObject){
+
+	  var classList = button.className.split(' ');
+	  alert(classList);
+	  // COPY
+	  if (classList.includes('buttons-copy')){
+	    
+	    data = $('#allScoreCardId').toTSV();
+	    exportObject.str = data;
+	    exportObject.rows = $('#allScoreCardId').find('tr').length - 1;  // did not include the footer
+	    
+	  } 
+	  // CSV
+	  else if (classList.includes('buttons-excel')){
+	    
+	    data = $('#allScoreCardId').toCSV();
+	    
+	  } 
+	  // PDF/PRINT
+	  else if (classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
+	    
+	    // data is actually the object to use for PDF/PRINT
+	    var subtotals = [];
+	    $('#allScoreCardId tr.subtotal').each(function(){
+	      var $row = $(this),
+	          row_index = $row.index(), 
+	          row = $row.find('td,th').map(function(){return $(this).text();}).get();
+	      subtotals[ subtotals.length ] = {rowNum: row_index, data: row };
+	    });
+	    
+	    for (var i=0, n=subtotals.length; i<n; i++){
+	      var subtotal = subtotals[i];
+	      data.body.splice(subtotal.rowNum, 0, subtotal.data);
+	    }
+	  }
+	  
+	  return data;
+	}
+
+	jQuery.fn.toCSV = function() {
+		  var valueDelim = '"',       // could have a delim option
+		      $tableStack = $(this),
+		      returnStack = [];
+		  
+		  function wrapText(text){
+		    return [valueDelim, text.replace(/"/g,'""'), valueDelim].join('');
+		  }
+		  
+		  $tableStack.each(function(){
+		    var $table = $(this), rows = [];
+		    
+		    // Iterate over rows
+		    // could customize this for showing header, footer, etc
+		    $table.find('thead,tbody').find('tr').each(function(){
+		      var $row = $(this), row = [];
+		      
+		      // Iterate over cells
+		      $row.find('th,td').each(function(){
+		        var $cell = $(this), colspan = $cell.prop('colSpan');
+		        
+		        // handle cells that span multiple columns
+		        if ( colspan && colspan > 1 ){
+		          for (var i=1; i<colspan; i++){
+		            row[ row.length ] = '""';
+		          }
+		        }
+		        row[ row.length ] = wrapText( $cell.text() );
+		        
+		      });
+		      
+		      rows[ rows.length ] = row.join(',');
+		    });
+		    
+		    returnStack[ returnStack.length ] = rows.join('\r\n');
+		  });
+		  
+		  return returnStack.length == 1 ? returnStack[0] : returnStack;
+		  
+		};
+
+		// Tab Separated Values
+		jQuery.fn.toTSV = function() {
+		  var valueDelim = '',       // could have a delim option
+		      $tableStack = $(this),
+		      returnStack = [];
+		  
+		  $tableStack.each(function(){
+		    var $table = $(this), rows = [];
+		    
+		    // Iterate over rows
+		    // could customize this for showing header, footer, etc
+		    $table.find('thead,tbody').find('tr').each(function(){
+		      var $row = $(this), row = [];
+		      
+		      // Iterate over cells
+		      $row.find('th,td').each(function(){
+		        var $cell = $(this), colspan = $cell.prop('colSpan');
+		        
+		        // handle cells that span multiple columns
+		        if ( colspan && colspan > 1 ){
+		          for (var i=1; i<colspan; i++){
+		            row[ row.length ] = '';
+		          }
+		        }
+		        row[ row.length ] = $cell.text();
+		        
+		      });
+		      
+		      rows[ rows.length ] = row.join('\t');
+		    });
+		    
+		    returnStack[ returnStack.length ] = rows.join('\r\n');
+		  });
+		  
+		  return returnStack.length == 1 ? returnStack[0] : returnStack;
+		  
+		};
+
 	
 	var reportTitle = '${ReportTitle}';
 	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
@@ -884,7 +1034,7 @@ $(document).ready(function() {
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
-		  "searching": false/* ,		 
+		  "searching": false,		 
 		  "footerCallback": function ( row, data, start, end, display ) {
 	            var api = this.api(), data;
 	 
@@ -982,7 +1132,7 @@ $(document).ready(function() {
 
 			  }
 		    
-		  } */
+		  }
 		     
 	});
 	qaspScorecardDataTable.columns.adjust().draw(); 

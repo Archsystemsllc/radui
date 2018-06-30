@@ -11,6 +11,47 @@ public class MacProgJurisPccMapping  {
 	private Integer jurisdictionId;	
 
 	private Integer pccId;
+	
+	private String macName;
+	
+	private String programName;
+	
+	private String jurisdictionName;
+	
+	private String pccLocationName;	
+	
+
+	public String getMacName() {
+		return macName;
+	}
+
+	public void setMacName(String macName) {
+		this.macName = macName;
+	}
+
+	public String getProgramName() {
+		return programName;
+	}
+
+	public void setProgramName(String programName) {
+		this.programName = programName;
+	}
+
+	public String getJurisdictionName() {
+		return jurisdictionName;
+	}
+
+	public void setJurisdictionName(String jurisdictionName) {
+		this.jurisdictionName = jurisdictionName;
+	}
+
+	public String getPccLocationName() {
+		return pccLocationName;
+	}
+
+	public void setPccLocationName(String pccLocationName) {
+		this.pccLocationName = pccLocationName;
+	}
 
 	public Integer getId() {
 		return id;

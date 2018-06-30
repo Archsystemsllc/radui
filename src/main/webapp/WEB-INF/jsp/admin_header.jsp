@@ -123,7 +123,7 @@
 									<!--  Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
 									<li class="dropdown">
-										<a class="dropdown-toggle ${menu_highlight == 'reports' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Menu">Reports</a>
+										<a class="dropdown-toggle ${menu_highlight == 'reports' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports" title="Reports Page">Reports</a>
 										<%-- <sec:authorize access="hasAuthority('Administrator') or hasAuthority('CMS User')">
 										<span class="caret"></span>
 										<ul class="dropdown-menu">										
@@ -134,11 +134,11 @@
 									</sec:authorize>
 									<!-- Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
-										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="#" title="Customer Service Representative List Page">Forms Upload</a>
+										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="#" title="Forms Upload Page">Forms Upload</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">		
 											<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Upload Page">CSR List Upload</a></li>								
-									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload QAM Environment Form">Envrionmental Change Control Form</a></li>	
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload Environemental Change Control Form">Envrionmental Change Control Form</a></li>	
 									      	<%-- <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/systemissueform" title="Upload System Issue Form">System Issue Form</a></li>									       --%>
 									    </ul>
 										</li>
@@ -149,7 +149,7 @@
 								
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
 									<li class="dropdown">
-										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="#" title="User Management Menu">User Management</a>
+										<a class="dropdown-toggle ${menu_highlight == 'user_management' ? 'active' : ''}" type="button" data-toggle="dropdown" href="#" title="User Management Page">User Management</a>
 										<span class="caret"></span>
 										<ul class="dropdown-menu">
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC Admin')">
@@ -159,6 +159,13 @@
 									    </sec:authorize>
 									    <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor')">
 									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macassignmentlist" title="MAC Assignment List">MAC Assignment</a></li>
+									     </sec:authorize>
+									      <sec:authorize access="hasAuthority('Administrator') ">
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macinfolist" title="MAC Info List">MAC List</a></li>
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/jurisdictionlist" title="MAC Info List">Jurisdiction List</a></li>
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/programlist" title="MAC Info List">Program List</a></li>
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/locationlist" title="MAC Info List">Location List</a></li>
+									      		<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/macmappinglist" title="MAC Mapping">MAC Mapping</a></li>
 									     </sec:authorize>
 									    </ul>
 									</li>

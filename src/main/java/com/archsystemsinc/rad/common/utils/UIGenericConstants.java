@@ -21,6 +21,9 @@ public class UIGenericConstants {
 	public static final String CMS_PASS_STRING = "CMS Pass";
 	public static final String CMS_FAIL_STRING = "CMS Fail";
 	
+	public static final String FINAL_STATUS_PASS_STRING = "Pass";
+	public static final String FINAL_STATUS_FAIL_STRING = "Fail";
+	
 	public static final String QUALITY_MONITOR_PASS_STRING = "Quality Monitor Pass";
 	public static final String QUALITY_MONITOR_FAIL_STRING = "Quality Monitor Fail";
 	
