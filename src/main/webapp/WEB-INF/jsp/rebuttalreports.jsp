@@ -19,13 +19,7 @@
 
 <!-- CSS for Bootstrap -->
 
-
-
-
 <!-- JQuery -->
-
-
-
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.1.1/css/autoFill.dataTables.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
@@ -65,7 +59,9 @@ $(document).ready(function() {
 	
 	var reportTitle = '${ReportTitle}';
 	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
+	+'Program:${reportsForm.programName}'+'  '+'PCC/Location:${reportsForm.pccLocationName}\n'
 	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
+
 
 		
 	//Rebuttal Data Table Code
@@ -79,6 +75,7 @@ $(document).ready(function() {
 		{ "mData": "jurisdictionName"},
 		{ "mData": "scorableCount"},
 		
+		
 		],
 	    "columnDefs": [ 
 	        { 
@@ -87,7 +84,11 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
-		   }	
+		   }, 
+		   {
+               "targets": [ 2 ],
+               className: 'dt-body-center'
+           }
 		 ], 
 		 dom: '<lif<t>pB>',
 	     buttons: [
@@ -112,152 +113,13 @@ $(document).ready(function() {
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	rebuttalReportDataTable.columns.adjust().draw();
 
-	/* $('#qaspReportListRow > thead').prepend('<tr media="all"><th colspan="1" style="text-align: center">Month</th><th colspan="2" style="text-align: center"># of QAM Scorecards Completed</th><th colspan="2" style="text-align: center"># of QAM Scorecards Passed</th><th colspan="2" style="text-align: center"># of QAM Scorecards Failed</th></tr>');
-	 */
-	var qaspScorecardData =eval('${qaspReportList}');
-	var qaspScorecardDataTable = $('#qaspReportDTId').DataTable( {
-		"aaData": qaspScorecardData,
-		"aoColumns": [
-		{ "mData": "monthYear"},
-		{ "mData": "scorableCount"},
-		{ "mData": "hhhScorableCount"},
-		{ "mData": "scorablePass"},
-		{ "mData": "hhhScorablePass"},
-		{ "mData": "scorableFail"},
-		{ "mData": "hhhScorableFail"}
-		],		
-		 dom: '<lif<t>pB>',
-	     buttons: [
-	         {
-	             extend: 'copyHtml5',
-	             footer: true,
-	             messageTop: messageOnTop,
-	             title: reportTitle	            
-	         },
-	         {
-	             extend: 'excelHtml5',
-	             footer: true,
-	             messageTop: messageOnTop,
-	             title: reportTitle	             
-	         },
-	         {
-	             extend: 'pdfHtml5',
-	             footer: true,
-	             stripNewlines: false,
-	             messageTop: messageOnTop,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
-	             title: reportTitle
-	         }	        
-	     ],
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
-		  "searching": false/* ,		 
-		  "footerCallback": function ( row, data, start, end, display ) {
-	            var api = this.api(), data;
-	 
-	            // Remove the formatting to get integer data for summation
-	            var intVal = function ( i ) {
-	                return typeof i === 'string' ?
-	                    i.replace(/[\$,]/g, '')*1 :
-	                    typeof i === 'number' ?
-	                        i : 0;
-	            };
-	            var totalRows = api .column( 4 ) .data() . count();
-
-	            // Total over all pages for Scoreable Count
-	            var scoreableCountTotal = api
-	                .column( 1 )
-	                .data()
-	                .reduce( function (a, b) {
-	                    return intVal(a) + intVal(b);
-	                }, 0 );
-	 
-	            // Update footer
-	           $( api.column( 1 ).footer() ).html( scoreableCountTotal );
-
-	            // Total over all pages for Scoreable Pass Count
-	            var scoreableHhhCountTotal = api
-            .column( 2 )
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		        $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
-
-		       
-		     	// Total over all pages for Scoreable Fail Count
-		        var scoreablePassCountTotal = api
-		              .column( 3 )
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		       $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
-
-		     // Total over all pages for Scoreable Fail Count
-		        var scoreableHhhPassCountTotal = api
-		              .column( 4 )
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		        $( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
-
-		        
-		     	// Total over all pages for Non Scoreable Count
-		        var scoreableFailCountTotal = api
-		              .column( 5)
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
-
-		        // Average over all pages for Scoreable Pass
-		        var scoreableFailHhhCountTotal = api
-		            .column( 6 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) ;
-		
-		        // Update footer
-		        $( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
-		        
-				var totalScoreCards = scoreableCountTotal + scoreableHhhCountTotal;
-				var totalPassScoreCards = scoreablePassCountTotal + scoreableHhhPassCountTotal;
-				var totalFailScoreCards = scoreableFailCountTotal + scoreableFailHhhCountTotal;
-				
-		        $('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
-		        $('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
-		        $('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
-
-		     // Update footer
-		     if(totalScoreCards == 0) {
-		    	 $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: Not Available In Selected Dates');
-			  } else {
-				  var average = (totalPassScoreCards / totalScoreCards) * 100;
-			      $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
-
-			  }
-		    
-		  } */
-		     
-	});
-	qaspScorecardDataTable.columns.adjust().draw(); 
+	
 
 });
 
@@ -288,7 +150,7 @@ $(document).ready(function() {
 						 		<form:hidden path="macId" />
 								 <form:hidden path="jurisId" />
 								 <form:hidden path="programId" />
-								 <form:hidden path="loc" />
+								 <form:hidden path="pccLocationId" />
 								 <form:hidden path="fromDate" />
 								 <form:hidden path="toDate" />
 								 <form:hidden path="mainReportSelect" />
@@ -328,6 +190,16 @@ $(document).ready(function() {
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-lg-4 form-group">
+			                                <label for="name"> Program:</label>
+			                                <label for="name"> ${reportsForm.programName}</label>
+			                            </div>
+			                            <div class="col-lg-4 form-group">
+			                                <label for="name"> PCC/Location:</label>
+			                                <label for="name"> ${reportsForm.pccLocationName}</label>
+			                            </div>
+			                        </div>
+			                         <div class="row">
+			                            <div class="col-lg-4 form-group">
 			                                <label for="name"> Report From Date:</label>
 			                                 <label for="name"> ${reportsForm.fromDateString}</label>
 			                            </div>
@@ -359,6 +231,7 @@ $(document).ready(function() {
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
 										            <th style="text-align: center">Number of Rebuttals</th>
+										           
 										            								                 
 										        </tr>
 										    </thead>

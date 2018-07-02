@@ -76,13 +76,24 @@
 
 								<div class="navbar-brand" style="display: inline">
 									<!--<a class="navbar-brand" href="page0.html">-->
-									<a href="https://www.cms.gov/" target="_blank"><img
+									
+								<a href="https://www.cms.gov/" target="_blank"><img
 										src="${pageContext.request.contextPath}/resources/images/logo.png"
 										alt="CMS logo" height="100px" style="float: left; width: 60%" title="Click on CMS Logo to navigate to CMS webpage"></a>
 
 								</div>
+								
+									<div class="navbar-brand" style="display: inline">
+									<!--<a class="navbar-brand" href="page0.html">-->
+									
+								<a href="#" target="_blank"><img
+										src="${pageContext.request.contextPath}/resources/images/ComradLogo.png"
+										alt="CMS logo" height="100px" style="width: 300px;align-content: center" title="COMRAD Logo"></a>
+
+								</div>
 
 							</div>
+							
 						</td>
 						<td style="border: 0px;"><div class="social" style="color:black">
 								Welcome ${pageContext.request.userPrincipal.name} | <a

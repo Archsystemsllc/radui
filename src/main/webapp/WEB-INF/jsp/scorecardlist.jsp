@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+w<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
@@ -107,18 +107,19 @@
 			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession";			
 	    }); 
 
+		
 	});
 </script>
 
 <script type="text/javascript">
 $(document).ready(function(){
 	var data =eval('${scoreCardList}');
-	//var data=$.parseJSON("${scoreCardList}");
-	//alert("Testing");
+	
 	var role = $('#userRole').val();
-	//alert("Role is:"+role);
+	
 	var reportTitle = 'Scorecard List';
 	var messageOnTop = 'Scorecard List From Date:${scorecard.filterFromDateString}'+'  '+'Scorecard List To Date:${scorecard.filterToDateString}';
+	var reportSearchString = '${ReportSearchString}';
 	var scoreCardListTable = $('#scoreCardLists').DataTable( {
 	"aaData": data,
 	"aoColumns": [
@@ -142,9 +143,22 @@ $(document).ready(function(){
     "columnDefs": [ 
         { 
            "render" : function(data, type, row) {
-			var linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/"+data+"' title='View'>View</a></span>";
+			var linkData = "";
+			if (reportSearchString !=null && reportSearchString !='') {
+				
+				linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/"+data+"/"+reportSearchString+"' title='View'>View</a></span>";
+				
+				
+			} else {
+				linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-scorecard/"+data+"/null' title='View'>View</a></span>";
+			}
 			if (role == 'Administrator' || role == 'Quality Manager' || role == 'Quality Monitor' ) {
-				var linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/"+data+"' title='Edit'>Edit</a></span>";
+				if (reportSearchString !=null && reportSearchString !='') {
+					
+					linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/"+data+"/"+reportSearchString+"' title='Edit'>Edit</a></span>";
+				} else {					
+					linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-scorecard/"+data+"/null' title='Edit'>Edit</a></span>";	
+				}
 			}
                        
             return linkData;		
@@ -336,7 +350,7 @@ $(document).ready(function(){
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
 										            <th style="text-align: left">MAC Call Reference ID</th>
-										            <th style="text-align: left">QM Name/ID</th>
+										            <th style="text-align: left">QM Name</th>
 										            <th style="text-align: left">QM Start Date/Time</th> 
 										            <th style="text-align: left">Scorecard Type</th>
 										            <th style="text-align: left">Status</th>
@@ -346,12 +360,7 @@ $(document).ready(function(){
 										    </thead>
 						                    <tbody>  
 						                    </tbody>
-						                    <tfoot>
-									            <tr>
-									            	<th style="text-align:left" colspan="8">Note: Content of the table is copied to the clipboard when user clicks on the "Copy" Button </th>
-									               
-									            </tr>
-									        </tfoot>
+						                   
 						                </table> 
 			                            </div>		                           
 			                        </div>         

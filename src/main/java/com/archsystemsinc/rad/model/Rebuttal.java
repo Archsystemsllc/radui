@@ -7,7 +7,9 @@ import java.util.Date;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.multipart.MultipartFile;
 
-public class Rebuttal  {	
+import com.archsystemsinc.rad.common.utils.UtilityFunctions;
+
+public class Rebuttal implements Comparable<Rebuttal> {	
 	
 	
 	private int id;
@@ -139,11 +141,31 @@ public class Rebuttal  {
 	
 	private ByteArrayResource httpFileData;
 	
+	private String callCategoryForDisplay;
+	
+	private String lobForDisplay;
 	
 	
-	
-	
-	
+	public String getCallCategoryForDisplay() {
+		return callCategoryForDisplay;
+	}
+
+
+	public void setCallCategoryForDisplay(String callCategoryForDisplay) {
+		this.callCategoryForDisplay = callCategoryForDisplay;
+	}
+
+
+	public String getLobForDisplay() {
+		return lobForDisplay;
+	}
+
+
+	public void setLobForDisplay(String lobForDisplay) {
+		this.lobForDisplay = lobForDisplay;
+	}
+
+
 	public ByteArrayResource getHttpFileData() {
 		return httpFileData;
 	}
@@ -720,6 +742,24 @@ public class Rebuttal  {
 		this.agree = agree;
 	}	
 	
-	
+	public int compareTo(Rebuttal rebuttal) {
+
+		String date1 = ((Rebuttal) rebuttal).getUpdatedDate();
+		String date2 = this.updatedDate;
+		
+		if(date1 != null && !date1.equalsIgnoreCase("") && date2 != null && !date2.equalsIgnoreCase("") ) {
+			return date1.compareTo(date2);
+		} else if((date1 == null || date1.equalsIgnoreCase("")) && (date2 == null || date2.equalsIgnoreCase(""))) {
+			return 0;
+		} else if(date1 == null || date1.equalsIgnoreCase("")) {
+			return -1;
+		}  else if(date2 == null || date2.equalsIgnoreCase("")) {
+			return 1;
+		} else return 0;
+		//descending order
+		//return compareQuantity - this.quantity;
+
+	}
+
 
 }

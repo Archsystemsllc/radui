@@ -17,7 +17,7 @@ public class ReportsForm {
     
     private String programId;
     
-    private String loc;
+    private String pccLocationId;
     
     private Date fromDate;
     
@@ -220,12 +220,12 @@ public class ReportsForm {
 		this.programId = programId;
 	}
 
-	public String getLoc() {
-		return loc;
+	public String getPccLocationId() {
+		return pccLocationId;
 	}
 
-	public void setLoc(String loc) {
-		this.loc = loc;
+	public void setPccLocationId(String pccLocationId) {
+		this.pccLocationId = pccLocationId;
 	}
 
 	public Date getFromDate() {

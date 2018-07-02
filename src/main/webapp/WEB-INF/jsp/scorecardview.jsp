@@ -417,9 +417,19 @@
             
         });
 
+		var reportSearchString = '${ReportSearchString}';
 		//Back Button Functionality
 		$('#close1,#close2').click(function(e) {	
-			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+			
+			if (reportSearchString !='null' && reportSearchString !='') {
+      			
+      			var selectedJurisdiction = $('#jurId :selected').text();
+      			var selectedMac = $('#macId :selected').text();
+      			
+      			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+selectedMac+"/"+selectedJurisdiction+"/"+reportSearchString;
+      		} else {
+      			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+          	}
 	     }); 
 
       	//Secton 1 - Option 1
@@ -1160,7 +1170,7 @@
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 8 - Calibration Module</h2> 
-				                    <div class="row">
+				                    <%-- <div class="row">
 			                            
 			                            <div class="col-lg-6 form-group">
 			                               
@@ -1169,7 +1179,7 @@
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            </div>
-			                        </div>
+			                        </div> --%>
 				                    
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
@@ -1180,13 +1190,13 @@
 											   	<form:option value="Fail" label="Fail" />											  						  	
 											</form:select> 
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                            <%-- <div class="col-lg-6 form-group">
 			                               
 			                                <label for="qamCalibrationUpdateDateTime">QAM Admin Calibration Update Date:</label>
 			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" disabled="true" title="Choose QAM Admin Calibration Update Date from the Calendar"/>
 			                            
 			                                
-			                            </div>
+			                            </div> --%>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
@@ -1197,13 +1207,13 @@
 											   	<form:option value="Fail" label="Fail" />											  						  	
 											</form:select> 
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                           <%--  <div class="col-lg-6 form-group">
 			                                
 			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
 			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" disabled="true" title="Choose CMS Calibration Update Date from the Calendar"/>
 			                            
 			                                
-			                            </div>
+			                            </div> --%>
 			                        </div>
 			                       
 				                    

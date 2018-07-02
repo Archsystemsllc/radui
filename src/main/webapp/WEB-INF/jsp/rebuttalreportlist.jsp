@@ -70,12 +70,12 @@
 							
 							
 							<<display:column title="Actions" style="text-align:center;">
-								<span><a class="action-icons c-edit" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-rebuttal/${rebuttalRow.id}" title="View">View</a></span>
-															
+								<span><a class='action-icons c-pending' href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-rebuttal/${rebuttalRow.id}" title="View">View</a></span>
+									
 							</display:column>
-							<display:setProperty name="export.excel.filename" value="Rebuttal.xls" />
-									<display:setProperty name="export.pdf.filename" value="Rebuttal.pdf" />
-									<display:setProperty name="export.csv.filename" value="Rebuttal.csv" />
+							<display:setProperty name="export.excel.filename" value="RebuttalList.xls" />
+									<display:setProperty name="export.pdf.filename" value="RebuttalList.pdf" />
+									<display:setProperty name="export.csv.filename" value="RebuttalList.csv" />
 									<display:setProperty name="export.pdf" value="true" />
 						</display:table>
 						<c:if test="${fn:length(sessionScope.SESSION_SCOPE_REBUTTALS_REPORT_MAP.values()) eq 0}">

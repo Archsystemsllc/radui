@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +47,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.dom.Document;
 
@@ -147,14 +150,25 @@ public class RebuttalController {
 			}
 			
 			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-			if(rebuttalNew.getFilterFromDateString() != null && !rebuttalNew.getFilterFromDateString().equalsIgnoreCase("")) {
-				rebuttalNew.setFilterFromDate(mdyFormat.parse(rebuttalNew.getFilterFromDateString()));
-			}
-			if(rebuttalNew.getFilterToDateString() != null && !rebuttalNew.getFilterToDateString().equalsIgnoreCase("")) {
-				rebuttalNew.setFilterToDate(mdyFormat.parse(rebuttalNew.getFilterToDateString()));
+			
+			if(rebuttalNew.getFilterFromDateString() != null && 
+					!rebuttalNew.getFilterFromDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = rebuttalNew.getFilterFromDateString() + " 00:00:00 AM";
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				rebuttalNew.setFilterFromDate(filterFromDate);
+				
+				
 			}
 			
 			
+			if(rebuttalNew.getFilterToDateString() != null && 
+					!rebuttalNew.getFilterToDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = rebuttalNew.getFilterToDateString() + " 11:59:59 PM";
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				rebuttalNew.setFilterToDate(filterToDate);
+				
+				
+			}
 			
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 			String ROOT_URI = new String(HomeController.RAD_WS_URI + "rebuttallist");
@@ -165,7 +179,7 @@ public class RebuttalController {
 			List<Rebuttal> rebuttalList = mapper.convertValue(rebuttalTempList, new TypeReference<List<Rebuttal>>() { });
 			
 			UtilityFunctions utilityFunctions = new UtilityFunctions();
-			
+			List<Rebuttal> rebuttalListTemp = new ArrayList<Rebuttal>();
 			//rebuttalList = mapper.readValue(exchange.getBody(), new TypeReference<List<Rebuttal>>(){});
 			for(Rebuttal rebuttal: rebuttalList) {
 				String macPCCNameTempValue = HomeController.PCC_LOC_MAP.get(rebuttal.getPccLocationId());
@@ -176,15 +190,20 @@ public class RebuttalController {
 					rebuttal.setDatePostedString(
 							utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted()));
 				}
-				rebuttal.setDescriptionComments("");
+				rebuttal.setDescriptionComments(rebuttal.getDescriptionComments().replaceAll("\n","::"));
+				rebuttal.setDescriptionComments(rebuttal.getDescriptionComments().replaceAll("<br/>","::"));
+				//rebuttal.setDescriptionComments("");
 				resultsMap.put(rebuttal.getId(), rebuttal);
+				rebuttalListTemp.add(rebuttal);
 			}
 			model.addAttribute("rebuttal",rebuttalNew);
 			
 			request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_MAP", resultsMap);
 			model.addAttribute("rebuttalFilter",true);
 			
-			String rebuttalListString = mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " ");
+			Collections.sort(rebuttalListTemp);
+			
+			String rebuttalListString = mapper.writeValueAsString(rebuttalListTemp).replaceAll("'", " ");
 					
 			rebuttalListString = response.encodeRedirectURL(rebuttalListString);
 			request.getSession().setAttribute("SESSION_SCOPE_REBUTTAL_FILTER", rebuttalNew);
@@ -336,8 +355,8 @@ public class RebuttalController {
 	
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
 			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
-	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result,
-			final Model model, HttpSession session, HttpServletResponse response) {
+	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result, 
+			final RedirectAttributes redirectAttributes, final Model model, HttpSession session, HttpServletResponse response) {
 
 		String returnView = "";
 		log.debug("--> saverebuttal <--");
@@ -387,11 +406,17 @@ public class RebuttalController {
        sdfAmerica.setTimeZone(tzInAmerica);
        String currentDateString = sdfAmerica.format(new Date());
        
+       User user =  (User) session.getAttribute("LoggedInUserForm");
+		rebuttal.setUserId(user.getId().intValue());
+       
        if(rebuttal.getId()==0) {
    		rebuttal.setDatePosted(new Date() );
    		rebuttal.setCreatedDate(currentDateString);
+   		rebuttal.setUpdatedDate(currentDateString);
+   		rebuttal.setCreatedBy(user.getUserName());
        } else {
        	rebuttal.setUpdatedDate(currentDateString);
+       	rebuttal.setUpdatedBy(user.getUserName());
        }
        
 		if(rebuttal.getRebuttalCompleteFlag()==null) {
@@ -404,24 +429,36 @@ public class RebuttalController {
 			rebuttal.setRebuttalResult("Pending");
 		} 
 		
-		rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"\n"+rebuttal.getDescriptionCommentsAppend());
+		if (rebuttal.getDescriptionComments() != null && !rebuttal.getDescriptionComments().equalsIgnoreCase("")) {
+			rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"::"+rebuttal.getDescriptionCommentsAppend());
+		} else {
+			rebuttal.setDescriptionComments(rebuttal.getDescriptionCommentsAppend());
+		}
+		
 		
 		 
-		User user =  (User) session.getAttribute("LoggedInUserForm");
-		rebuttal.setUserId(user.getId().intValue());
+		
 		try {
 			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
 			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
 			
 			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
 					Rebuttal.class);
+			if (rebuttal.getId() == 0) {
+				redirectAttributes.addFlashAttribute("success",
+						"success.create.rebuttal");
+			} else {
+				redirectAttributes.addFlashAttribute("success",
+						"success.edit.rebuttal");
+			}
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
-		String url = "forward:/"+userFolder+"/rebuttallist/false";
+		String url = "redirect:/"+userFolder+"/rebuttallist/false";
 		url = response.encodeRedirectURL(url);
 
 		return url;
@@ -477,8 +514,13 @@ public class RebuttalController {
 		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Pending")) {
 			rebuttal.setRebuttalCompleteFlag("No");
 		} 
-		
-		rebuttal.setDescriptionCommentsAppend(rebuttal.getDescriptionComments());
+		if(rebuttal.getDatePosted() != null) {
+			rebuttal.setDatePostedString(
+					utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted()));
+		}
+		rebuttal.setCallCategoryForDisplay(rebuttal.getCallCategory());
+		rebuttal.setLobForDisplay(rebuttal.getLob());
+		//rebuttal.setDescriptionCommentsAppend(rebuttal.getDescriptionComments());
 		
 		String roles = authentication.getAuthorities().toString();
 		User userSearchObject = new User();
@@ -541,7 +583,10 @@ public class RebuttalController {
 		if (resultsMap != null) {
 			rebuttal = resultsMap.get(id);
 		}
-		
+		if(rebuttal.getDatePosted() != null) {
+			rebuttal.setDatePostedString(
+					utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted()));
+		}
 		
 		if(rebuttal.getRebuttalStatus() == null) {
 			rebuttal.setRebuttalCompleteFlag("");
@@ -550,6 +595,9 @@ public class RebuttalController {
 		} else if(rebuttal.getRebuttalStatus().equalsIgnoreCase("Pending")) {
 			rebuttal.setRebuttalCompleteFlag("No");
 		} 
+		
+		rebuttal.setCallCategoryForDisplay(rebuttal.getCallCategory());
+		rebuttal.setLobForDisplay(rebuttal.getLob());
 		model.addAttribute("rebuttal", rebuttal);
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		HashMap<Integer,String> pccLocationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(rebuttal.getMacId()+"_"+rebuttal.getJurisId()+"_"+rebuttal.getProgramId());

@@ -258,7 +258,7 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="macReferenceId"> MAC Call Reference ID:</label>
 			                                <c:if test="${rebuttal.id == 0}">
-			                                <form:select path="macReferenceId" class="form-control" id="macReferenceId" readonly="true">	
+			                                <form:select path="macReferenceId" class="form-control required" id="macReferenceId" required="true">	
 			                                	<form:option value="" >---Select Mac Call Reference ID---</form:option>										   	
 											  	<form:options items="${macReferenceFailedList}" />
 											</form:select> 
@@ -270,45 +270,15 @@
 											<form:input type="hidden" name="macReferenceId" path="macReferenceId" />
 											</c:if>
 			                            </div>
-			                           <div class="col-sm-6 form-group">
-			                                <label for="name"> PCC/Location:</label>
-			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
-			                                	<form:option value="" label="---Select PCC/Location---"/>
-			                                	<form:options items="${programMapEdit}" />
-											</form:select> 
-			                            </div>
-			                        </div>
-			                         <div class="row">
-			                             <div class="col-sm-6 form-group">
-			                                <label for="name"> PCC/Location:</label>
-			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" readonly="true">
-			                                	<form:option value="" label="---Select PCC/Location---"/>
-			                                	<form:options items="${programMapEdit}" />
-											</form:select> 
-			                            </div>
+			                           
 			                           <div class="col-sm-6 form-group">
 			                                <label for="name"> CSR Full Name:</label>
 			                                <form:input class="form-control" type = "text" name = "csrFullName" path="csrFullName" readonly="true"/>
-			                            </div>
+			                            </div>	
+			                                                       
 			                        </div>
-			                        
-			                        <div class="row">
-			                              <div class="col-sm-6 form-group">
-			                                <label for="name"> Date Posted:</label>
-			                                <form:input type = "text" class="form-control" id="datePosted" name = "datePosted" path="datePosted" readonly="true"/>
-			                            </div>
-			                             <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User') ">
-									
-			                         <div class="col-sm-6 form-group">
-			                                <label for="name"> QM Name/ID:</label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
-			                                <form:input type = "hidden" name = "id" path="id" />
-			                            </div>
-			                            </sec:authorize>
-			                        </div>
-			                        
-			                        <div class="row">
-			                              
+			                         <div class="row">
+			                           
 			                          <div class="col-sm-6 form-group">
 			                                <label for="name"> Call Time:</label>
 			                                <form:input class="form-control" type = "text" name = "callTime" path="callTime" readonly="true"/>
@@ -317,26 +287,63 @@
 			                                <label for="name"> Call Monitoring Date:</label>
 			                                <form:input type = "text" class="form-control" id="callDate" name = "callDate" path="callDate" readonly="true"/>
 			                            </div>
+			                           
 			                        </div>
-			                        
-			                        <div class="row">
-			                              
+			                         <div class="row">		
+			                          <fieldset disabled>	                              
 			                            <div class="col-lg-6 form-group">
 			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" readonly="true">
+			                              <form:select path="callCategoryForDisplay" class="form-control" id="callCategoryForDisplay" readonly="true">
 											   	<form:option value="" label="--- Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                         	</div>
 			                         	<div class="col-lg-6 form-group">
-			                             <label for="email"> Rebuttal Call Category:</label>
-			                              <form:select path="callCategory" class="form-control required" id="callCategory" readonly="true">
-											   	<form:option value="" label="--- Select Rebuttal Call Category---"/>
-											   	<form:option value="1" label="QAM"/>
-											   	<form:option value="2" label="EDI"/>
-											</form:select> 			                                
-			                         	</div>
-			                         </div>
+			                                <label for="lob"> LOB:</label>
+			                                <form:select path="lobForDisplay" class="form-control" id="lobForDisplay" readonly="true">
+											   	<form:option value="" label="---Select LOB---"/>
+											  	<form:option value="Appeals/Reopenings" />
+											  	<form:option value="Electronic Data Interchange (EDI)" />
+											  	<form:option value="Enrollment" />
+											  	<form:option value="General" />
+											</form:select> 
+			                            </div>
+			                            </fieldset>
+			                         </div>			                        
+			                        
+			                      <div class="row">
+			                         
+			                             <div class="col-sm-6 form-group" id="datePostedDiv">
+			                                <label for="name"> Date Posted:</label>
+			                                <form:input type = "text" class="form-control" id="datePostedString" name = "datePostedString" path="datePostedString" readonly="true"/>
+			                            </div>
+			                            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User') ">
+									
+			                         	<div class="col-sm-6 form-group">
+			                                <label for="name"> QM Name/ID:</label>
+			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
+			                                <form:input type = "hidden" name = "id" path="id" />
+			                            </div>
+			                            </sec:authorize>
+			                             
+			                        </div>
+			                       
+			                         <div class="row">
+			                             <div class="col-sm-6 form-group">
+			                                <label for="name"> PCC/Location:</label>
+			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
+			                                	<form:option value="" label="---Select PCC/Location---"/>
+			                                	<form:options items="${programMapEdit}" />
+											</form:select> 
+			                            </div>
+			                            <div class="col-sm-6 form-group">
+			                             <label for="contactPerson">PCC Contact Person:</label>
+			                                <form:select path="contactPerson" class="form-control required" id="contactPerson" required="true">
+											   	<form:option value="" label="---Select PCC Contact---"/>
+											  <form:options items="${pccContactPersonMap}" />
+											</form:select> 
+			                            </div>
+			                        </div>
 			                         <div class="row">
 			                         	<c:if test="${rebuttal.id != 0}">
 			                         	 <div class="col-sm-6 form-group">

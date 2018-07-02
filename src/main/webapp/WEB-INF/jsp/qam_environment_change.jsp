@@ -216,7 +216,7 @@ $(function() {
 		      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
 		      	       + '<td align="center">' + item[2] + '</td>'
 		      	     + '<td align="center">' + item[3] + '</td>'
-	      	        +'<td style="text-align: center"><a class="viewLink" href="#" >Download</a></td></tr>';
+	      	        +'<td style="text-align: center"><a class="viewLink" href="${WEB_SERVICE_URL}download-document" >Download</a></td></tr>';
 	      	        
 	  	    	});
 		    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
@@ -301,10 +301,10 @@ $(function() {
 	  	var username="qamadmin";
 		var password="123456";	
 
-		alert(monthYear);
+		//alert(monthYear);
 	  
 	     $.ajax({ 
-	         type: "GET",
+	         type: "POST",
 	         dataType: "json",
 	         data: {docId: 3},
 	         url : "${WEB_SERVICE_URL}download-document",

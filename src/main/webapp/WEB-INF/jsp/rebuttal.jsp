@@ -52,6 +52,8 @@
 		$("#customerSkillsCallFailureReasonDiv").hide();
 		$("#rebuttalResult").hide();
 		$("#datePostedDiv").hide();
+		$("#pccLocationId").prop('disabled', true);
+		$("#contactPerson").prop('disabled', true);
 		
 		
     	var username="qamadmin";
@@ -66,6 +68,8 @@
     	if (id != 0) {
 
     		$("#datePostedDiv").show();
+    		$("#pccLocationId").prop('disabled', false);
+    		$("#contactPerson").prop('disabled', false);
     		       
     		if($("#accuracyCallFailureReason").val() != null ) {
 				failureBlockDisplay = true;				
@@ -120,72 +124,99 @@
 
 	$(function(){
 		$("select#macReferenceId").change(function(){
-            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectScoreCardFromMacRef",                    
-                    {scoreCardId: $(this).val()}, function(data){   
+			var scorecardId =  $(this).val();
+			$("#csrFullName").val("");
+      		
+      		$("#failureReason").val("");
+      		$("#qamFullName").val("");
+      		$("#callTime").val("");
+      		$("#callDate").val("");
+      		
+      		$("#macCallReferenceNumber").val("");
+      		$("#macId").val("");
+      		$("#jurisId").val("");
+      		$("#programId").val("");
+      		$("#callCategory").val("");
+      		$("#lob").val("");
+      		$("#callCategoryForDisplay").val("");
+      		$("#lobForDisplay").val("");
+      		$("#pccLocationId").prop('disabled', true);
+    		$("#contactPerson").prop('disabled', true);
+			if(scorecardId != "") {
 
-                   	//Assigning Values Based on User Role
-               		var role = $('#userRole').val();
+				 $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectScoreCardFromMacRef",                    
+		                    {scoreCardId: $(this).val()}, function(data){   
 
-               		if (role == 'MAC Admin' || role == 'MAC User') {
-               			$("#qamFullName").val('****');          			
-               		} else {
-               			$("#qamFullName").val(data.qamFullName);
-                   	}
+		                   	//Assigning Values Based on User Role
+		               		var role = $('#userRole').val();
 
-                    var failureBlockDisplay = false;                
-              		
-              		$("#csrFullName").val(data.csrFullName);
-              		
-              		$("#failureReason").val(data.failReason);
-              		$("#qamFullName").val(data.qamFullName);
-              		$("#callTime").val(data.callTime);
-              		$("#callDate").val(data.callMonitoringDate);
-              		
-              		$("#macCallReferenceNumber").val(data.macCallReferenceNumber);
-              		$("#macId").val(data.macId);
-              		$("#jurisId").val(data.jurId);
-              		$("#programId").val(data.programId);
-              		//Issue#15 Fix
-              		$("#callCategory").val(data.callCategoryId);
-              		$("#lob").val(data.lob);
-              		
+		               		if (role == 'MAC Admin' || role == 'MAC User') {
+		               			$("#qamFullName").val('****');          			
+		               		} else {
+		               			$("#qamFullName").val(data.qamFullName);
+		                   	}
 
-					if(data.accuracyCallFailureReason != "") {
-						failureBlockDisplay = true;
-						$("#accuracyCallFailureReason").val(data.accuracyCallFailureReason);
-						$("#accuracyCallFailureReasonDiv").show();
-					}
+		                    var failureBlockDisplay = false;                
+		              		
+		              		$("#csrFullName").val(data.csrFullName);
+		              		
+		              		$("#failureReason").val(data.failReason);
+		              		$("#qamFullName").val(data.qamFullName);
+		              		$("#callTime").val(data.callTime);
+		              		$("#callDate").val(data.callMonitoringDate);
+		              		
+		              		$("#macCallReferenceNumber").val(data.macCallReferenceNumber);
+		              		$("#macId").val(data.macId);
+		              		$("#jurisId").val(data.jurId);
+		              		$("#programId").val(data.programId);
+		              		//Issue#15 Fix
+		              		$("#callCategory").val(data.callCategoryId);
+		              		$("#lob").val(data.lob);
+		              		$("#callCategoryForDisplay").val(data.callCategoryId);
+		              		$("#lobForDisplay").val(data.lob);
+		              		
 
-					if(data.completenessCallFailureReason != "") {
-						failureBlockDisplay = true;
-						$("#completenessCallFailureReason").val(data.completenessCallFailureReason);
-						$("#completenessCallFailureReasonDiv").show();
-					}
+							if(data.accuracyCallFailureReason != "") {
+								failureBlockDisplay = true;
+								$("#accuracyCallFailureReason").val(data.accuracyCallFailureReason);
+								$("#accuracyCallFailureReasonDiv").show();
+							}
 
-					if(data.privacyCallFailureReason != "") {
-						failureBlockDisplay = true;
-						$("#privacyCallFailureReason").val(data.privacyCallFailureReason);
-						$("#privacyCallFailureReasonDiv").show();
-					}
+							if(data.completenessCallFailureReason != "") {
+								failureBlockDisplay = true;
+								$("#completenessCallFailureReason").val(data.completenessCallFailureReason);
+								$("#completenessCallFailureReasonDiv").show();
+							}
 
-					if(data.customerSkillsCallFailureReason != "") {
-						failureBlockDisplay = true;
-						$("#customerSkillsCallFailureReason").val(data.customerSkillsCallFailureReason);
-						$("#customerSkillsCallFailureReasonDiv").show();
-					}
+							if(data.privacyCallFailureReason != "") {
+								failureBlockDisplay = true;
+								$("#privacyCallFailureReason").val(data.privacyCallFailureReason);
+								$("#privacyCallFailureReasonDiv").show();
+							}
 
-					if(failureBlockDisplay == true) {
-						$("#failureReasonsDiv").show();
-					}
-              		
-                    $("#pccLocationId").get(0).options.length = 0;	           
-          	      	$("#pccLocationId").get(0).options[0] = new Option("Select PCC/Location", "");
-          	  	    	$.each(data.pccLocationMap, function (key,obj) {
-          	  	    		$("#pccLocationId").get(0).options[$("#pccLocationId").get(0).options.length] = new Option(obj, key);
-          	  	    		
-          	  	    });  	   
-                           
-              });
+							if(data.customerSkillsCallFailureReason != "") {
+								failureBlockDisplay = true;
+								$("#customerSkillsCallFailureReason").val(data.customerSkillsCallFailureReason);
+								$("#customerSkillsCallFailureReasonDiv").show();
+							}
+
+							if(failureBlockDisplay == true) {
+								$("#failureReasonsDiv").show();
+							}
+		              		
+		                    $("#pccLocationId").get(0).options.length = 0;	           
+		          	      	$("#pccLocationId").get(0).options[0] = new Option("Select PCC/Location", "");
+		          	  	    	$.each(data.pccLocationMap, function (key,obj) {
+		          	  	    		$("#pccLocationId").get(0).options[$("#pccLocationId").get(0).options.length] = new Option(obj, key);
+		          	  	    		
+		          	  	    });  	
+		          	  	    $("#pccLocationId").prop('disabled', false);
+		          			$("#contactPerson").prop('disabled', false);   
+		                           
+		              });
+
+			}
+           
         });
 
 		 $('#close1,#close2').click(function(e) {	
@@ -318,6 +349,8 @@
 				                <div class="col-md-8 col-md-offset-1 form-container">
 				                   
 				                   <form:hidden path="macId" />
+				                    <form:hidden path="callCategory" />
+				                     <form:hidden path="lob" />
 				                   <form:hidden path="programId" />
 								 	<form:hidden path="jurisId" />
 								 	<form:hidden path="id" />
@@ -340,13 +373,15 @@
 											<form:input type="hidden" name="macReferenceId" path="macReferenceId" />
 											</c:if>
 			                            </div>
+			                           
 			                           <div class="col-sm-6 form-group">
 			                                <label for="name"> CSR Full Name:</label>
 			                                <form:input class="form-control" type = "text" name = "csrFullName" path="csrFullName" readonly="true"/>
-			                            </div>			                           
+			                            </div>	
+			                                                       
 			                        </div>
 			                         <div class="row">
-			                              
+			                           
 			                          <div class="col-sm-6 form-group">
 			                                <label for="name"> Call Time:</label>
 			                                <form:input class="form-control" type = "text" name = "callTime" path="callTime" readonly="true"/>
@@ -355,18 +390,20 @@
 			                                <label for="name"> Call Monitoring Date:</label>
 			                                <form:input type = "text" class="form-control" id="callDate" name = "callDate" path="callDate" readonly="true"/>
 			                            </div>
+			                           
 			                        </div>
-			                         <div class="row">			                              
+			                         <div class="row">		
+			                          <fieldset disabled>	                              
 			                            <div class="col-lg-6 form-group">
 			                             <label for="email"> Call Category:</label>
-			                              <form:select path="callCategory" class="form-control" id="callCategory" readonly="true">
+			                              <form:select path="callCategoryForDisplay" class="form-control" id="callCategoryForDisplay" readonly="true">
 											   	<form:option value="" label="--- Select Call Category---"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 			                                
 			                         	</div>
 			                         	<div class="col-lg-6 form-group">
 			                                <label for="lob"> LOB:</label>
-			                                <form:select path="lob" class="form-control" id="lob" readonly="true">
+			                                <form:select path="lobForDisplay" class="form-control" id="lobForDisplay" readonly="true">
 											   	<form:option value="" label="---Select LOB---"/>
 											  	<form:option value="Appeals/Reopenings" />
 											  	<form:option value="Electronic Data Interchange (EDI)" />
@@ -374,8 +411,10 @@
 											  	<form:option value="General" />
 											</form:select> 
 			                            </div>
+			                            </fieldset>
 			                         </div>			                        
 			                        <div class="row">
+			                         
 			                             <div class="col-sm-6 form-group" id="datePostedDiv">
 			                                <label for="name"> Date Posted:</label>
 			                                <form:input type = "text" class="form-control" id="datePostedString" name = "datePostedString" path="datePostedString" readonly="true"/>
@@ -388,8 +427,9 @@
 			                                <form:input type = "hidden" name = "id" path="id" />
 			                            </div>
 			                            </sec:authorize>
-			                            
+			                             
 			                        </div>
+			                       
 			                         <div class="row">
 			                             <div class="col-sm-6 form-group">
 			                                <label for="name"> PCC/Location:</label>

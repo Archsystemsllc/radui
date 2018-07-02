@@ -19,9 +19,6 @@
 
 <!-- CSS for Bootstrap -->
 
-
-
-
 <!-- JQuery -->
 
 
@@ -81,135 +78,300 @@ $(document).ready(function() {
 		{ "mData": "scorableFail"},
 		{ "mData": "hhhScorableFail"}
 		],		
-		 dom: '<lif<t>pB>',
+	    "columnDefs": [ 	        
+		   {
+               "targets": [ 6 ],
+               className: 'dt-body-center'
+           }
+		 ], 
+		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
-	             footer: true,
+	             extend: 'copy',
 	             messageTop: messageOnTop,
-	             title: reportTitle	            
+	             title: reportTitle,
+			     customize: includeSubtotals
 	         },
 	         {
-	             extend: 'excelHtml5',
-	             footer: true,
+	             extend: 'excel',
 	             messageTop: messageOnTop,
-	             title: reportTitle	             
-	         },
+	             title: reportTitle,
+			     customizeData: includeSubtotals
+	            
+ 		      },
 	         {
-	             extend: 'pdfHtml5',
-	             footer: true,
-	             stripNewlines: false,
-	             messageTop: messageOnTop,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
-	             title: reportTitle
+	             
+			     extend: 'pdf',
+			     	customize: function(doc) {
+			     		doc.defaultStyle.fontSize = 12;
+			     		doc.styles.tableHeader.fontSize = 12; 
+			       	},     
+			        customizeData: includeSubtotals,
+			        messageTop: messageOnTop,
+			        title: reportTitle
 	         }	        
 	     ],
-		  "paging" : true,
-		  "pageLength" : 20,
+	      drawCallback: addSubtotals,
+		  "paging" : false,
+		  "pageLength" : 100,
 		  "ordering" : true,
-		  "searching": false/* ,		 
-		  "footerCallback": function ( row, data, start, end, display ) {
-	            var api = this.api(), data;
-	 
-	            // Remove the formatting to get integer data for summation
-	            var intVal = function ( i ) {
-	                return typeof i === 'string' ?
-	                    i.replace(/[\$,]/g, '')*1 :
-	                    typeof i === 'number' ?
-	                        i : 0;
-	            };
-	            var totalRows = api .column( 4 ) .data() . count();
-
-	            // Total over all pages for Scoreable Count
-	            var scoreableCountTotal = api
-	                .column( 1 )
-	                .data()
-	                .reduce( function (a, b) {
-	                    return intVal(a) + intVal(b);
-	                }, 0 );
-	 
-	            // Update footer
-	           $( api.column( 1 ).footer() ).html( scoreableCountTotal );
-
-	            // Total over all pages for Scoreable Pass Count
-	            var scoreableHhhCountTotal = api
-            .column( 2 )
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		        $( api.column( 2 ).footer() ).html( scoreableHhhCountTotal );
-
-		       
-		     	// Total over all pages for Scoreable Fail Count
-		        var scoreablePassCountTotal = api
-		              .column( 3 )
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		       $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
-
-		     // Total over all pages for Scoreable Fail Count
-		        var scoreableHhhPassCountTotal = api
-		              .column( 4 )
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		        $( api.column( 4 ).footer() ).html( scoreableHhhPassCountTotal );
-
-		        
-		     	// Total over all pages for Non Scoreable Count
-		        var scoreableFailCountTotal = api
-		              .column( 5)
-		              .data()
-		              .reduce( function (a, b) {
-		                  return intVal(a) + intVal(b);
-		              }, 0 );
-
-		        // Update footer
-		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
-
-		        // Average over all pages for Scoreable Pass
-		        var scoreableFailHhhCountTotal = api
-		            .column( 6 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) ;
-		
-		        // Update footer
-		        $( api.column( 6).footer() ).html(scoreableFailHhhCountTotal);
-		        
-				var totalScoreCards = scoreableCountTotal + scoreableHhhCountTotal;
-				var totalPassScoreCards = scoreablePassCountTotal + scoreableHhhPassCountTotal;
-				var totalFailScoreCards = scoreableFailCountTotal + scoreableFailHhhCountTotal;
-				
-		        $('tr:eq(2) th:eq(1)', api.table().footer()).html(totalScoreCards);
-		        $('tr:eq(2) th:eq(2)', api.table().footer()).html(totalPassScoreCards);
-		        $('tr:eq(2) th:eq(3)', api.table().footer()).html(totalFailScoreCards);
-
-		     // Update footer
-		     if(totalScoreCards == 0) {
-		    	 $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: Not Available In Selected Dates');
-			  } else {
-				  var average = (totalPassScoreCards / totalScoreCards) * 100;
-			      $('tr:eq(3) th:eq(0)', api.table().footer()).html('Average Quality Rate: '+average.toFixed(0) +"%");
-
-			  }
-		    
-		  } */
-		     
+		  "language": {
+		      "emptyTable": "No data available"
+		    }		     
 	});
 	qaspScorecardDataTable.columns.adjust().draw(); 
+
+	// Example: add subtotals by letter of first name
+	
+	function addSubtotals(settings){
+	  var api = this.api(),
+	      rows = api.rows({ page: 'current' }),
+	      cols = api.columns({ page: 'current' }),
+	      last = null,
+	      next = null,	       
+	      agg  = {};
+	      var totalScoreCards ;
+	  	  var totalPassScoreCards ;
+	  	  var totalFailScoreCards;
+	  	  var finalAverage;
+
+	  	  
+
+	 var totalRows = api .column( 4 ) .data() . count();
+	 
+	  // only generate subtotals on initial display and when first column is sorted, but not other columns
+	  if ( api.order().length && api.order()[0][0] !== 0 )
+	    return;
+	  
+	  api.column(0, {page: 'current'}).data().each(function( text, rowNum, stack ){
+	    var current_row = rows.data()[rowNum];
+	    var next_rowNum = rowNum + 1;
+	    var intVal = function ( i ) {
+            return typeof i === 'string' ?
+                i.replace(/[\$,]/g, '')*1 :
+                typeof i === 'number' ?
+                    i : 0;
+        };
+        
+	   
+	   if (rowNum===totalRows-1){
+		  		  
+           // Total over all pages for Scoreable Count
+           var scoreableCountTotal = api.column( 1 ).data().reduce( function (a, b) {
+                   return intVal(a) + intVal(b);
+               }, 0 );
+        
+           // Total over all pages for Scoreable Pass Count
+           var scoreableHhhCountTotal = api.column( 2 ).data().reduce( function (a, b) {
+	                  return intVal(a) + intVal(b);
+	       }, 0 );
+	       
+	     	// Total over all pages for Scoreable Fail Count
+	        var scoreablePassCountTotal = api.column( 3 ).data().reduce( function (a, b) {
+	                  return intVal(a) + intVal(b);
+	              }, 0 );
+
+	       // Total over all pages for Scoreable Fail Count
+	        var scoreableHhhPassCountTotal = api.column( 4 ).data().reduce( function (a, b) {
+	                  return intVal(a) + intVal(b);
+	              }, 0 );
+            
+	     	// Total over all pages for Non Scoreable Count
+	        var scoreableFailCountTotal = api.column( 5).data().reduce( function (a, b) {
+	                  return intVal(a) + intVal(b);
+	              }, 0 );
+
+	       
+
+	        // Average over all pages for Scoreable Pass
+	        var scoreableFailHhhCountTotal = api.column( 6 ).data().reduce( function (a, b) {
+	                return intVal(a) + intVal(b);
+	            }, 0) ;
+	
+	      
+	        
+			totalScoreCards = scoreableCountTotal + scoreableHhhCountTotal;
+			totalPassScoreCards = scoreablePassCountTotal + scoreableHhhPassCountTotal;
+			totalFailScoreCards = scoreableFailCountTotal + scoreableFailHhhCountTotal;
+			
+	       
+
+	     // Update footer
+	      if(totalScoreCards == 0) {
+	    	 finalAverage = 'Not Available In Selected Dates';
+		  } else {
+			  var average = (totalPassScoreCards / totalScoreCards) * 100;
+			  finalAverage = average.toFixed(0) +"%";
+
+		  } 
+		  var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
+		  
+	      cols.header().each(function(el, colNum){
+	        var $td = $('<td align="center"></td>');
+	        if (colNum === 0) {
+		          $td.text( ["Sub-Totals"].join('') );
+		    } else if (colNum === 1) {
+	          $td.text(scoreableCountTotal );
+	        } else if (colNum === 2) {
+	          $td.text(scoreableHhhCountTotal );
+	        } else if (colNum === 3) {
+	          $td.text(scoreablePassCountTotal);
+	        } else if (colNum === 4) {
+	          $td.text(scoreableHhhPassCountTotal );
+	        } else if (colNum === 5) {
+	          $td.text(scoreableFailCountTotal);
+	        } else if (colNum === 6) {
+	          $td.text(scoreableFailHhhCountTotal );
+	        } 
+	        $subtotal.append($td);
+	        
+	       
+	      });
+	     
+	      $(rows.nodes()).eq(rowNum).after($subtotal );
+	      
+	     $('#qaspReportDTId > tbody:last').append('<tr class="subtotal" ><td >Summary </td><td align="right">Total Completed</td><td align="left">'+totalScoreCards+'</td><td align="right">Total Passed</td><td align="left">'+totalPassScoreCards+'</td><td align="right">Total Failed</td><td align="left">'+totalFailScoreCards+'</td></tr>'
+				  +'<tr class="subtotal" ><td ></td><td></td><td align="right">Average</td><td align="left">'+finalAverage+'</td><td ></td><td ></td><td ></td></tr>');    
+	    
+	    }
+	  });
+	  
+	  
+	}
+
+	// for output formatting
+	function includeSubtotals( data, button, exportObject){
+
+	  var classList = button.className.split(' ');
+	  
+	  // COPY
+	  if (classList.includes('buttons-copy')){
+	    
+	    data = $('#qaspReportDTId').toTSV();
+	    exportObject.str = data;
+	    exportObject.rows = $('#qaspReportDTId').find('tr').length - 1;  // did not include the footer
+	    
+	  } 
+	  // CSV
+	  else if (classList.includes('buttons-csv')){
+	    
+	    data = $('#qaspReportDTId').toCSV();
+	    
+	  }
+	  // EXCEL/PDF/PRINT
+	  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
+	    
+	    // data is actually the object to use for EXCEL/PDF/PRINT
+	    var subtotals = [];
+	    $('#qaspReportDTId tr.subtotal').each(function(){
+	      var $row = $(this),
+	          row_index = $row.index(), 
+	          row = $row.find('td,th').map(function(){return $(this).text();}).get();
+	      subtotals[ subtotals.length ] = {rowNum: row_index, data: row };
+	    });
+	    
+	    for (var i=0, n=subtotals.length; i<n; i++){
+	      var subtotal = subtotals[i];
+	      data.body.splice(subtotal.rowNum, 0, subtotal.data);
+	    }
+	  }
+	  
+	  return data;
+	}
+
+	// Used so currency numbers can be added w/o dollar signs in the way
+	function parseCurrency(val){
+	  val += '';
+	  return parseFloat( val.replace(/[$,]/g,'') );
+	}
+
+	// Used to display currency again
+	function formatCurrency(val) {
+	  return parseCurrency(val).toLocaleString('US', {
+	    'style': 'currency',
+	    'currency': 'USD'
+	  });
+	}
+
+
+	jQuery.fn.toCSV = function() {
+	  var valueDelim = '"',       // could have a delim option
+	      $tableStack = $(this),
+	      returnStack = [];
+	  
+	  function wrapText(text){
+	    return [valueDelim, text.replace(/"/g,'""'), valueDelim].join('');
+	  }
+	  
+	  $tableStack.each(function(){
+	    var $table = $(this), rows = [];
+	    
+	    // Iterate over rows
+	    // could customize this for showing header, footer, etc
+	    $table.find('thead,tbody').find('tr').each(function(){
+	      var $row = $(this), row = [];
+	      
+	      // Iterate over cells
+	      $row.find('th,td').each(function(){
+	        var $cell = $(this), colspan = $cell.prop('colSpan');
+	        
+	        // handle cells that span multiple columns
+	        if ( colspan && colspan > 1 ){
+	          for (var i=1; i<colspan; i++){
+	            row[ row.length ] = '""';
+	          }
+	        }
+	        row[ row.length ] = wrapText( $cell.text() );
+	        
+	      });
+	      
+	      rows[ rows.length ] = row.join(',');
+	    });
+	    
+	    returnStack[ returnStack.length ] = rows.join('\r\n');
+	  });
+	  
+	  return returnStack.length == 1 ? returnStack[0] : returnStack;
+	  
+	};
+
+	// Tab Separated Values
+	jQuery.fn.toTSV = function() {
+	  var valueDelim = '',       // could have a delim option
+	      $tableStack = $(this),
+	      returnStack = [];
+	  
+	  $tableStack.each(function(){
+	    var $table = $(this), rows = [];
+	    
+	    // Iterate over rows
+	    // could customize this for showing header, footer, etc
+	    $table.find('thead,tbody').find('tr').each(function(){
+	      var $row = $(this), row = [];
+	      
+	      // Iterate over cells
+	      $row.find('th,td').each(function(){
+	        var $cell = $(this), colspan = $cell.prop('colSpan');
+	        
+	        // handle cells that span multiple columns
+	        if ( colspan && colspan > 1 ){
+	          for (var i=1; i<colspan; i++){
+	            row[ row.length ] = '';
+	          }
+	        }
+	        row[ row.length ] = $cell.text();
+	        
+	      });
+	      
+	      rows[ rows.length ] = row.join('\t');
+	    });
+	    
+	    returnStack[ returnStack.length ] = rows.join('\r\n');
+	  });
+	  
+	  return returnStack.length == 1 ? returnStack[0] : returnStack;
+	  
+	};
 
 });
 
@@ -219,7 +381,7 @@ $(document).ready(function() {
 <style>
 .subtotal td {
   font-weight:bold;
-  background: lightslategray;
+  background: none;
 }
 </style>
 
@@ -240,7 +402,7 @@ $(document).ready(function() {
 						 		<form:hidden path="macId" />
 								 <form:hidden path="jurisId" />
 								 <form:hidden path="programId" />
-								 <form:hidden path="loc" />
+								 <form:hidden path="pccLocationId" />
 								 <form:hidden path="fromDate" />
 								 <form:hidden path="toDate" />
 								 <form:hidden path="mainReportSelect" />
@@ -317,44 +479,17 @@ $(document).ready(function() {
 										            									                 
 										        </tr>
 										         <tr>
-										        	<th style="text-align: center">A/B</th>
-										            <th style="text-align: center">HHH</th>
-										            <th style="text-align: center">A/B</th>
-										            <th style="text-align: center">HHH</th>
-										            <th style="text-align: center">A/B</th>
-										            <th style="text-align: center">HHH</th>
+										        	<th style="text-align: center"># of QAM Scorecards Completed(A/B)</th>
+										            <th style="text-align: center"># of QAM Scorecards Completed(HHH)</th>
+										            <th style="text-align: center"># of QAM Scorecards Passed(A/B)</th>
+										            <th style="text-align: center"># of QAM Scorecards Passed(HHH)</th>
+										            <th style="text-align: center"># of QAM Scorecards Failed(A/B)</th>
+										            <th style="text-align: center"># of QAM Scorecards Failed(HHH)</th>
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
 						                    </tbody>
-						                    <tfoot >
-								            <tr >
-								            
-								             <th colspan="1" style="text-align:right">Sub-Totals:</th>
-								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th>
-								                <th style="text-align: center"></th> 
-								               
-								            </tr>
-								            <tr>
-								                <th colspan="1" style="text-align:right"></th>
-								                <th style="text-align: center" colspan="2">Total Completed</th>
-								                <th style="text-align: center" colspan="2">Total Passed</th>
-								                <th style="text-align: center" colspan="2">Total Failed</th>
-								            </tr>
-								            <tr>
-								                <th colspan="1" style="text-align:right">TOTALS</th>
-								                <th style="text-align: center" colspan="2"></th>
-								                <th style="text-align: center" colspan="2"></th>
-								                <th style="text-align: center" colspan="2"></th>
-								            </tr>
-								            <tr>
-								                <th colspan="7" style="text-align:center"></th>								                
-								            </tr> 
-								        </tfoot>
+						                   
 						                </table> 
 						                </div>
 						                </div>

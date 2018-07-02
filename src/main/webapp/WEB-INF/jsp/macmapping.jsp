@@ -73,7 +73,7 @@
 
 	$(function(){
 
-		//Select Jurisdiction Functionality
+		/* //Select Jurisdiction Functionality
 		$("select#macId").change(function(){
 			
 			var userRole = $('#userRole').val();			
@@ -133,7 +133,7 @@
 	      	  	    });  	   
                });
 			
-        });
+        }); */
 
 		
 
@@ -208,7 +208,7 @@
 			                            <div class="col-sm-6 form-group" id="jurisMultiSelect">
 			                                <label for="jurisdictionId"> Jurisdiction:</label>
 										<form:select path="jurisdictionId" class="form-control required" id="jurisdictionId" required="true"  title="Select one or multiple Jurisdiction from the list">
-										  
+										  <form:option value="" label="---Select Jurisdiction---"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>

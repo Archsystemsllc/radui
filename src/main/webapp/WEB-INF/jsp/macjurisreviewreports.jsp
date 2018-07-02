@@ -1016,7 +1016,7 @@ $(document).ready(function() {
 						 		<form:hidden path="macId" />
 								 <form:hidden path="jurisId" />
 								 <form:hidden path="programId" />
-								 <form:hidden path="loc" />
+								 <form:hidden path="pccLocationId" />
 								 <form:hidden path="fromDate" />
 								 <form:hidden path="toDate" />
 								 <form:hidden path="mainReportSelect" />

@@ -33,48 +33,12 @@
 </head>
 <body id="b">
 	<header id="header"> <%-- <div class="top-bar">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-6 col-xs-4">
-						<div class="top-number">
-							<p>
-								<i class="fa fa-phone"></i> +1 (410) 277-9781
-							</p>
-						</div>
-					</div>
-					<div class="col-sm-6 col-xs-8">
-						  <div class="social">
-						  <p style="color:#fff">Welcome ${pageContext.request.userPrincipal.name}| <a href="${pageContext.request.contextPath}" >Logout</a></p>
-<!--                             <ul class="social-share">
-                                <li><a title="facebook" target="_blank" href="https://www.facebook.com/archsystemsllc"><i class="fa fa-facebook"></i></a></li>
-                                <li><a title="twitter" target="_blank" href="https://twitter.com/ArchsystemsMD"><i class="fa fa-twitter"></i></a></li>
-                                <li><a title="linkedin" target="_blank" href="https://www.linkedin.com/company/arch-systems-llc"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a title="youtube" target="_blank" href="https://www.youtube.com/channel/UCCuPoi5quC8DaAoYc2_nq9A"><i class="fa fa-youtube"></i></a></li> 
-                                <li><a title="google+" target="_blank" href="https://plus.google.com/107095612689266148490"><i class="fa fa-google-plus"></i></a></li>
-                                <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
-                                <li><a href="#"><i class="fa fa-skype"></i></a></li>
-                            </ul>  -->
-                            <div class="search">
-                                <form role="form">
-                                    <input type="text" class="search-form" autocomplete="off" placeholder="Search">
-                                    <i class="fa fa-search"></i>
-                                </form>
-                           </div>
-                       </div> 
-					</div>
-				</div>
-			</div>
-			<!--/.container-->
+			
 		</div> --%> <!--/.top-bar--> 
 		<nav class="navbar navbar-inverse" role="banner">
 	<div class="container">
 		<div class="navbar-header" style="min-height: 110px;">
-			<!-- 	<button type="button" class="navbar-toggle" data-toggle="collapse"
-						data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button> -->
+			
 			<div class="navbar-brand">
 				<div class="row">
 					<!--<a class="navbar-brand" href="page0.html">-->
@@ -83,36 +47,19 @@
 							src="${pageContext.request.contextPath}/resources/images/logo.png"
 							alt="CMS logo" height="100px" title="Click on CMS Logo to navigate to CMS Webpage"
 							style="display: block; margin: 0 auto; width: 80%"></a>
-					</div>
-					<%-- <div class="col-sm-8">
-						<img
-							src="${pageContext.request.contextPath}/resources/images/logo.png"
-							alt="logo" height="100px"
-							style="display: block; margin: auto; width: 100%;">
-					</div> --%>
-					<!-- <div class="col-sm-2">
-						<div style="text-align:right;float: right; padding-top: 60px; height: 100px">
-							<button class="btn btn-primary btn-xs"
-								onclick="increaseFontSizeBy1px()">
-								<i class="fa fa-search-plus"></i>
-							</button>
-							<button class="btn btn-primary btn-xs"
-								onclick="decreaseFontSizeBy1px()">
-								<i class="fa fa-search-minus"></i>
-							</button>
-						</div>
-					</div> -->
+					</div>					
 				</div>
 			</div>
+			<div class="navbar-brand" style="display: inline">
+									<!--<a class="navbar-brand" href="page0.html">-->
+									
+								<a href="#" target="_blank"><img
+										src="${pageContext.request.contextPath}/resources/images/ComradLogo.png"
+										alt="CMS logo" height="100px" style="width: 300px;align-content: center" title="COMRAD Logo"></a>
+
+								</div>
 		</div>
-<%-- 		<div class="collapse navbar-collapse navbar-right">
-			<ul class="nav navbar-nav" style="padding-top:80px">
-				<li class="active"><a
-					href="${pageContext.request.contextPath}/login">Home</a></li>
-				<li><a href="${pageContext.request.contextPath}/admin/dashboard">Hypothesis</a></li>
-				<li><a href="#">Contact Us</a></li>
-			</ul>
-		</div> --%>
+
 	</div>
 	<!--/.container--> 
 	</nav>

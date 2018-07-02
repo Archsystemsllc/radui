@@ -56,17 +56,18 @@
 
 <script type="text/javascript">
 $(document).ready(function() {		
-	
-	var reportTitle = '${ReportTitle}';
 	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
+	+'Program:${reportsForm.programName}'+'  '+'PCC/Location:${reportsForm.pccLocationName}\n'
 	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
-
+	var reportTitle = '${ReportTitle}\n'+messageOnTop;	
+	
 	var allScorecardData =eval('${scoreCardList}');
 	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {
 		"aaData": allScorecardData,
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
 		{ "mData": "scorablePassPercent"},
@@ -90,61 +91,64 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 4
+		   "targets" : 5
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 6
+		   "targets" : 7
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 8
+		   "targets" : 9
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 10
-		   }		
+		   "targets" : 11,
+           className: 'dt-body-center'
+		   }	
 		 ], 
 		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             messageTop: messageOnTop,
 	             title: reportTitle,
-			     customize: includeSubtotals
+			     customize: includeSubtotalsAll
 	         },
 	         {
 	             extend: 'excel',
-	             messageTop: messageOnTop,
-	             title: reportTitle,
-			     customizeData: includeSubtotals
+	             customizeData: includeSubtotalsAll,
+	             title: reportTitle,			     
+	             messageOnTop: messageOnTop,
+	             
 	            
  		      },
 	         {
 	             
 			     extend: 'pdf',
+			     title: reportTitle,
 			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 8;
-			     		doc.styles.tableHeader.fontSize = 8; 
+			     		doc.defaultStyle.fontSize = 7;
+			     		doc.styles.tableHeader.fontSize = 7; 
 			       	},     
-			        customizeData: includeSubtotals,
-			        messageTop: messageOnTop,
-			        title: reportTitle
+			        customizeData: includeSubtotalsAll			       
 	         }	        
 	     ],
-	      drawCallback: addSubtotals,
+	      drawCallback: addSubtotalsAll,
 		  "paging" : false,
 		  "pageLength" : 100,
-		  "ordering" : true
+		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	
 	allScoreCardDataTable.columns.adjust().draw();
@@ -155,15 +159,15 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
 		{ "mData": "scorablePassPercent"},
 		{ "mData": "nonScorableCount"},
 		{ "mData": "nonScorablePercent"},
 		{ "mData": "doesNotCount_Number"},
-		{ "mData": "doesNotCount_Percent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "doesNotCount_Percent"}
+		
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -178,162 +182,56 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 4
+		   "targets" : 5
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 6
+		   "targets" : 7
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-	        "targets" : 8
+	        "targets" : 9
 		   }
 		 ], 
-		 dom: '<lif<t>pB>',
+		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             footer: true,
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	             
-	         },
-	         {
-	             extend: 'excel', 
-	             footer: true,
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'pdf',
-	             footer: true,
-	             messageTop: messageOnTop,
 	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL'
+			     customize: includeSubtotalsPassScoreCards
+	         },
+	         {
+	             extend: 'excel',
+	             customizeData: includeSubtotalsPassScoreCards,
+	             title: reportTitle,			     
+	             messageOnTop: messageOnTop,
+	             
+	            
+ 		      },
+	         {
+	             
+			     extend: 'pdf',
+			     title: reportTitle,
+			     	customize: function(doc) {
+			     		doc.defaultStyle.fontSize = 7;
+			     		doc.styles.tableHeader.fontSize = 7; 
+			       	},     
+			        customizeData: includeSubtotalsPassScoreCards			       
 	         }	        
 	     ],
+	      drawCallback: addSubtotalsPassScoreCards,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
-		  "footerCallback": function ( row, data, start, end, display ) {
-	            var api = this.api(), data;
-	 
-	            // Remove the formatting to get integer data for summation
-	            var intVal = function ( i ) {
-	                return typeof i === 'string' ?
-	                    i.replace(/[\$,]/g, '')*1 :
-	                    typeof i === 'number' ?
-	                        i : 0;
-	            };
-	            var totalRows = api .column( 4 ) .data() . count();
-
-	            // Total over all pages for Scoreable Count
-	            var scoreableCountTotal = api
-	                .column( 2 )
-	                .data()
-	                .reduce( function (a, b) {
-	                    return intVal(a) + intVal(b);
-	                }, 0 );
-	 
-	            // Update footer
-	            $( api.column( 2 ).footer() ).html( scoreableCountTotal );
-
-	            // Total over all pages for Scoreable Pass Count
-	            var scoreablePassCountTotal = api
-              .column( 3 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
-
-		        // Update footer
-		        $( api.column( 3 ).footer() ).html( scoreablePassCountTotal );
-
-		        // Average over all pages for Scoreable Pass
-		        var scoreablePassPercentAverage = api
-		            .column( 4 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
-		
-		        // Update footer
-		        $( api.column( 4 ).footer() ).html(scoreablePassPercentAverage.toFixed(0) +"%");
-
-		     	// Total over all pages for Scoreable Fail Count
-		        var scoreableFailCountTotal = api
-              .column( 5 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
-
-		        // Update footer
-		        $( api.column( 5 ).footer() ).html( scoreableFailCountTotal );
-
-		        // Average over all pages for Scoreable Pass
-		        var scoreableFailPercentAverage = api
-		            .column( 6 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
-		
-		        // Update footer
-		        $( api.column( 6 ).footer() ).html(scoreableFailPercentAverage.toFixed(0) +"%");
-
-		     	// Total over all pages for Non Scoreable Count
-		        var nonScoreableCountTotal = api
-              .column( 7 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
-
-		        // Update footer
-		        $( api.column( 7 ).footer() ).html( nonScoreableCountTotal );
-
-		        // Average over all pages for Scoreable Pass
-		        var nonScoreablePercentAverage = api
-		            .column( 8 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
-		
-		        // Update footer
-		        $( api.column( 8 ).footer() ).html(nonScoreablePercentAverage.toFixed(0) +"%");
-
-		     // Total over all pages for Does Not Count
-		        var doesNotCountTotal = api
-              .column( 9 )
-              .data()
-              .reduce( function (a, b) {
-                  return intVal(a) + intVal(b);
-              }, 0 );
-
-		        // Update footer
-		        $( api.column( 9 ).footer() ).html( doesNotCountTotal );
-
-		        // Average over all pages for Scoreable Pass
-		        var doesNotCountPercentAverage = api
-		            .column( 10 )
-		            .data()
-		            .reduce( function (a, b) {
-		                return intVal(a) + intVal(b);
-		            }, 0) / totalRows;
-		
-		        // Update footer
-		        $( api.column( 10 ).footer() ).html(doesNotCountPercentAverage.toFixed(0) +"%");
-
-	        }
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	allPassScorecardDataTable.columns.adjust().draw();
 
@@ -344,14 +242,14 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
+		{ "mData": "scorableCount"},
 		{ "mData": "scorableFail"},
 		{ "mData": "scorableFailPercent"},
 		{ "mData": "nonScorableCount"},
 		{ "mData": "nonScorablePercent"},
 		{ "mData": "doesNotCount_Number"},
-		{ "mData": "doesNotCount_Percent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "doesNotCount_Percent"}
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -360,31 +258,62 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
-		   }	
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 5
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 7
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 9
+		   },	
 		 ], 
-		 dom: '<lif<t>pB>',
+		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'excelHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'pdfHtml5',
-	             messageTop: messageOnTop,
+	             extend: 'copy',
 	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
+			     customize: includeSubtotalsFailScoreCards
+	         },
+	         {
+	             extend: 'excel',
+	             customizeData: includeSubtotalsFailScoreCards,
+	             title: reportTitle,			     
+	             messageOnTop: messageOnTop,
+	             
+	            
+ 		      },
+	         {
+	             
+			     extend: 'pdf',
+			     title: reportTitle,
+			     	customize: function(doc) {
+			     		doc.defaultStyle.fontSize = 7;
+			     		doc.styles.tableHeader.fontSize = 7; 
+			       	},     
+			        customizeData: includeSubtotalsFailScoreCards			       
 	         }	        
 	     ],
+	      drawCallback: addSubtotalsFailScoreCards,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 
 	failScorecardDataTable.columns.adjust().draw();
@@ -396,13 +325,12 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
 		{ "mData": "scorablePassPercent"},
 		{ "mData": "scorableFail"},
-		{ "mData": "scorableFailPercent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "scorableFailPercent"}
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -411,31 +339,55 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 5
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 7
 		   }	
 		 ], 
-		 dom: '<lif<t>pB>',
+		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'excelHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'pdfHtml5',
-	             messageTop: messageOnTop,
+	             extend: 'copy',
 	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
+			     customize: includeSubtotalsScoreable
+	         },
+	         {
+	             extend: 'excel',
+	             customizeData: includeSubtotalsScoreable,
+	             title: reportTitle,			     
+	             messageOnTop: messageOnTop,
+	             
+	            
+ 		      },
+	         {
+	             
+			     extend: 'pdf',
+			     title: reportTitle,
+			     	customize: function(doc) {
+			     		doc.defaultStyle.fontSize = 7;
+			     		doc.styles.tableHeader.fontSize = 7; 
+			       	},     
+			        customizeData: includeSubtotalsScoreable			       
 	         }	        
 	     ],
+	      drawCallback: addSubtotalsScoreable,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 
 	scoreableReportDataTable.columns.adjust().draw();
@@ -448,11 +400,10 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
-		{ "mData": "scorablePassPercent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "scorablePassPercent"}
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -461,31 +412,48 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 5
 		   }	
 		 ], 
-		 dom: '<lif<t>pB>',
+		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'excelHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'pdfHtml5',
-	             messageTop: messageOnTop,
+	             extend: 'copy',
 	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
+			     customize: includeSubtotalsAll
+	         },
+	         {
+	             extend: 'excel',
+	             customizeData: includeSubtotalsAll,
+	             title: reportTitle,			     
+	             messageOnTop: messageOnTop,
+	             
+	            
+ 		      },
+	         {
+	             
+			     extend: 'pdf',
+			     title: reportTitle,
+			     	customize: function(doc) {
+			     		doc.defaultStyle.fontSize = 7;
+			     		doc.styles.tableHeader.fontSize = 7; 
+			       	},     
+			        customizeData: includeSubtotalsAll			       
 	         }	        
 	     ],
+	      drawCallback: addSubtotalsAll,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	scoreablePassReportDataTable.columns.adjust().draw();
 	
@@ -497,11 +465,10 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorableFail"},
-		{ "mData": "scorableFailPercent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "scorableFailPercent"}
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -510,31 +477,48 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 5
 		   }	
 		 ], 
-		 dom: '<lif<t>pB>',
+		 dom: 'B<"clear">lfrtip',	
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'excelHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'pdfHtml5',
-	             messageTop: messageOnTop,
+	             extend: 'copy',
 	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
+			     customize: includeSubtotalsAll
+	         },
+	         {
+	             extend: 'excel',
+	             customizeData: includeSubtotalsAll,
+	             title: reportTitle,			     
+	             messageOnTop: messageOnTop,
+	             
+	            
+ 		      },
+	         {
+	             
+			     extend: 'pdf',
+			     title: reportTitle,
+			     	customize: function(doc) {
+			     		doc.defaultStyle.fontSize = 7;
+			     		doc.styles.tableHeader.fontSize = 7; 
+			       	},     
+			        customizeData: includeSubtotalsAll			       
 	         }	        
 	     ],
+	      drawCallback: addSubtotalsAll,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 
 	scoreableFailReportTable.columns.adjust().draw();
@@ -546,10 +530,9 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "nonScorableCount"},
-		{ "mData": "nonScorablePercent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "nonScorablePercent"}
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -558,6 +541,13 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 4
 		   }	
 		 ], 
 		 dom: '<lif<t>pB>',
@@ -583,6 +573,9 @@ $(document).ready(function() {
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	nonScoreableDataTable.columns.adjust().draw();	
 
@@ -593,10 +586,9 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "totalCount"},
 		{ "mData": "doesNotCount_Number"},
-		{ "mData": "doesNotCount_Percent"},
-		{ "mData": "qamStartDate"},
-		{ "mData": "qamEndDate"}
+		{ "mData": "doesNotCount_Percent"}
 		],		
 	    "columnDefs": [ 
 	        { 
@@ -605,6 +597,13 @@ $(document).ready(function() {
 				return linkData;
 	        },
 		   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 4
 		   }	
 		 ], 
 		 dom: '<lif<t>pB>',
@@ -630,11 +629,14 @@ $(document).ready(function() {
 		  "paging" : false,
 		  "pageLength" : 20,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	doesNotCountDataTable.columns.adjust().draw();
 	
 	// Example: add subtotals by letter of first name
-	function addSubtotals(settings){
+	function addSubtotalsAll(settings){
 	  var api = this.api(),
 	      rows = api.rows({ page: 'current' }),
 	      cols = api.columns({ page: 'current' }),
@@ -643,14 +645,15 @@ $(document).ready(function() {
 	       
 	      agg  = {},
 	      scoreable_sum_colNum = 2;
-	      scoreable_pass_sum_colNum = 3;
-	      scoreable_pass_percent_colNum = 4;
-	      scoreable_fail_count_sum_colNum = 5;
-	      scoreable_fail_percent_sum_colNum = 6;
-	      non_scoreable_count_sum_colNum = 7;
-	      non_scoreable_percent_sum_colNum = 8;
-	      doesn_not_count_sum_colNum = 9;
-	      doesn_not_count_percent_colNum = 10;
+	      scoreable_sum_colNum = 3;
+	      scoreable_pass_sum_colNum = 4;
+	      scoreable_pass_percent_colNum = 5;
+	      scoreable_fail_count_sum_colNum = 6;
+	      scoreable_fail_percent_sum_colNum = 7;
+	      non_scoreable_count_sum_colNum = 8;
+	      non_scoreable_percent_sum_colNum = 9;
+	      doesn_not_count_sum_colNum = 10;
+	      doesn_not_count_percent_colNum = 11;
 
 	 var totalRows = api .column( 4 ) .data() . count();
 		     
@@ -673,32 +676,29 @@ $(document).ready(function() {
         
 	   if (rowNum===totalRows-1){
 
+			// Total over all pages for Scoreable Count
+	           var scoreableTotalCouunt = api.column( 2 ).data().reduce( function (a, b) {
+	                   return intVal(a) + intVal(b);
+	               }, 0 );
+
+
 	    	// Total over all pages for Scoreable Count
-	            var scoreableCountTotal = api
-	                .column( 2 )
-	                .data()
-	                .reduce( function (a, b) {
+	            var scoreableCountTotal = api.column( 3 ).data().reduce( function (a, b) {
 	                    return intVal(a) + intVal(b);
 	                }, 0 );
 	 
 	       // Total over all pages for Scoreable Pass Count
-	            var scoreablePassCountTotal = api
-             .column( 3 )
-             .data()
-             .reduce( function (a, b) {
+	            var scoreablePassCountTotal = api.column( 4 ).data().reduce( function (a, b) {
                  return intVal(a) + intVal(b);
              }, 0 );
 
 		      
 		   // Average over all pages for Scoreable Pass
 		   var scoreablePassPercentAverage = scoreablePassCountTotal / scoreableCountTotal * 100;
-		   var scoreablePassPercentAverageHtml = scoreablePassPercentAverage.toFixed(2)  +"%";
+		   var scoreablePassPercentAverageHtml = scoreablePassPercentAverage.toFixed(3)  +"%";
 		
 		   // Total over all pages for Scoreable Fail Count
-		        var scoreableFailCountTotal = api
-             .column( 5 )
-             .data()
-             .reduce( function (a, b) {
+		        var scoreableFailCountTotal = api.column( 6 ).data().reduce( function (a, b) {
                  return intVal(a) + intVal(b);
              }, 0 );
 
@@ -706,18 +706,12 @@ $(document).ready(function() {
 		        var scoreableFailPercentAverage = scoreableFailCountTotal / scoreableCountTotal * 100;
 		
 		  // Total over all pages for Non Scoreable Count
-		        var nonScoreableCountTotal = api
-             .column( 7 )
-             .data()
-             .reduce( function (a, b) {
+		        var nonScoreableCountTotal = api.column( 8 ).data().reduce( function (a, b) {
                  return intVal(a) + intVal(b);
              }, 0 );
 
 		  // Total over all pages for Does Not Count
-		        var doesNotCountTotal = api
-             .column( 9 )
-             .data()
-             .reduce( function (a, b) {
+		        var doesNotCountTotal = api.column( 10 ).data().reduce( function (a, b) {
                  return intVal(a) + intVal(b);
              }, 0 );
 
@@ -734,22 +728,24 @@ $(document).ready(function() {
 	        if (colNum === 1) {
 		          $td.text( "Total And Average" );
 		    } else if (colNum === 2) {
-	          $td.text(scoreableCountTotal );
+	          $td.text(scoreableTotalCouunt );
 	        } else if (colNum === 3) {
-	          $td.text(scoreablePassCountTotal );
+	          $td.text(scoreableCountTotal );
 	        } else if (colNum === 4) {
-	          $td.text(scoreablePassPercentAverage.toFixed(2)  +"%" );
+	          $td.text(scoreablePassCountTotal );
 	        } else if (colNum === 5) {
-	          $td.text(scoreableFailCountTotal );
+	          $td.text(scoreablePassPercentAverage.toFixed(2)  +"%" );
 	        } else if (colNum === 6) {
-	          $td.text(scoreableFailPercentAverage.toFixed(2)  +"%" );
+	          $td.text(scoreableFailCountTotal );
 	        } else if (colNum === 7) {
-	          $td.text(nonScoreableCountTotal );
+	          $td.text(scoreableFailPercentAverage.toFixed(2)  +"%" );
 	        } else if (colNum === 8) {
-	          $td.text(nonScoreablePercentAverage.toFixed(2)  +"%" );
+	          $td.text(nonScoreableCountTotal );
 	        } else if (colNum === 9) {
-	          $td.text(doesNotCountTotal );
+	          $td.text(nonScoreablePercentAverage.toFixed(2)  +"%" );
 	        } else if (colNum === 10) {
+	          $td.text(doesNotCountTotal );
+	        } else if (colNum === 11) {
 	          $td.text(doesNotCountPercentAverage.toFixed(2) +"%" );
 	        }
 	        $subtotal.append($td);
@@ -764,8 +760,7 @@ $(document).ready(function() {
 	}
 
 	// for output formatting
-	function includeSubtotals( data, button, exportObject){
-
+	function includeSubtotalsAll( data, button, exportObject){
 	  var classList = button.className.split(' ');
 	  
 	  // COPY
@@ -784,7 +779,7 @@ $(document).ready(function() {
 	  }
 	  // EXCEL/PDF/PRINT
 	  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
-	    
+		 
 	    // data is actually the object to use for EXCEL/PDF/PRINT
 	    var subtotals = [];
 	    $('#allScoreCardId tr.subtotal').each(function(){
@@ -802,6 +797,441 @@ $(document).ready(function() {
 	  
 	  return data;
 	}
+
+
+	//All Pass Score Cards -- allPassScorecardDTId
+	function addSubtotalsPassScoreCards(settings){
+		  var api = this.api(),
+		      rows = api.rows({ page: 'current' }),
+		      cols = api.columns({ page: 'current' }),
+		      last = null,
+		      next = null,
+		       
+		      agg  = {};
+		      
+
+		 var totalRows = api .column( 4 ) .data() . count();
+			     
+		
+		  
+		  // only generate subtotals on initial display and when first column is sorted, but not other columns
+		  if ( api.order().length && api.order()[0][0] !== 0 )
+		    return;
+		  
+		  api.column(0, {page: 'current'}).data().each(function( text, rowNum, stack ){
+		    var current_row = rows.data()[rowNum];
+		    var next_rowNum = rowNum + 1;
+		   
+		    var intVal = function ( i ) {
+	            return typeof i === 'string' ?
+	                i.replace(/[\$,]/g, '')*1 :
+	                typeof i === 'number' ?
+	                    i : 0;
+	        };
+	        
+		   if (rowNum===totalRows-1){
+
+				// Total over all pages for Scoreable Count
+		           var scoreableTotalCouunt = api.column( 2 ).data().reduce( function (a, b) {
+		                   return intVal(a) + intVal(b);
+		               }, 0 );
+
+
+		    	// Total over all pages for Scoreable Count
+		            var scoreableCountTotal = api.column( 3 ).data().reduce( function (a, b) {
+		                    return intVal(a) + intVal(b);
+		                }, 0 );
+		 
+		       // Total over all pages for Scoreable Pass Count
+		            var scoreablePassCountTotal = api.column( 4 ).data().reduce( function (a, b) {
+	                 return intVal(a) + intVal(b);
+	             }, 0 );
+
+			      
+			   // Average over all pages for Scoreable Pass
+			   var scoreablePassPercentAverage = scoreablePassCountTotal / scoreableCountTotal * 100;
+			   var scoreablePassPercentAverageHtml = scoreablePassPercentAverage.toFixed(3)  +"%";
+			
+			   
+			  // Total over all pages for Non Scoreable Count
+			        var nonScoreableCountTotal = api.column( 8 ).data().reduce( function (a, b) {
+	                 return intVal(a) + intVal(b);
+	             }, 0 );
+
+			  // Total over all pages for Does Not Count
+			        var doesNotCountTotal = api.column( 10 ).data().reduce( function (a, b) {
+	                 return intVal(a) + intVal(b);
+	             }, 0 );
+
+			  // Average over all pages for Scoreable Pass
+			        var nonScoreablePercentAverage = nonScoreableCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
+			
+			  // Average over all pages for Scoreable Pass
+			        var doesNotCountPercentAverage = doesNotCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
+			       
+			 var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
+		     
+		      cols.header().each(function(el, colNum){
+		        var $td = $('<td></td>');
+		        if (colNum === 1) {
+			          $td.text( "Total And Average" );
+			    } else if (colNum === 2) {
+		          $td.text(scoreableTotalCouunt );
+		        } else if (colNum === 3) {
+		          $td.text(scoreableCountTotal );
+		        } else if (colNum === 4) {
+		          $td.text(scoreablePassCountTotal );
+		        } else if (colNum === 5) {
+		          $td.text(scoreablePassPercentAverage.toFixed(2)  +"%" );
+		        }  else if (colNum === 6) {
+		          $td.text(nonScoreableCountTotal );
+		        } else if (colNum === 7) {
+		          $td.text(nonScoreablePercentAverage.toFixed(2)  +"%" );
+		        } else if (colNum === 8) {
+		          $td.text(doesNotCountTotal );
+		        } else if (colNum === 9) {
+		          $td.text(doesNotCountPercentAverage.toFixed(2) +"%" );
+		        }
+		        $subtotal.append($td);
+		       
+		      });
+		     
+		      $(rows.nodes()).eq(rowNum).after($subtotal );
+		    }
+		  
+		  });
+		  
+		}
+
+		// for output formatting
+		function includeSubtotalsPassScoreCards( data, button, exportObject){
+		  var classList = button.className.split(' ');
+		  
+		  // COPY
+		  if (classList.includes('buttons-copy')){
+		    
+		    data = $('#allPassScorecardDTId').toTSV();
+		    exportObject.str = data;
+		    exportObject.rows = $('#allPassScorecardDTId').find('tr').length - 1;  // did not include the footer
+		    
+		  } 
+		  // CSV
+		  else if (classList.includes('buttons-csv')){
+		    
+		    data = $('#allPassScorecardDTId').toCSV();
+		    
+		  }
+		  // EXCEL/PDF/PRINT
+		  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
+			 
+		    // data is actually the object to use for EXCEL/PDF/PRINT
+		    var subtotals = [];
+		    $('#allPassScorecardDTId tr.subtotal').each(function(){
+		      var $row = $(this),
+		          row_index = $row.index(), 
+		          row = $row.find('td,th').map(function(){return $(this).text();}).get();
+		      subtotals[ subtotals.length ] = {rowNum: row_index, data: row };
+		    });
+		    
+		    for (var i=0, n=subtotals.length; i<n; i++){
+		      var subtotal = subtotals[i];
+		      data.body.splice(subtotal.rowNum, 0, subtotal.data);
+		    }
+		  }
+		  
+		  return data;
+		}
+
+		//All Fail Score Cards -- allFailScorecardDTId
+		function addSubtotalsFailScoreCards(settings){
+			  var api = this.api(),
+			      rows = api.rows({ page: 'current' }),
+			      cols = api.columns({ page: 'current' }),
+			      last = null,
+			      next = null,
+			       
+			      agg  = {};
+			      
+
+			 var totalRows = api .column( 4 ) .data() . count();
+				     
+			
+			  
+			  // only generate subtotals on initial display and when first column is sorted, but not other columns
+			  if ( api.order().length && api.order()[0][0] !== 0 )
+			    return;
+			  
+			  api.column(0, {page: 'current'}).data().each(function( text, rowNum, stack ){
+			    var current_row = rows.data()[rowNum];
+			    var next_rowNum = rowNum + 1;
+			   
+			    var intVal = function ( i ) {
+		            return typeof i === 'string' ?
+		                i.replace(/[\$,]/g, '')*1 :
+		                typeof i === 'number' ?
+		                    i : 0;
+		        };
+		        
+			   if (rowNum===totalRows-1){
+
+					// Total over all pages for Scoreable Count
+			           var scoreableTotalCouunt = api.column( 2 ).data().reduce( function (a, b) {
+			                   return intVal(a) + intVal(b);
+			               }, 0 );
+
+
+			    	// Total over all pages for Scoreable Count
+			            var scoreableCountTotal = api.column( 3 ).data().reduce( function (a, b) {
+			                    return intVal(a) + intVal(b);
+			                }, 0 );
+			 
+			         // Total over all pages for Scoreable Fail Count
+				        var scoreableFailCountTotal = api.column( 6 ).data().reduce( function (a, b) {
+		                 return intVal(a) + intVal(b);
+		             }, 0 );
+
+				  // Average over all pages for Scoreable Pass
+				        var scoreableFailPercentAverage = scoreableFailCountTotal / scoreableCountTotal * 100;
+				
+				   
+				  // Total over all pages for Non Scoreable Count
+				        var nonScoreableCountTotal = api.column( 8 ).data().reduce( function (a, b) {
+		                 return intVal(a) + intVal(b);
+		             }, 0 );
+
+				  // Total over all pages for Does Not Count
+				        var doesNotCountTotal = api.column( 10 ).data().reduce( function (a, b) {
+		                 return intVal(a) + intVal(b);
+		             }, 0 );
+
+				  // Average over all pages for Scoreable Pass
+				        var nonScoreablePercentAverage = nonScoreableCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
+				
+				  // Average over all pages for Scoreable Pass
+				        var doesNotCountPercentAverage = doesNotCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
+				       
+				 var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
+			     
+			      cols.header().each(function(el, colNum){
+			        var $td = $('<td></td>');
+			        if (colNum === 1) {
+				          $td.text( "Total And Average" );
+				    } else if (colNum === 2) {
+			          $td.text(scoreableTotalCouunt );
+			        } else if (colNum === 3) {
+			          $td.text(scoreableCountTotal );
+			        } else if (colNum === 4) {
+			          $td.text(scoreableFailCountTotal );
+			        } else if (colNum === 5) {
+			          $td.text(scoreableFailPercentAverage.toFixed(2)  +"%" );
+			        }  else if (colNum === 6) {
+			          $td.text(nonScoreableCountTotal );
+			        } else if (colNum === 7) {
+			          $td.text(nonScoreablePercentAverage.toFixed(2)  +"%" );
+			        } else if (colNum === 8) {
+			          $td.text(doesNotCountTotal );
+			        } else if (colNum === 9) {
+			          $td.text(doesNotCountPercentAverage.toFixed(2) +"%" );
+			        }
+			        $subtotal.append($td);
+			       
+			      });
+			     
+			      $(rows.nodes()).eq(rowNum).after($subtotal );
+			    }
+			  
+			  });
+			  
+			}
+
+			// for output formatting
+			function includeSubtotalsFailScoreCards( data, button, exportObject){
+			  var classList = button.className.split(' ');
+			  
+			  // COPY
+			  if (classList.includes('buttons-copy')){
+			    
+			    data = $('#allFailScorecardDTId').toTSV();
+			    exportObject.str = data;
+			    exportObject.rows = $('#allFailScorecardDTId').find('tr').length - 1;  // did not include the footer
+			    
+			  } 
+			  // CSV
+			  else if (classList.includes('buttons-csv')){
+			    
+			    data = $('#allFailScorecardDTId').toCSV();
+			    
+			  }
+			  // EXCEL/PDF/PRINT
+			  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
+				 
+			    // data is actually the object to use for EXCEL/PDF/PRINT
+			    var subtotals = [];
+			    $('#allFailScorecardDTId tr.subtotal').each(function(){
+			      var $row = $(this),
+			          row_index = $row.index(), 
+			          row = $row.find('td,th').map(function(){return $(this).text();}).get();
+			      subtotals[ subtotals.length ] = {rowNum: row_index, data: row };
+			    });
+			    
+			    for (var i=0, n=subtotals.length; i<n; i++){
+			      var subtotal = subtotals[i];
+			      data.body.splice(subtotal.rowNum, 0, subtotal.data);
+			    }
+			  }
+			  
+			  return data;
+			}
+
+
+			//All Scoreable Score Cards -- scoreableReportDTId
+			function addSubtotalsScoreable(settings){
+				  var api = this.api(),
+				      rows = api.rows({ page: 'current' }),
+				      cols = api.columns({ page: 'current' }),
+				      last = null,
+				      next = null,
+				       
+				      agg  = {};
+				      
+
+				 var totalRows = api .column( 4 ) .data() . count();
+					     
+				
+				  
+				  // only generate subtotals on initial display and when first column is sorted, but not other columns
+				  if ( api.order().length && api.order()[0][0] !== 0 )
+				    return;
+				  
+				  api.column(0, {page: 'current'}).data().each(function( text, rowNum, stack ){
+				    var current_row = rows.data()[rowNum];
+				    var next_rowNum = rowNum + 1;
+				   
+				    var intVal = function ( i ) {
+			            return typeof i === 'string' ?
+			                i.replace(/[\$,]/g, '')*1 :
+			                typeof i === 'number' ?
+			                    i : 0;
+			        };
+			        
+				   if (rowNum===totalRows-1){
+
+						// Total over all pages for Scoreable Count
+				           var scoreableTotalCouunt = api.column( 2 ).data().reduce( function (a, b) {
+				                   return intVal(a) + intVal(b);
+				               }, 0 );
+
+
+				    	// Total over all pages for Scoreable Count
+				            var scoreableCountTotal = api.column( 3 ).data().reduce( function (a, b) {
+				                    return intVal(a) + intVal(b);
+				                }, 0 );
+
+				         // Total over all pages for Scoreable Pass Count
+				            var scoreablePassCountTotal = api.column( 4 ).data().reduce( function (a, b) {
+			                 return intVal(a) + intVal(b);
+			             }, 0 );
+
+					      
+					   // Average over all pages for Scoreable Pass
+					   var scoreablePassPercentAverage = scoreablePassCountTotal / scoreableCountTotal * 100;
+					   var scoreablePassPercentAverageHtml = scoreablePassPercentAverage.toFixed(3)  +"%";
+					
+				 
+				         // Total over all pages for Scoreable Fail Count
+					        var scoreableFailCountTotal = api.column( 6 ).data().reduce( function (a, b) {
+			                 return intVal(a) + intVal(b);
+			             }, 0 );
+
+					  // Average over all pages for Scoreable Pass
+					        var scoreableFailPercentAverage = scoreableFailCountTotal / scoreableCountTotal * 100;
+					
+					   
+					  // Total over all pages for Non Scoreable Count
+					        var nonScoreableCountTotal = api.column( 8 ).data().reduce( function (a, b) {
+			                 return intVal(a) + intVal(b);
+			             }, 0 );
+
+					  // Total over all pages for Does Not Count
+					        var doesNotCountTotal = api.column( 10 ).data().reduce( function (a, b) {
+			                 return intVal(a) + intVal(b);
+			             }, 0 );
+
+					  // Average over all pages for Scoreable Pass
+					        var nonScoreablePercentAverage = nonScoreableCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
+					
+					  // Average over all pages for Scoreable Pass
+					        var doesNotCountPercentAverage = doesNotCountTotal /(scoreableCountTotal + nonScoreableCountTotal + doesNotCountTotal) * 100;
+					       
+					 var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
+				     
+				      cols.header().each(function(el, colNum){
+				        var $td = $('<td></td>');
+				        if (colNum === 1) {
+					          $td.text( "Total And Average" );
+					    } else if (colNum === 2) {
+				          $td.text(scoreableTotalCouunt );
+				        } else if (colNum === 3) {
+				          $td.text(scoreableCountTotal );
+				        } else if (colNum === 4) {
+				          $td.text(scoreablePassCountTotal );
+				        } else if (colNum === 5) {
+				          $td.text(scoreablePassPercentAverage.toFixed(2)  +"%" );
+				        } else if (colNum === 6) {
+				          $td.text(scoreableFailCountTotal );
+				        } else if (colNum === 7) {
+				          $td.text(scoreableFailPercentAverage.toFixed(2)  +"%" );
+				        }  
+				        $subtotal.append($td);
+				       
+				      });
+				     
+				      $(rows.nodes()).eq(rowNum).after($subtotal );
+				    }
+				  
+				  });
+				  
+				}
+
+				// for output formatting
+				function includeSubtotalsScoreable( data, button, exportObject){
+				  var classList = button.className.split(' ');
+				  
+				  // COPY
+				  if (classList.includes('buttons-copy')){
+				    
+				    data = $('#scoreableReportDTId').toTSV();
+				    exportObject.str = data;
+				    exportObject.rows = $('#scoreableReportDTId').find('tr').length - 1;  // did not include the footer
+				    
+				  } 
+				  // CSV
+				  else if (classList.includes('buttons-csv')){
+				    
+				    data = $('#scoreableReportDTId').toCSV();
+				    
+				  }
+				  // EXCEL/PDF/PRINT
+				  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
+					 
+				    // data is actually the object to use for EXCEL/PDF/PRINT
+				    var subtotals = [];
+				    $('#scoreableReportDTId tr.subtotal').each(function(){
+				      var $row = $(this),
+				          row_index = $row.index(), 
+				          row = $row.find('td,th').map(function(){return $(this).text();}).get();
+				      subtotals[ subtotals.length ] = {rowNum: row_index, data: row };
+				    });
+				    
+				    for (var i=0, n=subtotals.length; i<n; i++){
+				      var subtotal = subtotals[i];
+				      data.body.splice(subtotal.rowNum, 0, subtotal.data);
+				    }
+				  }
+				  
+				  return data;
+				}
+		
 
 	// Used so currency numbers can be added w/o dollar signs in the way
 	function parseCurrency(val){
@@ -904,8 +1334,9 @@ $(document).ready(function() {
 <style>
 .subtotal td {
   font-weight:bold;
-  background: lightslategray;
+  background: none;
 }
+
 </style>
 
 </head>
@@ -925,7 +1356,7 @@ $(document).ready(function() {
 						 		<form:hidden path="macId" />
 								 <form:hidden path="jurisId" />
 								 <form:hidden path="programId" />
-								 <form:hidden path="loc" />
+								 <form:hidden path="pccLocationId" />
 								 <form:hidden path="fromDate" />
 								 <form:hidden path="toDate" />
 								 <form:hidden path="mainReportSelect" />
@@ -1006,6 +1437,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Scoreable Count</th>
 										            <th style="text-align: center">Scoreable Pass Count</th>
 										            <th style="text-align: center">Scoreable Pass Percent</th> 
@@ -1021,23 +1453,7 @@ $(document).ready(function() {
 										    </thead>
 						                    <tbody style="text-align: center">  
 						                    </tbody>
-							              <!--  <tfoot>
-									            <tr>
-									            	<th></th>
-									                <th  style="text-align:right">Total and Average:</th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th></th>
-									                <th>NA</th>
-									                <th>NA</th>
-									            </tr>
-									        </tfoot> -->
+							              
 						                </table> 
 						                </div>
 						                </div>
@@ -1054,6 +1470,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Scoreable Count</th>
 										            <th style="text-align: center">Scoreable Pass Count</th>
 										            <th style="text-align: center">Scoreable Pass Percent</th> 
@@ -1061,8 +1478,7 @@ $(document).ready(function() {
 										            <th style="text-align: center">Non-Scoreable Percent</th> 
 										            <th style="text-align: center">Does Not Count</th>
 										            <th style="text-align: center">Does Not Count Percent</th>	
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>											          										           
+										            							          										           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1084,14 +1500,15 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
+										            <th style="text-align: center">Scoreable Count</th>
 										            <th style="text-align: center">Scoreable Fail Count</th>
 										            <th style="text-align: center">Scoreable Fail Percent</th>
 										            <th style="text-align: center">Non-Scoreable Count</th>										            
 										            <th style="text-align: center">Non-Scoreable Percent</th> 
 										            <th style="text-align: center">Does Not Count</th>
 										            <th style="text-align: center">Does Not Count Percent</th>	
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>											          										           
+										          								          										           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1112,14 +1529,12 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Scoreable Count</th>
 										            <th style="text-align: center">Scoreable Pass Count</th>
 										            <th style="text-align: center">Scoreable Pass Percent</th>										            
 										            <th style="text-align: center">Scoreable Fail Count</th> 
-										            <th style="text-align: center">Scoreable Fail Percent</th>
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>		
-										            								          										           
+										            <th style="text-align: center">Scoreable Fail Percent</th>				           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1140,13 +1555,10 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Scoreable Count</th>
 										            <th style="text-align: center">Scoreable Pass Count</th>
-										            <th style="text-align: center">Scoreable Pass Percent</th>
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>												            
-										            
-										            								          										           
+										            <th style="text-align: center">Scoreable Pass Percent</th>				           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1167,13 +1579,11 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Scoreable Count</th>
 										            <th style="text-align: center">Scoreable Fail Count</th>
 										            <th style="text-align: center">Scoreable Fail Percent</th>
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>												            
-										            
-										            								          										           
+										            			           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1194,11 +1604,10 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Non-Scoreable Count</th>
 										            <th style="text-align: center">Non-Scoreable Percent</th>
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>		
-										            								          										           
+										           	           
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  
@@ -1219,11 +1628,10 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: center">MAC</th>
 										            <th style="text-align: center">Jurisdiction</th>
+										            <th style="text-align: center">Total Count</th>
 										            <th style="text-align: center">Does Not Count</th>
 										            <th style="text-align: center">Does Not Count Percent</th>
-										             <th style="text-align: center">QAM Start Date</th>
-										            <th style="text-align: center">QAM End Date</th>		
-										            								          										           
+										                      
 										        </tr>
 										    </thead>
 						                    <tbody style="text-align: center">  

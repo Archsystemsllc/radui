@@ -63,6 +63,8 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
+
+		
 		//Required Fields Logic
 		$('.required').each(function(){
 		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
@@ -420,6 +422,7 @@
             
         });
 
+		var reportSearchString = '${ReportSearchString}';
 		//Back Button Functionality
 		$('#close1,#close2').click(function(e) {	
 			 e.preventDefault();		
@@ -431,7 +434,17 @@
 	              buttons: {
 	                "Yes": function() {
 	              		$( this ).dialog("close");
-	              		window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+	              		
+	              		if (reportSearchString !='null' && reportSearchString !='') {
+	              			
+	              			var selectedJurisdiction = $('#jurId :selected').text();
+	              			var selectedMac = $('#macId :selected').text();
+	              			
+	              			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+selectedMac+"/"+selectedJurisdiction+"/"+reportSearchString;
+	              		} else {
+	              			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
+		              	}
+	              		
 	                },
 	                Cancel: function() {                    
 	                	$( this ).dialog("close"); 
@@ -440,7 +453,7 @@
             });
 	     }); 
 
-      	//Secton 1 - Option 1
+		//Secton 1 - Option 1
 
 		$("input[name='scorecardType']").change(function(){		
 			
@@ -788,11 +801,14 @@
 	</div>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/saveorupdatescorecard" id="scorecardForm">
+		<form:form method="POST" modelAttribute="scorecard" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/saveorupdatescorecard/${ReportSearchString}" id="scorecardForm">
 		<!-- Hidden Fields -->
 		<form:input type = "hidden" path="id" />
 		<form:input type = "hidden" path="qamStartdateTime" />
 		<form:input type = "hidden" path="qamEnddateTime" />
+		<form:input type = "hidden" path="scoreCardStatusUpdateDateTime" />
+		<form:input type = "hidden" path="qamCalibrationUpdateDateTime" />
+		<form:input type = "hidden" path="cmsCalibrationUpdateDateTime" />
 		<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			<tr>
 				<td style="vertical-align: top">
@@ -860,10 +876,10 @@
 			                                <input type="hidden" id="DatePickerHidden" />
 			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true" title="Choose Quality Manager Start Date/Time from the Calendar"/>
 			                            </div>
-			                           <%--  <div class="col-lg-6 form-group">
-			                                <label for="email"> QM End Date/Time:</label>
-			                                <form:input type = "text" class="form-control" path="qamEnddateTimeString" readonly="true" title="Choose Quality Manager End Date/Time from the Calendar"/>
-			                            </div> --%>
+			                           <div class="col-lg-6 form-group">
+			                               
+			                                <input type="checkbox" name="terms" id="terms" >&nbsp;New Medicare Card Call Tracking</input>	         
+			                            </div> 
 			                        </div>
 				                    
 				                </div>
@@ -1213,7 +1229,7 @@
 				            <div class="row " id="Section8Div">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                    <h2>Section 8 - Calibration Module</h2> 
-				                    <div class="row">
+				                    <%-- <div class="row">
 			                            
 			                            <div class="col-lg-6 form-group">
 			                               
@@ -1222,7 +1238,7 @@
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            </div>
-			                        </div>
+			                        </div> --%>
 				                    
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
@@ -1233,13 +1249,13 @@
 											   	<form:option value="Quality Manager Fail" label="Quality Manager Fail" />											  						  	
 											</form:select> 
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                           <%--  <div class="col-lg-6 form-group">
 			                               
 			                                <label for="qamCalibrationUpdateDateTime">Quality Manager Calibration Update Date:</label>
 			                                <form:input class="form-control required" type ="text" path="qamCalibrationUpdateDateTime" disabled="true" title="Choose Quality Manager Calibration Update Date from the Calendar"/>
 			                            
 			                                
-			                            </div>
+			                            </div> --%>
 			                        </div>
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
@@ -1250,13 +1266,13 @@
 											   	<form:option value="CMS Fail" label="CMS Fail" />											  						  	
 											</form:select> 
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                            <%-- <div class="col-lg-6 form-group">
 			                                
 			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
 			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" disabled="true" title="Choose CMS Calibration Update Date from the Calendar"/>
 			                            
 			                                
-			                            </div>
+			                            </div> --%>
 			                        </div>
 			                       
 				                    

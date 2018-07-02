@@ -45,7 +45,7 @@
 <script type="text/javascript">
 
 function resetFields() {
-	//alert("Inside ResetFields");
+	
     $('#csrMonthLists').hide();
     CsrListTable.clear().draw();
 	$('#csrLists').hide();
@@ -73,15 +73,14 @@ $(function() {
 	            $('#uploadButton').attr('disabled', false);
 	            break;
 	        default:
-	            alert('Please Upload A Valid File.');
+	            alert('Please Upload A Valid File (Check CSR Template).');
 	            this.value = '';
 	    }
 	});	
 	
   $('button[id=uploadCsr]').click(function(e) {
     e.preventDefault();
-    //Disable submit button
-    //$(this).prop('disabled',true);
+    
     $('#csrListViewDiv').hide();
 	$('#csrListMonthDiv').hide();
    
@@ -135,6 +134,7 @@ $(function() {
     	beforeSend: function( xhr ) {
     		//Reset alert message and progress bar
     		$('#alertMsg').text('');
+    		$('#successMsg').text('');
     		$('#progressBar').text('');
     		$('#progressBar').css('width','0%');
         }
@@ -142,8 +142,8 @@ $(function() {
   
     // Called on success of file upload
     ajaxReq.done(function(data) {
-      $('#alertMsg').text(data.status);      
-     
+       
+      $('#successMsg').text(data.status);
       resetFields();
     });
     
@@ -204,7 +204,9 @@ $(function() {
 
 	  	$('#csrLists tbody').empty();
 		$('#alertMsg').text('');
+		$('#successMsg').text('');
 		$('#searchalertMsg').text('');
+		$('#searchalertMsgSuccess').text('');
 		
 		 var row= $(this).closest('tr');  
 	  	var monthYear=$("td:eq(0)",row).text(); 
@@ -240,7 +242,9 @@ $(function() {
 
 	$('#searchCsr').click(function(e){ 
   		$('#alertMsg').text('');
+  		$('#successMsg').text('');
   		$('#searchalertMsg').text('');
+  		$('#searchalertMsgSuccess').text('');
   		$('#csrMonthLists tbody').empty();
   		$('#csrListViewDiv').hide();
   	  	$('#csrListMonthDiv').hide();
@@ -250,7 +254,7 @@ $(function() {
 		 var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
 	  	var validateFromDate = $('#fromDate').val();
 		var validateToDate = $('#toDate').val();		  
-		//alert(validateMac+","+validateJurisdiction+","+validateFromDate+","+validateToDate)
+		
 		  if(validateMac == null && validateJurisdiction == null) {
 			  $('#searchalertMsg').text("Please Select MAC Id and Jurisdiction Id");
 			  
@@ -276,9 +280,7 @@ $(function() {
 		 
 		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
 		 var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
-
-		 
-	 	//alert("inside Search:"+selectedMac+':::'+selectedJurisdiction+':::'+selectedJurisArr+"::::"+JSON.stringify(selectedJurisArr));
+	 	
 	 	var username="qamadmin";
 	   	var password="123456";
 	 	$.ajax({ 
@@ -292,12 +294,14 @@ $(function() {
 	       // alert("Result Count:"+resultCount);
 	        if(resultCount==0) {
 	        	$('#searchalertMsg').text('No Data Found for the Selected Months');
+	        	
 		    } else {
 		    	 
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
 	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-	      	        $('#searchalertMsg').text('CSR Monthly List Available Retrieved Successfully!');
+	      	        $('#searchalertMsgSucess').text('CSR Monthly List Available Retrieved Successfully!');
+	      	      
 	  	    	});
 		    	trHTML += '</tbody>';
 		    	$('#csrListMonthDiv').show();
@@ -374,6 +378,7 @@ $(function() {
     
     $('#keepCurrentListCB').click(function() {
     	$('#alertMsg').text('');
+    	$('#successMsg').text('');
         if( $(this).is(':checked')) {            
         	
             $( "#dialog-confirm" ).dialog({
@@ -419,7 +424,9 @@ $(function() {
     	$('#csrListViewDiv').hide();
     	$('#csrListMonthDiv').hide();	
     	$('#alertMsg').text('');
+    	$('#successMsg').text('');
     	$('#searchalertMsg').text('');
+    	$('#searchalertMsgSuccess').text('');
     	
     	$("#keepPreviousListButton").hide();
     	$("#dialog-confirm").hide();
@@ -552,6 +559,7 @@ $(function() {
 				                   				                   
 				                    <div class="row">
 				                      <div id="alertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
+				                      <div id="successMsg" style="color: blue;font-size: 18px;"  class="col-lg-8 form-group"></div>
 									</div>
 				                     <div class="row" id='progressBar_Hideme'>
 				                     	<div class="progress" >
@@ -656,6 +664,8 @@ $(function() {
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
 				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
+				                      <div id="searchalertMsgSucess" style="color: blue;font-size: 18px;"  class="col-lg-8 form-group"></div>
+				                      
 									</div>
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">

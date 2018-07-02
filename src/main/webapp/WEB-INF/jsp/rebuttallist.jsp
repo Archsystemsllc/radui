@@ -94,11 +94,10 @@ function resetFields() {
 
 <script type="text/javascript">
 $(document).ready(function(){
-	var data =eval('${rebuttalList}');
-	//var data=$.parseJSON("${rebuttalList}");
-	//alert("Testing");
+	
 	var role = $('#userRole').val();
-	//alert("Role is:"+role);
+	var data = eval('${rebuttalList}');
+	
 	var rebuttalListTable = $('#rebuttalLists').DataTable( {
 	"aaData": data,
 	"aoColumns": [
@@ -117,7 +116,7 @@ $(document).ready(function(){
            "render" : function(data, type, row) {
 			var linkData = "<span><a class='action-icons c-pending'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/view-rebuttal/"+data+"' title='View'>View</a></span>";
 			if (role == 'Administrator' || role == 'Quality Manager' || role == 'MAC User' || role == 'MAC Admin' || role == 'Quality Monitor') {
-				var linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-rebuttal/"+data+"' title='Edit'>Edit</a></span>";
+				linkData = linkData+ "<span><a class='action-icons c-edit'	href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/edit-rebuttal/"+data+"' title='Edit'>Edit</a></span>";
 			}
                        
             return linkData;		
@@ -146,8 +145,8 @@ $(document).ready(function(){
          //,'colvis'
      ],
 	  "paging" : true,
-	  "pageLength" : 10,
-	   "ordering" : true,
+	  "pageLength" : 20,
+	   "ordering" : false,
 	});
 });
 </script>
@@ -236,7 +235,18 @@ $(document).ready(function(){
 										</div>
 									</div>
 									<br/>
-								</c:if>		
+								</c:if>	
+								 <div class="row" style="width:90%;">			                   
+				                   <c:if test="${not empty success}">
+				                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
+				                    </div>
+				                 </c:if>
+				                  <c:if test="${not empty error}">
+				                 	<div class="errorblock" ><spring:message code="${success}"></spring:message>
+				                    </div>
+				                 </c:if>
+				                
+				                 </div>	
 								
 								<div class="row" id="rebuttallistdatatablediv">
 				                <div class="col-lg-12 col-lg-offset-1 form-container">

@@ -239,9 +239,9 @@ public class ScoreCardController {
 		return finalResultsMap;
 	}
 	
-	 @RequestMapping(value ={"/admin/edit-scorecard/{id}", "/quality_manager/edit-scorecard/{id}", "/cms_user/edit-scorecard/{id}",
-			 "/mac_admin/edit-scorecard/{id}","/mac_user/edit-scorecard/{id}","/quality_monitor/edit-scorecard/{id}"}, method = RequestMethod.GET)	
-	public String editScoreCardGet(@PathVariable("id") final Integer id, final Model model, 
+	 @RequestMapping(value ={"/admin/edit-scorecard/{id}/{reportSearchString}", "/quality_manager/edit-scorecard/{id}/{reportSearchString}", "/cms_user/edit-scorecard/{id}/{reportSearchString}",
+			 "/mac_admin/edit-scorecard/{id}/{reportSearchString}","/mac_user/edit-scorecard/{id}/{reportSearchString}","/quality_monitor/edit-scorecard/{id}/{reportSearchString}"}, method = RequestMethod.GET)	
+	public String editScoreCardGet(@PathVariable("id") final Integer id, @PathVariable("reportSearchString") final String reportSearchString, final Model model, 
 			Authentication authentication, HttpSession session) {
 		
 		 
@@ -249,6 +249,7 @@ public class ScoreCardController {
 		User userForm = (User) session.getAttribute("LoggedInUserForm");
 		
 		model.addAttribute("menu_highlight", "scorecard");
+		model.addAttribute("ReportSearchString", reportSearchString);
 		ScoreCard scoreCard = resultsMap.get(id);
 		
 		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
@@ -327,14 +328,15 @@ public class ScoreCardController {
 		return "scorecard";
 	}
 	 
-	 @RequestMapping(value ={"/admin/view-scorecard/{id}", "/quality_manager/view-scorecard/{id}", "/cms_user/view-scorecard/{id}",
-			 "/mac_admin/view-scorecard/{id}","/mac_user/view-scorecard/{id}","/quality_monitor/view-scorecard/{id}"}, method = RequestMethod.GET)
-	public String viewScoreCardGet(@PathVariable("id") final Integer id, final Model model,Authentication authentication,
+	 @RequestMapping(value ={"/admin/view-scorecard/{id}/{reportSearchString}", "/quality_manager/view-scorecard/{id}/{reportSearchString}", "/cms_user/view-scorecard/{id}/{reportSearchString}",
+			 "/mac_admin/view-scorecard/{id}/{reportSearchString}","/mac_user/view-scorecard/{id}/{reportSearchString}","/quality_monitor/view-scorecard/{id}/{reportSearchString}"}, method = RequestMethod.GET)
+	public String viewScoreCardGet(@PathVariable("id") final Integer id, @PathVariable("reportSearchString") final String reportSearchString, final Model model,Authentication authentication,
 			HttpSession session) {
 		
 		HashMap<Integer,ScoreCard> resultsMap = (HashMap<Integer, ScoreCard>) session.getAttribute("SESSION_SCOPE_SCORECARDS_MAP");
 		User userForm = (User) session.getAttribute("LoggedInUserForm");
 		model.addAttribute("menu_highlight", "scorecard");
+		model.addAttribute("ReportSearchString", reportSearchString);
 		ScoreCard scoreCard = resultsMap.get(id);
 		
 		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
@@ -405,6 +407,7 @@ public class ScoreCardController {
 		scoreCard.setQamFullName(name);
 		
 		model.addAttribute("menu_highlight", "scorecard");
+		model.addAttribute("ReportSearchString","null");
 		
 		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
 		
@@ -444,10 +447,10 @@ public class ScoreCardController {
 	}
 
 	
-	@RequestMapping(value ={"/admin/saveorupdatescorecard", "/quality_manager/saveorupdatescorecard", "/cms_user/saveorupdatescorecard",
-			 "/mac_admin/saveorupdatescorecard","/mac_user/saveorupdatescorecard","/quality_monitor/saveorupdatescorecard"}, method = RequestMethod.POST)
+	@RequestMapping(value ={"/admin/saveorupdatescorecard/{reportSearchString}", "/quality_manager/saveorupdatescorecard/{reportSearchString}", "/cms_user/saveorupdatescorecard/{reportSearchString}",
+			 "/mac_admin/saveorupdatescorecard/{reportSearchString}","/mac_user/saveorupdatescorecard/{reportSearchString}","/quality_monitor/saveorupdatescorecard/{reportSearchString}"}, method = RequestMethod.POST)
 	public String saveScorecard(@ModelAttribute("scorecard") ScoreCard scoreCard, final BindingResult result,
-			final RedirectAttributes redirectAttributes, final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
+			final RedirectAttributes redirectAttributes, @PathVariable("reportSearchString") final String reportSearchString, final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
 
 		String returnView = "";
 		log.debug("--> savescorecard <--");
@@ -462,6 +465,9 @@ public class ScoreCardController {
 		String validationResult = validateScoreCard(scoreCard);
 		
 		String loggedInUserRole = userFormSession.getRole().getRoleName();
+		
+		String macName ="";
+		String jurisdictionName = "";
 		
 		if(!validationResult.equalsIgnoreCase("Validation Succesfull")) {
 			
@@ -596,7 +602,8 @@ public class ScoreCardController {
 				
 				
 				//System Screen Access--End
-				
+				macName= scoreCard.getMacName();
+				jurisdictionName = scoreCard.getJurisdictionName();
 				
 				//System Screen Access--End
 				ResponseEntity<ScoreCard> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCard,ScoreCard.class);
@@ -615,9 +622,17 @@ public class ScoreCardController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			String url = "redirect:/"+userFolder+"/scorecardlist/false";
-			url = response.encodeRedirectURL(url);
-			returnView =  url;
+			
+			
+			if(reportSearchString!=null && !reportSearchString.equalsIgnoreCase("") && !reportSearchString.equalsIgnoreCase("null") ) {
+				String url = "redirect:/"+userFolder+"/mac-jur-report-drilldown/"+macName+"/"+jurisdictionName+"/"+reportSearchString;
+				url = response.encodeRedirectURL(url);
+				returnView =  url;
+			} else {
+				String url = "redirect:/"+userFolder+"/scorecardlist/false";
+				url = response.encodeRedirectURL(url);
+				returnView =  url;
+			}
 		}
 
 		return returnView;

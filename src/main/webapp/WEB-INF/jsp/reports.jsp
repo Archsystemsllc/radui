@@ -44,9 +44,17 @@
 		$('#toDateString').val("");
 		$('#macId').prop('selectedIndex',0);
 		$("#jurisdictionIds").get(0).options.length = 0;	    
-		$("#jurisId").get(0).options.length = 0;	  
-		$('#programId').prop('selectedIndex',0);
-		$('#loc').prop('selectedIndex',0);
+	  	$("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       
+	    $("#jurisdictionIds").get(0).options[1] = new Option("---Select All---", "ALL");	    
+		$("#jurisId").get(0).options.length = 0;	
+		$("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");        
+		$("#programId").get(0).options.length = 0;	           
+	    $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+	    $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+		$('#pccLocationId').prop('selectedIndex',0);
+		$("#pccLocationId").get(0).options.length = 0;	           
+	    $("#pccLocationId").get(0).options[0] = new Option("---Select PCC/Location---", "");
+	    $("#pccLocationId").get(0).options[1] = new Option("---Select All---", "ALL");
 		
 		$('#scoreCardType').prop('selectedIndex',0);  
 		$('#complianceReportType').prop('selectedIndex',0);
@@ -96,7 +104,7 @@
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();   
-    		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+    		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
     		$("#jurisId").removeAttr('required');
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
@@ -106,7 +114,7 @@
     		$('#scoreCardTypeDiv').show();
     		$('#callResultDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();  
-    		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+    		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
     		$("#jurisId").removeAttr('required');
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
@@ -120,12 +128,12 @@
     		$('#jurisSingleSelect').hide();
     		$('select[id="macId"] > option[value="ALL"]').show();
     		$('#programPccLocDiv').hide();
-    		$("#programId,#loc").removeAttr('required');
+    		$("#programId,#pccLocationId").removeAttr('required');
         } else if (reportSelectValue == 'Rebuttal' ) {
         	$('#callCategoryTypeDiv').show();
     		$('#rebuttalStatusDiv').show();
     		$('#programPccLocDiv,#datesDiv').show();
-    		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+    		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
     		$("#jurisId").removeAttr('required');
     		$('#jurisMultiSelect').show();
     		$('#jurisSingleSelect').hide();
@@ -137,7 +145,7 @@
         	$('#callCategoryTypeDiv').hide();
     		$('#rebuttalStatusDiv').hide();
     		$('#programPccLocDiv').hide();
-    		$("#programId,#loc,#jurisdictionIds").removeAttr('required');
+    		$("#programId,#pccLocationId,#jurisdictionIds").removeAttr('required');
     		$('#jurisMultiSelect').hide();
     		$('#jurisSingleSelect').show();
     		$("#jurisId").attr('required',true);    		
@@ -158,7 +166,7 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv,#datesDiv').show();  
-        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -171,7 +179,7 @@
         		$('#datesDiv').show(); 
         		$("#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);  
         		$('#programPccLocDiv').hide();
-        		$("#programId,#loc").removeAttr('required');
+        		$("#programId,#pccLocationId").removeAttr('required');
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -183,7 +191,7 @@
             	$('#callCategoryTypeDiv').show();
         		$('#rebuttalStatusDiv').show();
         		$('#programPccLocDiv,#datesDiv').show();   
-        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -194,7 +202,7 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv').hide();
-        		$("#programId,#loc,#jurisdictionIds").removeAttr('required');
+        		$("#programId,#pccLocationId,#jurisdictionIds").removeAttr('required');
         		$('#jurisMultiSelect').hide();
         		$('#jurisSingleSelect').show();
         		$("#jurisId").attr('required',true);        		
@@ -227,7 +235,7 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv,#datesDiv').show();  
-        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
+        		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -241,7 +249,7 @@
         		$('#datesDiv').show();  
         		$("#fromDateString,#toDateString,#jurisdictionIds").attr('required',true); 
         		$('#programPccLocDiv').hide();
-        		$("#programId,#loc").removeAttr('required');
+        		$("#programId,#pccLocationId").removeAttr('required');
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -253,7 +261,7 @@
             	$('#callCategoryTypeDiv').show();
         		$('#rebuttalStatusDiv').show();
         		$('#programPccLocDiv,#datesDiv').show();   
-        		$("#programId,#loc,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
+        		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds").attr('required',true);
         		$('#jurisMultiSelect').show();
         		$('#jurisSingleSelect').hide();
         		$('select[id="macId"] > option[value="ALL"]').show();
@@ -264,7 +272,7 @@
             	$('#callCategoryTypeDiv').hide();
         		$('#rebuttalStatusDiv').hide();
         		$('#programPccLocDiv').hide();    
-        		$("#programId,#loc,#jurisdictionIds").removeAttr('required');   
+        		$("#programId,#pccLocationId,#jurisdictionIds").removeAttr('required');   
         		$('#jurisMultiSelect').hide();
         		$('#jurisSingleSelect').show();
         		$("#jurisId").attr('required',true);		
@@ -296,7 +304,7 @@
 	                    {macId: macIdValue , multipleInput: false}, function(data){
 	                    	
 	                 $("#jurisId").get(0).options.length = 0;	    
-	                 //$("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");        
+	                 $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");              
 	      	      	 $.each(data, function (key,obj) {
 	      	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -391,11 +399,11 @@
 				
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val(),programIdAvailableFlag: true}, function(data){
 	                
-	                 $("#loc").get(0).options.length = 0;	           
-	      	      	 $("#loc").get(0).options[0] = new Option("---Select PCC/Location---", "");
-	      	      	 $("#loc").get(0).options[1] = new Option("---Select All---", "ALL");
+	                 $("#pccLocationId").get(0).options.length = 0;	           
+	      	      	 $("#pccLocationId").get(0).options[0] = new Option("---Select PCC/Location---", "");
+	      	      	 $("#pccLocationId").get(0).options[1] = new Option("---Select All---", "ALL");
 	      	  	    	$.each(data, function (key,obj) {
-	      	  	    		$("#loc").get(0).options[$("#loc").get(0).options.length] = new Option(obj, key);
+	      	  	    		$("#pccLocationId").get(0).options[$("#pccLocationId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
 	      	  	    });  	   
                });
@@ -461,7 +469,8 @@
 			                            <div class="col-sm-6 form-group" id="jurisSingleSelect">
 			                                <label for="jurisId"> Jurisdiction:</label>
 										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" title="Select one Jurisdiction from the list">
-										  <form:option value="" label="---Select Jurisdiction---"/>										   
+										  <form:option value="" label="---Select Jurisdiction---"/>		
+										   <form:option value="ALL" label="---Select ALL---"/>								   
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
@@ -477,7 +486,7 @@
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> PCC/Location:</label>
-			                                <form:select path="loc" class="form-control required" id="loc" title="Select one Provider Contact Centers/Location from the List">
+			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" title="Select one Provider Contact Centers/Location from the List">
 			                                	<form:option value="" label="---Select PCC/Location---"/>
 											   <form:option value="ALL" label="---Select ALL---"/>
 										   		<form:options items="${locationMapEdit}" />
@@ -521,6 +530,7 @@
 			                                <form:select path="callResult" class="form-control required" id="callResult" title="Select one Call Result from the List" >
 											   	<form:option value="" label="---Select Call Result---"/>
 											   	<form:option value="ALL" label="---Select ALL---"/>
+											   	<form:option value="Pass" />	
 											  	<form:option value="Fail" />											  										  	
 											</form:select> 
 			                            </div>
