@@ -59,10 +59,10 @@
 
 <script type="text/javascript">
 $(document).ready(function() {		
-	
-	var reportTitle = '${ReportTitle}';
 	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
 	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
+	var reportTitle = '${ReportTitle}\n'+messageOnTop;
+	
 
 		/* $('#qaspReportListRow > thead').prepend('<tr media="all"><th colspan="1" style="text-align: center">Month</th><th colspan="2" style="text-align: center"># of QAM Scorecards Completed</th><th colspan="2" style="text-align: center"># of QAM Scorecards Passed</th><th colspan="2" style="text-align: center"># of QAM Scorecards Failed</th></tr>');
 	 */
@@ -101,14 +101,14 @@ $(document).ready(function() {
  		      },
 	         {
 	             
-			     extend: 'pdf',
+ 		    	 extend: 'pdf',
+			     title: reportTitle,
 			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 12;
-			     		doc.styles.tableHeader.fontSize = 12; 
+			     		doc.defaultStyle.fontSize = 10;
+			     		doc.styles.tableHeader.fontSize = 10; 
 			       	},     
-			        customizeData: includeSubtotals,
-			        messageTop: messageOnTop,
-			        title: reportTitle
+			        customizeData: includeSubtotals			       
+	         	        
 	         }	        
 	     ],
 	      drawCallback: addSubtotals,
@@ -471,14 +471,15 @@ $(document).ready(function() {
 			                            			                        
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qaspReportDTId" style="width: 95%">
 						                    <thead>
-										        <tr>
+										       <!--  <tr>
 										            <th style="text-align: center" rowspan="2">Month</th>
 										            <th style="text-align: center" colspan="2"># of QAM Scorecards Completed</th>
 										            <th style="text-align: center" colspan="2"># of QAM Scorecards Passed</th>
 										            <th style="text-align: center" colspan="2"># of QAM Scorecards Failed</th>
 										            									                 
-										        </tr>
+										        </tr> -->
 										         <tr>
+										         <th style="text-align: center" >Month</th>
 										        	<th style="text-align: center"># of QAM Scorecards Completed(A/B)</th>
 										            <th style="text-align: center"># of QAM Scorecards Completed(HHH)</th>
 										            <th style="text-align: center"># of QAM Scorecards Passed(A/B)</th>

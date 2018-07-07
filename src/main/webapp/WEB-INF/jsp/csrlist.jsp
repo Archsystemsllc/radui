@@ -300,7 +300,7 @@ $(function() {
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
 	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-	      	        $('#searchalertMsgSucess').text('CSR Monthly List Available Retrieved Successfully!');
+	      	        $('#searchalertMsgSucess').text('CSR Monthly List Available Retrieved Successfully for Selected MAC and Jurisdiction');
 	      	      
 	  	    	});
 		    	trHTML += '</tbody>';
@@ -349,7 +349,7 @@ $(function() {
 	        
 	          $("#jurisdictionS").get(0).options.length = 0;	
 	          $("#jurisdictionS").get(0).options[0] = new Option("---Select Jurisdiction---", "");           
-		      	 $("#jurisdictionS").get(0).options[1] = new Option("Select ALL", "ALL");
+		      	
 		  	    	$.each(data, function (key,obj) {
 		  	    		$("#jurisdictionS").get(0).options[$("#jurisdictionS").get(0).options.length] = new Option(obj, key);
 		  	    		
@@ -681,7 +681,7 @@ $(function() {
 			                             <label for="name"> MAC:</label>
 			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple" title="Select one or multiple MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:option value="ALL" label="Select ALL" />
+										  
 										   <form:options items="${macIdMap}" />
 										</form:select> 	
 			                            </div>
@@ -689,7 +689,7 @@ $(function() {
 			                             <label for="name"> Jurisdiction:</label>
 			                               	<form:select path="jurisdictionS" class="form-control" id="jurisdictionS" multiple="multiple" title="Select one or multiple Jurisdiction from the list">
 										   <form:option value="" label="---Select Jurisdiction---" />
-										   <form:option value="ALL" label="Select ALL" />
+										   
 										    <form:options items="${jurisMapEdit}" />	
 										</form:select>
 			                            </div>

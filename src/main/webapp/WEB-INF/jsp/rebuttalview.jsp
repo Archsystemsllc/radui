@@ -328,7 +328,7 @@
 			                             
 			                        </div>
 			                       
-			                         <div class="row">
+			                          <div class="row">
 			                             <div class="col-sm-6 form-group">
 			                                <label for="name"> PCC/Location:</label>
 			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" required="true">
@@ -344,6 +344,7 @@
 											</form:select> 
 			                            </div>
 			                        </div>
+			                        
 			                         <div class="row">
 			                         	<c:if test="${rebuttal.id != 0}">
 			                         	 <div class="col-sm-6 form-group">

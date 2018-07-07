@@ -574,6 +574,8 @@ public class RebuttalController {
 	public String viewRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request) {
 		
 		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTALS_REPORT_MAP");
+		HashMap<Integer,String> pccContactPersonMap = new HashMap<Integer,String>();
+		User userSearchObject = new User();
 		
 		if (resultsMap == null ) {
 			resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
@@ -603,6 +605,24 @@ public class RebuttalController {
 		HashMap<Integer,String> pccLocationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(rebuttal.getMacId()+"_"+rebuttal.getJurisId()+"_"+rebuttal.getProgramId());
 		
 		model.addAttribute("programMapEdit", pccLocationMap);
+		userSearchObject.setStatus(UIGenericConstants.RECORD_STATUS_ACTIVE);
+		userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
+		
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchUsers");
+		
+		ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, userSearchObject, List.class);
+		ObjectMapper mapper = new ObjectMapper();
+		List<User> userResultsList = new ArrayList<User> ();
+		userResultsList = responseEntity.getBody();
+		List<User> userList = mapper.convertValue(userResultsList, new TypeReference<List<User>>() { });
+		
+		for(User userTemp: userList) {
+			pccContactPersonMap.put(userTemp.getId().intValue(), userTemp.getLastName()+" "+userTemp.getFirstName());
+		}
+		
+		
+		model.addAttribute("pccContactPersonMap",pccContactPersonMap);
 		return "rebuttalview";
 	}	
 }

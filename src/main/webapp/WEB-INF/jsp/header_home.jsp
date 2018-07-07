@@ -43,21 +43,21 @@
 				<div class="row">
 					<!--<a class="navbar-brand" href="page0.html">-->
 					<div class="col-sm-8">
-						<a href="https://www.cms.gov/" target="_blank"><img
-							src="${pageContext.request.contextPath}/resources/images/logo.png"
-							alt="CMS logo" height="100px" title="Click on CMS Logo to navigate to CMS Webpage"
+						<a href="#" ><img
+							src="${pageContext.request.contextPath}/resources/images/CRAD LOGO.png"
+							alt="CMS logo" height="100px" title="CRAD Logo"
 							style="display: block; margin: 0 auto; width: 80%"></a>
 					</div>					
 				</div>
 			</div>
-			<div class="navbar-brand" style="display: inline">
+			<%-- <div class="navbar-brand" style="display: inline">
 									<!--<a class="navbar-brand" href="page0.html">-->
 									
-								<a href="#" target="_blank"><img
-										src="${pageContext.request.contextPath}/resources/images/ComradLogo.png"
-										alt="CMS logo" height="100px" style="width: 300px;align-content: center" title="COMRAD Logo"></a>
+								<a href="#" ><img
+										src="${pageContext.request.contextPath}/resources/images/CRAD LOGO.png"
+										alt="CMS logo" height="100px" style="width: 300px;align-content: center" title="CRAD Logo"></a>
 
-								</div>
+								</div> --%>
 		</div>
 
 	</div>
