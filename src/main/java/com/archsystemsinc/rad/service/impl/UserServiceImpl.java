@@ -28,6 +28,24 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RadServiceApiClient radServiceApiClient;
 	
+	@Override
+	public void resetFailAttempts(String name) {
+		radServiceApiClient.resetFailAttempts(name);
+		
+	}
+
+	@Override
+	public void updateFailAttempts(String name) {
+		radServiceApiClient.updateFailAttempts(name);
+		
+	}
+
+	@Override
+	public User getUserAttempts(String name) {
+		return radServiceApiClient.getUserAttempts(name);		
+	}
+
+	
     @Override
     public void save(User user) throws Exception {
     
@@ -83,5 +101,11 @@ public class UserServiceImpl implements UserService {
 		return radServiceApiClient.findUsers(userFilter);
 	}
 
+	@Override
+	public boolean isUserLocked(String name) {
+		return radServiceApiClient.isUserLocked(name);	
+	}
+
+	
 	
 }

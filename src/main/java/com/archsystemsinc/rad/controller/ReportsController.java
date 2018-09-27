@@ -803,7 +803,9 @@ public class ReportsController {
 						qamMacByJurisdictionReviewReport.setScorableCount(1);
 						if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorablePass(1);
-						} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {
+						} else if(scoreCard.getCmsCalibrationStatus() != null && scoreCard.getCmsCalibrationStatus().toLowerCase().contains("Fail".toLowerCase()))
+							//scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) 
+							{							
 							qamMacByJurisdictionReviewReport.setScorableFail(1);
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
@@ -820,7 +822,9 @@ public class ReportsController {
 						qamMacByJurisdictionReviewReport.setScoreCardType(qamMacByJurisdictionReviewReport.getScoreCardType()+"::"+scoreCardType);
 						if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorablePass(qamMacByJurisdictionReviewReport.getScorablePass()+1);							
-						} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {							
+						} else if(scoreCard.getCmsCalibrationStatus() != null && scoreCard.getCmsCalibrationStatus().toLowerCase().contains("Fail".toLowerCase()))
+								//scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) 
+								{							
 							qamMacByJurisdictionReviewReport.setScorableFail(qamMacByJurisdictionReviewReport.getScorableFail()+1);
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
@@ -964,7 +968,9 @@ public class ReportsController {
 							qamMacByJurisdictionReviewReport.setHhhScorableCount(1);
 							if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
 								qamMacByJurisdictionReviewReport.setHhhScorablePass(1);
-							} else if(scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) {
+							} else if(scoreCard.getCmsCalibrationStatus() != null && scoreCard.getCmsCalibrationStatus().toLowerCase().contains("Fail".toLowerCase()))
+								//scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) 
+								{							
 								qamMacByJurisdictionReviewReport.setHhhScorableFail(1);
 							}
 						} 

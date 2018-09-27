@@ -877,8 +877,8 @@
 			                                <form:input type = "text" class="form-control" path="qamStartdateTimeString" readonly="true" title="Choose Quality Manager Start Date/Time from the Calendar"/>
 			                            </div>
 			                           <div class="col-lg-6 form-group">
-			                               
-			                                <input type="checkbox" name="terms" id="terms" >&nbsp;New Medicare Card Call Tracking</input>	         
+			                               <form:checkbox path="newMedicareCardCallTracking" />
+			                                &nbsp;New Medicare Card Call Tracking</input>	         
 			                            </div> 
 			                        </div>
 				                    
@@ -1243,7 +1243,7 @@
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamCalibrationStatus">Quality Manager Calibration Status:</label>
-			                                 <form:select path="qamCalibrationStatus" class="form-control required"  disabled="true" title="Select Quality Manager Calibration Status from the List">
+			                                 <form:select path="qamCalibrationStatus" class="form-control "  disabled="true" title="Select Quality Manager Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
 											   	<form:option value="Quality Manager Pass" label="Quality Manager Pass" />	
 											   	<form:option value="Quality Manager Fail" label="Quality Manager Fail" />											  						  	
@@ -1260,7 +1260,7 @@
 			                         <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="cmsCalibrationStatus">CMS Calibration Status:</label>
-			                                 <form:select path="cmsCalibrationStatus" class="form-control required"  disabled="true" title="Select CMS Calibration Status from the List">
+			                                 <form:select path="cmsCalibrationStatus" class="form-control "  disabled="true" title="Select CMS Calibration Status from the List">
 											   	<form:option value="" label="---Select---"/>											   	
 											   	<form:option value="CMS Pass" label="CMS Pass" />	
 											   	<form:option value="CMS Fail" label="CMS Fail" />											  						  	

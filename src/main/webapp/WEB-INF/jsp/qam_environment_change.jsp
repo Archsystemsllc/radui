@@ -495,7 +495,7 @@ $(function() {
 				                    <h2>Search QAM Environmental Change Control Form</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
-				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
+				                      <div id="searchalertMsg" style="color: blue;font-size: 18px;"  class="col-lg-8 form-group"></div>
 									</div>
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">

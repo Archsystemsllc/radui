@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import com.archsystemsinc.rad.configuration.CustomUserDetailsService;
 import com.archsystemsinc.rad.service.SecurityService;
 
 /**
@@ -24,7 +25,7 @@ public class SecurityServiceImpl implements SecurityService{
     private AuthenticationManager authenticationManager;*/
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     private static final Logger logger = Logger.getLogger(SecurityServiceImpl.class);
 

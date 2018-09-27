@@ -6,6 +6,7 @@ package com.archsystemsinc.rad.service;
 
 import java.util.List;
 
+
 import com.archsystemsinc.rad.model.Role;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.model.UserFilter;
@@ -32,4 +33,12 @@ public interface UserService {
 	Role findRoleById(Long id);
 
 	List<User> findUsers(UserFilter userFilter);
+
+	void resetFailAttempts(String name);
+
+	void updateFailAttempts(String name);
+	
+	boolean isUserLocked(String name);
+
+	User getUserAttempts(String name);
 }

@@ -663,7 +663,7 @@ $(function() {
 				                    <h2>Search CSR Lists Section</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
-				                      <div id="searchalertMsg" style="color: red;font-size: 18px;"  class="col-lg-8 form-group"></div>
+				                      <div id="searchalertMsg" style="color: blue;font-size: 18px;"  class="col-lg-8 form-group"></div>
 				                      <div id="searchalertMsgSucess" style="color: blue;font-size: 18px;"  class="col-lg-8 form-group"></div>
 				                      
 									</div>

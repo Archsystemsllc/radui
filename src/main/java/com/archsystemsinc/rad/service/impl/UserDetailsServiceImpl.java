@@ -1,6 +1,6 @@
 /**
 * Copyright (c) 2017, Archsystems Inc and/or its affiliates. All rights reserved.
-*/
+*//*
 
 package com.archsystemsinc.rad.service.impl;
 
@@ -20,9 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.archsystemsinc.rad.common.utils.RadServiceApiClient;
 import com.archsystemsinc.rad.model.User;
 
-/**
+*//**
  * This is the implementation of the User Details Service for login functionality.
- */
+ *//*
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 	private static final Logger log = Logger.getLogger(UserDetailsServiceImpl.class);
@@ -52,4 +52,4 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 
 	
-}
+}*/

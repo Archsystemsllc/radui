@@ -111,6 +111,91 @@ public class RadServiceApiClient {
 		log.debug("<-- getUser");
 		return userResponse;
 	}
+	
+	public User resetFailAttempts(String userName)  {
+		log.debug("--> getUser");
+		
+		User userResponse = null;
+		try {
+			User userSend = new User();
+			ObjectMapper mapper = new ObjectMapper();
+			userSend.setUserName(userName);
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(radservicesEndpoint + "resetFailAttempts");
+			ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userSend,User.class);
+			
+			userResponse = response.getBody();
+		}catch(Exception ex) {
+			log.error("Errro while finding user, userName="+userName,ex);
+			userResponse = null;
+		}
+		log.debug("<-- getUser");
+		return userResponse;
+	}
+	
+	public User updateFailAttempts(String userName)  {
+		log.debug("--> getUser");
+		
+		User userResponse = null;
+		try {
+			User userSend = new User();
+			ObjectMapper mapper = new ObjectMapper();
+			userSend.setUserName(userName);
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(radservicesEndpoint + "updateFailAttempts");
+			ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userSend,User.class);
+			
+			userResponse = response.getBody();
+		}catch(Exception ex) {
+			log.error("Errro while finding user, userName="+userName,ex);
+			userResponse = null;
+		}
+		log.debug("<-- getUser");
+		return userResponse;
+	}
+	
+	public Boolean isUserLocked(String userName)  {
+		log.debug("--> isUserLocked");
+		
+		Boolean userResponseFlag = null;
+		try {
+			User userSend = new User();
+			ObjectMapper mapper = new ObjectMapper();
+			userSend.setUserName(userName);
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(radservicesEndpoint + "isUserLocked");
+			ResponseEntity<Boolean> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userSend,Boolean.class);
+			
+			userResponseFlag = response.getBody();
+		}catch(Exception ex) {
+			log.error("Errro while finding user, userName="+userName,ex);
+			userResponseFlag = null;
+		}
+		log.debug("<-- isUserLocked");
+		return userResponseFlag;
+	}
+	
+	
+	public User getUserAttempts(String userName)  {
+		log.debug("--> getUser");
+		
+		User userResponse = null;
+		try {
+			User userSend = new User();
+			ObjectMapper mapper = new ObjectMapper();
+			userSend.setUserName(userName);
+			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+			String ROOT_URI = new String(radservicesEndpoint + "getUserAttempts");
+			ResponseEntity<User> response = basicAuthRestTemplate.postForEntity(ROOT_URI, userSend,User.class);
+			
+			userResponse = response.getBody();
+		}catch(Exception ex) {
+			log.error("Errro while finding user, userName="+userName,ex);
+			userResponse = null;
+		}
+		log.debug("<-- getUser");
+		return userResponse;
+	}
 
 
 	

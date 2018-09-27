@@ -184,6 +184,18 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String macAssignmentSearchString;	
 	
+	private boolean newMedicareCardCallTracking;
+	
+
+	
+
+	public boolean isNewMedicareCardCallTracking() {
+		return newMedicareCardCallTracking;
+	}
+
+	public void setNewMedicareCardCallTracking(boolean newMedicareCardCallTracking) {
+		this.newMedicareCardCallTracking = newMedicareCardCallTracking;
+	}
 
 	public String getMacAssignmentSearchString() {
 		return macAssignmentSearchString;
