@@ -79,7 +79,7 @@
 									
 								<a href="#" ><img
 										src="${pageContext.request.contextPath}/resources/images/CRAD LOGO.png"
-										alt="CMS logo" height="100px" style="float: left; width: 60%" title="CRAD Logo"></a>
+										alt="CMS logo" height="100px" style="float: left; width: 150px" title="CRAD Logo"></a>
 
 								</div>
 								

@@ -46,7 +46,7 @@
 						<a href="#" ><img
 							src="${pageContext.request.contextPath}/resources/images/CRAD LOGO.png"
 							alt="CMS logo" height="100px" title="CRAD Logo"
-							style="display: block; margin: 0 auto; width: 80%"></a>
+							style="display: block; margin: 0 auto; width: 150px"></a>
 					</div>					
 				</div>
 			</div>

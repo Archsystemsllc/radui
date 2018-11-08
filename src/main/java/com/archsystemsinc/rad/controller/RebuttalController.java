@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpStatus;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.server.ClassPathResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +56,7 @@ import org.w3c.dom.Document;
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
-
+import com.archsystemsinc.rad.model.Program;
 import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
@@ -91,21 +93,25 @@ public class RebuttalController {
 		List<Rebuttal> rebuttalTempList = null;
 		
 		Rebuttal rebuttalNew = new Rebuttal();
+		String objectType = "";
 		
 		try {
 			
 			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
 			Rebuttal rebuttalFromSession = (Rebuttal) request.getSession().getAttribute("SESSION_SCOPE_REBUTTAL_FILTER");
 			if (rebuttalFromModel.getMacId() != null && rebuttalFromModel.getJurisIdReportSearchString() !=null ){
-				rebuttalNew = rebuttalFromModel;				
+				rebuttalNew = rebuttalFromModel;	
+				objectType = "Model";
 			} else if(rebuttalFromSession != null && sessionBackObject.equalsIgnoreCase("true")) {
 				//Back Button is Clicked				
 				rebuttalNew = rebuttalFromSession;
+				objectType = "Session";
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				rebuttalNew = new Rebuttal();
 				String[] tempValues = {UIGenericConstants.ALL_STRING};
 				rebuttalNew.setJurisIdReportSearchString(tempValues);
+				objectType = "New";
 			}
 			
 			String roles = authentication.getAuthorities().toString();
@@ -114,7 +120,7 @@ public class RebuttalController {
 				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				String jurisIdList = HomeController.LOGGED_IN_USER_JURISDICTION_IDS;		
 				
-				if(jurisIdList != null && !jurisIdList.equalsIgnoreCase("")) {
+				if(jurisIdList != null && !jurisIdList.equalsIgnoreCase("")  && objectType == "New") {
 					ArrayList<Integer> jurisdictionArrayList = new ArrayList<Integer>();
 					
 					String[] jurisIds = jurisIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
@@ -134,7 +140,7 @@ public class RebuttalController {
 				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
 			}
 			
-			if(rebuttalNew.getJurisIdReportSearchString() != null && rebuttalNew.getJurisIdReportSearchString().length > 0) {
+			if(rebuttalNew.getJurisIdReportSearchString() != null && rebuttalNew.getJurisIdReportSearchString().length > 0 && rebuttalNew.getJurisIdList() == null) {
 				ArrayList<Integer> jurisdictionArrayList = new ArrayList<Integer>();
 				
 				String[] jurisIds = rebuttalNew.getJurisIdReportSearchString();
@@ -360,47 +366,16 @@ public class RebuttalController {
 
 		String returnView = "";
 		log.debug("--> saverebuttal <--");
+		ByteArrayResource fileAsResource = null;
+		try {
+		
+		MultipartFile rebuttalMultipartObject = rebuttal.getRebuttalFileObject();
 
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
 		
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
 		
-		
-		String fileName = "";
-		 MultipartFile tempMultipartFile = null;
-		 /*LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-		 map.add("file", new ClassPathResource(file));
-		 HttpHeaders headers = new HttpHeaders();
-		 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-		 HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(
-		                     map, headers);
-		 ResponseEntity<String> result = template.get().exchange(
-		                     contextPath.get() + path, HttpMethod.POST, requestEntity,
-		                     String.class);*/
-		
-		if (rebuttal.getRebuttalFileObject() != null && !rebuttal.getRebuttalFileObject().isEmpty()) {
-            try {
-                fileName = rebuttal.getRebuttalFileObject().getOriginalFilename();
-                tempMultipartFile = rebuttal.getRebuttalFileObject();
-                byte[] bytes = rebuttal.getRebuttalFileObject().getBytes();
-                rebuttal.setRebuttalFileAttachment(bytes);
-                rebuttal.setHttpFileData(new ByteArrayResource(bytes));
-                BufferedOutputStream buffStream = 
-                        new BufferedOutputStream(new FileOutputStream(new File(SERVER_UPLOAD_FILE_LOCATION + fileName)));
-                buffStream.write(bytes);
-                buffStream.close();
-                //return "You have successfully uploaded " + fileName;
-            } catch (Exception e) {
-                //return "You failed to upload " + fileName + ": " + e.getMessage();
-            }
-        } else {
-            //return "Unable to upload. File is empty.";
-        }
-		
-		//Nulling the File Value
-		rebuttal.setRebuttalFileObject(null);
 		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
        TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
        sdfAmerica.setTimeZone(tzInAmerica);
@@ -419,6 +394,232 @@ public class RebuttalController {
        	rebuttal.setUpdatedBy(user.getUserName());
        }
        
+		if(rebuttal.getRebuttalCompleteFlag()==null) {
+			rebuttal.setRebuttalStatus("Pending");
+		} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("Yes")) {
+			rebuttal.setRebuttalStatus("Completed");
+			
+		} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("No")) {
+			rebuttal.setRebuttalStatus("Pending");
+			rebuttal.setRebuttalResult("Pending");
+		} 
+		
+		if (rebuttal.getDescriptionComments() != null && !rebuttal.getDescriptionComments().equalsIgnoreCase("")) {
+			rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"::"+rebuttal.getDescriptionCommentsAppend());
+		} else {
+			rebuttal.setDescriptionComments(rebuttal.getDescriptionCommentsAppend());
+		}
+		
+		
+			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
+			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
+			rebuttal.setRebuttalFileObject(null);
+			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
+					Rebuttal.class);
+			ObjectMapper mapper = new ObjectMapper();
+			Rebuttal rebuttalTempObject = responseObject.getBody();
+			
+			
+			
+			//Code to Upload File Object - Start
+			if (rebuttalMultipartObject != null && !rebuttalMultipartObject.isEmpty()) {
+				
+				String ROOT_URI_UPLOAD_ATTACHMENT = new String(HomeController.RAD_WS_URI + "uploadRebuttalFileObject");	
+				
+				
+					try {
+						fileAsResource = new ByteArrayResource(rebuttalMultipartObject.getBytes()) {
+						    @Override
+						    public String getFilename() {
+						        return rebuttalMultipartObject.getOriginalFilename();
+						    }
+						};
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}			
+				
+				//add file
+			    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+			    params.add("file", fileAsResource);
+			    
+			    HttpHeaders headers = new HttpHeaders();
+			    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+			    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+			            new HttpEntity<>(params, headers);
+
+			    //add array
+			    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ROOT_URI_UPLOAD_ATTACHMENT);
+			   
+			    //add some String
+			    builder.queryParam("id", rebuttalTempObject.getId());
+
+			    //another staff
+			    String resultOutput = "";
+			  
+
+			    ResponseEntity<Boolean> responseEntity = basicAuthRestTemplate.exchange(
+			            builder.build().encode().toUri(),
+			            HttpMethod.POST,
+			            requestEntity,
+			            Boolean.class);
+			  //Code to Upload File Object - End
+				
+			}
+			
+		    
+			if (rebuttal.getId() == 0) {
+				
+				
+				redirectAttributes.addFlashAttribute("success",
+						"success.create.rebuttal");
+			} else {
+				redirectAttributes.addFlashAttribute("success",
+						"success.edit.rebuttal");
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
+		String url = "redirect:/"+userFolder+"/rebuttallist/false";
+		url = response.encodeRedirectURL(url);
+
+		return url;
+	}
+	
+	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal2", "/quality_manager/saveOrUpdateRebuttal2", "/cms_user/saveOrUpdateRebuttal2",
+			 "/mac_admin/saveOrUpdateRebuttal2","/mac_user/saveOrUpdateRebuttal2","/quality_monitor/saveOrUpdateRebuttal2"}, method = RequestMethod.POST)	
+	public String saveRebuttal2(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result, 
+			final RedirectAttributes redirectAttributes, final Model model, HttpSession session, HttpServletResponse response) {
+
+		String returnView = "";
+		log.debug("--> saverebuttal <--");
+		
+		ByteArrayResource fileAsResource = null;
+		try {
+			fileAsResource = new ByteArrayResource(rebuttal.getRebuttalFileObject().getBytes()) {
+			    @Override
+			    public String getFilename() {
+			        return rebuttal.getRebuttalFileObject().getOriginalFilename();
+			    }
+			};
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttalUpload");
+		
+		String pattern = "MM/dd/yyyy hh:mm:ss a";
+
+	    //add file
+	    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+	    params.add("file", fileAsResource);
+
+	    //add array
+	    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ROOT_URI);
+	   
+	    
+	   
+	    //add some String
+	    //builder.queryParam("name", name);
+
+	    //another staff
+	    String resultOutput = "";
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+	    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
+	            new HttpEntity<>(params, headers);
+
+	    ResponseEntity<Rebuttal> responseEntity = basicAuthRestTemplate.exchange(
+	            builder.build().encode().toUri(),
+	            HttpMethod.POST,
+	            requestEntity,
+	            Rebuttal.class);
+	    
+	   /* ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
+				Rebuttal.class);*/
+
+	  /*  HttpStatus statusCode = responseEntity.getStatusCode();
+	    if (statusCode == HttpStatus.ACCEPTED) {
+	        result = responseEntity.getBody();
+	    }*/
+	    return resultOutput;
+
+		//Finish
+		
+		
+		
+		
+		
+		
+		
+		/*
+
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
+		
+		String pattern = "MM/dd/yyyy hh:mm:ss a";
+		
+		
+		String fileName = "";
+		 MultipartFile tempMultipartFile = null;
+		 LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+		 map.add("file", new ClassPathResource(file));
+		 HttpHeaders headers = new HttpHeaders();
+		 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+		 HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(
+		                     map, headers);
+		 ResponseEntity<String> result = template.get().exchange(
+		                     contextPath.get() + path, HttpMethod.POST, requestEntity,
+		                     String.class);
+		
+		if (rebuttal.getRebuttalFileObject() != null && !rebuttal.getRebuttalFileObject().isEmpty()) {
+           try {
+               fileName = rebuttal.getRebuttalFileObject().getOriginalFilename();
+               tempMultipartFile = rebuttal.getRebuttalFileObject();
+               byte[] bytes = rebuttal.getRebuttalFileObject().getBytes();
+               rebuttal.setRebuttalFileAttachment(bytes);
+               rebuttal.setHttpFileData(new ByteArrayResource(bytes));
+               BufferedOutputStream buffStream = 
+                       new BufferedOutputStream(new FileOutputStream(new File(SERVER_UPLOAD_FILE_LOCATION + fileName)));
+               buffStream.write(bytes);
+               buffStream.close();
+               //return "You have successfully uploaded " + fileName;
+           } catch (Exception e) {
+               //return "You failed to upload " + fileName + ": " + e.getMessage();
+           }
+       } else {
+           //return "Unable to upload. File is empty.";
+       }
+		
+		//Nulling the File Value
+		rebuttal.setRebuttalFileObject(null);
+		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
+      TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+      sdfAmerica.setTimeZone(tzInAmerica);
+      String currentDateString = sdfAmerica.format(new Date());
+      
+      User user =  (User) session.getAttribute("LoggedInUserForm");
+		rebuttal.setUserId(user.getId().intValue());
+      
+      if(rebuttal.getId()==0) {
+  		rebuttal.setDatePosted(new Date() );
+  		rebuttal.setCreatedDate(currentDateString);
+  		rebuttal.setUpdatedDate(currentDateString);
+  		rebuttal.setCreatedBy(user.getUserName());
+      } else {
+      	rebuttal.setUpdatedDate(currentDateString);
+      	rebuttal.setUpdatedBy(user.getUserName());
+      }
+      
 		if(rebuttal.getRebuttalCompleteFlag()==null) {
 			rebuttal.setRebuttalStatus("Pending");
 		} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("Yes")) {
@@ -461,7 +662,7 @@ public class RebuttalController {
 		String url = "redirect:/"+userFolder+"/rebuttallist/false";
 		url = response.encodeRedirectURL(url);
 
-		return url;
+		return url;*/
 	}
 	
 	

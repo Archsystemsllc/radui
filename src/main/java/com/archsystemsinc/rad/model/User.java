@@ -46,6 +46,11 @@ public class User {
 	private Boolean enabled;
 	
 	
+	private Date failedLoginDate;		
+		
+	private Integer failedLoginAttempts;
+	
+	
 	//Temporary Variables
 	
 	private ArrayList<String> jurIdList;
@@ -57,6 +62,18 @@ public class User {
 	
 	
 	
+	public Date getFailedLoginDate() {
+		return failedLoginDate;
+	}
+	public void setFailedLoginDate(Date failedLoginDate) {
+		this.failedLoginDate = failedLoginDate;
+	}
+	public Integer getFailedLoginAttempts() {
+		return failedLoginAttempts;
+	}
+	public void setFailedLoginAttempts(Integer failedLoginAttempts) {
+		this.failedLoginAttempts = failedLoginAttempts;
+	}
 	public Long getIgnoreCurrentUserId() {
 		return ignoreCurrentUserId;
 	}

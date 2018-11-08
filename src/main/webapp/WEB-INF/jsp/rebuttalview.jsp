@@ -410,8 +410,8 @@
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name">Attachments:</label>			                                
-			                               <input class="form-control" id="file" type="file" name="uploadAttachment" style="box-sizing: content-box;" value="TestFile.xls">
-										</input>
+			                               <span>${rebuttal.fileName}</span>
+										
 			                            </div>		                           
 			                        </div>    
 			                        </fieldset>   

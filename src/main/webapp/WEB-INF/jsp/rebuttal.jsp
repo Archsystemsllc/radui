@@ -39,6 +39,20 @@
 
 	$(document).ready(function () {
 
+		$('INPUT[type="file"]').change(function () {
+		    var ext = this.value.match(/\.(.+)$/)[1];
+		   
+		    switch (ext) {
+		        case 'xls':break;
+		        case 'xlsx':break;
+		        case 'pdf':break;
+		        case 'doc':break;
+		        default:
+		            alert('Please Upload A Valid File (.doc/.pdf/.xslx)');
+		            this.value = '';
+		    }
+		});	
+
 		$('.required').each(function(){
 		       $(this).prev('label').after("<span class='red'>*</span>");
 		});
@@ -448,7 +462,7 @@
 			                        </div>
 			                       
 			                        
-			                       
+			                        <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User') ">
 			                         <div class="row">
 			                         	<c:if test="${rebuttal.id != 0}">
 			                         	 <div class="col-sm-6 form-group">
@@ -461,6 +475,7 @@
 			                            </div>
 			                       		</c:if>
 			                        </div>
+			                        </sec:authorize>
 				                </div>
 				            </div> 
 				            
@@ -519,6 +534,10 @@
 			                         <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name">Attachments:</label>		
+			                                <c:if test="${rebuttal.id > 0}">
+												<span>${rebuttal.fileName}</span>
+											</c:if>
+											</br>
 			                                <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree that PHI/PII information is not included in the attachment.</input>	                                
 			                               <form:hidden path="agree" value=" " id="hiddenagree" ></form:hidden>
 			                                <form:input type="file" path="rebuttalFileObject" id="rebuttalFileObject" class="form-control input-sm"></form:input>

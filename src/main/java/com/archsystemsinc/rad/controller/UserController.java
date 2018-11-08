@@ -103,7 +103,7 @@ public class UserController {
 				}
 			}
 			
-			//userSearchObject.setJurIdList(jurIdArrayList);
+			userSearchObject.setJurIdList(jurIdArrayList);
 			
 			userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
 			

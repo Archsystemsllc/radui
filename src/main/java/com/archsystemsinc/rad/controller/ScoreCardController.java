@@ -67,20 +67,24 @@ public class ScoreCardController {
 		String roles = authentication.getAuthorities().toString();
 		
 		model.addAttribute("menu_highlight", "scorecard");
+		String objectType = "";
 		
 		try {
 			
 
 			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
 			ScoreCard scoreCardFromSession = (ScoreCard) request.getSession().getAttribute("SESSION_SCOPE_SCORECARD_FILTER");
-			if (scoreCardFromModel.getMacId() != null && scoreCardFromModel.getJurisIdReportSearchString() !=null && scoreCardFromModel.getCallResult() !=null){
+			if (scoreCardFromModel.getMacId() != null && scoreCardFromModel.getJurisIdReportSearchString() !=null ){
 				scoreCardNew = scoreCardFromModel;				
+				objectType = "Model";
 			} else if(scoreCardFromSession != null && sessionBackObject.equalsIgnoreCase("true")) {
 				//Back Button is Clicked				
 				scoreCardNew = scoreCardFromSession;
+				objectType = "Session";
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				scoreCardNew = new ScoreCard();
+				objectType = "New";
 				String[] tempValues = {UIGenericConstants.ALL_STRING};
 				scoreCardNew.setJurisIdReportSearchString(tempValues);
 			}
@@ -90,7 +94,7 @@ public class ScoreCardController {
 					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 					
-					if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("")) {
+					if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("") && objectType == "New") {
 						String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 						programMap = new HashMap<Integer, String> ();
 						locationMap = new HashMap<Integer, String> ();
@@ -100,19 +104,20 @@ public class ScoreCardController {
 						}
 											
 						scoreCardNew.setJurIdList(jurIdArrayList);
-						//scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
+						scoreCardFailObject.setJurIdList(jurIdArrayList);
+						scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
 					}
 					
 					//scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);		
-					scoreCardNew.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
+					scoreCardNew.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_PASS_STRING);
 					
-					//scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
 					//scoreCardFailObject.setJurIdList(jurIdArrayList);
 					
-					//scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
+					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);	
@@ -129,7 +134,7 @@ public class ScoreCardController {
 				scoreCardNew.setUserId(userFormFromSession.getId().intValue());
 			}
 			
-			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew);
+			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew, scoreCardFailObject);
 			ObjectMapper mapper = new ObjectMapper();
 			//Convert the result set to string and replace single character with spaces
 			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
@@ -148,7 +153,7 @@ public class ScoreCardController {
 	}
 	
 	
-	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject) {	
+	private HashMap<Integer,ScoreCard> retrieveScoreCardList(ScoreCard scoreCardModelObject, ScoreCard scoreCardFailObject) {	
 		log.debug("--> Enter retrieveScoreCardList <--");
 		
 		List<ScoreCard> resultsMap = new ArrayList<ScoreCard> ();
@@ -159,7 +164,7 @@ public class ScoreCardController {
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 			String ROOT_URI = new String(HomeController.RAD_WS_URI + "searchScoreCard");
 			
-			if(scoreCardModelObject.getJurisIdReportSearchString() != null && scoreCardModelObject.getJurisIdReportSearchString().length > 0) {
+			if(scoreCardModelObject.getJurisIdReportSearchString() != null && scoreCardModelObject.getJurisIdReportSearchString().length > 0 && scoreCardModelObject.getJurIdList() == null) {
 				ArrayList<Integer> jurisdictionArrayList = new ArrayList<Integer>();
 				
 				String[] jurisIds = scoreCardModelObject.getJurisIdReportSearchString();
@@ -180,9 +185,9 @@ public class ScoreCardController {
 				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
 				scoreCardModelObject.setFilterFromDate(filterFromDate);
 				
-				/*if (scoreCardFailObject != null) {
+				if (scoreCardFailObject != null) {
 					scoreCardFailObject.setFilterFromDate(filterFromDate);
-				}*/
+				}
 			}
 			
 			
@@ -192,9 +197,9 @@ public class ScoreCardController {
 				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
 				scoreCardModelObject.setFilterToDate(filterToDate);
 				
-				/*if (scoreCardFailObject != null) {
+				if (scoreCardFailObject != null) {
 					scoreCardFailObject.setFilterToDate(filterToDate);
-				}*/
+				}
 			}
 			
 			
@@ -208,7 +213,7 @@ public class ScoreCardController {
 			List<ScoreCard> scoreCardFailList = null;
 			//Scorecard Fail List
 			
-			/*if (scoreCardFailObject != null) {
+			if (scoreCardFailObject != null) {
 				BasicAuthRestTemplate basicAuthRestTemplate2 = new BasicAuthRestTemplate("qamadmin", "123456");
 				ResponseEntity<List> responseEntity2 = basicAuthRestTemplate2.postForEntity(ROOT_URI, scoreCardFailObject, List.class);
 				
@@ -223,7 +228,7 @@ public class ScoreCardController {
 						scoreCardList.addAll(scoreCardFailList);
 					}
 				}
-			}*/
+			}
 			
 			for(ScoreCard scoreCardTemp: scoreCardList) {
 				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCardTemp.getQamStartdateTime());
