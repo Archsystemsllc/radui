@@ -143,6 +143,12 @@
 									    </sec:authorize>	 --%>
 									</li>
 									</sec:authorize>
+									<sec:authorize access="hasAuthority('MAC Admin') ">
+									<li class="dropdown">
+										<a class="dropdown-toggle ${menu_highlight == 'reports' ? 'active' : ''}" type="button" data-toggle="dropdown" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/reports_macadmin" title="Reports Page">Reports</a>
+										
+									</li>
+									</sec:authorize>
 									<!-- Menu for the Reports -->
 									<sec:authorize access="hasAuthority('Administrator') or hasAuthority('MAC User')  or hasAuthority('MAC Admin')">									
 										<li class="dropdown"><a class="${menu_highlight == 'csr' ? 'active' : ''}" href="#" title="Forms Upload Page">Forms Upload</a>

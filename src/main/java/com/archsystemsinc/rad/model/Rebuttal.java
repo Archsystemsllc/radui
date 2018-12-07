@@ -96,6 +96,8 @@ public class Rebuttal implements Comparable<Rebuttal> {
 	
 	private String rebuttalCallCategory;
 	
+	private Integer qamId;
+	
 	//Temporaray Variables
 	
 	
@@ -146,6 +148,18 @@ public class Rebuttal implements Comparable<Rebuttal> {
 	private String lobForDisplay;
 	
 	
+	
+	
+	public Integer getQamId() {
+		return qamId;
+	}
+
+
+	public void setQamId(Integer qamId) {
+		this.qamId = qamId;
+	}
+
+
 	public String getCallCategoryForDisplay() {
 		return callCategoryForDisplay;
 	}

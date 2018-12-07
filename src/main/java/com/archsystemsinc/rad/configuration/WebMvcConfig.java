@@ -35,10 +35,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	@Bean
    	public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
 		///Local Development Environment
-    	//String activeProfile = System.getProperty("spring.profiles.active",	"local");
+    	String activeProfile = System.getProperty("spring.profiles.active",	"local");
     	
     	//AWS Development Environment
-    	String activeProfile = System.getProperty("spring.profiles.active",	"development");
+    	//String activeProfile = System.getProperty("spring.profiles.active",	"development");
     	
     	//AWS UAT Environment
     	//String activeProfile = System.getProperty("spring.profiles.active", "uat");

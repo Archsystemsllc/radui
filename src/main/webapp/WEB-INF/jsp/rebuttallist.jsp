@@ -103,7 +103,15 @@ $(document).ready(function(){
 	"aoColumns": [
 	{ "mData": "macName"},
 	{ "mData": "macCallReferenceNumber"},
-	{ "mData": "qamFullName"},
+	{ "mData": function (data, type, dataToSet) {
+		var returnData='';
+		if (role == 'MAC Admin' || role == 'MAC User') {
+			returnData = data.qamId;
+		} else {
+			returnData = data.qamFullName
+		}
+        return returnData;
+    }},
 	{ "mData": "macPCCNameTempValue"},
 	{ "mData": "datePostedString"},
 	{ "mData": "callDate"},
@@ -259,15 +267,14 @@ $(document).ready(function(){
 						                    <thead>
 										        <tr>
 										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">MAC Call Reference ID</th>
-										            <th style="text-align: left">QM Name/ID</th>
+										            <th style="text-align: left">MAC Call Reference ID</th>										            
+										            <th style="text-align: left">QM Name/QM ID</th>										            
 										            <th style="text-align: left">PCC/Location</th>
 										            <th style="text-align: left">Date Posted</th> 
 										            <th style="text-align: left">Reporting Month</th>
 										            <th style="text-align: left">Status</th>
 										            <th style="text-align: left">Result</th>
-										            <th style="text-align: left">Actions</th>
-										           
+										            <th style="text-align: left">Actions</th>										           
 										        </tr>
 										    </thead>
 						                    <tbody>  

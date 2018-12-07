@@ -143,6 +143,8 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String[] systemScreenAccessArray;
 	
+	private Integer qamId;
+	
 	//Temporary Variables
 	private String jurisdictionName;	
 	
@@ -186,8 +188,17 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private boolean newMedicareCardCallTracking;
 	
-
 	
+	
+	
+
+	public Integer getQamId() {
+		return qamId;
+	}
+
+	public void setQamId(Integer qamId) {
+		this.qamId = qamId;
+	}
 
 	public boolean isNewMedicareCardCallTracking() {
 		return newMedicareCardCallTracking;

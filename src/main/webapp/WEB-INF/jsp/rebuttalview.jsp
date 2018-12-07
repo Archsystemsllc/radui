@@ -253,6 +253,7 @@
 								 	<form:hidden path="jurisId" />
 								 	<form:hidden path="id" />
 								 	<form:hidden path="rebuttalResult" />
+								 	<form:hidden path="qamId" />
 								 	<fieldset disabled>
 				                    <div class="row">
 			                            <div class="col-sm-6 form-group">
@@ -317,14 +318,18 @@
 			                                <label for="name"> Date Posted:</label>
 			                                <form:input type = "text" class="form-control" id="datePostedString" name = "datePostedString" path="datePostedString" readonly="true"/>
 			                            </div>
-			                            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User') ">
-									
+			                           
 			                         	<div class="col-sm-6 form-group">
-			                                <label for="name"> QM Name/ID:</label>
-			                                <form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true"/>
-			                                <form:input type = "hidden" name = "id" path="id" />
+			                                <label for="name"> QM Name/QM ID:</label>
+			                                
+			                                <sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User') ">
+													 <form:input type = "text" class="form-control" path="qamId" readonly="true"/>				                                
+					                      </sec:authorize>
+										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
+													 <form:input type = "text" class="form-control" path="qamFullName" readonly="true"/>				                                
+					                      </sec:authorize>	 
 			                            </div>
-			                            </sec:authorize>
+			                            
 			                             
 			                        </div>
 			                       

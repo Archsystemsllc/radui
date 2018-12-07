@@ -68,9 +68,49 @@ public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJuri
     
     private String qmName;
     
+    private String callCategoryName;
+    
+    private String callDuration;
+    
+    private String macCallReferenceNumber;
+    
+    private String finalCallResult;
     
     
-    public Integer getHhhTotalCount() {
+    public String getFinalCallResult() {
+		return finalCallResult;
+	}
+
+	public void setFinalCallResult(String finalCallResult) {
+		this.finalCallResult = finalCallResult;
+	}
+
+	public String getMacCallReferenceNumber() {
+		return macCallReferenceNumber;
+	}
+
+	public void setMacCallReferenceNumber(String macCallReferenceNumber) {
+		this.macCallReferenceNumber = macCallReferenceNumber;
+	}
+
+	public String getCallCategoryName() {
+		return callCategoryName;
+	}
+
+	public void setCallCategoryName(String callCategoryName) {
+		this.callCategoryName = callCategoryName;
+	}
+	
+
+	public String getCallDuration() {
+		return callDuration;
+	}
+
+	public void setCallDuration(String callDuration) {
+		this.callDuration = callDuration;
+	}
+
+	public Integer getHhhTotalCount() {
 		return hhhTotalCount;
 	}
 

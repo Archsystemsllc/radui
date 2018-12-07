@@ -42,6 +42,101 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller
 public class ReportsController {
 	private static final Logger log = Logger.getLogger(ReportsController.class);
+	
+	 @RequestMapping(value ={"/admin/reports", "/quality_manager/reports", "/cms_user/reports",
+			 "/mac_admin/reports","/mac_user/reports","/quality_monitor/reports"})		
+	public String viewReports(Model model, HttpSession session, Authentication authentication) {
+		log.debug("--> viewReports <--");
+		
+		ReportsForm reportsForm = new ReportsForm();
+		reportsForm.setMainReportSelect("ScoreCard");
+		model.addAttribute("reportsForm", reportsForm);
+		String roles = authentication.getAuthorities().toString();
+		
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+			
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			
+			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+			HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
+			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+				if (programTempMap == null) continue;
+				
+				programMap.putAll(programTempMap);
+				for(Integer programIdSingle: programTempMap.keySet()) {
+					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+					if (locationTempMap == null) continue;
+					locationMap.putAll(locationTempMap);
+					locationTempMap = null;
+				}
+				
+				programTempMap = null;
+			}
+			model.addAttribute("programMapEdit", programMap);	
+			model.addAttribute("locationMapEdit", locationMap);	
+			
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
+			
+		} else {
+			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
+			
+		}	
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		
+		return "reports";
+	}
+	 
+	 @RequestMapping(value ={"/mac_admin/reports_macadmin","/mac_user/reports_macadmin"})		
+	public String viewMacAdminReports(Model model, HttpSession session, Authentication authentication) {
+		log.debug("--> viewReports MAC Admin <--");
+		
+		ReportsForm reportsForm = new ReportsForm();
+		reportsForm.setMainReportSelect("ScoreCard");
+		model.addAttribute("reportsForm", reportsForm);
+		String roles = authentication.getAuthorities().toString();
+		
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+			
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			
+			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+			HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
+			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+				if (programTempMap == null) continue;
+				
+				programMap.putAll(programTempMap);
+				for(Integer programIdSingle: programTempMap.keySet()) {
+					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+					if (locationTempMap == null) continue;
+					locationMap.putAll(locationTempMap);
+					locationTempMap = null;
+				}
+				
+				programTempMap = null;
+			}
+			model.addAttribute("programMapEdit", programMap);	
+			model.addAttribute("locationMapEdit", locationMap);	
+			
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
+			
+		} else {
+			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
+			
+		}	
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		
+		return "reports_macadmin";
+	}
 
 	/**
 	 * This method provides the functionalities for listing users.
@@ -136,53 +231,7 @@ public class ReportsController {
 	}
 	
 	
-	 @RequestMapping(value ={"/admin/reports", "/quality_manager/reports", "/cms_user/reports",
-			 "/mac_admin/reports","/mac_user/reports","/quality_monitor/reports"})		
-	public String viewReports(Model model, HttpSession session, Authentication authentication) {
-		log.debug("--> viewReports <--");
-		
-		ReportsForm reportsForm = new ReportsForm();
-		reportsForm.setMainReportSelect("ScoreCard");
-		model.addAttribute("reportsForm", reportsForm);
-		String roles = authentication.getAuthorities().toString();
-		
-		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
-			
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
-			
-			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
-			HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
-			HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
-			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
-				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
-				if (programTempMap == null) continue;
-				
-				programMap.putAll(programTempMap);
-				for(Integer programIdSingle: programTempMap.keySet()) {
-					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
-					if (locationTempMap == null) continue;
-					locationMap.putAll(locationTempMap);
-					locationTempMap = null;
-				}
-				
-				programTempMap = null;
-			}
-			model.addAttribute("programMapEdit", programMap);	
-			model.addAttribute("locationMapEdit", locationMap);	
-			
-			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
-			
-		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);		
-			
-		}	
-		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
-		
-		
-		return "reports";
-	}
+	
 	
 	 @RequestMapping(value ={"/admin/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}", "/quality_manager/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}", 
 			 "/cms_user/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}", "/mac_admin/mac-jur-report-drilldown/{macId}/{jurisId}/{searchString}",
@@ -619,6 +668,165 @@ public class ReportsController {
 		model.addAttribute("reportsForm", reportsForm);
 		return returnView;
 	}
+	
+	
+	@RequestMapping(value ={"/admin/getMacAdminReport", "/quality_manager/getMacAdminReport", "/cms_user/getMacAdminReport",
+			 "/mac_admin/getMacAdminReport","/mac_user/getMacAdminReport","/quality_monitor/getMacAdminReport"})			
+	public String getReportForMacAdmin(@ModelAttribute("reportsForm") ReportsForm reportsForm,  final BindingResult result,
+			final Model model, HttpServletRequest request, HttpSession session, Authentication authentication) {
+
+		String returnView = "";
+		log.debug("--> getMacAdminReport <--");
+		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer, ScoreCard> ();
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI;
+		
+		HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+		HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
+		
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
+		String roles = authentication.getAuthorities().toString();
+			
+		try {
+			
+			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+			
+			if(reportsForm.getFromDateString() != null && 
+					!reportsForm.getFromDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				reportsForm.setFromDate(filterFromDate);			
+			}
+			
+			
+			if(reportsForm.getToDateString() != null && 
+					!reportsForm.getToDateString().equalsIgnoreCase("")) {
+				String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				reportsForm.setToDate(filterToDate);
+			}
+			
+			reportsForm.setCallResult(UIGenericConstants.ALL_STRING);
+			reportsForm.setScoreCardType("Scoreable");
+			
+			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+				User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+				
+				reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
+				String[] jurisIds = reportsForm.getJurisdictionIds();
+				
+				String jurIds = reportsForm.getJurisdictionIds().toString();
+				
+				ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
+				if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+					String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getJurisId()));
+					reportsForm.setJurisdictionNameValues(jurisdictionTempName);
+					reportsForm.setJurisdictionName(jurisdictionTempName);
+					
+				} else {
+					if(jurisIds[0].equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+						reportsForm.setJurisdictionName(UIGenericConstants.ALL_STRING);
+						
+						for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+							jurIdArrayList.add(jurisIdSingle);
+							
+							if(reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+								reportsForm.setProgramName(reportsForm.getProgramId());
+								HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+								if (programTempMap == null) continue;								
+								programMap.putAll(programTempMap);								
+								programTempMap = null;
+							}						
+						}
+						reportsForm.setJurIdList(jurIdArrayList);			
+						
+					} else {
+						
+							String jurisdictionNamesValues = "";
+							for (String jurisIdSingleValue: jurisIds) {
+								jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));								
+								String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));								
+								jurisdictionNamesValues += jurisdictionTempName+ " ";
+							}
+							
+							reportsForm.setJurIdList(jurIdArrayList);		
+							reportsForm.setJurisdictionNameValues(jurisdictionNamesValues);
+							reportsForm.setJurisdictionName(jurisdictionNamesValues);
+						}					
+						
+						
+						if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
+							String macName = HomeController.MAC_ID_MAP.get(Integer.valueOf(reportsForm.getMacId()));				
+							reportsForm.setMacName(macName);
+						} else {
+							reportsForm.setMacName(UIGenericConstants.ALL_STRING);
+						}
+						
+						if (!reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING) ) {
+							String programName = HomeController.ALL_PROGRAM_MAP.get(Integer.valueOf(reportsForm.getProgramId()));				
+							reportsForm.setProgramName(programName);
+						}  else {
+							reportsForm.setProgramName(UIGenericConstants.ALL_STRING);
+						}
+					}
+			} 
+			////
+			
+			Map<String, QamMacByJurisdictionReviewReport> finalSortedMap = new TreeMap<String, QamMacByJurisdictionReviewReport>(
+					new Comparator<String>() {
+
+						@Override
+						public int compare(String o1, String o2) {
+							return o1.compareTo(o2);
+						}
+
+					});
+			
+			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getMacJurisReport");
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+				finalResultsMap = generateMacAdminScoreCardReport(scoreCardList,session);				
+				returnView = "reports_macadmin_results";				
+				finalSortedMap.putAll(finalResultsMap);
+				
+				model.addAttribute("AllScoreCardReport_All",true);
+				model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);					
+				model.addAttribute("scoreCardList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				model.addAttribute("ReportTitle","Scorecard Report");
+				  
+				session.setAttribute("SS_MAC_JURIS_REPORT", finalSortedMap);
+			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Rebuttal")) {
+				
+				returnView = "rebuttalreports";				
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "getRebuttalReport");				
+				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				ObjectMapper mapper = new ObjectMapper();
+				resultsMap = responseEntity.getBody();
+				List<Rebuttal> rebuttalList = mapper.convertValue(resultsMap.values(), new TypeReference<List<Rebuttal>>() { });
+				
+				finalResultsMap = generateRebuttalReport(rebuttalList,session);
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("REBUTTAL_REPORT",finalSortedMap);
+				model.addAttribute("RebuttalReport",true);
+				
+				model.addAttribute("rebuttalReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				session.setAttribute("SS_REBUTTAL_REPORT", finalSortedMap);
+				
+				model.addAttribute("ReportTitle","Rebuttal Report");
+				
+			} 
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		session.setAttribute("ReportsFormSession", reportsForm);
+		model.addAttribute("reportsForm", reportsForm);
+		return returnView;
+	}
 
 
 	@RequestMapping(value ={"/admin/getMacJurisReportFromSession", "/quality_manager/getMacJurisReportFromSession", "/cms_user/getMacJurisReportFromSession",
@@ -767,6 +975,46 @@ public class ReportsController {
 		return returnView;
 	}
 	
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateMacAdminScoreCardReport(List<ScoreCard> scoreCardList,HttpSession session) {
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();
+		HashMap<String,ArrayList<ScoreCard>> qamMacByJurisReportSessionObject = new HashMap<String,ArrayList<ScoreCard>>();
+		int count = 1;
+		for(ScoreCard scoreCard: scoreCardList) {
+			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(scoreCard.getMacId());
+			if(macInfo != null) {
+				String macNameTemp = macInfo.getMacName();
+				String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
+				
+				
+				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+				String scoreCardType = scoreCard.getScorecardType();
+				
+				qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+				qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
+				qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+				qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+				qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+				qamMacByJurisdictionReviewReport.setMacId(macInfo.getId().intValue());
+				qamMacByJurisdictionReviewReport.setScoreCardType(scoreCardType);
+				qamMacByJurisdictionReviewReport.setCallCategoryName(HomeController.CALL_CATEGORY_MAP.get(scoreCard.getCallCategoryId()));
+				qamMacByJurisdictionReviewReport.setCallDuration(scoreCard.getCallDuration());
+								
+				qamMacByJurisdictionReviewReport.setMacCallReferenceNumber(scoreCard.getMacCallReferenceNumber());
+				qamMacByJurisdictionReviewReport.setFinalCallResult(scoreCard.getFinalScoreCardStatus());
+				
+				finalResultsMap.put(macNameTemp+"_"+jurisdictionTemp+"_"+count, qamMacByJurisdictionReviewReport);
+				count++;
+				
+			}
+		}
+		
+		
+		
+		//session.setAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
+		
+		return finalResultsMap;
+	}
 	
 	private HashMap<String,QamMacByJurisdictionReviewReport> generateScoreCardReport(List<ScoreCard> scoreCardList,HttpSession session) {
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();

@@ -129,7 +129,7 @@ $(document).ready(function(){
 	{ "mData": function (data, type, dataToSet) {
 		var returnData='';
 		if (role == 'MAC Admin' || role == 'MAC User') {
-			returnData = data.id;
+			returnData = data.qamId
 		} else {
 			returnData = data.qamFullName
 		}
@@ -350,7 +350,7 @@ $(document).ready(function(){
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
 										            <th style="text-align: left">MAC Call Reference ID</th>
-										            <th style="text-align: left">QM Name</th>
+										            <th style="text-align: left">QM Name/QM ID</th>
 										            <th style="text-align: left">QM Start Date/Time</th> 
 										            <th style="text-align: left">Scorecard Type</th>
 										            <th style="text-align: left">Status</th>

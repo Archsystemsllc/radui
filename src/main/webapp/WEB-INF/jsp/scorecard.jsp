@@ -847,12 +847,12 @@
 									</div>
 				                    <h2>Section 1 - QAM Information</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
-				                   
+				                   <form:hidden path="qamId" />
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
 			                                <label for="qamFullName"> QM Name/QM ID: </label>
 			                                <sec:authorize access="hasAuthority('MAC Admin') or hasAuthority('MAC User') ">
-													<form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="id" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
+													<form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamId" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
 					                      </sec:authorize>
 										<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
 													<form:input type = "text" class="form-control" id="qamFullName" name = "qamFullName" path="qamFullName" readonly="true" title="Enter Quality Manager Name/ID in this field"/>			                                
