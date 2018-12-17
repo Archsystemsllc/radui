@@ -11,11 +11,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Qam Environment List</title>
+<title>QAM Environmental Change Control Form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
 
@@ -163,7 +162,8 @@ $(function() {
   		$('#qamEnvironmentListViewDiv').hide();
   	  	$('#qamEnvironmentListMonthDiv').hide();
   	  	
-	  	e.preventDefault();			  	
+	  	e.preventDefault();		
+	  	
 	  	var validateMac = $('select[name=macIdS]').val();
 		var validateJurisdiction = $('select[name=jurisdictionS]').val(); 	    	
 	  	var validateFromDate = $('#fromDate').val();
@@ -216,7 +216,7 @@ $(function() {
 		      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
 		      	       + '<td align="center">' + item[2] + '</td>'
 		      	     + '<td align="center">' + item[3] + '</td>'
-	      	        +'<td style="text-align: center"><a class="viewLink" href="${WEB_SERVICE_URL}download-document" >Download</a></td></tr>';
+	      	        +'<td style="text-align: center"><a class="viewLink" href="${WEB_SERVICE_URL}download-document" >'+item[4]+'</a></td></tr>';
 	      	        
 	  	    	});
 		    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
@@ -297,20 +297,20 @@ $(function() {
 	
 		var row= $(this).closest('tr');  
 	  	var monthYear=$("td:eq(0)",row).text(); 
-
+		var docIdValue = $("td:eq(3)",row).text();
 	  	var username="qamadmin";
 		var password="123456";	
 
-		//alert(monthYear);
+		//alert(docIdValue);
 	  
 	     $.ajax({ 
 	         type: "POST",
 	         dataType: "json",
-	         data: {docId: 3},
+	         data: {docId: docIdValue},
 	         url : "${WEB_SERVICE_URL}download-document",
 	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
 	        success: function(data){ 
-	        	alert("Successly downloaded");
+	        	alert("Successfully downloaded");
 	        },
 	        failure: function () {
 	            $("#csrLists").append("Error when fetching data please contact administrator");
@@ -326,6 +326,8 @@ $(function() {
     $(document).ready(function () {
 
     	$('#qamEnvironmentMonthLists').hide();
+    	$('#qamEnvironmentListMonthDiv').hide();
+    	
     	$('#qamEnvironmentLists').hide();
     	$('#alertMsg').text('');
     	$('#searchalertMsg').text('');
@@ -456,12 +458,12 @@ $(function() {
 			                            </div>
 			                          </div>
 			                         </div>
-			                          <div class="col-lg-8 col-lg-offset-1 form-container">
+			                          <div class="col-lg-12 col-lg-offset-1 form-container">
 			                          <div class="row">
-			                           <div class="col-lg-8 form-group">
+			                           <div class="col-lg-12 form-group">
 			                                <label for="formType">Form Type:</label></br>
-			                                											
-											<form:radiobutton path="formType" value="No Planned Changes" title="No Planned Changes radio button"/>&nbsp;No Planned Changes&nbsp;
+			                                <form:radiobutton path="formType" value="Planned Changes" title="Planned Changes radio button"/>&nbsp;Planned Changes&nbsp;										
+											&nbsp;<form:radiobutton path="formType" value="No Planned Changes" title="No Planned Changes radio button"/>&nbsp;No Planned Changes&nbsp;
 										  	&nbsp;<form:radiobutton path="formType" value="Adverse Event" title="Adverse Event radio button"/>&nbsp;Adverse Event&nbsp;
 										  	&nbsp;<form:radiobutton path="formType" value="Emergency Change" title="Emergency Change radio button"/>&nbsp;Emergency Change&nbsp;
 			                            </div>
@@ -543,7 +545,7 @@ $(function() {
 													<th title="Monthly">Month</th>
 													<th title="MAC">Mac</th>
 													<th title="Jurisdiction">Jurisdiction</th>
-													<th title="Action">Action</th>
+													<th title="Action">Download</th>
 												</tr>
 											</thead>
 										</table>

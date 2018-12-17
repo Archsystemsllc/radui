@@ -19,36 +19,28 @@
 
 <!-- CSS for Bootstrap -->
 
-
-
-
 <!-- JQuery -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css"/>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
-<script src="https://cdn.datatables.net/rowgroup/1.0.2/js/dataTables.rowGroup.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 
 
 <script type="text/javascript">
 $(document).ready(function() {		
 	
-	var reportTitle = '${ReportTitle}';
-	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
-	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
-
+	var messageOnTop = 'MAC:${reportsForm.macName},Jurisdiction:${reportsForm.jurisdictionName},'
+		+'Report From Date:${reportsForm.fromDateString},Report To Date:${reportsForm.toDateString}';
+	var reportTitle = '${ReportTitle}';	
 		
 	//Compliance Data Table Code
 	var complianceReportData =eval('${complianceReportList}');
@@ -63,32 +55,35 @@ $(document).ready(function() {
 		"columnDefs": [ 	       
 		   {
                "targets": [ 3 ],
-               className: 'dt-body-center'
+               className: 'dt-body-left'
            }
 		 ], 
-	   	 dom: '<lif<t>pB>',
+		 dom: 'Bfrtip',
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
+	             extend: 'copy',
 	             messageTop: messageOnTop,
 	             title: reportTitle
 	         },
 	         {
-	             extend: 'excelHtml5',
+	             extend: 'excel',
 	             messageTop: messageOnTop,
 	             title: reportTitle
 	         },
 	         {
-	             extend: 'pdfHtml5',
+	             extend: 'pdf',
 	             messageTop: messageOnTop,
 	             title: reportTitle,
 	             orientation : 'landscape',
 	             pageSize : 'LEGAL',
 	         }	        
 	     ],
-		  "paging" : false,
-		  "pageLength" : 20,
+	     "paging" : false,
+		  "pageLength" : 100,
 		  "ordering" : true,
+		  "language": {
+		      "emptyTable": "No data available"
+		    }
 	});
 	complianceReportDataTable.columns.adjust().draw();	
 	
@@ -189,13 +184,13 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="complianceReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: center">MAC</th>
-										            <th style="text-align: center">Jurisdiction</th>
-										            <th style="text-align: center">Month, Year</th>
-										            <th style="text-align: center">Compliance Status</th>										           		           
+										            <th style="text-align: left">MAC</th>
+										            <th style="text-align: left">Jurisdiction</th>
+										            <th style="text-align: left">Month, Year</th>
+										            <th style="text-align: left">Compliance Status</th>										           		           
 										        </tr>
 										    </thead>
-						                    <tbody style="text-align: center">  
+						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
 						                </div>

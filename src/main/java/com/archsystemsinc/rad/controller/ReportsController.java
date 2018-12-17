@@ -229,6 +229,89 @@ public class ReportsController {
 		
 		return "reports";
 	}
+	 
+	@RequestMapping(value ={"/mac_admin/goBackMacAdminReports","/mac_user/goBackMacAdminReports"})		
+	public String goBackMacAdminReports(final Model model,HttpSession session, Authentication authentication) {
+		log.debug("--> showAdminDashboard <--");
+		HashMap<Integer,String> locationMap = null;
+		HashMap<Integer,String> jurisMap = null;
+		HashMap<Integer,String> programMap = null;
+		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
+		ReportsForm reportsForm = (ReportsForm) session.getAttribute("ReportsFormSession");
+		model.addAttribute("reportsForm", reportsForm);
+		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
+		
+		String roles = authentication.getAuthorities().toString();
+		
+		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			User userFormSession = (User) session.getAttribute("LoggedInUserForm");
+			
+			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
+			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			
+			//String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			programMap = new HashMap<Integer, String> ();
+			locationMap = new HashMap<Integer, String> ();
+			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				jurIdArrayList.add(jurisIdSingle);
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+				if (programTempMap == null) continue;
+				
+				programMap.putAll(programTempMap);
+				for(Integer programIdSingle: programTempMap.keySet()) {
+					HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+					if (locationTempMap == null) continue;
+					locationMap.putAll(locationTempMap);
+					locationTempMap = null;
+				}
+				
+				programTempMap = null;
+			}
+			reportsForm.setJurIdList(jurIdArrayList);
+			model.addAttribute("programMapEdit", programMap);	
+			model.addAttribute("locationMapEdit", locationMap);	
+			
+			reportsForm.setMacId(HomeController.LOGGED_IN_USER_MAC_ID.toString());
+			
+		} else {
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+				jurisMap = HomeController.MAC_JURISDICTION_MAP.get(Integer.valueOf(reportsForm.getMacId()));
+				
+			} else {
+				jurisMap = HomeController.JURISDICTION_MAP;
+				
+			}
+			
+			model.addAttribute("jurisMapEdit", jurisMap);
+			
+			
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)
+					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+				programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(reportsForm.getMacId()+"_"+reportsForm.getJurisId());
+				
+			} else {
+				programMap = HomeController.ALL_PROGRAM_MAP;
+				
+			}
+			
+			model.addAttribute("programMapEdit", programMap);
+			
+			if (!reportsForm.getMacId().equalsIgnoreCase("") && !reportsForm.getMacId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)
+					&& !reportsForm.getJurisId().equalsIgnoreCase("") && !reportsForm.getJurisId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)
+							&& !reportsForm.getProgramId().equalsIgnoreCase("") && !reportsForm.getProgramId().equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+				locationMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(Integer.valueOf(reportsForm.getMacId())+"_"+Integer.valueOf(reportsForm.getJurisId())+"_"+Integer.valueOf(reportsForm.getProgramId()));			
+				
+			} else {
+				locationMap = HomeController.ALL_PCC_LOCATION_MAP;
+			}
+			
+			model.addAttribute("locationMapEdit", locationMap);
+		}
+		
+		
+		return "reports_macadmin";
+	}
 	
 	
 	
@@ -353,8 +436,6 @@ public class ReportsController {
 				String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
 				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
 				reportsForm.setToDate(filterToDate);
-				
-				
 			}
 			
 			
@@ -517,6 +598,7 @@ public class ReportsController {
 				resultsMap = responseEntity.getBody();
 				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
 				finalResultsMap = generateScoreCardReport(scoreCardList,session);
+				finalResultsMap = generateScoreCardReportSummary(finalResultsMap);
 				
 				returnView = "scorecardreports";
 				
@@ -1009,10 +1091,6 @@ public class ReportsController {
 			}
 		}
 		
-		
-		
-		//session.setAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
-		
 		return finalResultsMap;
 	}
 	
@@ -1047,13 +1125,13 @@ public class ReportsController {
 					qamMacByJurisdictionReviewReport.setScoreCardType(scoreCardType);
 					qamMacByJurisdictionReviewReport.setTotalCount(1);
 					
+					qamMacByJurisdictionReviewReport.setScoreCardType("::");
+					
 					if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 						qamMacByJurisdictionReviewReport.setScorableCount(1);
-						if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
+						if(scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Pass".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorablePass(1);
-						} else if(scoreCard.getCmsCalibrationStatus() != null && scoreCard.getCmsCalibrationStatus().toLowerCase().contains("Fail".toLowerCase()))
-							//scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) 
-							{							
+						} else if(scoreCard.getFinalScoreCardStatus() != null && scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Fail".toLowerCase())) {							
 							qamMacByJurisdictionReviewReport.setScorableFail(1);
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
@@ -1068,11 +1146,9 @@ public class ReportsController {
 					if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 						qamMacByJurisdictionReviewReport.setScorableCount(qamMacByJurisdictionReviewReport.getScorableCount()+1);
 						qamMacByJurisdictionReviewReport.setScoreCardType(qamMacByJurisdictionReviewReport.getScoreCardType()+"::"+scoreCardType);
-						if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
+						if(scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Pass".toLowerCase())) {
 							qamMacByJurisdictionReviewReport.setScorablePass(qamMacByJurisdictionReviewReport.getScorablePass()+1);							
-						} else if(scoreCard.getCmsCalibrationStatus() != null && scoreCard.getCmsCalibrationStatus().toLowerCase().contains("Fail".toLowerCase()))
-								//scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) 
-								{							
+						} else if(scoreCard.getFinalScoreCardStatus() != null && scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Fail".toLowerCase())) {							
 							qamMacByJurisdictionReviewReport.setScorableFail(qamMacByJurisdictionReviewReport.getScorableFail()+1);
 						}
 					} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
@@ -1094,7 +1170,7 @@ public class ReportsController {
 			DecimalFormat twoDForm = new DecimalFormat("#.##");
 			QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macJurisKey);
 			
-			if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("Scoreable")) {
+			if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("::Scoreable")) {
 				Float scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
 				scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
 				Float scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
@@ -1102,12 +1178,12 @@ public class ReportsController {
 				qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
 				qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);				
 			} 
-			if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("Non-Scoreable")) {
+			if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("::Non-Scoreable")) {
 				Float scNsPercent =  ((float)qamMacByJurisdictionReviewReport.getNonScorableCount()*100/(qamMacByJurisdictionReviewReport.getTotalCount()));
 				scNsPercent =  Float.valueOf((twoDForm.format(scNsPercent)));
 				qamMacByJurisdictionReviewReport.setNonScorablePercent(scNsPercent);		
 			}  
-			if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("Does Not Count")) {
+			if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("::Does Not Count")) {
 				Float dncPercent =  ((float)qamMacByJurisdictionReviewReport.getDoesNotCount_Number()*100/(qamMacByJurisdictionReviewReport.getTotalCount()));
 				dncPercent =  Float.valueOf((twoDForm.format(dncPercent)));
 				qamMacByJurisdictionReviewReport.setDoesNotCount_Percent(dncPercent);		
@@ -1117,6 +1193,64 @@ public class ReportsController {
 		}
 		
 		session.setAttribute("MAC_BY_JURIS_REPORT_SESSION_OBJECT", qamMacByJurisReportSessionObject);
+		
+		return finalResultsMap;
+	}
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateScoreCardReportSummary(HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap) {
+		
+		
+		Integer totalRowCount = finalResultsMap.size();
+		
+		Integer totalCount = 0,
+				scoreableCount = 0,
+				scoreablePassCount = 0,
+				scoreableFailCount = 0,
+				nonScoreableCount = 0,
+				doesNotCount = 0;
+		Float scoreablePassPercent = 0.0f,
+				scoreableFailPercent = 0.0f,
+				nonScoreablePercent = 0.0f,
+				doesNotCountPercent = 0.0f;
+		
+		if(totalRowCount > 0) {
+			QamMacByJurisdictionReviewReport finalSummaryQamJurisReport = new QamMacByJurisdictionReviewReport();
+			
+			for (QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport: finalResultsMap.values()) {
+			
+				totalCount += qamMacByJurisdictionReviewReport.getTotalCount();
+				scoreableCount += qamMacByJurisdictionReviewReport.getScorableCount();
+				scoreablePassCount += qamMacByJurisdictionReviewReport.getScorablePass();
+				scoreableFailCount += qamMacByJurisdictionReviewReport.getScorableFail();
+				nonScoreableCount += qamMacByJurisdictionReviewReport.getNonScorableCount();
+				doesNotCount += qamMacByJurisdictionReviewReport.getDoesNotCount_Number();
+				
+				scoreablePassPercent += qamMacByJurisdictionReviewReport.getScorablePassPercent();
+				scoreableFailPercent += qamMacByJurisdictionReviewReport.getScorableFailPercent();
+				nonScoreablePercent += qamMacByJurisdictionReviewReport.getNonScorablePercent();
+				doesNotCountPercent += qamMacByJurisdictionReviewReport.getDoesNotCount_Percent();
+				
+			}
+			DecimalFormat twoDForm = new DecimalFormat("#.##");
+			
+			finalSummaryQamJurisReport.setMacName("ZZZZ");
+			finalSummaryQamJurisReport.setJurisdictionName("Total And Average");
+			finalSummaryQamJurisReport.setTotalCount(totalCount);
+			finalSummaryQamJurisReport.setScorableCount(scoreableCount);
+			finalSummaryQamJurisReport.setScorablePass(scoreablePassCount);
+			finalSummaryQamJurisReport.setScorableFail(scoreableFailCount);
+			finalSummaryQamJurisReport.setNonScorableCount(nonScoreableCount);
+			finalSummaryQamJurisReport.setDoesNotCount_Number(doesNotCount);
+			
+			
+			finalSummaryQamJurisReport.setScorablePassPercent(Float.valueOf(twoDForm.format(scoreablePassPercent/totalRowCount)));
+			finalSummaryQamJurisReport.setScorableFailPercent(Float.valueOf(twoDForm.format(scoreableFailPercent/totalRowCount)));
+			finalSummaryQamJurisReport.setNonScorablePercent(Float.valueOf(twoDForm.format(nonScoreablePercent/totalRowCount)));
+			finalSummaryQamJurisReport.setDoesNotCount_Percent(Float.valueOf(twoDForm.format(doesNotCountPercent/totalRowCount)));
+			
+			finalResultsMap.put("ZZZZ", finalSummaryQamJurisReport);
+		}
+		
 		
 		return finalResultsMap;
 	}
@@ -1214,10 +1348,10 @@ public class ReportsController {
 						
 						if(scoreCardType.equalsIgnoreCase("Scoreable")) {
 							qamMacByJurisdictionReviewReport.setHhhScorableCount(1);
-							if(scoreCard.getCallResult().toLowerCase().contains("Pass".toLowerCase())) {
+							if(scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Pass".toLowerCase())) {
 								qamMacByJurisdictionReviewReport.setHhhScorablePass(1);
-							} else if(scoreCard.getCmsCalibrationStatus() != null && scoreCard.getCmsCalibrationStatus().toLowerCase().contains("Fail".toLowerCase()))
-								//scoreCard.getCallResult().toLowerCase().contains("Fail".toLowerCase())) 
+							} else if(scoreCard.getFinalScoreCardStatus() != null && scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Fail".toLowerCase()))
+								//scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Fail".toLowerCase())) 
 								{							
 								qamMacByJurisdictionReviewReport.setHhhScorableFail(1);
 							}

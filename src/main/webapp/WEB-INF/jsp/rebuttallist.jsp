@@ -50,6 +50,7 @@ function resetFields() {
 	
 	$('#macId').prop('selectedIndex',0);
 	$('#jurId').prop('selectedIndex',0);	
+	$('#programId').prop('selectedIndex',0);	
 	$('#filterFromDateString').val("");
 	$('#filterToDateString').val("");
 	
@@ -82,6 +83,32 @@ function resetFields() {
       	  	    	});  	   
                });
 			}
+        });
+
+		$("#jurId").change(function(){
+
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+				var macIdValue = $('#macId').val();
+				
+				var selectedJurisdiction =""; 
+				
+				$("#jurId :selected").each(function() {
+					 selectedJurisdiction+=($(this).attr('value'))+",";
+					}); 
+				
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
+	                
+	                 $("#programId").get(0).options.length = 0;	           
+	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    	});  	   
+	               });
+			} 
         });
 
 		//Back Button Functionality
@@ -200,7 +227,19 @@ $(document).ready(function(){
 													</form:select>
 												</div>
 											</div>
-											
+											<div class="row">
+												<div class="col-lg-4 form-group">
+													<label for="name"> Program:</label>
+														<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
+														   <form:option value="" label="---Select Program---"/>
+														   <form:option value="0" label="ALL" /> 
+														   <form:options items="${programMapEdit}" />
+														</form:select> 	
+												</div>
+												<div class="col-lg-4 form-group">
+													
+												</div>
+											</div>
 											
 											<div class="row">
 												<div class="col-lg-4 form-group">

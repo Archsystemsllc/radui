@@ -141,8 +141,17 @@ public class CommonController {
 	@RequestMapping(value ={"/admin/selectProgram", "/quality_manager/selectProgram", "/cms_user/selectProgram",
 			 "/mac_admin/selectProgram","/mac_user/selectProgram","/quality_monitor/selectProgram"}, method = RequestMethod.GET)	
 	@ResponseBody
-	public HashMap<Integer,String> selectProgram(@RequestParam("macId") final String macIdString,@RequestParam("jurisId") final String jurisIdString) {
+	public HashMap<Integer,String> selectProgram(@RequestParam("macId") String macIdString,@RequestParam("jurisId") final String jurisIdString) {
 		
+		try {
+			int macIdInteger = Integer.valueOf(macIdString);
+			if (macIdInteger == 0 ) {
+				macIdString = UIGenericConstants.ALL_STRING;
+			}
+		} catch (NumberFormatException e) {
+			System.out.println("Low Error");
+		}
+				
 		HashMap<Integer,String> programMap = new HashMap<Integer,String>();
 		HashMap<Integer,String> programTempMap = new HashMap<Integer,String>();
 		

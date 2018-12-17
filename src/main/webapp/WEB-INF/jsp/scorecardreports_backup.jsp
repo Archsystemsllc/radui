@@ -20,7 +20,7 @@
 <!-- CSS for Bootstrap -->
 <!-- JQuery -->
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css"/>
 
 
@@ -28,17 +28,63 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.6.0/jszip.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script> 
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script> -->
+
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.1/jszip.js"></script>
+    <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+
+    <link href="https://nightly.datatables.net/buttons/css/buttons.dataTables.css?_=82057b89834dd191a8e620fb781c34b2.css" rel="stylesheet" type="text/css" />
+<script src="https://nightly.datatables.net/buttons/js/dataTables.buttons.js?_=82057b89834dd191a8e620fb781c34b2"></script>
+<script src="https://nightly.datatables.net/buttons/js/buttons.html5.js?_=82057b89834dd191a8e620fb781c34b2"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
+
+
+<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.1/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.1/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.1.1/js/dataTables.keyTable.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.1.1/js/dataTables.rowReorder.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.1/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+
+
+<!-- <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.html5.js"></script>
+<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.flash.js"></script>
+<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.print.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.1/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.1/js/dataTables.fixedHeader.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.1.1/js/dataTables.keyTable.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.1.1/js/dataTables.rowReorder.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.1/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+ -->
+
+
 <script type="text/javascript">
 $(document).ready(function() {		
-	var messageOnTop = 'MAC:${reportsForm.macName},Jurisdiction:${reportsForm.jurisdictionName},'
-	+'Program:${reportsForm.programName},PCC/Location:${reportsForm.pccLocationName},'
-	+'Report From Date:${reportsForm.fromDateString},Report To Date:${reportsForm.toDateString}';
+	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
+	+'Program:${reportsForm.programName}'+'  '+'PCC/Location:${reportsForm.pccLocationName}\n'
+	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
 	var reportTitle = '${ReportTitle}';	
 
 	var allScorecardData =eval('${scoreCardList}');	
@@ -62,13 +108,7 @@ $(document).ready(function() {
 	    "columnDefs": [ 
 	        { 
 	           "render" : function(data, type, row) {
-	        	   var linkData = "";
-		        if (data=="ZZZZ") {
-		        	linkData = "Z_Row";
-			     } else {
-			    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ALL'>"+data+"</a></span>";
-				  }
-				
+				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ALL'>"+data+"</a></span>";
 				return linkData;
 	        },
 		   "targets" : 0
@@ -107,13 +147,16 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,
+			     customize: includeSubtotalsAll,
+	             className: 'copyButton'
 	         },
 	         {
-	             extend: 'excel',
+	             extend: 'excelHtml5',
 	             title: reportTitle,
 	             messageTop: messageOnTop,
-	             filename: 'Scorecard Report'
+	             filename: 'Scorecard Report',
+	             customizeData: includeSubtotalsAll
  		      },
 	         {  
 			     extend: 'pdf',
@@ -126,9 +169,10 @@ $(document).ready(function() {
 	             className: 'pdfButton'		       
 	         }	        
 	     ],
-	     
+	      drawCallback: addSubtotalsAll,
 		  "paging" : false,
-		  "pageLength" : 100,		 
+		  "pageLength" : 100,
+		  "ordering" : true,
 		  "language": {
 		      "emptyTable": "No data available"
 		    }
@@ -266,10 +310,12 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,
+			     customize: includeSubtotalsFailScoreCards
 	         },
 	         {
-	             extend: 'excel',	           
+	             extend: 'excel',
+	             customizeData: includeSubtotalsFailScoreCards,
 	             title: reportTitle,			     
 	             messageOnTop: messageOnTop,
 	             
@@ -282,10 +328,11 @@ $(document).ready(function() {
 			     	customize: function(doc) {
 			     		doc.defaultStyle.fontSize = 7;
 			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+			       	},     
+			        customizeData: includeSubtotalsFailScoreCards			       
 	         }	        
 	     ],
-	     
+	      drawCallback: addSubtotalsFailScoreCards,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
@@ -340,11 +387,12 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,
+			     customize: includeSubtotalsScoreable
 	         },
 	         {
 	             extend: 'excel',
-	           
+	             customizeData: includeSubtotalsScoreable,
 	             title: reportTitle,			     
 	             messageOnTop: messageOnTop,
 	             
@@ -357,10 +405,11 @@ $(document).ready(function() {
 			     	customize: function(doc) {
 			     		doc.defaultStyle.fontSize = 7;
 			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+			       	},     
+			        customizeData: includeSubtotalsScoreable			       
 	         }	        
 	     ],
-	     
+	      drawCallback: addSubtotalsScoreable,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
@@ -404,11 +453,12 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,
+			     customize: includeSubtotalsAll
 	         },
 	         {
 	             extend: 'excel',
-	          
+	             customizeData: includeSubtotalsAll,
 	             title: reportTitle,			     
 	             messageOnTop: messageOnTop,
 	             
@@ -421,10 +471,11 @@ $(document).ready(function() {
 			     	customize: function(doc) {
 			     		doc.defaultStyle.fontSize = 7;
 			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}	       
+			       	},     
+			        customizeData: includeSubtotalsAll			       
 	         }	        
 	     ],
-	    
+	      drawCallback: addSubtotalsAll,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,
@@ -467,11 +518,12 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,
+			     customize: includeSubtotalsAll
 	         },
 	         {
 	             extend: 'excel',
-	            
+	             customizeData: includeSubtotalsAll,
 	             title: reportTitle,			     
 	             messageOnTop: messageOnTop,
 	             
@@ -484,10 +536,11 @@ $(document).ready(function() {
 			     	customize: function(doc) {
 			     		doc.defaultStyle.fontSize = 7;
 			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+			       	},     
+			        customizeData: includeSubtotalsAll			       
 	         }	        
 	     ],
-	     
+	      drawCallback: addSubtotalsAll,
 		  "paging" : true,
 		  "pageLength" : 20,
 		  "ordering" : true,

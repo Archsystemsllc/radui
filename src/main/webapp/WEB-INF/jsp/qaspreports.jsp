@@ -64,7 +64,7 @@ $(document).ready(function() {
 	var reportTitle = '${ReportTitle}\n'+messageOnTop;
 	
 
-		/* $('#qaspReportListRow > thead').prepend('<tr media="all"><th colspan="1" style="text-align: center">Month</th><th colspan="2" style="text-align: center"># of QAM Scorecards Completed</th><th colspan="2" style="text-align: center"># of QAM Scorecards Passed</th><th colspan="2" style="text-align: center"># of QAM Scorecards Failed</th></tr>');
+		/* $('#qaspReportListRow > thead').prepend('<tr media="all"><th colspan="1" style="text-align: left">Month</th><th colspan="2" style="text-align: left"># of QAM Scorecards Completed</th><th colspan="2" style="text-align: left"># of QAM Scorecards Passed</th><th colspan="2" style="text-align: left"># of QAM Scorecards Failed</th></tr>');
 	 */
 	var qaspScorecardData =eval('${qaspReportList}');
 	var qaspScorecardDataTable = $('#qaspReportDTId').DataTable( {
@@ -81,7 +81,7 @@ $(document).ready(function() {
 	    "columnDefs": [ 	        
 		   {
                "targets": [ 6 ],
-               className: 'dt-body-center'
+               className: 'dt-body-left'
            }
 		 ], 
 		 dom: 'B<"clear">lfrtip',	
@@ -207,7 +207,7 @@ $(document).ready(function() {
 		  var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
 		  
 	      cols.header().each(function(el, colNum){
-	        var $td = $('<td align="center"></td>');
+	        var $td = $('<td align="left"></td>');
 	        if (colNum === 0) {
 		          $td.text( ["Sub-Totals"].join('') );
 		    } else if (colNum === 1) {
@@ -472,23 +472,23 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qaspReportDTId" style="width: 95%">
 						                    <thead>
 										       <!--  <tr>
-										            <th style="text-align: center" rowspan="2">Month</th>
-										            <th style="text-align: center" colspan="2"># of QAM Scorecards Completed</th>
-										            <th style="text-align: center" colspan="2"># of QAM Scorecards Passed</th>
-										            <th style="text-align: center" colspan="2"># of QAM Scorecards Failed</th>
+										            <th style="text-align: left" rowspan="2">Month</th>
+										            <th style="text-align: left" colspan="2"># of QAM Scorecards Completed</th>
+										            <th style="text-align: left" colspan="2"># of QAM Scorecards Passed</th>
+										            <th style="text-align: left" colspan="2"># of QAM Scorecards Failed</th>
 										            									                 
 										        </tr> -->
 										         <tr>
-										         <th style="text-align: center" >Month</th>
-										        	<th style="text-align: center"># of QAM Scorecards Completed(A/B)</th>
-										            <th style="text-align: center"># of QAM Scorecards Completed(HHH)</th>
-										            <th style="text-align: center"># of QAM Scorecards Passed(A/B)</th>
-										            <th style="text-align: center"># of QAM Scorecards Passed(HHH)</th>
-										            <th style="text-align: center"># of QAM Scorecards Failed(A/B)</th>
-										            <th style="text-align: center"># of QAM Scorecards Failed(HHH)</th>
+										         <th style="text-align: left" >Month</th>
+										        	<th style="text-align: left"># of QAM Scorecards Completed(A/B)</th>
+										            <th style="text-align: left"># of QAM Scorecards Completed(HHH)</th>
+										            <th style="text-align: left"># of QAM Scorecards Passed(A/B)</th>
+										            <th style="text-align: left"># of QAM Scorecards Passed(HHH)</th>
+										            <th style="text-align: left"># of QAM Scorecards Failed(A/B)</th>
+										            <th style="text-align: left"># of QAM Scorecards Failed(HHH)</th>
 										        </tr>
 										    </thead>
-						                    <tbody style="text-align: center">  
+						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                   
 						                </table> 

@@ -412,13 +412,13 @@
 					                </c:if>
 			                        
 			                        
-			                         <div class="row">
+			                        <%--  <div class="row">
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name">Attachments:</label>			                                
 			                               <span>${rebuttal.fileName}</span>
 										
 			                            </div>		                           
-			                        </div>    
+			                        </div>     --%>
 			                        </fieldset>   
 				                    
 				                </div>

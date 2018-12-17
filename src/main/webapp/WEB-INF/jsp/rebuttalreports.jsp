@@ -20,49 +20,28 @@
 <!-- CSS for Bootstrap -->
 
 <!-- JQuery -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.1.1/css/autoFill.dataTables.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/colreorder/1.3.1/css/colReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.1/css/fixedColumns.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.1/css/fixedHeader.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/keytable/2.1.1/css/keyTable.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.1.1/css/rowReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/1.4.1/css/scroller.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css"/>
- 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/autofill/2.1.1/js/dataTables.autoFill.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.colVis.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.html5.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.flash.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.print.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.1/js/dataTables.colReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.1/js/dataTables.fixedHeader.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.1.1/js/dataTables.keyTable.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.1.1/js/dataTables.rowReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.1/js/dataTables.scroller.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css"/>
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 
 
 <script type="text/javascript">
 $(document).ready(function() {		
 	
-	var reportTitle = '${ReportTitle}';
-	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
-	+'Program:${reportsForm.programName}'+'  '+'PCC/Location:${reportsForm.pccLocationName}\n'
-	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
-
-
+	var messageOnTop = 'MAC:${reportsForm.macName},Jurisdiction:${reportsForm.jurisdictionName},'
+		+'Program:${reportsForm.programName},PCC/Location:${reportsForm.pccLocationName},'
+		+'Report From Date:${reportsForm.fromDateString},Report To Date:${reportsForm.toDateString}';
+	var reportTitle = '${ReportTitle}';	
 		
 	//Rebuttal Data Table Code
 	var rebuttalReportData =eval('${rebuttalReportList}');
@@ -87,23 +66,23 @@ $(document).ready(function() {
 		   }, 
 		   {
                "targets": [ 2 ],
-               className: 'dt-body-center'
+               className: 'dt-body-left'
            }
 		 ], 
-		 dom: '<lif<t>pB>',
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
-	             extend: 'copyHtml5',
+	             extend: 'copy',
 	             messageTop: messageOnTop,
 	             title: reportTitle
 	         },
 	         {
-	             extend: 'excelHtml5',
+	             extend: 'excel',
 	             messageTop: messageOnTop,
 	             title: reportTitle
 	         },
 	         {
-	             extend: 'pdfHtml5',
+	             extend: 'pdf',
 	             messageTop: messageOnTop,
 	             title: reportTitle,
 	             orientation : 'landscape',
@@ -119,12 +98,20 @@ $(document).ready(function() {
 	});
 	rebuttalReportDataTable.columns.adjust().draw();
 
-	
+	//Back Button Functionality
+	$('#close1').click(function(e) {
+		
+		 e.preventDefault();	
+		 var userRole = $('#userRole').val();				
+		
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+				window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/goBackMacJurisReport";				
+			} else {
+				window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/goBackMacAdminReports";
 
+			}
+	 });
 });
-
-
-
 </script>
 <style>
 .subtotal td {
@@ -138,12 +125,11 @@ $(document).ready(function() {
 	<jsp:include page="admin_header.jsp"></jsp:include>
 
 	<table id="mid">
-		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="${pageContext.request.contextPath}/${SS_USER_FOLDER}/goBackMacJurisReport" id="reportsForm" >
+		<form:form method="POST" modelAttribute="reportsForm" class="form-signin" action="#" id="reportsForm" >
 			<tr>
 				<td style="vertical-align: top">
 
-					<div id="updates" class="boxed">
-					
+					<div id="updates" class="boxed">					
 						
 						<div class="content">
 						
@@ -161,7 +147,7 @@ $(document).ready(function() {
 								  <form:hidden path="complianceReportType" />
 								  <form:hidden path="callCategoryType" />
 								  <form:hidden path="rebuttalStatus" />
-								 
+								 <input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 								 			
 								<div class="table-users" style="width: 98%">
 									<div class="header">Report Results Screen</div>
@@ -173,7 +159,7 @@ $(document).ready(function() {
 				                    
 				                    <div class="row">
 				                            <div class="col-sm-12 form-group">
-				                                <button class="btn btn-primary" id="create"  type="submit">Back</button>
+				                                <span><button class="btn btn-primary" id="close1" type="button">Back</button></span>
 				                            </div>
 				                           
 				                        </div>
@@ -228,14 +214,14 @@ $(document).ready(function() {
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="rebuttalReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
-										            <th style="text-align: center">MAC</th>
-										            <th style="text-align: center">Jurisdiction</th>
-										            <th style="text-align: center">Number of Rebuttals</th>
+										            <th style="text-align: left">MAC</th>
+										            <th style="text-align: left">Jurisdiction</th>
+										            <th style="text-align: left">Number of Rebuttals</th>
 										           
 										            								                 
 										        </tr>
 										    </thead>
-						                    <tbody style="text-align: center">  
+						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
 						                </div>

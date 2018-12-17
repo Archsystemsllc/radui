@@ -132,9 +132,9 @@ public class ScoreCardController {
 				}
 			}			
 			
-			if(roles.contains("Quality Monitor")) {
+			/*if(roles.contains("Quality Monitor")) {
 				scoreCardNew.setUserId(userFormFromSession.getId().intValue());
-			}
+			}*/
 			
 			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew, scoreCardFailObject);
 			ObjectMapper mapper = new ObjectMapper();
@@ -596,6 +596,7 @@ public class ScoreCardController {
 				scoreCard.setQamEnddateTimeString(qamEnddateTimeString);
 				scoreCard.setQamEnddateTime(qamEnddateTime);
 				scoreCard.setUserId(userFormSession.getId().intValue());
+				scoreCard.setQamId(userFormSession.getId().intValue());
 				scoreCard.setMacName(HomeController.MAC_ID_MAP.get(scoreCard.getMacId()));
 				scoreCard.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCard.getJurId()));
 				scoreCard.setScoreCardStatusUpdateDateTime(currentDateTime);

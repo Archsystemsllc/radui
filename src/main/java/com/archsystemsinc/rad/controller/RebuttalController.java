@@ -131,13 +131,34 @@ public class RebuttalController {
 					}
 					
 					rebuttalNew.setJurisIdList(jurisdictionArrayList);
+					
+					HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
+					HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
+					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+						HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+						if (programTempMap == null) continue;
+						
+						programMap.putAll(programTempMap);
+						for(Integer programIdSingle: programTempMap.keySet()) {
+							HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+							if (locationTempMap == null) continue;
+							locationMap.putAll(locationTempMap);
+							locationTempMap = null;
+						}
+						
+						programTempMap = null;
+					}
+					model.addAttribute("programMapEdit", programMap);	
+					model.addAttribute("locationMapEdit", locationMap);	
+					
 				}
 				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);		
 			} else {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
+				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);	
+				model.addAttribute("programMapEdit", HomeController.ALL_PROGRAM_MAP);	
 			}
 			
 			if(rebuttalNew.getJurisIdReportSearchString() != null && rebuttalNew.getJurisIdReportSearchString().length > 0 && rebuttalNew.getJurisIdList() == null) {
@@ -287,11 +308,13 @@ public class RebuttalController {
 		
 		HashMap<Integer,String> failedMacRefList = new HashMap<Integer,String>();
 		
-		Rebuttal rebuttal = new Rebuttal();
-		
 		ScoreCard scoreCardTemp = new ScoreCard();
 		List<ScoreCard> resultsMapTemp = null;
 		List<ScoreCard> failedScorecardList = null;
+		
+		List<Rebuttal> rebuttalTempList = null;
+		
+		Rebuttal rebuttalNew = new Rebuttal();
 		
 		try {
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
@@ -303,6 +326,8 @@ public class RebuttalController {
 				
 				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				
+				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				
 				if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("")) {
 					String[] jurisIds = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 					
@@ -312,6 +337,7 @@ public class RebuttalController {
 						jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));
 					}				
 					scoreCardTemp.setJurIdList(jurIdArrayList);
+					rebuttalNew.setJurisIdList(jurIdArrayList);
 				}
 				
 				
@@ -322,10 +348,25 @@ public class RebuttalController {
 			resultsMapTemp = responseEntity.getBody();
 			failedScorecardList = mapper.convertValue(resultsMapTemp, new TypeReference<List<ScoreCard>>() { });
 			
+			rebuttalNew.setRebuttalStatus("Completed");
+			
+			String ROOT_URI2 = new String(HomeController.RAD_WS_URI + "rebuttallist");
+			responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI2, rebuttalNew, List.class);
+			
+			rebuttalTempList = responseEntity.getBody();
+			
+			List<Rebuttal> rebuttalCompletedList = mapper.convertValue(rebuttalTempList, new TypeReference<List<Rebuttal>>() { });
+			
+			HashMap<String, String> rebuttalCompletedMacCallRefMap = new HashMap<String, String>();
+			for(Rebuttal rebuttal: rebuttalCompletedList) {
+				rebuttalCompletedMacCallRefMap.put(rebuttal.getMacCallReferenceNumber(), rebuttal.getMacCallReferenceNumber());
+			}
+			
 			for(ScoreCard scoreCard: failedScorecardList) {
-				resultsMap.put(scoreCard.getId(), scoreCard);
-				failedMacRefList.put(scoreCard.getId(), scoreCard.getMacCallReferenceNumber());
-				
+				if(rebuttalCompletedMacCallRefMap.get(scoreCard.getMacCallReferenceNumber())==null ) {
+					resultsMap.put(scoreCard.getId(), scoreCard);
+					failedMacRefList.put(scoreCard.getId(), scoreCard.getMacCallReferenceNumber());
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
