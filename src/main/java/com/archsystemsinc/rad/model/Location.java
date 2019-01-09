@@ -1,0 +1,97 @@
+package com.archsystemsinc.rad.model;
+
+/**
+ * This persistent class for the user database table.
+ */
+
+public class Location {
+	
+	
+	private Integer id;
+
+	
+	private String pccLocationName;
+	
+	private String description;	
+	
+	private String createdBy;
+	private String updatedBy;
+	private String createdDate;	
+	private String updatedDate;
+	
+	
+	
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+
+	public String getCreatedDate() {
+		return createdDate;
+	}
+
+
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
+	}
+
+
+	
+
+	public String getUpdatedDate() {
+		return updatedDate;
+	}
+
+
+	public void setUpdatedDate(String updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+
+	public Integer getId() {
+		return id;
+	}
+
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+
+	public String getPccLocationName() {
+		return pccLocationName;
+	}
+
+
+	public void setPccLocationName(String pccLocationName) {
+		this.pccLocationName = pccLocationName;
+	}	
+	
+}
