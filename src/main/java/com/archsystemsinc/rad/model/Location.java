@@ -20,9 +20,6 @@ public class Location {
 	private String updatedDate;
 	
 	
-	
-
-
 	public String getDescription() {
 		return description;
 	}
