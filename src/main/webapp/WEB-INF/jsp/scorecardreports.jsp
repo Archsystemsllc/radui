@@ -48,6 +48,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
@@ -57,17 +58,34 @@ $(document).ready(function() {
 		{ "mData": "nonScorableCount"},
 		{ "mData": "nonScorablePercent"},
 		{ "mData": "doesNotCount_Number"},
-		{ "mData": "doesNotCount_Percent"}		
+		{ "mData": "doesNotCount_Percent"},
+		{ "mData": "macName"}		
 		],		
 	    "columnDefs": [ 
+	    	{ 
+		           "render" : function(data, type, row) {
+		        	   var sortData = row.macName+"_"+row.jurisdictionName+"_";	        	  
+		        	   if(row.program == null) {
+		        		   sortData += "ZZZZ";
+			        	} else {
+			        		sortData += row.program;
+					     } 
+					
+					return sortData;
+		        },
+			   "targets" : 13,
+			   "visible": false
+			   },
 	        { 
 	           "render" : function(data, type, row) {
-	        	   var linkData = "";
-		        if (data=="ZZZZ") {
-		        	linkData = "Z_Row";
-			     } else {
-			    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ALL'>"+data+"</a></span>";
-				  }
+	        	   var linkData = "";	        	  
+	        	   if(row.program == null) {
+						linkData = data;
+		        	} else if (data=="zTotals") {
+		        		linkData = data;
+				     	} else {
+				    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+					  	}
 				
 				return linkData;
 	        },
@@ -78,28 +96,28 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 5
+		   "targets" : 6
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 7
+		   "targets" : 8
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 9
+		   "targets" : 10
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 11,
+		   "targets" : 12,
            className: 'dt-body-left'
 		   }	
 		 ], 
@@ -118,21 +136,71 @@ $(document).ready(function() {
 	         {  
 			     extend: 'pdf',
 			     title: reportTitle,
-		     	 customize: function(doc) {
-		     		doc.defaultStyle.fontSize = 7;
-		     		doc.styles.tableHeader.fontSize = 7; 
-		       	 },     
-			     customizeData: includeSubtotalsAll,
-	             className: 'pdfButton'		       
+			     messageTop: messageOnTop,
+			     orientation : 'landscape',
+	             pageSize : 'LEGAL',
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;
+		           }			            
 	         }	        
 	     ],
 	     
 		  "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
 		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+               if ( aData.program == null )
+               {
+                   $('td', nRow).css('background-color', '#CEE9F5');
+               }
+               
+           }
 	});
+
+	// Sort by columns 1 and 2 and redraw
+	allScoreCardDataTable
+	    .order( [ 13, 'asc' ] )
+	    .draw();
 	
 	allScoreCardDataTable.columns.adjust().draw();
 
@@ -142,6 +210,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
@@ -154,9 +223,17 @@ $(document).ready(function() {
 		],		
 	    "columnDefs": [ 
 	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ScoreablePass'>"+data+"</a></span>";
-				return linkData;
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
 	        },
 		   "targets" : 0
 		   },
@@ -165,54 +242,94 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 5
+		   "targets" : 6
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 7
+		   "targets" : 8
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-	        "targets" : 9
+	        "targets" : 10
 		   }
 		 ], 
-		 dom: 'B<"clear">lfrtip',	
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle,
-			     customize: includeSubtotalsPassScoreCards
+	             title: reportTitle
 	         },
 	         {
 	             extend: 'excel',
 	             title: reportTitle,			     
-	             messageOnTop: messageOnTop,
-	             customizeData: includeSubtotalsPassScoreCards
+	             messageOnTop: messageOnTop
  		      },
 	         {
 	             
-			     extend: 'pdf',
+ 		    	 extend: 'pdf',
 			     title: reportTitle,
-			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 7;
-			     		doc.styles.tableHeader.fontSize = 7; 
-			       	},     
-			        customizeData: includeSubtotalsPassScoreCards			       
+			     messageTop: messageOnTop,			     
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;
+			     }
 	         }	        
 	     ],
-	      drawCallback: addSubtotalsPassScoreCards,
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		   },
+	      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
 	});
 	allPassScorecardDataTable.columns.adjust().draw();
 
@@ -223,6 +340,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorableFail"},
@@ -234,9 +352,17 @@ $(document).ready(function() {
 		],		
 	    "columnDefs": [ 
 	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ScoreableFail'>"+data+"</a></span>";
-				return linkData;
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
 	        },
 		   "targets" : 0
 		   },
@@ -245,24 +371,24 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 5
+		   "targets" : 6
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 7
+		   "targets" : 8
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 9
+		   "targets" : 10
 		   }
 		 ], 
-		 dom: 'B<"clear">lfrtip',	
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
@@ -277,23 +403,65 @@ $(document).ready(function() {
  		      },
 	         {
 	             
-			     extend: 'pdf',
+ 		    	 extend: 'pdf',
 			     title: reportTitle,
-			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 7;
-			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+			     messageTop: messageOnTop,			    
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;
+			     }
 	         }	        
 	     ],
 	     
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
-		  "responsive": true,
-		  "bAutoWidth": true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
 	});
 
 	failScorecardDataTable.columns.adjust().draw();
@@ -305,6 +473,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
@@ -315,9 +484,17 @@ $(document).ready(function() {
 		],		
 	    "columnDefs": [ 
 	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ScoreableOnly'>"+data+"</a></span>";
-				return linkData;
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
 	        },
 		   "targets" : 0
 		   },
@@ -326,17 +503,17 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 5
+		   "targets" : 6
 		   },
 		   { 
 	           "render" : function(data, type, row) {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 7
+		   "targets" : 8
 		   }	
 		 ], 
-		 dom: 'B<"clear">lfrtip',	
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
@@ -352,21 +529,65 @@ $(document).ready(function() {
  		      },
 	         {
 	             
-			     extend: 'pdf',
+ 		    	 extend: 'pdf',
 			     title: reportTitle,
-			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 7;
-			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+			     messageTop: messageOnTop,			   
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;
+			     }
 	         }	        
 	     ],
 	     
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
 	});
 
 	scoreableReportDataTable.columns.adjust().draw();
@@ -379,6 +600,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorablePass"},
@@ -386,9 +608,17 @@ $(document).ready(function() {
 		],		
 	    "columnDefs": [ 
 	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ScoreablePass'>"+data+"</a></span>";
-				return linkData;
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
 	        },
 		   "targets" : 0
 		   },
@@ -397,10 +627,10 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 5
+		   "targets" : 6
 		   }	
 		 ], 
-		 dom: 'B<"clear">lfrtip',	
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
@@ -416,21 +646,65 @@ $(document).ready(function() {
  		      },
 	         {
 	             
-			     extend: 'pdf',
+ 		    	 extend: 'pdf',
 			     title: reportTitle,
-			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 7;
-			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}	       
+			     messageTop: messageOnTop,			   
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;   
+			     }
 	         }	        
 	     ],
 	    
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
 	});
 	scoreablePassReportDataTable.columns.adjust().draw();
 	
@@ -442,6 +716,7 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "scorableCount"},
 		{ "mData": "scorableFail"},
@@ -449,9 +724,17 @@ $(document).ready(function() {
 		],		
 	    "columnDefs": [ 
 	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/ScoreableFail'>"+data+"</a></span>";
-				return linkData;
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
 	        },
 		   "targets" : 0
 		   },
@@ -460,10 +743,10 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 5
+		   "targets" : 6
 		   }	
 		 ], 
-		 dom: 'B<"clear">lfrtip',	
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
@@ -479,21 +762,65 @@ $(document).ready(function() {
  		      },
 	         {
 	             
-			     extend: 'pdf',
+ 		    	 extend: 'pdf',
 			     title: reportTitle,
-			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 7;
-			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+			     messageTop: messageOnTop,			    
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;       
+			     }
 	         }	        
 	     ],
 	     
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
 	});
 
 	scoreableFailReportTable.columns.adjust().draw();
@@ -505,15 +832,24 @@ $(document).ready(function() {
 		"aoColumns": [
 		{ "mData": "macName"},
 		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
 		{ "mData": "totalCount"},
 		{ "mData": "nonScorableCount"},
 		{ "mData": "nonScorablePercent"}
 		],		
 	    "columnDefs": [ 
 	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/Non-Scoreable'>"+data+"</a></span>";
-				return linkData;
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
 	        },
 		   "targets" : 0
 		   },
@@ -522,66 +858,10 @@ $(document).ready(function() {
 				var linkData = data +"%";
 				return linkData;
 	        },
-		   "targets" : 4
+		   "targets" : 5
 		   }	
 		 ], 
-		 dom: 'B<"clear">lfrtip',
-	     buttons: [
-	         {
-	             extend: 'copyHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'excelHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle
-	         },
-	         {
-	             extend: 'pdfHtml5',
-	             messageTop: messageOnTop,
-	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
-	         }	        
-	     ],
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
-		  "language": {
-		      "emptyTable": "No data available"
-		    }
-	});
-	nonScoreableDataTable.columns.adjust().draw();	
-
-	//Does Not Count Data Table Code
-	var doesNotCountData =eval('${doesNotCountList}');
-	var doesNotCountDataTable = $('#doesNotCountDTId').DataTable( {
-		"aaData": doesNotCountData,
-		"aoColumns": [
-		{ "mData": "macName"},
-		{ "mData": "jurisdictionName"},
-		{ "mData": "totalCount"},
-		{ "mData": "doesNotCount_Number"},
-		{ "mData": "doesNotCount_Percent"}
-		],		
-	    "columnDefs": [ 
-	        { 
-	           "render" : function(data, type, row) {
-				var linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/Does Not Count'>"+data+"</a></span>";
-				return linkData;
-	        },
-		   "targets" : 0
-		   },
-		   { 
-	           "render" : function(data, type, row) {
-				var linkData = data +"%";
-				return linkData;
-	        },
-		   "targets" : 4
-		   }	
-		 ], 
-		 dom: 'B<"clear">lfrtip',
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
@@ -594,19 +874,174 @@ $(document).ready(function() {
 	             title: reportTitle
 	         },
 	         {
-	             extend: 'pdf',
-	             messageTop: messageOnTop,
-	             title: reportTitle,
-	             orientation : 'landscape',
-	             pageSize : 'LEGAL',
+	        	 extend: 'pdf',
+			     title: reportTitle,
+			     messageTop: messageOnTop,			    
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;
+			     }
 	         }	        
 	     ],
-		  "paging" : false,
-		  "pageLength" : 20,
-		  "ordering" : true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		    }
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
+	});
+	nonScoreableDataTable.columns.adjust().draw();	
+
+	//Does Not Count Data Table Code
+	var doesNotCountData =eval('${doesNotCountList}');
+	var doesNotCountDataTable = $('#doesNotCountDTId').DataTable( {
+		"aaData": doesNotCountData,
+		"aoColumns": [
+		{ "mData": "macName"},
+		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
+		{ "mData": "totalCount"},
+		{ "mData": "doesNotCount_Number"},
+		{ "mData": "doesNotCount_Percent"}
+		],		
+	    "columnDefs": [ 
+	        { 
+	        	 "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if(row.program == null) {
+							linkData = data;
+			        	} else if (data=="zTotals") {
+			        		linkData = data;
+					     	} else {
+					    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+						  	}
+					
+					return linkData;
+	        },
+		   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 5
+		   }	
+		 ], 
+		 dom: 'Bfrtip',	
+	     buttons: [
+	         {
+	             extend: 'copy',
+	             messageTop: messageOnTop,
+	             title: reportTitle
+	         },
+	         {
+	             extend: 'excel',
+	             messageTop: messageOnTop,
+	             title: reportTitle
+	         },
+	         {
+	        	 extend: 'pdf',
+			     title: reportTitle,
+			     messageTop: messageOnTop,			    
+			     customize: function (doc) {
+		               doc.pageMargins = [10,10,10,10];
+		               doc.defaultStyle.fontSize = 7;
+		               doc.styles.tableHeader.fontSize = 7;
+		               doc.styles.title.fontSize = 9;
+		               // Remove spaces around page title
+		               doc.content[0].text = doc.content[0].text.trim();
+		               // Create a footer
+		               doc['footer']=(function(page, pages) {
+		                   return {
+		                       columns: [
+		                           '',
+		                           {
+		                               // This is the right column
+		                               alignment: 'right',
+		                               text: ['page ', { text: page.toString() },  ' of ', { text: pages.toString() }]
+		                           }
+		                       ],
+		                       margin: [10, 0]
+		                   }
+		               });
+		               // Styling the table: create style object
+		               var objLayout = {};
+		               // Horizontal line thickness
+		               objLayout['hLineWidth'] = function(i) { return .5; };
+		               // Vertikal line thickness
+		               objLayout['vLineWidth'] = function(i) { return .5; };
+		               // Horizontal line color
+		               objLayout['hLineColor'] = function(i) { return '#aaa'; };
+		               // Vertical line color
+		               objLayout['vLineColor'] = function(i) { return '#aaa'; };
+		               // Left padding of the cell
+		               objLayout['paddingLeft'] = function(i) { return 4; };
+		               // Right padding of the cell
+		               objLayout['paddingRight'] = function(i) { return 4; };
+		               // Inject the object in the document
+		               doc.content[1].layout = objLayout;
+			     }
+	         }	        
+	     ],
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
+		  "language": {
+		      "emptyTable": "No data available"
+		    },
+	    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+		    
+              if ( aData.program == null )
+              {
+                  $('td', nRow).css('background-color', '#CEE9F5');
+              }
+              
+          }
 	});
 	doesNotCountDataTable.columns.adjust().draw();
 	
@@ -1409,6 +1844,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										            <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Pass Count</th>
@@ -1419,7 +1855,7 @@ $(document).ready(function() {
 										            <th style="text-align: left">Non-Scoreable Percent</th> 
 										            <th style="text-align: left">Does Not Count</th>
 										            <th style="text-align: left">Does Not Count Percent</th>
-										            
+										            <th style="text-align: left">Sort Row</th>
 										          										           
 										        </tr>
 										    </thead>
@@ -1442,6 +1878,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Pass Count</th>
@@ -1472,6 +1909,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Fail Count</th>
@@ -1500,6 +1938,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Pass Count</th>
@@ -1526,6 +1965,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Pass Count</th>
@@ -1550,6 +1990,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Scoreable Count</th>
 										            <th style="text-align: left">Scoreable Fail Count</th>
@@ -1575,6 +2016,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Non-Scoreable Count</th>
 										            <th style="text-align: left">Non-Scoreable Percent</th>
@@ -1599,6 +2041,7 @@ $(document).ready(function() {
 										        <tr>
 										            <th style="text-align: left">MAC</th>
 										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
 										            <th style="text-align: left">Total Count</th>
 										            <th style="text-align: left">Does Not Count</th>
 										            <th style="text-align: left">Does Not Count Percent</th>

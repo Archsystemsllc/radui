@@ -74,8 +74,6 @@ public class MacAssignmentController {
 		try {
 			
 			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
-			
-			
 									
 			String roles = authentication.getAuthorities().toString();
 			Date today = new Date(); 			
@@ -125,9 +123,13 @@ public class MacAssignmentController {
 		List<User> macAssignmentListResultsMap = new ArrayList<User> ();
 		
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-		Integer user1Count = 0;
-		Integer user2Count = 0;
-		Integer user3Count = 0;
+		Integer user1TempCompletedCount = 0;
+		Integer user2TempCompletedCount = 0;
+		Integer user3TempCompletedCount = 0;
+		
+		Integer user1TotalAssignedCount = 0, user2TotalAssignedCount = 0, user3TotalAssignedCount = 0;
+		Integer user1TotalCompletedCount = 0, user2TotalCompletedCount = 0, user3TotalCompletedCount = 0;
+		Integer macJurisdictionProgramPlanned = 0,  macJurisdictionProgramCompleted = 0, totalPlanned = 0, totalCompleted = 0;
 	
 		try {
 			
@@ -257,9 +259,9 @@ public class MacAssignmentController {
 							
 							scoreCardRsultsMap = responseEntity.getBody();
 							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
-							user1Count = scoreCardList.size();
-							if(user1Count >0 ) {
-								System.out.println("Test");
+							user1TempCompletedCount = scoreCardList.size();
+							if(user1TempCompletedCount >0 ) {
+								//System.out.println("Test");
 							}
 							
 							//Scorecard List Count for Second User						
@@ -268,9 +270,9 @@ public class MacAssignmentController {
 							
 							scoreCardRsultsMap = responseEntity.getBody();
 							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
-							user2Count = scoreCardList.size();
-							if(user2Count > 0 ) {
-								System.out.println("Test");
+							user2TempCompletedCount = scoreCardList.size();
+							if(user2TempCompletedCount > 0 ) {
+								//System.out.println("Test");
 							}
 							//Scorecard List Count for Second User
 														
@@ -279,13 +281,33 @@ public class MacAssignmentController {
 							
 							scoreCardRsultsMap = responseEntity.getBody();
 							scoreCardList = mapper.convertValue(scoreCardRsultsMap, new TypeReference<List<ScoreCard>>() { });
-							user3Count = scoreCardList.size();
-							if(user3Count > 0) {
-								System.out.println("Test");
+							user3TempCompletedCount = scoreCardList.size();
+							if(user3TempCompletedCount > 0) {
+								//System.out.println("Test");
 							}
-							macAssignmentObjectTemp.setAssignedCallsForCindy(eachQualityMontiorCalls[0]+"("+user1Count+")");
-							macAssignmentObjectTemp.setAssignedCallsForLydia(eachQualityMontiorCalls[1]+"("+user2Count+")");						
-							macAssignmentObjectTemp.setAssignedCallsForJaneene(eachQualityMontiorCalls[2]+"("+user3Count+")");
+							macAssignmentObjectTemp.setAssignedCallsForCindy(eachQualityMontiorCalls[0]+"("+user1TempCompletedCount+")");
+							macAssignmentObjectTemp.setAssignedCallsForLydia(eachQualityMontiorCalls[1]+"("+user2TempCompletedCount+")");						
+							macAssignmentObjectTemp.setAssignedCallsForJaneene(eachQualityMontiorCalls[2]+"("+user3TempCompletedCount+")");
+							
+							user1TotalAssignedCount += Integer.valueOf(eachQualityMontiorCalls[0]);
+							user2TotalAssignedCount += Integer.valueOf(eachQualityMontiorCalls[1]);
+							user3TotalAssignedCount += Integer.valueOf(eachQualityMontiorCalls[2]);
+							
+							user1TotalCompletedCount += user1TempCompletedCount;
+							user2TotalCompletedCount += user2TempCompletedCount;
+							user3TotalCompletedCount += user3TempCompletedCount;
+							
+							macJurisdictionProgramPlanned = Integer.valueOf(eachQualityMontiorCalls[0]) + Integer.valueOf(eachQualityMontiorCalls[1]) + Integer.valueOf(eachQualityMontiorCalls[2]); 
+							macJurisdictionProgramCompleted = user1TempCompletedCount + user2TempCompletedCount + user3TempCompletedCount; 
+							
+							
+							macAssignmentObjectTemp.setPlannedCalls(macJurisdictionProgramPlanned.toString());
+							macAssignmentObjectTemp.setMacJurisdictionProgramCompleted(macJurisdictionProgramCompleted);
+							totalPlanned += macJurisdictionProgramPlanned;
+							totalCompleted += macJurisdictionProgramCompleted;
+							macJurisdictionProgramPlanned=0;
+							macJurisdictionProgramCompleted=0;
+							
 						} else {
 							macAssignmentObjectTemp.setAssignedCallsForCindy(eachQualityMontiorCalls[0]);
 							macAssignmentObjectTemp.setAssignedCallsForLydia(eachQualityMontiorCalls[1]);						
@@ -301,8 +323,25 @@ public class MacAssignmentController {
 					macAssignmentMap.put(macAssignmentObjectTemp.getId(),macAssignmentObjectTemp);
 				}
 				session.setAttribute("SESSION_SCOPE_MAC_ASSIGNMENT_MAP", macAssignmentMap);
-				model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			}
+				
+			if(action.equalsIgnoreCase("View")) {
+				MacAssignmentObject macAssignmentObjectTemp = new MacAssignmentObject();
+				macAssignmentObjectTemp.setMacName("zTotals");
+				macAssignmentObjectTemp.setJurisdictionName("");
+				macAssignmentObjectTemp.setProgramName("");
+			
+				macAssignmentObjectTemp.setCreatedMethod("Total");
+				macAssignmentObjectTemp.setAssignedCallsForCindy(user1TotalAssignedCount+"("+user1TotalCompletedCount+")");
+				macAssignmentObjectTemp.setAssignedCallsForLydia(user2TotalAssignedCount+"("+user2TotalCompletedCount+")");
+				macAssignmentObjectTemp.setAssignedCallsForJaneene(user3TotalAssignedCount+"("+user3TotalCompletedCount+")");
+				macAssignmentObjectTemp.setPlannedCalls(totalPlanned.toString());
+				macAssignmentObjectTemp.setMacJurisdictionProgramCompleted(totalCompleted);
+				macAssignmentList.add(macAssignmentObjectTemp);
+			}
+			
+			
+			model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			
 			model.addAttribute("macAssignmentObjectForm", macAssignmentObject);
 			
@@ -349,7 +388,7 @@ public class MacAssignmentController {
 	
 	@RequestMapping(value ={"/admin/save-macassignmentlist", "/quality_manager/save-macassignmentlist", "/cms_user/save-macassignmentlist",
 			 "/mac_admin/save-macassignmentlist","/mac_user/save-macassignmentlist","/quality_monitor/save-macassignmentlist"}, method = RequestMethod.GET)	
-	public void saveMacAssignmentScreenGetMethod(@RequestParam("monthNumber") final String assignedMonthYear, @RequestParam("finalDataSet[]") String[] saveDataSet,final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
+	public String saveMacAssignmentScreenGetMethod(@RequestParam("monthNumber") final String assignedMonthYear, @RequestParam("finalDataSet[]") String[] saveDataSet,final Model model, Authentication authentication, HttpSession session, HttpServletResponse response) {
 		log.debug("--> saveMacAssignmentScreenGetMethod <--");
 		  
 		String returnView = "";
@@ -361,7 +400,7 @@ public class MacAssignmentController {
 		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
 		model.addAttribute("menu_highlight", "scorecard");
-		
+		Integer plannedCalls = 0;
 				
 		String loggedInUserRole = userFormSession.getRole().getRoleName();
 		MacAssignmentObject macAssignmentObject = null;
@@ -384,7 +423,7 @@ public class MacAssignmentController {
 						macAssignmentObject = macAssignmentMap.get(idValue);
 						//macAssignmentObject.setUpdatedDate(new Date());
 						macAssignmentObject.setUpdatedBy(userFormSession.getUserName());
-						macAssignmentObject.setPlannedCalls("20");
+						//macAssignmentObject.setPlannedCalls("20");
 						macAssignmentObject.setCreatedMethod("Auto");
 										
 				} else {
@@ -396,7 +435,7 @@ public class MacAssignmentController {
 					macAssignmentObject.setMacId(Integer.valueOf(eachCellArray[7]));
 					macAssignmentObject.setJurisdictionId(Integer.valueOf(eachCellArray[8]));
 					macAssignmentObject.setProgramId(Integer.valueOf(eachCellArray[9]));
-					macAssignmentObject.setPlannedCalls("20");
+					//macAssignmentObject.setPlannedCalls("20");
 					macAssignmentObject.setCreatedMethod("Auto");
 					//macAssignmentObject.setCreatedDate(new Date());
 					macAssignmentObject.setCreatedBy(userFormSession.getUserName());
@@ -406,13 +445,22 @@ public class MacAssignmentController {
 				
 				if(eachCellArray.length > 4) {
 					if(eachCellArray[4] != null && !eachCellArray[4].equalsIgnoreCase("") && !eachCellArray[4].equalsIgnoreCase("NoInput")) {
-						assignedCalls += eachCellArray[4]+","+eachCellArray[5]+","+eachCellArray[6];
-						
+						if(eachCellArray[4].equalsIgnoreCase("NoInput")) {
+							eachCellArray[4] = "0";
+						}
+						if(eachCellArray[5].equalsIgnoreCase("NoInput")) {
+							eachCellArray[5] = "0";
+						}
+						if(eachCellArray[6].equalsIgnoreCase("NoInput")) {
+							eachCellArray[6] = "0";
+						}
+						assignedCalls = eachCellArray[4]+","+eachCellArray[5]+","+eachCellArray[6];
+						plannedCalls = Integer.valueOf(eachCellArray[4]) + Integer.valueOf(eachCellArray[5]) + Integer.valueOf(eachCellArray[6]);
 					}					
 				}
 				
 				macAssignmentObject.setAssignedCalls(assignedCalls);
-				
+				macAssignmentObject.setPlannedCalls(plannedCalls.toString());
 				macAssignmentObjectList.add(macAssignmentObject);			
 				
 			}
@@ -423,11 +471,11 @@ public class MacAssignmentController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*String url = "redirect:/"+userFolder+"/macassignmentlist";
+		/*String url = "forward:/"+userFolder+"/macassignmentlist";
 		url = response.encodeRedirectURL(url);
-		returnView =  url;		
+		returnView =  url;		*/
 
-		return returnView;*/
+		return "Success";
 		
 	}
 	

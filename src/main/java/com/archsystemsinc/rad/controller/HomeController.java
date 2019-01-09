@@ -800,7 +800,7 @@ public class HomeController {
 			String jurisdictionNamesValues = "";
 			String jurIdList = "";			
 			
-			if(user.getMacId() != null) {
+			if(user.getMacId() != null ) {
 				String macName = MAC_ID_MAP.get(user.getMacId().intValue());				
 				LOGGED_IN_USER_MAC_ID = user.getMacId().intValue();
 				
@@ -809,7 +809,7 @@ public class HomeController {
 				
 				//Jurisdiction Id Setup
 				
-				if(user.getJurId() != null) {
+				if(user.getJurId() != null && !user.getJurId().equalsIgnoreCase("")) {
 					String[] jurisIds = user.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);				
 					
 					for (String jurisIdSingleValue: jurisIds) {
@@ -821,7 +821,7 @@ public class HomeController {
 					}
 				}
 				
-				if(user.getPccId() != null) {
+				if(user.getPccId() != null && !user.getPccId().equalsIgnoreCase("")) {
 					String[] pccIdUiValue = user.getPccId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);				
 					
 					for (String pccIdSingleValue: pccIdUiValue) {

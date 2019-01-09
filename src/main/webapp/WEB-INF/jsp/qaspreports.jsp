@@ -84,7 +84,7 @@ $(document).ready(function() {
                className: 'dt-body-left'
            }
 		 ], 
-		 dom: 'B<"clear">lfrtip',	
+		 dom: 'Bfrtip',	
 	     buttons: [
 	         {
 	             extend: 'copy',
@@ -96,7 +96,52 @@ $(document).ready(function() {
 	             extend: 'excel',
 	             messageTop: messageOnTop,
 	             title: reportTitle,
-			     customizeData: includeSubtotals
+			     customize: function (xlsx) {
+			         console.log(xlsx);
+			         alert("test");
+			         var sheet = xlsx.xl.worksheets['Sheet1.xml'];
+			         alert("Test1");
+			         var downrows = 3;
+			         var clRow = $('row', sheet);
+			         //update Row
+			         clRow.each(function () {
+			             var attr = $(this).attr('r');
+			             var ind = parseInt(attr);
+			             ind = ind + downrows;
+			             $(this).attr("r",ind);
+			         });
+			  
+			         // Update  row > c
+			         $('row c ', sheet).each(function () {
+			             var attr = $(this).attr('r');
+			             var pre = attr.substring(0, 1);
+			             var ind = parseInt(attr.substring(1, attr.length));
+			             ind = ind + downrows;
+			             $(this).attr("r", pre + ind);
+			         });
+			  
+			         function Addrow(index,data) {
+			             msg='<row r="'+index+'">'
+			             for(i=0;i<data.length;i++){
+			                 var key=data[i].k;
+			                 var value=data[i].v;
+			                 msg += '<c t="inlineStr" r="' + key + index + '" s="42">';
+			                 msg += '<is>';
+			                 msg +=  '<t>'+value+'</t>';
+			                 msg+=  '</is>';
+			                 msg+='</c>';
+			             }
+			             msg += '</row>';
+			             return msg;
+			         }
+			  
+			         //insert
+			         var r1 = Addrow(1, [{ k: 'A', v: 'ColA' }, { k: 'B', v: '' }, { k: 'C', v: '' }]);
+			         var r2 = Addrow(2, [{ k: 'A', v: '' }, { k: 'B', v: 'ColB' }, { k: 'C', v: '' }]);
+			         var r3 = Addrow(3, [{ k: 'A', v: '' }, { k: 'B', v: '' }, { k: 'C', v: 'ColC' }]);
+			         
+			         sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2+ r3+ r4+ sheet.childNodes[0].childNodes[1].innerHTML;
+			     }
 	            
  		      },
 	         {
@@ -152,7 +197,8 @@ $(document).ready(function() {
                 typeof i === 'number' ?
                     i : 0;
         };
-        
+
+      
 	   
 	   if (rowNum===totalRows-1){
 		  		  
@@ -260,7 +306,20 @@ $(document).ready(function() {
 	  }
 	  // EXCEL/PDF/PRINT
 	  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
-	    
+
+		  var headers = [];
+		  $('#qaspReportDTId th.header').each(function(){
+			  var $row = $(this),
+	          row_index = $row.index(), 
+	          row = $row.find('td,th').map(function(){return $(this).text();}).get();
+			  headers[ headers.length ] = {rowNum: row_index, data: row };
+		  });
+
+
+		  for (var i=0, n=headers.length; i<n; i++){
+		      var header = headers[i];
+		      data.body.splice(headers.rowNum, 0, header.data);
+		    }
 	    // data is actually the object to use for EXCEL/PDF/PRINT
 	    var subtotals = [];
 	    $('#qaspReportDTId tr.subtotal').each(function(){
@@ -471,13 +530,15 @@ $(document).ready(function() {
 			                            			                        
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qaspReportDTId" style="width: 95%">
 						                    <thead>
-										       <!--  <tr>
-										            <th style="text-align: left" rowspan="2">Month</th>
-										            <th style="text-align: left" colspan="2"># of QAM Scorecards Completed</th>
-										            <th style="text-align: left" colspan="2"># of QAM Scorecards Passed</th>
-										            <th style="text-align: left" colspan="2"># of QAM Scorecards Failed</th>
+										     
+										        <tr>
+										            <th style="text-align: center" colspan="7" class="header">QASP Report1</th>									            
 										            									                 
-										        </tr> -->
+										        </tr>
+										        <tr>
+										            <th style="text-align: center" colspan="7" class="header">QASP Report2</th>									            
+										            									                 
+										        </tr>
 										         <tr>
 										         <th style="text-align: left" >Month</th>
 										        	<th style="text-align: left"># of QAM Scorecards Completed(A/B)</th>
