@@ -1,6 +1,8 @@
 package com.archsystemsinc.rad.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +112,23 @@ public class ScoreCardController {
 						scoreCardFailObject.setJurIdList(scoreCardNew.getJurIdList());
 					}
 					
+					SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+					
+					Date today = new Date();					
+				
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(today);
+					Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+									
+					if(dayOfMonth < 16) {					
+						cal.add(Calendar.MONTH, -1);					
+					} 
+					
+					cal.set(Calendar.DATE, 15);		
+					String toDate = mdyFormat.format(cal.getTime());
+					
+					scoreCardNew.setFilterToDateString(toDate);
+					
 					//scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);		
@@ -118,7 +137,7 @@ public class ScoreCardController {
 					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
 					//scoreCardFailObject.setJurIdList(jurIdArrayList);
-					
+					scoreCardFailObject.setFilterToDateString(toDate);
 					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
 			} else {

@@ -42,6 +42,7 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.colVis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.js"></script>
 
 <script type="text/javascript">
 
@@ -55,16 +56,8 @@ function resetFields() {
 	$('#filterToDateString').val("");
 	
 }
-	$(document).ready(function() {
 
-		$('#filterFromDateString').datepicker({
-			maxDate : 0
-		});
-
-		$('#filterToDateString').datepicker({
-			maxDate : 0
-		});
-
+$(document).ready(function() {
 		
 		$("select#macId").change(function(){
 
@@ -121,6 +114,68 @@ function resetFields() {
 
 <script type="text/javascript">
 $(document).ready(function(){
+	var userRole = $('#userRole').val();
+	
+	var maxAllowedDate = 0;	
+	if ((userRole == "MAC Admin") || (userRole == "MAC User") ){
+		var maxAllowedDate = new Date();			
+		var day = maxAllowedDate.getDate();
+		
+		if(day < 16) {
+			maxAllowedDate.setMonth(maxAllowedDate.getMonth() - 1);				
+		}
+		
+		maxAllowedDate.setDate(15);			
+	}
+	
+	 
+	$('#filterFromDateString').datepicker({
+		maxDate: maxAllowedDate,
+		format: "mm/dd/yyyy",
+		onSelect: function(selected) {
+			$("#filterToDateString").datepicker("option","minDate", selected)
+		}
+
+	}); 
+	    	
+	var previousFromDate;
+
+	$("#filterFromDateString").focus(function(){   
+		previousFromDate= $(this).val(); ;
+	});
+	$("#filterFromDateString").blur(function(){   
+	     var newDate = $(this).val();    
+	     
+	    if (!moment(newDate, 'MM/DD/YYYY', true).isValid()){         
+    	   
+	        $(this).val(previousFromDate);      
+	        console.log("Error");
+	    }  
+	});
+
+	$('#filterToDateString').datepicker({
+		maxDate: maxAllowedDate,
+		format: "mm/dd/yyyy",
+		onSelect: function(selected) {
+			$("#filterFromDateString").datepicker("option","maxDate", selected)
+		}
+			    		
+	}); 
+
+	var previousToDate;
+
+	$("#filterToDateString").focus(function(){   
+		previousToDate= $(this).val(); ;
+	});
+	$("#filterToDateString").blur(function(){   
+	     var newDate = $(this).val();    
+	     
+	    if (!moment(newDate, 'MM/DD/YYYY', true).isValid()){         
+    	   
+	        $(this).val(previousToDate);      
+	        console.log("Error");
+	    }  
+	});
 	
 	var role = $('#userRole').val();
 	var data = eval('${rebuttalList}');
@@ -160,7 +215,7 @@ $(document).ready(function(){
 	   "targets" : 8
 	   },
 	 ],	
-	 dom: '<lif<t>pB>',
+	 dom: 'Bfrtip',
      buttons: [
          {
              extend: 'copyHtml5',

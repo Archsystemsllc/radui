@@ -67,11 +67,11 @@ $(document).ready(function() {
 		{ "mData": "jurisdictionName"},
 		{ "mData": "programName"},
 		{ "mData": "createdMethod"},
-		{ "mData": "plannedCalls"},
-		{ "mData": "macJurisdictionProgramCompleted"},		
+		{ "mData": "plannedCalls"},		
 		{ "mData": "assignedCallsForCindy"},
 		{ "mData": "assignedCallsForLydia"},
-		{ "mData": "assignedCallsForJaneene"}
+		{ "mData": "assignedCallsForJaneene"},
+		{ "mData": "macJurisdictionProgramCompleted"}
 		],	
 		 "columnDefs": [ 
 		        { 
@@ -89,7 +89,7 @@ $(document).ready(function() {
 					}					
 					return linkData;
 		        },
-			   "targets" : 6
+			   "targets" : 5
 			   },
 			   { 
 		           "render" : function(data, type, row) {
@@ -105,7 +105,7 @@ $(document).ready(function() {
 					}					
 					return linkData;
 		        },
-			   "targets" : 7
+			   "targets" : 6
 			   },
 			  
 			   { 
@@ -122,7 +122,7 @@ $(document).ready(function() {
 					}					
 					return linkData;
 		        },
-			   "targets" : 8
+			   "targets" : 7
 			   }
 			 ],	   
 		dom: 'Bfrtip',	
@@ -294,14 +294,10 @@ $(document).ready(function() {
 										            <th style="text-align: left" rowspan="2">MAC</th>
 										            <th style="text-align: left" rowspan="2">Jurisdiction</th>
 										            <th style="text-align: left" rowspan="2">Progam</th>
-										             <th style="text-align: left" rowspan="2">Created</th> 
+										            <th style="text-align: left" rowspan="2">Created</th> 
 										            <th style="text-align: left" rowspan="2">Planned</th>
-										           
-						                           		<th style="text-align: left" rowspan="2">Completed</th>
-						                       
-										           
 										            <th style="text-align: center" colspan="3">Assigned Calls</th>
-										            
+										            <th style="text-align: left" rowspan="2">Completed</th>
 										           
 										        </tr>
 										        <tr>
@@ -309,6 +305,7 @@ $(document).ready(function() {
 										            <th style="text-align: left">Rivera,Lydia</th>										            
 										            <th style="text-align: left">Galtin,Janeene</th>
 										        </tr>
+										       
 										    </thead>
 						                    <tbody>  
 						                    </tbody>

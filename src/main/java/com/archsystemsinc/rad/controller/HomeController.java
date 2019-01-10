@@ -462,9 +462,9 @@ public class HomeController {
 			  model.addAttribute("menu_highlight", "home");
 			  
 			  session.setAttribute("SS_USER_FOLDER","admin");
-			 if(MAC_ID_MAP == null) {
+			 //if(MAC_ID_MAP == null) {
 				 setupStaticGlobalVariables();
-			  }
+			  //}
 			 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			 String userName = auth.getName(); //get logged in username 
 			 User user = userService.findByUsername(userName);
@@ -759,15 +759,17 @@ public class HomeController {
 					for(Integer callCategoryId: callCategoryMap.keySet()) {
 						String callCategoryName = callCategoryMap.get(callCategoryId);
 						HashMap<Integer, String> callSubCategoryMap = callCatSubCatMap.get(callCategoryId);
-						
-						for(Integer callSubCategoryId: callSubCategoryMap.keySet()) {
-							key = "";
-							value = "";
-							String callSubCategoryName = callSubCategoryMap.get(callSubCategoryId);
-							key = callCategoryId+"-"+callSubCategoryId;
-							value = callCategoryName+"-"+callSubCategoryName;
-							callCatSubCatMultiSelectMap.put(key, value);
+						if(callSubCategoryMap != null) {
+							for(Integer callSubCategoryId: callSubCategoryMap.keySet()) {
+								key = "";
+								value = "";
+								String callSubCategoryName = callSubCategoryMap.get(callSubCategoryId);
+								key = callCategoryId+"-"+callSubCategoryId;
+								value = callCategoryName+"-"+callSubCategoryName;
+								callCatSubCatMultiSelectMap.put(key, value);
+							}
 						}
+						
 						
 					}
 					
@@ -784,6 +786,9 @@ public class HomeController {
 					
 					e.printStackTrace();
 				} catch (IOException e) {
+					
+					e.printStackTrace();
+				} catch (Exception e) {
 					
 					e.printStackTrace();
 				}

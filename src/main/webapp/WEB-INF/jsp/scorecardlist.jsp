@@ -68,20 +68,32 @@
 		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
 		});
 
-		$('#filterFromDateString').datepicker({
-			maxDate : 0,
+		var userRole = $('#userRole').val();		
+		var maxAllowedDate = 0;	
+		if ((userRole == "MAC Admin") || (userRole == "MAC User") ){
+			var maxAllowedDate = new Date();			
+			var day = maxAllowedDate.getDate();
+			
+			if(day < 16) {
+				maxAllowedDate.setMonth(maxAllowedDate.getMonth() - 1);				
+			}
+			
+			maxAllowedDate.setDate(15);			
+		}
+		
+		 $('#filterFromDateString').datepicker({
+			maxDate : maxAllowedDate,
     		onSelect: function(selected) {
     			$("#filterToDateString").datepicker("option","minDate", selected)
     		}
 		});
 
 		$('#filterToDateString').datepicker({
-			maxDate : 0,
+			maxDate : maxAllowedDate,
     		onSelect: function(selected) {
     			$("#filterFromDateString").datepicker("option","maxDate", selected)
     		}
 		});
-
 		
 		$("select#macId").change(function(){
 

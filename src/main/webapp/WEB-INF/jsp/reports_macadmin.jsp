@@ -36,6 +36,8 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.js"></script>
+
 
 <script type="text/javascript">
 	function resetFields() {
@@ -62,9 +64,22 @@
 		$('#rebuttalStatusDiv').hide();
 		$('#jurisSingleSelect').hide();
 		
-
+		var userRole = $('#userRole').val();		
+		var maxAllowedDate = 0;	
+		if ((userRole == "MAC Admin") || (userRole == "MAC User") ){
+			var maxAllowedDate = new Date();			
+			var day = maxAllowedDate.getDate();
+			
+			if(day < 16) {
+				maxAllowedDate.setMonth(maxAllowedDate.getMonth() - 1);				
+			}
+			
+			maxAllowedDate.setDate(15);			
+		}
+		
+		 
     	$('#fromDateString').datepicker({
-    		maxDate: 0,
+    		maxDate: maxAllowedDate,
     		format: "mm/dd/yyyy",
     		onSelect: function(selected) {
     			$("#toDateString").datepicker("option","minDate", selected)
@@ -88,7 +103,7 @@
     	});
 
     	$('#toDateString').datepicker({
-    		maxDate: 0,
+    		maxDate: maxAllowedDate,
     		format: "mm/dd/yyyy",
     		onSelect: function(selected) {
     			$("#fromDateString").datepicker("option","maxDate", selected)

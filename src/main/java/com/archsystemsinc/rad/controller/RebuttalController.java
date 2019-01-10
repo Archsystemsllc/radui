@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -152,6 +153,23 @@ public class RebuttalController {
 					model.addAttribute("locationMapEdit", locationMap);	
 					
 				}
+				
+				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+				
+				Date today = new Date();					
+			
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(today);
+				Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+								
+				if(dayOfMonth < 16) {					
+					cal.add(Calendar.MONTH, -1);					
+				} 
+				
+				cal.set(Calendar.DATE, 15);		
+				String toDate = mdyFormat.format(cal.getTime());
+				rebuttalNew.setFilterToDateString(toDate);
+				
 				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);		
@@ -339,6 +357,22 @@ public class RebuttalController {
 					scoreCardTemp.setJurIdList(jurIdArrayList);
 					rebuttalNew.setJurisIdList(jurIdArrayList);
 				}
+				
+				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+				
+				Date today = new Date();					
+			
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(today);
+				Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+								
+				if(dayOfMonth < 16) {					
+					cal.add(Calendar.MONTH, -1);					
+				} 
+				
+				cal.set(Calendar.DATE, 15);		
+				String toDate = mdyFormat.format(cal.getTime());
+				rebuttalNew.setFilterToDateString(toDate);
 				
 				
 			} 
