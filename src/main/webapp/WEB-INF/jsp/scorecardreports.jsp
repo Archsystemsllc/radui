@@ -41,7 +41,6 @@ $(document).ready(function() {
 	+'Report From Date:${reportsForm.fromDateString},Report To Date:${reportsForm.toDateString}';
 	var reportTitle = '${ReportTitle}';	
 
-	alert(messageOnTop+"____"+reportTitle);
 	var allScorecardData =eval('${scoreCardList}');	
 
 	var allScoreCardDataTable = $('#allScoreCardId').DataTable( {
@@ -126,13 +125,19 @@ $(document).ready(function() {
 		 buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	             }
 	         },
 	         {
 	             extend: 'excel',
 	             title: reportTitle,
 	             messageTop: messageOnTop,
-	             filename: 'Scorecard Report'
+	             filename: 'Scorecard Report',	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	             }
  		      },
 	         {  
 			     extend: 'pdfHtml5',
@@ -1856,10 +1861,7 @@ $(document).ready(function() {
 					                    <h2>${ReportTitle}</h2> 
 					                  	
 				                   <c:if test="${AllScoreCardReport_All == true}">
-				                        
-				               
-				                   
-				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                                      
 				                   <div class="row" id="allScoreCardDiv">
 			                            <div class="col-lg-10 form-group">
 			                        

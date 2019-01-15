@@ -71,6 +71,10 @@ public class ScoreCardController {
 		model.addAttribute("menu_highlight", "scorecard");
 		String objectType = "";
 		
+		SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+		
+		Date today = new Date();			
+		
 		try {
 			
 
@@ -89,10 +93,47 @@ public class ScoreCardController {
 				objectType = "New";
 				String[] tempValues = {UIGenericConstants.ALL_STRING};
 				scoreCardNew.setJurisIdReportSearchString(tempValues);
+				
+				//Restricting From Date to 6 months from Current Date
+				Calendar fromDateCalendar = Calendar.getInstance();
+				fromDateCalendar.setTime(today);
+				
+				fromDateCalendar.add(Calendar.MONTH, -6);
+				String fromDate = mdyFormat.format(fromDateCalendar.getTime());				
+				
+				scoreCardNew.setFilterFromDateString(fromDate);
+				
+				if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+					scoreCardFailObject = new ScoreCard();
+					// Restricting Mac User and Mac Admin to only see data until 15th of the Month, based on the day
+					Calendar toDateCalendar = Calendar.getInstance();
+					Integer dayOfMonth = toDateCalendar.get(Calendar.DAY_OF_MONTH);
+									
+					if(dayOfMonth < 16) {					
+						toDateCalendar.add(Calendar.MONTH, -1);					
+					} 
+					
+					toDateCalendar.set(Calendar.DATE, 15);		
+					String toDate = mdyFormat.format(toDateCalendar.getTime());
+					
+					scoreCardFailObject.setFilterFromDateString(fromDate);
+					
+					scoreCardNew.setFilterToDateString(toDate);
+					scoreCardFailObject.setFilterToDateString(toDate);
+					
+				} else {
+					// Restricting Mac User and Mac Admin to only see data until 15th of the Month, based on the day
+					Calendar toDateCalendar = Calendar.getInstance();
+					toDateCalendar.setTime(today);
+					String toDate = mdyFormat.format(toDateCalendar.getTime());
+					
+					scoreCardNew.setFilterToDateString(toDate);
+					
+				}
 			}
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-				scoreCardFailObject = new ScoreCard();
+				
 					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 					
@@ -112,23 +153,6 @@ public class ScoreCardController {
 						scoreCardFailObject.setJurIdList(scoreCardNew.getJurIdList());
 					}
 					
-					SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-					
-					Date today = new Date();					
-				
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(today);
-					Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-									
-					if(dayOfMonth < 16) {					
-						cal.add(Calendar.MONTH, -1);					
-					} 
-					
-					cal.set(Calendar.DATE, 15);		
-					String toDate = mdyFormat.format(cal.getTime());
-					
-					scoreCardNew.setFilterToDateString(toDate);
-					
 					//scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);		
@@ -137,11 +161,11 @@ public class ScoreCardController {
 					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
 					//scoreCardFailObject.setJurIdList(jurIdArrayList);
-					scoreCardFailObject.setFilterToDateString(toDate);
+					
 					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
 			} else {
-				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);	
+				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);				
 				
 				if(scoreCardNew.getMacId() == null || scoreCardNew.getMacId() == 0) {
 					model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
@@ -558,6 +582,7 @@ public class ScoreCardController {
 			model.addAttribute("ValidationFailure", validationResult);
 			redirectAttributes
 			.addFlashAttribute("error", "validation.failed.scorecard");
+			model.addAttribute("ReportSearchString", reportSearchString);
 			returnView = "scorecard";
 		} else {			
 			
@@ -710,10 +735,19 @@ public class ScoreCardController {
     	} else if(scoreCard.getScorecardType().equalsIgnoreCase("Non-Scoreable")) {
     		
     		if(scoreCard.getNonScoreableReason().equalsIgnoreCase("")) {
-				validationResultString+="Non-Scoreable Reason";
+				validationResultString+="Non-Scoreable Reason,";
 			}
     		
     	} 
+    	
+    	if(scoreCard.getCsrLevel().equalsIgnoreCase("")) {
+    		validationResultString+="Csr Level,";
+    	}
+    	
+    	if(scoreCard.getMacCallReferenceNumber().equalsIgnoreCase("")) {
+    		validationResultString+="Mac Call Reference Number";
+    	}
+    	
     	
     	if(validationResultString.equalsIgnoreCase("Please Provide Following Fields:")) {
     		validationResultString = "Validation Succesfull";

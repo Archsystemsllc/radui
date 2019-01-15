@@ -96,10 +96,16 @@ public class RebuttalController {
 		Rebuttal rebuttalNew = new Rebuttal();
 		String objectType = "";
 		
+		SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+		
+		Date today = new Date();			
+		
 		try {
 			
 			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
 			Rebuttal rebuttalFromSession = (Rebuttal) request.getSession().getAttribute("SESSION_SCOPE_REBUTTAL_FILTER");
+			
+			String roles = authentication.getAuthorities().toString();
 			if (rebuttalFromModel.getMacId() != null && rebuttalFromModel.getJurisIdReportSearchString() !=null ){
 				rebuttalNew = rebuttalFromModel;	
 				objectType = "Model";
@@ -113,9 +119,44 @@ public class RebuttalController {
 				String[] tempValues = {UIGenericConstants.ALL_STRING};
 				rebuttalNew.setJurisIdReportSearchString(tempValues);
 				objectType = "New";
+				
+				//Restricting From Date to 6 months from Current Date
+				Calendar fromDateCalendar = Calendar.getInstance();
+				fromDateCalendar.setTime(today);
+				
+				fromDateCalendar.add(Calendar.MONTH, -6);
+				String fromDate = mdyFormat.format(fromDateCalendar.getTime());				
+				
+				rebuttalNew.setFilterFromDateString(fromDate);
+				
+				if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+					
+					// Restricting Mac User and Mac Admin to only see data until 15th of the Month, based on the day
+					Calendar toDateCalendar = Calendar.getInstance();
+					Integer dayOfMonth = toDateCalendar.get(Calendar.DAY_OF_MONTH);
+									
+					if(dayOfMonth < 16) {					
+						toDateCalendar.add(Calendar.MONTH, -1);					
+					} 
+					
+					toDateCalendar.set(Calendar.DATE, 15);		
+					String toDate = mdyFormat.format(toDateCalendar.getTime());
+					
+					rebuttalNew.setFilterToDateString(toDate);
+					
+					
+				} else {
+					// Restricting Mac User and Mac Admin to only see data until 15th of the Month, based on the day
+					Calendar toDateCalendar = Calendar.getInstance();
+					toDateCalendar.setTime(today);
+					String toDate = mdyFormat.format(toDateCalendar.getTime());
+					
+					rebuttalNew.setFilterToDateString(toDate);
+					
+				}
 			}
 			
-			String roles = authentication.getAuthorities().toString();
+			
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
@@ -152,23 +193,7 @@ public class RebuttalController {
 					model.addAttribute("programMapEdit", programMap);	
 					model.addAttribute("locationMapEdit", locationMap);	
 					
-				}
-				
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-				
-				Date today = new Date();					
-			
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(today);
-				Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-								
-				if(dayOfMonth < 16) {					
-					cal.add(Calendar.MONTH, -1);					
-				} 
-				
-				cal.set(Calendar.DATE, 15);		
-				String toDate = mdyFormat.format(cal.getTime());
-				rebuttalNew.setFilterToDateString(toDate);
+				}				
 				
 				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
@@ -194,7 +219,7 @@ public class RebuttalController {
 				rebuttalNew.setJurisIdList(jurisdictionArrayList);
 			}
 			
-			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+			
 			
 			if(rebuttalNew.getFilterFromDateString() != null && 
 					!rebuttalNew.getFilterFromDateString().equalsIgnoreCase("")) {

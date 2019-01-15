@@ -63,12 +63,12 @@
 <script type="text/javascript">
 
 	$(document).ready(function () {
-
 		
 		//Required Fields Logic
 		$('.required').each(function(){
 		       $(this).prev('label').after("<span class='red'><strong>*</strong></span>");
 		});
+		
 		
     	//Set Default Values    	
     	$('#alertMsg').text('');
@@ -208,7 +208,7 @@
 		var username="qamadmin";
   	   	var password="123456";
 
-  	 
+  	 	var csrFullNameSelected = false;
     	    	
     	$("#csrFullName" ).autocomplete({
     	      minLength: 0,
@@ -262,10 +262,21 @@
    			    callTimString = callTimString.replace(/:/,'');
    			    callTimString = callTimString.replace(/:/,'');
    			    callTimString = callTimString.replace(/(AM|PM)/, '');
-    			
-                var macRefId = selectedJurisdiction+firstName+lastName+dateConvertedValue+"_"+callTimString;
 
-                $('#macCallReferenceNumber').val(macRefId);         	 
+				if((selectedJurisdiction != null && selectedJurisdiction !="") &&
+						(firstName != null && firstName !="") &&
+						(lastName != null && lastName !="") &&
+						(dateConvertedValue != null && dateConvertedValue !="") &&
+						(callTimString != null && callTimString !="") ) {
+
+					var macRefId = selectedJurisdiction+firstName+lastName+dateConvertedValue+"_"+callTimString;
+	                $('#macCallReferenceNumber').val(macRefId);      
+	                csrFullNameSelected = true;		
+				} else {
+					$('#macCallReferenceNumber').val("");      
+					csrFullNameSelected = false;		
+				}
+                   	 
     	        return false;
     	      }
     	})
@@ -313,26 +324,24 @@
         	oneLine: true,
         	hourMax: 4
     	}); 
+
+
+    	 $("#csrFullName").change(function(){
+ 			var csrFullNameValue = $(this).val().trim();		
+ 			
+ 	        if(csrFullNameSelected == false || csrFullNameValue == "No CSR's Found" || $("#csrLevel").val().trim() == "" || csrFullNameValue == " ") {		       
+ 	        	$("#csrFullName").val("");
+ 	        	$("#csrLevel").val("");
+ 	        	$("#macCallReferenceNumber").val("");  
+ 	        } 	       
+ 	        	
+ 	     });	
  	
 	});
 
 	$(function(){	
 
-		 $("#csrFullName").change(function(){
-			var csrFullNameValue = $(this).val().trim();			
-	        if(csrFullNameValue == "No CSR's Found") {		       
-	        	$("#csrFullName").val("");
-	        	$("#csrLevel").val("");
-	        	$("#macCallReferenceNumber").val("");  
-	        } 
-
-	        if(csrFullNameValue == " ") {		       
-	        	$("#csrFullName").val("");
-	        	$("#csrLevel").val("");
-	        	$("#macCallReferenceNumber").val("");        	
-	        } 
-	        	
-	     });	
+		
 
 		//Select Jurisdiction Functionality
 		$("select#macId").change(function(){
@@ -790,6 +799,75 @@
 				  onChange: null
 				  
 				});
+
+
+			$('#scorecardForm').submit(function(){
+				$('#alertMsg').text("");
+				var scorecard_type = $("input[name='scorecardType']:checked").val();
+				var missing_fields = "";
+				if(scorecard_type=="Scoreable" ) {
+					if($("input[name='csrPrvAccInfo']:checked").val() == "No") {
+						if($("accuracyCallFailureReason").val() == "") {
+							missing_fields+="Accuracy Call Failure Reason,";
+						}
+						if($("accuracyCallFailureTime").val() == "") {
+							missing_fields+="Accuracy Call Failure Time,";
+						}
+					}
+					if($("input[name='csrPrvCompInfo']:checked").val() == "No") {
+						if($("completenessCallFailureReason").val() == "") {
+							missing_fields+="Completeness Call Failure Reason,";
+						}
+						if($("completenessCallFailureTime").val() == "") {
+							missing_fields+="Completeness Call Failure Time,";
+						}
+					}
+					if($("input[name='csrFallPrivacyProv']:checked").val() == "No") {
+						if($("privacyCallFailureReason").val() == "") {
+							missing_fields+="Privacy Call Failure Reason,";
+						}
+						if($("privacyCallFailureTime").val() == "") {
+							missing_fields+="Privacy Call Failure Time,";
+						}
+					}
+					if($("input[name='csrWasCourteous']:checked").val() == "No") {
+						if($("customerSkillsCallFailureReason").val() == "") {
+							missing_fields+="Customer Skills Call Failure Reason,";
+						}
+						if($("customerSkillsCallFailureTime").val() == "") {
+							missing_fields+="Customer Skills Call Failure Time,";
+						}
+					}
+					
+
+				} else if(scorecard_type=="Non-Scoreable" ) {
+
+					
+					if($("nonScoreableReason").val() == "") {
+						missing_fields+="Non-Scoreable Reason,";
+					}
+
+				} else if(scorecard_type=="Does Not Count" ) {
+
+				}
+
+				if($("csrLevel").val() == "") {
+					missing_fields+="Csr Level,";
+				}
+
+				if($("macCallReferenceNumber").val() == "") {
+					missing_fields+="Mac Call Reference Number,";
+				}
+
+				if(missing_fields == "") {
+					$('#alertMsg').text("");
+					return true;
+				} else {
+					$('#alertMsg').text('Please Provide Following Fields:'+missing_fields);
+					return false;
+				}
+				
+			});
 		});
 	</script>
 
@@ -840,6 +918,7 @@
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
 				                <div class="row">
 				                      <div style="color: red;font-size: 18px;"  class="col-lg-12 form-group">
+				                      <div id="alertMsg" style="color: red;font-size: 18px;"  ></div>
 				                      <c:if test="${not empty ValidationFailure}">
 										${ValidationFailure}
 										</c:if>
@@ -984,7 +1063,7 @@
 			                            </div>
 			                            <div class="col-lg-6 form-group">
 			                            	<label for="csrLevel"> CSR Level:</label>
-			                                <form:input class="form-control" type = "text" name = "csrLevel" path="csrLevel"  readonly="true" title="Enter Customer Service Representaive Level"/>	
+			                                <form:input class="form-control readonly  required" type = "text" name = "csrLevel" readonly="true"   path="csrLevel"  title="Enter Customer Service Representaive Level"/>	
 			                            </div>
 			                        </div>
 			                         <div class="row">
@@ -999,7 +1078,7 @@
 										</div>
 			                            <div class="col-lg-6 form-group">
 			                                <label for="macCallReferenceNumber"> MAC Call Reference ID:</label>
-			                                <form:input class="form-control" type = "text" name = "macCallReferenceNumber" path="macCallReferenceNumber"  readonly="true" title="Enter Medicare Administrative Contractor Reference ID"/>
+			                                <form:input class="form-control readonly  required" type = "text" readonly="true"  name = "macCallReferenceNumber" path="macCallReferenceNumber"  title="Enter Medicare Administrative Contractor Reference ID"/>
 			                               </div>
 			                        </div>
 			                        <div class="row">

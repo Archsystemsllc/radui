@@ -76,8 +76,20 @@ public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJuri
     
     private String finalCallResult;
     
+    private String nonScoreableReason;
     
-    public String getFinalCallResult() {
+    
+    
+    
+    public String getNonScoreableReason() {
+		return nonScoreableReason;
+	}
+
+	public void setNonScoreableReason(String nonScoreableReason) {
+		this.nonScoreableReason = nonScoreableReason;
+	}
+
+	public String getFinalCallResult() {
 		return finalCallResult;
 	}
 

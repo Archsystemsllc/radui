@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestClientException;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
@@ -593,16 +594,28 @@ public class ReportsController {
 
 					});
 			
+			ObjectMapper mapper = new ObjectMapper();
 			if(reportsForm.getMainReportSelect()==null || reportsForm.getMainReportSelect().equalsIgnoreCase("ScoreCard")) {
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getMacJurisReport");
+				
+				if(reportsForm.isReasonReportFlag()) {
+					reportsForm.setJurIdList(null);
+					reportsForm.setProgramId(null);
+				}
+				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
-				ObjectMapper mapper = new ObjectMapper();
+				
 				resultsMap = responseEntity.getBody();
 				List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
-				finalResultsMap = generateScoreCardReport(scoreCardList,session);
-				finalResultsMap = generateScoreCardReportSummary(finalResultsMap);
 				
-				returnView = "scorecardreports";
+				if(reportsForm.isReasonReportFlag()) {
+					finalResultsMap = generateNonScoreableReasonReport(scoreCardList);
+					returnView = "nonscoreable_reasonreport";
+				} else {
+					finalResultsMap = generateScoreCardReport(scoreCardList,session);
+					returnView = "scorecardreports";
+					finalResultsMap = generateScoreCardReportSummary(finalResultsMap);
+				}				
 				
 				finalSortedMap.putAll(finalResultsMap);
 				
@@ -662,7 +675,13 @@ public class ReportsController {
 					
 					model.addAttribute("nonScoreableList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
 					
-					model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
+					if(reportsForm.isReasonReportFlag()) {
+						model.addAttribute("ReportTitle","CRAD Non-Scoreable Reason Report");
+					} else {
+						model.addAttribute("ReportTitle","Scorecard Report - Non-Scoreable Records");
+					}
+					
+					
 				} else if (reportsForm.getScoreCardType().equalsIgnoreCase("Does Not Count")) {
 					model.addAttribute("DoesNotCountReport",true);
 					model.addAttribute("MAC_JURIS_REPORT",finalSortedMap);
@@ -673,6 +692,31 @@ public class ReportsController {
 					model.addAttribute("ReportTitle","Scorecard Report - Does Not Count Records");
 				}
 				session.setAttribute("SS_MAC_JURIS_REPORT", finalSortedMap);
+			}else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Review")) {
+							
+				finalResultsMap = generateReviewReport(reportsForm);
+				returnView = "review_reports";
+				
+				finalSortedMap.putAll(finalResultsMap);
+				model.addAttribute("ReportTitle","CRAD MAC Review Report");
+				if(reportsForm.getMacId() != null && !reportsForm.getMacId().equalsIgnoreCase("All") && reportsForm.getJurIdList() == null) {
+					model.addAttribute("MacReviewReport",true);
+					
+					model.addAttribute("macReviewReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
+				} else if(reportsForm.getMacId() != null && reportsForm.getMacId().equalsIgnoreCase("All") && reportsForm.getJurIdList() == null) {
+					finalResultsMap = generateScoreCardReportSummary(finalResultsMap);
+					model.addAttribute("MacReviewReport",true);
+					model.addAttribute("macReviewReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+					
+				} else if(reportsForm.getJurIdList() != null) {
+					finalResultsMap = generateScoreCardReportSummary(finalResultsMap);
+					model.addAttribute("MacJurisdictionReviewReport",true);					
+					model.addAttribute("macJurisdictionReviewReportList",mapper.writeValueAsString(finalSortedMap.values()).replaceAll("'", " "));
+				}
+				
+				
+				
 			} else if(reportsForm.getMainReportSelect().equalsIgnoreCase("Compliance")) {
 				
 				returnView = "compliancereports";
@@ -680,7 +724,7 @@ public class ReportsController {
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getComplianceReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
-				ObjectMapper mapper = new ObjectMapper();
+				
 				resultsMap = responseEntity.getBody();
 				List<CsrLog> complianceList = mapper.convertValue(resultsMap.values(), new TypeReference<List<CsrLog>>() { });
 				
@@ -707,7 +751,7 @@ public class ReportsController {
 				ROOT_URI = new String(HomeController.RAD_WS_URI + "getRebuttalReport");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
-				ObjectMapper mapper = new ObjectMapper();
+				
 				resultsMap = responseEntity.getBody();
 				List<Rebuttal> rebuttalList = mapper.convertValue(resultsMap.values(), new TypeReference<List<Rebuttal>>() { });
 				
@@ -729,7 +773,7 @@ public class ReportsController {
 				//reportsForm.setScoreCardType("Scoreable");
 				
 				ResponseEntity<HashMap> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
-				ObjectMapper mapper = new ObjectMapper();
+				
 				resultsMap = responseEntity.getBody();
 				List<ScoreCard> qaspList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
 				
@@ -1532,6 +1576,289 @@ public class ReportsController {
 		}	
 		
 		session.setAttribute("REBUTTAL_MAC_JURIS_REPORT_SESSION_OBJECT", rebuttalMacJurisReportSessionObject);
+		
+		return finalResultsMap;
+	}
+	
+	//Method to Generate Non-Scoreable Reason Report
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateNonScoreableReasonReport(List<ScoreCard> scoreCardList) {
+		
+		//MAC Juris Program Data
+		
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport>();
+		
+		HashMap<String,ArrayList<ScoreCard>> macJurisProgramScorecardReportSessionObject = new HashMap<String,ArrayList<ScoreCard>>();
+		Integer totalListSize = scoreCardList.size();
+		Integer index = 1;
+		for(ScoreCard scoreCard: scoreCardList) {
+			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(scoreCard.getMacId());
+			if(macInfo != null) {
+				String macNameTemp = macInfo.getMacName();
+				
+				//String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
+				//String programNameTemp = HomeController.ALL_PROGRAM_MAP.get(scoreCard.getProgramId());
+				
+				
+				//QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macNameTemp);
+				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReportSubTotal = finalResultsMap.get(macNameTemp+"_SubTotal");
+				
+				String scoreCardType = scoreCard.getScorecardType();
+				
+				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+				//qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
+				qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+				qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+				qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+				qamMacByJurisdictionReviewReport.setMacId(macInfo.getId().intValue());
+				qamMacByJurisdictionReviewReport.setScoreCardType(scoreCardType);
+				qamMacByJurisdictionReviewReport.setMacCallReferenceNumber(scoreCard.getMacCallReferenceNumber());
+				qamMacByJurisdictionReviewReport.setNonScoreableReason(scoreCard.getNonScoreableReason());
+				//qamMacByJurisdictionReviewReport.setProgram(programNameTemp);
+				
+				qamMacByJurisdictionReviewReport.setScoreCardType("::"+scoreCardType);
+				
+				if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {					
+					qamMacByJurisdictionReviewReport.setNonScoreableReason(scoreCard.getNonScoreableReason());						
+				}				
+				
+				finalResultsMap.put(macNameTemp+"_"+index, qamMacByJurisdictionReviewReport);
+				index++;
+				
+				if(qamMacByJurisdictionReviewReportSubTotal == null) {
+					qamMacByJurisdictionReviewReportSubTotal = new QamMacByJurisdictionReviewReport();
+					//qamMacByJurisdictionReviewReportSubTotal.setJurisdictionName(jurisdictionTemp);
+					qamMacByJurisdictionReviewReportSubTotal.setMacName(macNameTemp+" (SubTotal)");
+					qamMacByJurisdictionReviewReportSubTotal.setQamStartDate(macInfo.getQamStartDate());
+					qamMacByJurisdictionReviewReportSubTotal.setQamEndDate(macInfo.getQamEndDate());
+					qamMacByJurisdictionReviewReportSubTotal.setMacId(macInfo.getId().intValue());
+					qamMacByJurisdictionReviewReportSubTotal.setScoreCardType(scoreCardType);
+					qamMacByJurisdictionReviewReportSubTotal.setTotalCount(1);					
+					
+					qamMacByJurisdictionReviewReportSubTotal.setScoreCardType("::");
+					
+					if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
+						qamMacByJurisdictionReviewReportSubTotal.setNonScorableCount(1);						
+					} 
+					
+					
+				} else {
+					if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
+						qamMacByJurisdictionReviewReportSubTotal.setTotalCount(qamMacByJurisdictionReviewReportSubTotal.getTotalCount()+1);	
+					}
+				}
+				
+				finalResultsMap.put(macNameTemp+"_SubTotal", qamMacByJurisdictionReviewReportSubTotal);
+				
+			}
+		}
+		if(totalListSize > 0) {
+			QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReportFinalTotal = new QamMacByJurisdictionReviewReport();
+			qamMacByJurisdictionReviewReportFinalTotal.setMacName("Grand Total");
+			qamMacByJurisdictionReviewReportFinalTotal.setTotalCount(totalListSize);
+			finalResultsMap.put("Grand Total",qamMacByJurisdictionReviewReportFinalTotal);
+		}
+		return finalResultsMap;
+	}
+	
+	
+	//Method to Generate Review Report
+	
+	private HashMap<String,QamMacByJurisdictionReviewReport> generateReviewReport(ReportsForm reportsForm) {
+		
+		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
+		String ROOT_URI;
+		ResponseEntity<HashMap> responseEntityObject = null;
+		
+		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer, ScoreCard> ();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		Integer scoreCardPassCount = 0,scoreCardFailCount = 0,totalScoreCardCount = 0, nonScoreableCount=0;
+		
+		List<ScoreCard> scoreCardList = null;
+		List<ScoreCard> scoreCardPassList = null;
+		List<ScoreCard> scoreCardFailList = null;
+		List<ScoreCard> nonScoreableList = null;
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		Float scPassPercent = null,scFailPercent = null, nonScoreablePercent = null;
+		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
+		
+		
+		try {
+			//MAC Data
+			
+			ROOT_URI = new String(HomeController.RAD_WS_URI + "getMacJurisReport");
+			/*
+			if(reportsForm.getMacId() != null && reportsForm.getJurisId() == null 
+					&& reportsForm.getProgramId() == null && reportsForm.getProgramId() == "") {*/
+			if(reportsForm.getMacId() != null && !reportsForm.getMacId().equalsIgnoreCase("All")
+					&& reportsForm.getJurIdList() != null && reportsForm.getProgramId() != null & !reportsForm.getProgramId().equalsIgnoreCase("")) {
+				
+				reportsForm.setScoreCardType("Scoreable");
+				reportsForm.setCallCategoryType("Pass");
+				responseEntityObject = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				
+				resultsMap = responseEntityObject.getBody();
+				scoreCardPassList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+				scoreCardPassCount = scoreCardPassList.size();
+				
+				reportsForm.setCallCategoryType("Fail");
+				responseEntityObject = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				
+				resultsMap = responseEntityObject.getBody();
+				scoreCardFailList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+				scoreCardFailCount = scoreCardFailList.size();
+				
+				reportsForm.setScoreCardType("Non-Scoreable");
+				responseEntityObject = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				
+				resultsMap = responseEntityObject.getBody();
+				nonScoreableList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+				nonScoreableCount = nonScoreableList.size();
+				
+				MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(Integer.valueOf(reportsForm.getMacId()));
+				if(macInfo != null) {
+					totalScoreCardCount = scoreCardPassCount + scoreCardFailCount;
+					String macNameTemp = macInfo.getMacName();
+					QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+					//qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
+					qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+					qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+					qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+					qamMacByJurisdictionReviewReport.setMacId(macInfo.getId().intValue());
+					qamMacByJurisdictionReviewReport.setTotalCount(totalScoreCardCount);
+					qamMacByJurisdictionReviewReport.setScorablePass(scoreCardPassCount);
+					qamMacByJurisdictionReviewReport.setScorableFail(scoreCardFailCount);
+					
+					scPassPercent =  (float)scoreCardPassCount*100/(totalScoreCardCount);
+					scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
+					scFailPercent =  (float)scoreCardFailCount*100/(totalScoreCardCount);
+					scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
+					
+					
+					nonScoreablePercent = (float) nonScoreableCount*100/(totalScoreCardCount+nonScoreableCount);
+					nonScoreablePercent =  Float.valueOf((twoDForm.format(nonScoreablePercent)));
+					
+					qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
+					qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);	
+					
+					qamMacByJurisdictionReviewReport.setNonScorableCount(nonScoreableCount);
+					qamMacByJurisdictionReviewReport.setNonScorablePercent(nonScoreablePercent);
+					
+					finalResultsMap.put(macNameTemp, qamMacByJurisdictionReviewReport);
+				}
+				
+			} else if(reportsForm.getMacId() != null && reportsForm.getMacId().equalsIgnoreCase("All") && 
+					reportsForm.getJurIdList() != null && reportsForm.getProgramId() != null & !reportsForm.getProgramId().equalsIgnoreCase("")) {
+				
+				reportsForm.setScoreCardType("Scoreable");
+				
+				responseEntityObject = basicAuthRestTemplate.postForEntity(ROOT_URI, reportsForm, HashMap.class);
+				
+				resultsMap = responseEntityObject.getBody();
+				scoreCardList = mapper.convertValue(resultsMap.values(), new TypeReference<List<ScoreCard>>() { });
+								
+				for(ScoreCard scoreCard: scoreCardList) {
+					MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(scoreCard.getMacId());
+					if(macInfo != null) {
+						String macNameTemp = macInfo.getMacName();
+						String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
+						String programNameTemp = HomeController.ALL_PROGRAM_MAP.get(scoreCard.getProgramId());
+						
+						
+						QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macNameTemp+"_"+jurisdictionTemp);
+						
+						String scoreCardType = scoreCard.getScorecardType();
+						
+						if(qamMacByJurisdictionReviewReport == null) {
+							qamMacByJurisdictionReviewReport = new QamMacByJurisdictionReviewReport();
+							qamMacByJurisdictionReviewReport.setJurisdictionName(jurisdictionTemp);
+							qamMacByJurisdictionReviewReport.setMacName(macNameTemp);
+							qamMacByJurisdictionReviewReport.setQamStartDate(macInfo.getQamStartDate());
+							qamMacByJurisdictionReviewReport.setQamEndDate(macInfo.getQamEndDate());
+							qamMacByJurisdictionReviewReport.setMacId(macInfo.getId().intValue());
+							qamMacByJurisdictionReviewReport.setScoreCardType(scoreCardType);
+							qamMacByJurisdictionReviewReport.setTotalCount(1);
+							
+							qamMacByJurisdictionReviewReport.setScoreCardType("::"+scoreCardType);
+							
+							if(scoreCardType.equalsIgnoreCase("Scoreable")) {
+								
+								qamMacByJurisdictionReviewReport.setScorableCount(1);
+								if(scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Pass".toLowerCase())) {
+									qamMacByJurisdictionReviewReport.setScorablePass(1);
+								} else if(scoreCard.getFinalScoreCardStatus() != null && scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Fail".toLowerCase())) {							
+									qamMacByJurisdictionReviewReport.setScorableFail(1);
+								}
+							} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
+								qamMacByJurisdictionReviewReport.setNonScorableCount(1);						
+							} 
+							
+							
+						} else {
+							qamMacByJurisdictionReviewReport.setTotalCount(qamMacByJurisdictionReviewReport.getTotalCount()+1);
+							if(scoreCardType.equalsIgnoreCase("Scoreable")) {
+								qamMacByJurisdictionReviewReport.setScorableCount(qamMacByJurisdictionReviewReport.getScorableCount()+1);
+								qamMacByJurisdictionReviewReport.setScoreCardType(qamMacByJurisdictionReviewReport.getScoreCardType()+"::"+scoreCardType);
+								if(scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Pass".toLowerCase())) {
+									qamMacByJurisdictionReviewReport.setScorablePass(qamMacByJurisdictionReviewReport.getScorablePass()+1);							
+								} else if(scoreCard.getFinalScoreCardStatus() != null && scoreCard.getFinalScoreCardStatus().toLowerCase().contains("Fail".toLowerCase())) {							
+									qamMacByJurisdictionReviewReport.setScorableFail(qamMacByJurisdictionReviewReport.getScorableFail()+1);
+								}
+							} else if(scoreCardType.equalsIgnoreCase("Non-Scoreable")) {
+								qamMacByJurisdictionReviewReport.setScoreCardType(qamMacByJurisdictionReviewReport.getScoreCardType()+"::"+scoreCardType);
+								qamMacByJurisdictionReviewReport.setNonScorableCount(qamMacByJurisdictionReviewReport.getNonScorableCount()+1);	
+							} 
+						}
+						
+						finalResultsMap.put(macNameTemp+"_"+jurisdictionTemp, qamMacByJurisdictionReviewReport);
+					}
+				}
+				
+				for(String macJurisKey: finalResultsMap.keySet()) {
+					
+					
+					QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macJurisKey);
+					
+				
+					
+					if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("::Scoreable")) {
+						scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+						scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
+						scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+						scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
+						qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
+						qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);				
+					} 
+					if(qamMacByJurisdictionReviewReport.getScoreCardType().contains("::Non-Scoreable")) {
+						Float scNsPercent =  ((float)qamMacByJurisdictionReviewReport.getNonScorableCount()*100/(qamMacByJurisdictionReviewReport.getTotalCount()));
+						scNsPercent =  Float.valueOf((twoDForm.format(scNsPercent)));
+						qamMacByJurisdictionReviewReport.setNonScorablePercent(scNsPercent);		
+					}  
+					
+					
+					finalResultsMap.put(macJurisKey, qamMacByJurisdictionReviewReport);
+				}
+				
+				
+				
+			} else if(reportsForm.getMacId() != null && reportsForm.getMacId().equalsIgnoreCase("All") && 
+					reportsForm.getJurIdList() != null && reportsForm.getProgramId() != null & !reportsForm.getProgramId().equalsIgnoreCase("")) {
+				
+			}
+		} catch (RestClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return finalResultsMap;
 	}

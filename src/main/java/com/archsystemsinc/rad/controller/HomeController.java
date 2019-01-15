@@ -321,15 +321,7 @@ public class HomeController {
 				
 				Date currentDateTime = new Date();
 				  
-				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);
-				
-				/*if(macProgJurisPccMapping.getId() == null || macProgJurisPccMapping.getId()== 0) {
-					macProgJurisPccMapping.setCreatedBy(userForm.getUserName());
-					macProgJurisPccMapping.setCreatedDate(currentDateString);
-				} else {
-					macProgJurisPccMapping.setUpdatedBy(userForm.getUserName());
-					macProgJurisPccMapping.setUpdateddDate(currentDateString);
-				}*/
+				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);		
 				
 				
 				
@@ -462,9 +454,9 @@ public class HomeController {
 			  model.addAttribute("menu_highlight", "home");
 			  
 			  session.setAttribute("SS_USER_FOLDER","admin");
-			 //if(MAC_ID_MAP == null) {
+			 if(MAC_ID_MAP == null) {
 				 setupStaticGlobalVariables();
-			  //}
+			 }
 			 Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 			 String userName = auth.getName(); //get logged in username 
 			 User user = userService.findByUsername(userName);

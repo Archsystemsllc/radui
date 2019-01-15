@@ -130,6 +130,9 @@ public class MacAssignmentController {
 		Integer user1TotalAssignedCount = 0, user2TotalAssignedCount = 0, user3TotalAssignedCount = 0;
 		Integer user1TotalCompletedCount = 0, user2TotalCompletedCount = 0, user3TotalCompletedCount = 0;
 		Integer macJurisdictionProgramPlanned = 0,  macJurisdictionProgramCompleted = 0, totalPlanned = 0, totalCompleted = 0;
+		Date searchFromDate = new Date(), searchToDate = new Date();
+		
+		SimpleDateFormat myMonthYearPathFormat = new SimpleDateFormat("MM_yyyy_dd hh:mm:ss a");
 	
 		try {
 			
@@ -145,7 +148,7 @@ public class MacAssignmentController {
 
 			});
 			MacAssignmentObject macAssignmentSearchObject = new MacAssignmentObject();
-			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM_yyyy");
+			SimpleDateFormat monthYearFormat = new SimpleDateFormat("MM_yyyy");		
 			
 			Date today = new Date(); 
 			if(monthYearPath.equalsIgnoreCase("null")) {
@@ -157,17 +160,41 @@ public class MacAssignmentController {
 					cal.add(Calendar.MONTH, -1);					
 				} 
 				
-				String currentMonthYear = mdyFormat.format(cal.getTime());
-				macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
-				model.addAttribute("currentMonthYear", currentMonthYear);
+				//Restricting From Date to 6 months from Current Date
+				Calendar fromDateCalendar = Calendar.getInstance();
+				fromDateCalendar.setTime(today);
+				
+				if(dayOfMonth <= 15) {					
+					fromDateCalendar.add(Calendar.MONTH, -1);	
+					searchFromDate = fromDateCalendar.getTime();
+					searchToDate = today;
+				} else {
+					fromDateCalendar.set(Calendar.DATE, 16);
+					searchFromDate = fromDateCalendar.getTime();
+					searchToDate = today;
+				}
 			} else {
 				
-				//SimpleDateFormat mydFormat = new SimpleDateFormat("MMM_yyyy_dd");
+				
 				try {
-					/*Date monthDate = mydFormat.parse(monthYearPath+"_01");
-					String currentMonthYear = mdyFormat.format(monthDate);*/
+					String filterFromDateString = monthYearPath+"_16 00:00:00 AM";
+					searchFromDate = myMonthYearPathFormat.parse(filterFromDateString);
+					
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(searchFromDate);
+					cal.add(Calendar.MONTH, 1);		
+					cal.set(Calendar.DATE, 15);
+					
+					cal.set(Calendar.HOUR, 11);
+					cal.set(Calendar.MINUTE, 59);
+					cal.set(Calendar.SECOND, 59);
+					cal.set(Calendar.AM_PM, Calendar.PM);
+					
+					searchToDate = cal.getTime();
+					
 					macAssignmentSearchObject.setAssignedMonthYear(monthYearPath);
 					model.addAttribute("currentMonthYear", monthYearPath);
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -231,25 +258,14 @@ public class MacAssignmentController {
 							ResponseEntity<List> responseEntity;
 							List<ScoreCard> scoreCardRsultsMap;
 							List<ScoreCard> scoreCardList;
-							Calendar cal = Calendar.getInstance();
-							Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-							Date filterToDate;
-							Date filterFromDate;
-							
-							filterToDate = cal.getTime();
-							if(dayOfMonth <= 15) {					
-								cal.add(Calendar.MONTH, -1);					
-							} 
-							
-							cal.set(Calendar.DAY_OF_MONTH, 15);
-							filterFromDate = cal.getTime();
-							
+														
 							scoreCard = new ScoreCard();
-							scoreCard.setFilterFromDate(filterFromDate);
-							scoreCard.setFilterToDate(filterToDate);
+							scoreCard.setFilterFromDate(searchFromDate);
+							scoreCard.setFilterToDate(searchToDate);
 							scoreCard.setMacId(macAssignmentObjectTemp.getMacId());
 							scoreCard.setJurId(macAssignmentObjectTemp.getJurisdictionId());
 							scoreCard.setProgramId(macAssignmentObjectTemp.getProgramId());
+							scoreCard.setScorecardType("Scoreable");
 							
 							//Scorecard List Count for First User
 							

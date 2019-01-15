@@ -57,8 +57,17 @@ public class ReportsForm {
     
     private String[] jurisdictionIds;
     
+    private boolean reasonReportFlag;
     
 	
+	public boolean isReasonReportFlag() {
+		return reasonReportFlag;
+	}
+
+	public void setReasonReportFlag(boolean reasonReportFlag) {
+		this.reasonReportFlag = reasonReportFlag;
+	}
+
 	public String getPccLocationName() {
 		return pccLocationName;
 	}
