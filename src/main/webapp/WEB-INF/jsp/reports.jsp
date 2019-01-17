@@ -125,7 +125,7 @@
     	}); 
 
     	var reportSelectValue=$('input:radio[name=mainReportSelect]:checked').val();
-    	
+
     	if (reportSelectValue == '') {    		
     		$('input:radio[name=mainReportSelect]')[0].checked = true;
     		$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect').show();      			
@@ -162,7 +162,15 @@
         	$('select[id="macId"] > option[value="ALL"]').hide();        	
         	$("#jurisId").attr('required',true);    				
     		$("#macId option[value='ALL']").hide();    		
-        }  
+        }  else if (reportSelectValue == 'Summary' ) {
+                    	
+    		$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
+    		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+    		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+       		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+    		$('select[id="macId"] > option[value="ALL"]').show(); 
+    		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
+        }
 
 
     	$('.required').each(function(){
@@ -198,11 +206,18 @@
             	$('select[id="macId"] > option[value="ALL"]').hide();        	
             	$("#jurisId").attr('required',true);    				
         		$("#macId option[value='ALL']").hide();    		
+            }else if (mainReportSelect == 'Summary' ) {
+            	
+            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+        		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show(); 
+        		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
             }
 
-          
- 		var scoreCardType = $("select#scoreCardType").val();
-           if (scoreCardType=="Scoreable") {           
+        var scoreCardType = $("select#scoreCardType").val();
+           if (scoreCardType=="Scoreable" && mainReportSelect != 'Summary' ) {           
 	           	$('#callResultDiv').show();
 	           	$("#callResult").attr('required',true);
            } else if (scoreCardType=="Non-Scoreable") {           	
@@ -215,10 +230,10 @@
 	});
 
 	$(function(){
-
+		var mainReportSelect = "";
 
 		$("input[name='mainReportSelect']").change(function(){
-            var mainReportSelect = $(this).val();
+			mainReportSelect = $(this).val();
             if (mainReportSelect=="ScoreCard") {
             	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();          		 		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);
@@ -251,12 +266,20 @@
             	$("#jurisId").attr('required',true);    				
         		$("#macId option[value='ALL']").hide();    
         		resetFields();	
+            }else if (mainReportSelect == 'Summary' ) {
+            	
+            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+        		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show(); 
+        		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
             }
         });
 
 		$("select#scoreCardType").change(function(){
 			 var scoreCardType = $(this).val();
-			 if (scoreCardType=="Scoreable") {           
+			 if (scoreCardType=="Scoreable"  && mainReportSelect != 'Summary' ) {           
 		           	$('#callResultDiv').show();
 		           	$("#callResult").attr('required',true);
 	           } else if (scoreCardType=="Non-Scoreable") {           	
@@ -417,7 +440,9 @@
 											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;Scorecard &nbsp;										                            
 										  	<form:radiobutton path="mainReportSelect" value="Compliance" title="Choose Compliance"/>&nbsp;Compliance &nbsp;
 										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" title="Choose Rebuttal" />&nbsp;Rebuttal &nbsp;
-										  	<form:radiobutton path="mainReportSelect" value="Qasp" title="Choose QASP" />&nbsp;QASP Report &nbsp;
+										  	<form:radiobutton path="mainReportSelect" value="Qasp" title="Choose QASP" />&nbsp;QASP&nbsp;
+										  	<%-- <form:radiobutton path="mainReportSelect" value="Review" title="Choose Review" />&nbsp;Review&nbsp; --%>
+										  	<form:radiobutton path="mainReportSelect" value="Summary" title="Choose Summary" />&nbsp;Summary&nbsp;
 			                         	     
 			                            </div>
 			                        </div>
@@ -490,6 +515,10 @@
 											  	<form:option value="Does Not Count" />											  	
 											</form:select> 
 			                            </div>
+			                           <%--  <div class="col-lg-6 form-group">
+			                               <form:checkbox path="reasonReportFlag" />
+			                                &nbsp;Reason Report</input>	         
+			                            </div>  --%>
 			                            <div class="col-sm-6 form-group" id="complianceTypeDiv">
 			                                <label for="complianceReportType"> Compliance Type:</label> 
 										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" title="Select one Compliance Type from the List" >

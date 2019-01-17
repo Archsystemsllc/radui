@@ -449,7 +449,9 @@
 	              			var selectedJurisdiction = $('#jurId :selected').text();
 	              			var selectedMac = $('#macId :selected').text();
 	              			
-	              			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+selectedMac+"/"+selectedJurisdiction+"/"+reportSearchString;
+	              			var selectedProgram = $('#macId :selected').text();
+	              			
+	              			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+selectedMac+"/"+selectedJurisdiction+"/"+selectedProgram+"/"+reportSearchString;
 	              		} else {
 	              			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
 		              	}

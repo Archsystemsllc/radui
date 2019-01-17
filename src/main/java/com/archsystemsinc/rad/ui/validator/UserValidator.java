@@ -38,7 +38,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("userName", "Duplicate.userForm.userName");
         }
         
-        Pattern pattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+        Pattern pattern = Pattern.compile("^(.+)@(.+)$",
                 Pattern.CASE_INSENSITIVE);
           if (!(pattern.matcher(user.getUserName()).matches())) {
         	  errors.rejectValue("userName", "user.email.invalid");

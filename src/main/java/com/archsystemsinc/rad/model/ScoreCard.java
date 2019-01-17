@@ -178,6 +178,8 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private ArrayList<Integer> macIdList;
 	
+	private ArrayList<Integer> programIdList;	
+	
 	private ArrayList<String> macCallResultList;
 	
 	private String callCatSubCatMsString;
@@ -187,10 +189,14 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private String macAssignmentSearchString;	
 	
 	private boolean newMedicareCardCallTracking;
-	
-	
-	
-	
+
+	public ArrayList<Integer> getProgramIdList() {
+		return programIdList;
+	}
+
+	public void setProgramIdList(ArrayList<Integer> programIdList) {
+		this.programIdList = programIdList;
+	}
 
 	public Integer getQamId() {
 		return qamId;

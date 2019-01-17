@@ -62,10 +62,13 @@ public class ScoreCardController {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardNew = null;
 		ScoreCard scoreCardFailObject = null;
-		HashMap<Integer,String> locationMap = null;
+		HashMap<Integer,String> locationMap = new HashMap<Integer, String> ();
 		HashMap<Integer,String> jurisMap = null;
-		HashMap<Integer,String> programMap = null;
+		HashMap<Integer,String> programMap = new HashMap<Integer, String> ();
+		
+		
 		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
+		ArrayList<Integer> programIdArrayList = new ArrayList<Integer> ();
 		String roles = authentication.getAuthorities().toString();
 		
 		model.addAttribute("menu_highlight", "scorecard");
@@ -81,9 +84,15 @@ public class ScoreCardController {
 			User userFormFromSession = (User) request.getSession().getAttribute("LoggedInUserForm");
 			ScoreCard scoreCardFromSession = (ScoreCard) request.getSession().getAttribute("SESSION_SCOPE_SCORECARD_FILTER");
 			if (scoreCardFromModel.getMacId() != null && scoreCardFromModel.getJurisIdReportSearchString() !=null ){
+				if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+					scoreCardFailObject = new ScoreCard();
+				}
 				scoreCardNew = scoreCardFromModel;				
 				objectType = "Model";
 			} else if(scoreCardFromSession != null && sessionBackObject.equalsIgnoreCase("true")) {
+				if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+					scoreCardFailObject = new ScoreCard();
+				}
 				//Back Button is Clicked				
 				scoreCardNew = scoreCardFromSession;
 				objectType = "Session";
@@ -109,11 +118,11 @@ public class ScoreCardController {
 					Calendar toDateCalendar = Calendar.getInstance();
 					Integer dayOfMonth = toDateCalendar.get(Calendar.DAY_OF_MONTH);
 									
-					if(dayOfMonth < 16) {					
+					if(dayOfMonth < 15) {					
 						toDateCalendar.add(Calendar.MONTH, -1);					
 					} 
 					
-					toDateCalendar.set(Calendar.DATE, 15);		
+					toDateCalendar.set(Calendar.DATE, 14);		
 					String toDate = mdyFormat.format(toDateCalendar.getTime());
 					
 					scoreCardFailObject.setFilterFromDateString(fromDate);
@@ -134,33 +143,128 @@ public class ScoreCardController {
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				
+				
+				
 					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
 					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
 					
 					if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("") && objectType.equalsIgnoreCase("New")) {
 						String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
-						programMap = new HashMap<Integer, String> ();
-						locationMap = new HashMap<Integer, String> ();
 						
 						for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
 							jurIdArrayList.add(jurisIdSingle);
+							HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+							if (programTempMap == null) continue;
+							
+							programMap.putAll(programTempMap);
+							for(Integer programIdSingle: programTempMap.keySet()) {
+								programIdArrayList.add(programIdSingle);
+								HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+								if (locationTempMap == null) continue;
+								locationMap.putAll(locationTempMap);
+								locationTempMap = null;
+							}
+							
+							programTempMap = null;
 						}
+						
+						model.addAttribute("programMapEdit", programMap);	
+						model.addAttribute("locationMapEdit", locationMap);	
 											
 						scoreCardNew.setJurIdList(jurIdArrayList);
 						scoreCardFailObject.setJurIdList(jurIdArrayList);
-						scoreCardFailObject.setJurisIdReportSearchString(jurisIdStrings);
-					} else if(objectType.equalsIgnoreCase("Session")) {
-						scoreCardFailObject.setJurIdList(scoreCardNew.getJurIdList());
+						scoreCardNew.setProgramId(0);
+						
+						scoreCardNew.setProgramIdList(programIdArrayList);
+						scoreCardFailObject.setProgramIdList(programIdArrayList);
+						
+											
+					} else {						
+						
+						String[] jurisIds = scoreCardNew.getJurisIdReportSearchString();
+						
+						String jurIds = scoreCardNew.getJurisIdReportSearchString().toString();
+						
+						if(jurisIds[0].equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+							scoreCardNew.setJurisdictionName(UIGenericConstants.ALL_STRING);
+							
+							for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+								jurIdArrayList.add(jurisIdSingle);
+								
+								if(scoreCardNew.getProgramId()==0 ) {
+									//scoreCardNew.setProgramName(reportsForm.getProgramId());
+									HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+									if (programTempMap == null) continue;
+									
+									programMap.putAll(programTempMap);
+									
+									for(Integer programIdSingle: programTempMap.keySet()) {
+										programIdArrayList.add(programIdSingle);
+									}
+									/*if(scoreCardNew.getPccLocationId()==0) {
+										for(Integer programIdSingle: programTempMap.keySet()) {
+											HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+											if (locationTempMap == null) continue;
+											locationMap.putAll(locationTempMap);
+											locationTempMap = null;
+										}
+									}*/
+									
+									programTempMap = null;
+								} else {
+									scoreCardFailObject.setProgramId(scoreCardNew.getProgramId());
+								}
+							}
+							
+							scoreCardNew.setProgramIdList(programIdArrayList);
+							scoreCardFailObject.setProgramIdList(programIdArrayList);
+							
+							scoreCardNew.setJurIdList(jurIdArrayList);			
+							scoreCardFailObject.setJurIdList(jurIdArrayList);
+						} else {
+							
+							for (String jurisIdSingleValue: jurisIds) {
+								jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));								
+								String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));								
+								
+							}
+							
+							scoreCardNew.setJurIdList(jurIdArrayList);		
+							scoreCardFailObject.setJurIdList(jurIdArrayList);
+							
+							scoreCardFailObject.setProgramId(scoreCardNew.getProgramId());
+						}
+						
+						
 					}
+					
+					String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+					programMap = new HashMap<Integer, String> ();
+				    locationMap = new HashMap<Integer, String> ();
+					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+						HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+						if (programTempMap == null) continue;
+						
+						programMap.putAll(programTempMap);
+						for(Integer programIdSingle: programTempMap.keySet()) {
+							HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+							if (locationTempMap == null) continue;
+							locationMap.putAll(locationTempMap);
+							locationTempMap = null;
+						}
+						
+						programTempMap = null;
+					}
+					model.addAttribute("programMapEdit", programMap);	
 					
 					//scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
 					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);		
 					scoreCardNew.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_PASS_STRING);
 					
-					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
-					//scoreCardFailObject.setJurIdList(jurIdArrayList);
+					
+					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
 					
 					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
@@ -168,11 +272,80 @@ public class ScoreCardController {
 				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);				
 				
 				if(scoreCardNew.getMacId() == null || scoreCardNew.getMacId() == 0) {
-					model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);		
+					model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);
+					model.addAttribute("programMapEdit", HomeController.ALL_PROGRAM_MAP);
 				} else {
 					jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCardNew.getMacId());
 					model.addAttribute("jurisMapEdit", jurisMap);
 				}
+				
+				if(objectType.equalsIgnoreCase("New")) {
+					scoreCardNew.setProgramId(0);
+				} else {
+					
+					String[] jurisIds = scoreCardNew.getJurisIdReportSearchString();
+					
+					String jurIds = scoreCardNew.getJurisIdReportSearchString().toString();
+					
+					if(jurisIds[0].equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
+						scoreCardNew.setJurisdictionName(UIGenericConstants.ALL_STRING);
+						
+						for(Integer jurisIdSingle: HomeController.JURISDICTION_MAP.keySet()) {
+							jurIdArrayList.add(jurisIdSingle);
+							
+							if(scoreCardNew.getProgramId() == null || scoreCardNew.getProgramId()==0 ) {
+								//scoreCardNew.setProgramName(reportsForm.getProgramId());
+								HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCardNew.getMacId()+"_"+jurisIdSingle);
+								if (programTempMap == null) continue;
+								
+								programMap.putAll(programTempMap);
+								
+								for(Integer programIdSingle: programTempMap.keySet()) {
+									programIdArrayList.add(programIdSingle);
+								}
+								/*if(scoreCardNew.getPccLocationId()==0) {
+									for(Integer programIdSingle: programTempMap.keySet()) {
+										HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+										if (locationTempMap == null) continue;
+										locationMap.putAll(locationTempMap);
+										locationTempMap = null;
+									}
+								}*/
+								
+								programTempMap = null;
+							}						
+						}
+						
+						model.addAttribute("programMapEdit", programMap);
+						scoreCardNew.setProgramIdList(programIdArrayList);
+						
+						
+						scoreCardNew.setJurIdList(jurIdArrayList);			
+						
+					} else {
+						
+						for (String jurisIdSingleValue: jurisIds) {
+							jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));								
+							String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));		
+							
+							HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCardNew.getMacId()+"_"+jurisIdSingleValue);
+							if (programTempMap == null) continue;
+							
+							programMap.putAll(programTempMap);
+							
+							for(Integer programIdSingle: programTempMap.keySet()) {
+								programIdArrayList.add(programIdSingle);
+							}
+							
+						}
+						model.addAttribute("programMapEdit", programMap);
+						scoreCardNew.setJurIdList(jurIdArrayList);		
+						
+					}
+					
+				}
+				
+				
 			}			
 			
 			/*if(roles.contains("Quality Monitor")) {

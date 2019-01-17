@@ -114,6 +114,34 @@
 			}
         });
 
+
+		$("#jurId").change(function(){
+
+			var userRole = $('#userRole').val();			
+			if ((userRole != "MAC Admin") && (userRole != "MAC User")){
+
+				var macIdValue = $('#macId').val();
+				
+				var selectedJurisdiction =""; 
+				
+				
+				$("#jurId :selected").each(function() {
+					 selectedJurisdiction+=($(this).attr('value'))+",";
+				}); 
+				
+	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
+	                
+	                 $("#programId").get(0).options.length = 0;	           
+	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
+	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "0");
+	      	  	    	$.each(data, function (key,obj) {
+	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
+	      	  	    		
+	      	  	    	});  	   
+	               });
+			} 
+        });
+
 		//Back Button Functionality
 		$('#back').click(function(e) {	
 			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession";			
@@ -259,6 +287,20 @@ $(document).ready(function(){
 													</form:select>
 												</div>
 											</div>
+											<div class="row" id="programPccLocDiv">
+					                            <div class="col-lg-4 form-group">
+					                                <label for="name"> Program:</label>
+												<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
+												   <form:option value="" label="---Select Program---"/>
+												    <form:option value="0" label="---Select ALL---"/>
+												   <form:options items="${programMapEdit}" />
+												</form:select> 	
+					                            </div>
+					                            <div class="col-lg-4 form-group">
+					                              &nbsp;
+					                            </div>
+					                            
+					                        </div>
 											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
 												
 											<div class="row">

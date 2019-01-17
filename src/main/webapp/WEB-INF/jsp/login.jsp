@@ -98,7 +98,7 @@ $(document).ready(function() {
 					</div>
 					
 					</div>
-			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qam@cms.hhs.gov" title="Email Address qam@cms.hhs.gov"><strong><u>qam@cms.hhs.gov</u></strong></a>.</div>
+			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qamadmin@archsystemsinc.com" title="Email Address qamadmin@archsystemsinc.com"><strong><u>qamadmin@archsystemsinc.com</u></strong></a>.</div>
 
 <div style="padding-left:224px;padding-bottom:20px;">Disclaimer: This web site is not hosted on a Centers for Medicare & Medicaid Services (CMS) web server.</div>
 

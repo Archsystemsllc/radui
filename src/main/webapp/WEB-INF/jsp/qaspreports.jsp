@@ -532,11 +532,11 @@ $(document).ready(function() {
 						                    <thead>
 										     
 										        <tr>
-										            <th style="text-align: center" colspan="7" class="header">QASP Report1</th>									            
+										            <th style="text-align: center" colspan="7" class="header">QASP Report</th>									            
 										            									                 
 										        </tr>
 										        <tr>
-										            <th style="text-align: center" colspan="7" class="header">QASP Report2</th>									            
+										            <th style="text-align: center" colspan="7" class="header"></th>									            
 										            									                 
 										        </tr>
 										         <tr>

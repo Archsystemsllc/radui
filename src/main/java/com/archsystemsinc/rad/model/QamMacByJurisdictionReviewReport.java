@@ -78,10 +78,17 @@ public class QamMacByJurisdictionReviewReport implements Comparable<QamMacByJuri
     
     private String nonScoreableReason;
     
+    private Integer callDurationInSeconds;   
     
-    
-    
-    public String getNonScoreableReason() {
+    public Integer getCallDurationInSeconds() {
+		return callDurationInSeconds;
+	}
+
+	public void setCallDurationInSeconds(Integer callDurationInSeconds) {
+		this.callDurationInSeconds = callDurationInSeconds;
+	}
+
+	public String getNonScoreableReason() {
 		return nonScoreableReason;
 	}
 

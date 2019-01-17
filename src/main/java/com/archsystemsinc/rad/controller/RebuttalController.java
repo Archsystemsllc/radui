@@ -1,45 +1,31 @@
 package com.archsystemsinc.rad.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpStatus;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.log4j.Logger;
-import org.openqa.selenium.server.ClassPathResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -48,24 +34,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.w3c.dom.Document;
 
 import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
-import com.archsystemsinc.rad.model.Program;
 import com.archsystemsinc.rad.model.Rebuttal;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
-import com.archsystemsinc.rad.model.UserFilter;
 import com.archsystemsinc.rad.service.UserService;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -135,7 +115,7 @@ public class RebuttalController {
 					Calendar toDateCalendar = Calendar.getInstance();
 					Integer dayOfMonth = toDateCalendar.get(Calendar.DAY_OF_MONTH);
 									
-					if(dayOfMonth < 16) {					
+					if(dayOfMonth < 15) {					
 						toDateCalendar.add(Calendar.MONTH, -1);					
 					} 
 					
@@ -359,12 +339,24 @@ public class RebuttalController {
 		
 		Rebuttal rebuttalNew = new Rebuttal();
 		
+		SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+		
 		try {
 			BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 			String ROOT_URI = new String(HomeController.RAD_WS_URI + "retrieveMacCallRefFailList");
 			
 			String roles = authentication.getAuthorities().toString();
 			
+			//Restricting From Date to CRAD Migration Date Into CMS
+			
+			String filterFromDateString = "12/15/2018 00:00:00 AM";
+			Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				
+			scoreCardTemp.setFilterFromDate(filterFromDate);	
+			rebuttalNew.setFilterFromDate(filterFromDate);
+			
+			Date today = new Date();
+									
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				
 				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
@@ -381,26 +373,30 @@ public class RebuttalController {
 					}				
 					scoreCardTemp.setJurIdList(jurIdArrayList);
 					rebuttalNew.setJurisIdList(jurIdArrayList);
-				}
-				
-				SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
-				
-				Date today = new Date();					
+				}			
 			
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(today);
 				Integer dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 								
-				if(dayOfMonth < 16) {					
+				if(dayOfMonth < 15) {					
 					cal.add(Calendar.MONTH, -1);					
 				} 
 				
-				cal.set(Calendar.DATE, 15);		
-				String toDate = mdyFormat.format(cal.getTime());
-				rebuttalNew.setFilterToDateString(toDate);
+				cal.set(Calendar.DATE, 14);		
+				cal.set(Calendar.HOUR, 23);
+				cal.set(Calendar.MINUTE, 59);
+				cal.set(Calendar.SECOND, 59);
 				
+				scoreCardTemp.setFilterToDate(cal.getTime());	
+				rebuttalNew.setFilterToDate(cal.getTime());
 				
-			} 
+			} else {
+				// Restricting Mac User and Mac Admin to only see data until 15th of the Month, based on the day
+				scoreCardTemp.setFilterToDate(today);					
+				rebuttalNew.setFilterToDate(today);
+				
+			}
 			
 			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardTemp, List.class);
 			ObjectMapper mapper = new ObjectMapper();

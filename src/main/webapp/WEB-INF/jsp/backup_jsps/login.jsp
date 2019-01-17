@@ -86,7 +86,7 @@
 					</div>
 					
 					</div>
-			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qam@cms.hhs.gov">qam@cms.hhs.gov</a>.</div>
+			<div style="padding-left:352px;padding-bottom:20px;">If you are having problems logging in email us at <a href="mailto:qamadmin@archsystemsinc.com">qamadmin@archsystemsinc.com</a>.</div>
 
 <div style="padding-left:224px;padding-bottom:20px;">Disclaimer: This web site is not hosted on a Centers for Medicare & Medicaid Services (CMS) web server.</div>
 
