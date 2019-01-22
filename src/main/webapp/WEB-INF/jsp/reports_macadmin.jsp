@@ -164,7 +164,14 @@
         	$('select[id="macId"] > option[value="ALL"]').hide();        	
         	$("#jurisId").attr('required',true);    				
     		$("#macId option[value='ALL']").hide();    		
-        }  
+        }  else if (reportSelectValue == 'Summary' ) {
+                    	
+    		$('#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
+    		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult,#scoreCardType").removeAttr('required');      		 		
+    		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+       		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv,#scoreCardType').hide();
+    		$('select[id="macId"] > option[value="ALL"]').show();    		
+        }
 
 
     	$('.required').each(function(){
@@ -200,11 +207,19 @@
             	$('select[id="macId"] > option[value="ALL"]').hide();        	
             	$("#jurisId").attr('required',true);    				
         		$("#macId option[value='ALL']").hide();    		
+            }else if (mainReportSelect == 'Summary' ) {
+            	
+            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+        		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show(); 
+        		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
             }
 
           
  		var scoreCardType = $("select#scoreCardType").val();
-           if (scoreCardType=="Scoreable") {           
+           if (scoreCardType=="Scoreable"  && mainReportSelect != 'Summary' ) {           
 	           	$('#callResultDiv').show();
 	           	$("#callResult").attr('required',true);
            } else if (scoreCardType=="Non-Scoreable") {           	
@@ -218,9 +233,9 @@
 
 	$(function(){
 
-
+		var mainReportSelect = "";
 		$("input[name='mainReportSelect']").change(function(){
-            var mainReportSelect = $(this).val();
+			mainReportSelect = $(this).val();
             if (mainReportSelect=="ScoreCard") {
             	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();          		 		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);
@@ -253,12 +268,20 @@
             	$("#jurisId").attr('required',true);    				
         		$("#macId option[value='ALL']").hide();    
         		resetFields();	
+            }else if (mainReportSelect == 'Summary' ) {
+            	
+            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+        		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show(); 
+        		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
             }
         });
 
 		$("select#scoreCardType").change(function(){
 			 var scoreCardType = $(this).val();
-			 if (scoreCardType=="Scoreable") {           
+			 if (scoreCardType=="Scoreable"  && mainReportSelect != 'Summary') {           
 		           	$('#callResultDiv').show();
 		           	$("#callResult").attr('required',true);
 	           } else if (scoreCardType=="Non-Scoreable") {           	
@@ -418,6 +441,8 @@
 			                            <label for="reportType"> Report Type:</label>
 											<form:radiobutton path="mainReportSelect" value="ScoreCard" title="Choose Scorecard"/>&nbsp;Scorecard &nbsp;
 										  	<form:radiobutton path="mainReportSelect" value="Rebuttal" title="Choose Rebuttal" />&nbsp;Rebuttal &nbsp;
+										  	<form:radiobutton path="mainReportSelect" value="Summary" title="Choose Summary" />&nbsp;Summary&nbsp;
+			                         	  
 			                            </div>
 			                        </div>
 				                    <div class="row">
@@ -427,7 +452,7 @@
 										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:option value="ALL" label="---Select ALL---"/>
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 									
 										
 			                            </div>

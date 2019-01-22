@@ -1243,9 +1243,9 @@ $(document).ready(function() {
 				<td style="vertical-align: top">
 
 					<div id="updates" class="boxed">
-					
+					<div class="table-users" style="width: 98%">
 						
-						<div class="content">
+						<div class="container" style="width: 99%">
 						
 						 		<form:hidden path="macId" />
 								 <form:hidden path="jurisId" />
@@ -1262,66 +1262,63 @@ $(document).ready(function() {
 								  <form:hidden path="callCategoryType" />
 								  <form:hidden path="rebuttalStatus" />
 								 
-								 			
-								<div class="table-users" style="width: 98%">
-									<div class="header">Report Results Screen</div>
-									
-								<div class="row " style="margin-top: 10px">
-									<div class="col-lg-12 col-lg-offset-1 form-container">
-				                    <%-- <h2>"${reportName}"</h2>  --%>
-				                    <!-- <p> Please provide your feedback below: </p> -->
-				                    
-				                    <div class="row">
-				                            <div class="col-sm-12 form-group">
+								 <div class="row " style="margin-top: 10px">
+										<div class="col-md-12 col-md-offset-0 form-container">
+											<div class="row">
+												<div class="col-md-8 col-md-offset-0 form-group">
+												<h2>Report Results Screen</h2>
+												</div>
+											</div>	
+				                    	<div class="row">
+				                            <div class="col-md-8 col-md-offset-0 form-group">
 				                                <button class="btn btn-primary" id="create"  type="submit">Back</button>
 				                            </div>
 				                           
 				                        </div>
 				                   
 				                    <div class="row">
-			                            <div class="col-lg-4 form-group">
+			                            <div class="col-md-4 col-md-offset-1 form-group">
 			                                <label for="name"> MAC:</label>
 			                                <label for="name"> ${reportsForm.macName}</label>
 			                            </div>
-			                            <div class="col-lg-4 form-group">
+			                            <div class="col-md-4 col-md-offset-0 form-group">
 			                                <label for="name"> Jurisdiction:</label>
 			                                <label for="name"> ${reportsForm.jurisdictionName}</label>
 			                            </div>
 			                        </div>
 			                         <div class="row">
-			                            <div class="col-lg-4 form-group">
+			                            <div class="col-md-4 col-md-offset-1 form-group">
 			                                <label for="name"> Program:</label>
 			                                <label for="name"> ${reportsForm.programName}</label>
 			                            </div>
-			                            <div class="col-lg-4 form-group">
+			                            <div class="col-md-4 col-md-offset-0 form-group">
 			                                <label for="name"> PCC/Location:</label>
 			                                <label for="name"> ${reportsForm.pccLocationName}</label>
 			                            </div>
 			                        </div>
 			                         <div class="row">
-			                            <div class="col-lg-4 form-group">
+			                            <div class="col-md-4 col-md-offset-1 form-group"">
 			                                <label for="name"> Report From Date:</label>
 			                                 <label for="name"> ${reportsForm.fromDateString}</label>
 			                            </div>
-			                            <div class="col-lg-4 form-group">
+			                            <div class="col-md-4 col-md-offset-0 form-group">
 			                                <label for="name"> Report To Date:</label>
 			                                 <label for="name"> ${reportsForm.toDateString}</label>
 			                            </div>
 			                        </div>
 				                    
-				                	</div>
+				                	<!-- </div> -->
 				                </div>
 									
 								
 								 <div class="row" id="allScoreCardMainDiv">	
-					             <div class="col-lg-12 col-lg-offset-1 form-container">
+					             <div class="col-md-12 col-md-offset-0 form-container">
 					                
 					                    <h2>${ReportTitle}</h2> 
 					                  	
 				                   <c:if test="${AllScoreCardReport_All == true}">
 				                                      
-				                   <div class="row" id="allScoreCardDiv">
-			                            <div class="col-lg-10 form-group">
+				                   
 			                        
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allScoreCardId" style="width: 95%">
 						                    <thead>
@@ -1347,16 +1344,13 @@ $(document).ready(function() {
 						                    </tbody>
 							              
 						                </table> 
-						                </div>
-						                </div>
+						              
 				                     </c:if>
 				                     
 				                   <c:if test="${AllScoreCardReport_Pass == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="allPassScorecardDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                   
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allPassScorecardDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1377,17 +1371,14 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						              
 				                     </c:if>
 				                     
 				                     
 				                  <c:if test="${AllScoreCardReport_Fail == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="allFailScorecardDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                    
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="allFailScorecardDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1407,16 +1398,13 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						               
 				                     </c:if>
 				                     
 				                     <c:if test="${ScoreableReport == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="scoreableReportDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                   < 
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreableReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1434,16 +1422,13 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						             
 				                     </c:if>
 				                     
 				                   <c:if test="${ScoreablePassReport == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="scoreablePassReportDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                    
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreablePassReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1459,16 +1444,13 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						               
 				                     </c:if>
 				                     
 				                      <c:if test="${ScoreableFailReport == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="scoreableFailReportDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                     
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreableFailReportDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1485,16 +1467,13 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						              
 				                     </c:if>
 				                     
 				                      <c:if test="${NonScoreableReport == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="nonScoreableDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                    
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="nonScoreableDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1510,16 +1489,13 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						                
 				                     </c:if>
 				                     
 				                     <c:if test="${DoesNotCountReport == true}">
 				                   
 				                    <!-- <p> Please provide your feedback below: </p> -->				                   
-				                   <div class="row" id="doesNotCountDiv">
-			                            <div class="col-lg-10 form-group">
-			                        
+				                   
 			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="doesNotCountDTId" style="width: 95%">
 						                    <thead>
 										        <tr>
@@ -1535,11 +1511,10 @@ $(document).ready(function() {
 						                    <tbody style="text-align: left">  
 						                    </tbody>
 						                </table> 
-						                </div>
-						                </div>
+						               
 				                     </c:if>
 				                     
-				                   
+				                   </div>
 					                </div>
 					                </div>
 					            </div>  <!-- Main Row Div -->

@@ -139,7 +139,7 @@ public class Rebuttal implements Comparable<Rebuttal> {
 
 	private String fileType;
 	
-	private MultipartFile rebuttalFileObject;
+	private File rebuttalFileObject;
 	
 	private ByteArrayResource httpFileData;
 	
@@ -200,12 +200,15 @@ public class Rebuttal implements Comparable<Rebuttal> {
 	}
 
 
-	public MultipartFile getRebuttalFileObject() {
+	
+
+
+	public File getRebuttalFileObject() {
 		return rebuttalFileObject;
 	}
 
 
-	public void setRebuttalFileObject(MultipartFile rebuttalFileObject) {
+	public void setRebuttalFileObject(File rebuttalFileObject) {
 		this.rebuttalFileObject = rebuttalFileObject;
 	}
 

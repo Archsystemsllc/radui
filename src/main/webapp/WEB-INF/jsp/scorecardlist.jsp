@@ -133,7 +133,7 @@
 	                
 	                 $("#programId").get(0).options.length = 0;	           
 	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
-	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "0");
+	      	      	 $("#programId").get(0).options[1] = new Option("ALL", "0");
 	      	  	    	$.each(data, function (key,obj) {
 	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -146,6 +146,18 @@
 		$('#back').click(function(e) {	
 			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/getMacJurisReportFromSession";			
 	    }); 
+
+		var scoreCardType = $("select#scorecardType").val();
+        if (scoreCardType=="Scoreable") {           
+	           	$('#callResultDiv').show();
+	           	$("#callResult").attr('required',true);
+        } else if (scoreCardType=="Non-Scoreable") {           	
+	           	$('#callResultDiv').hide();
+	           	$("#callResult").removeAttr('required'); 
+        } else if (scoreCardType=="Does Not Count") {                        	
+        		$('#callResultDiv').hide();
+        		$("#callResult").removeAttr('required'); 
+        }
 
 		
 	});
@@ -209,7 +221,7 @@ $(document).ready(function(){
 	 ],
 	 //dom: 'Bfrtip',
 	 //dom: '<"top"i>fprtl<"bottom"B><"clear">',
-	 dom: '<lif<t>pB>',
+	dom: 'Bfrtip',
      buttons: [
          {
              extend: 'copyHtml5',
@@ -245,6 +257,24 @@ $(document).ready(function(){
 	});
 });
 </script>
+<script type="text/javascript">
+$(function(){
+	$("select#scorecardType").change(function(){
+		 var scoreCardType = $(this).val();
+		 if (scoreCardType=="Scoreable") {           
+	           	$('#callResultDiv').show();
+	           	$("#callResult").attr('required',true);
+          } else if (scoreCardType=="Non-Scoreable") {           	
+	           	$('#callResultDiv').hide();
+	           	$("#callResult").removeAttr('required'); 
+          } else if (scoreCardType=="Does Not Count") {                        	
+          		$('#callResultDiv').hide();
+          		$("#callResult").removeAttr('required'); 
+          }
+   });
+	
+});
+</script>
 
 </head>
 <body>
@@ -257,28 +287,33 @@ $(document).ready(function(){
 				<td style="vertical-align: top" >
 
 					<div id="updates" class="boxed">
+						<div class="table-users" style="width: 99%">
+						<div class="container" style="width: 99%">
 
-						<div class="content">
-
-							<div class="table-users" style="width: 90%">
+							
 								<div class="header">List of Scorecards</div>
 							<!-- 	Removed Blank Space - 508 -->
 							 <input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 								<c:if test="${ScoreCardFilter == true}">
 									
 									<div class="row " style="margin-top: 10px">
-										<div class="col-lg-12 col-lg-offset-1 form-container">
+										<div class="col-md-12 col-md-offset-0 form-container">
 											<div class="row">
+											<div class="col-md-8 col-md-offset-0 form-group">
 												<h2>Scorecard Search Filters</h2>
-												<div class="col-lg-4 form-group">
+												</div>
+											</div>
+											<div class="row">
+											
+												<div class="col-md-4 col-md-offset-1 form-group">
 													<label for="name"> MAC:</label>
 													<form:select path="macId" class="form-control required"
 														required="true" title="Select one Medicare Administrative Contractor ID from the List">
 														<form:option value="0" label="ALL" />
-														<form:options items="${macMapEdit}" />
+														<form:options items="${macIdMapEdit}" />
 													</form:select>
 												</div>
-												<div class="col-lg-4 form-group">
+												<div class="col-md-4 col-md-offset-0 form-group">
 													<label for="name"> Jurisdiction:</label>
 													<form:select path="jurisIdReportSearchString" class="form-control required"
 														id="jurId" required="true" title="Select one or multiple Jurisdiction from the List" multiple="true">
@@ -288,44 +323,27 @@ $(document).ready(function(){
 												</div>
 											</div>
 											<div class="row" id="programPccLocDiv">
-					                            <div class="col-lg-4 form-group">
+					                            <div class="col-md-4 col-md-offset-1 form-group">
 					                                <label for="name"> Program:</label>
 												<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
-												   <form:option value="" label="---Select Program---"/>
-												    <form:option value="0" label="---Select ALL---"/>
+												   <form:option value="0" label="ALL"/>
 												   <form:options items="${programMapEdit}" />
 												</form:select> 	
 					                            </div>
-					                            <div class="col-lg-4 form-group">
-					                              &nbsp;
-					                            </div>
-					                            
-					                        </div>
-											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
-												
-											<div class="row">
-												
-												<div class="col-lg-4 form-group">
-													<label for="name">Status:</label>
-													<form:select class="form-control  required" id="callResult"
-														path="callResult" title="Select one Status from the List" required="true" >
-														<form:option value="ALL" label="ALL" />
-														<form:option value="Pass" />
-														<form:option value="Fail" />
-													</form:select>
-												</div>
-												<div class="col-lg-4 form-group">
+					                            <sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('Quality Monitor') or hasAuthority('CMS User')">
+											
+					                           <div class="col-md-4 col-md-offset-0 form-group">
 													<label for="name"> QM Name:</label>
 													<form:input type="text" class="form-control"
 														id="qamFullName" name="qamFullName" path="qamFullName" title="Enter Qualtiy Monitor Name/ID" />
 												
 												</div>
-											</div>
-											</sec:authorize>
-											<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
+					                            </sec:authorize>
+					                        </div>
+											
 											<div class="row">
-												
-												<div class="col-lg-4 form-group">
+												<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('CMS User')">
+												<div class="col-md-4 col-md-offset-1 form-group">
 													<label for="name">Scorecard Type:</label>
 													<form:select class="form-control  required" id="scorecardType"
 														path="scorecardType" title="Select one Score Card Type from the List" required="true" >
@@ -335,89 +353,93 @@ $(document).ready(function(){
 														<form:option value="Does Not Count" />
 													</form:select>
 												</div>
+												</sec:authorize>
+												<div class="col-md-4 col-md-offset-0 form-group">
+													<label for="name">Status:</label>
+													<form:select class="form-control  required" id="callResult"
+														path="callResult" title="Select one Status from the List" required="true" >
+														<form:option value="ALL" label="ALL" />
+														<form:option value="Pass" />
+														<form:option value="Fail" />
+													</form:select>
+												</div>
 											</div>
-											</sec:authorize>
+											
 											<div class="row">
-												<div class="col-lg-4 form-group">
+												<div class="col-md-4 col-md-offset-1 form-group">
 													<label for="name"> From Date:</label>
 
 													<form:input type="text" class="form-control"
 														path="filterFromDateString" title="Choose From Date from the Calendar" readonly="true" />
 												</div>
-												<div class="col-lg-4 form-group">
+												<div class="col-md-4 col-md-offset-0 form-group">
 													<label for="email"> To Date:</label>
 													<form:input type="text" class="form-control"
 														path="filterToDateString" title="Choose To Date from the Calendar" readonly="true" />
 												</div>
 											</div>
-										</div>
-									</div>
-									<div class="row ">
-										<div class="col-lg-12 col-lg-offset-1 form-container">
-											<table
-												style="border-collapse: separate; border-spacing: 2px; valign: middle"
-												id='table1'>
-												<tr>
-													<td>
+											<div class="row ">
+												<div class="col-md-6 col-md-offset-1 form-group">
+											
 													<span><button class="btn btn-primary" id="filter" type="submit" title="Select Filter button to Filter the results">Filter</button></span> 
 													<span><button class="btn btn-primary" onclick="resetFields();" type="button" title="Select Reset button to Reset the results">Reset</button></span>
 													<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Monitor') or hasAuthority('Quality Manager') ">
 													<span><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/new-scorecard" title="Select Add Scorecard button to add new scorecard"><button class="btn btn-primary" id="addScorecard" type="button">Add Scorecard</button></a></span> 
 													</sec:authorize>
-												</td>
-												
-												</tr>
-											</table>
+												</div>
+										
+											</div>
 										</div>
 									</div>
+									
 							</c:if>
 							<c:if test="${ReportFlag == true}">
-								<div class="row" style="margin-top: 10px">
-									<div class="col-lg-12 col-lg-offset-1 form-container">
-										<button class="btn btn-primary" id="back" type="button">Back</button></a></span>
+							<div class="row " style="margin-top: 10px">
+								<div class="col-md-12 col-md-offset-0 form-container">
+									<div class="col-md-6 col-md-offset-0 form-group">
+										<button class="btn btn-primary" id="back" type="button">Back</button>
 									</div>
 								</div>
 								<br/>
+							</div>
 							</c:if>		
 								
-								<div class="row" id="scorecardlistdatatablediv">
-				                <div class="col-lg-12 col-lg-offset-1 form-container">
+							<div class="row" id="scorecardlistdatatablediv">
+					                <div class="col-md-12 col-md-offset-0 form-container">
+					                   
+					                    <!-- <p> Please provide your feedback below: </p> -->	
+					                  <div class="row" style="width:90%;">			                   
+					                   <c:if test="${not empty success}">
+					                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
+					                    </div>
+					                 </c:if>
+					                  <c:if test="${not empty error}">
+					                 	<div class="errorblock" ><spring:message code="${success}"></spring:message>
+					                    </div>
+					                 </c:if>
+					                
+					           			</div>
+				               
+				                         
+				                 <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl table table-bordered" id="scoreCardLists" style="width: 100%">
+							      	<thead>
+								        <tr>
+								            <th style="text-align: left">MAC</th>
+								            <th style="text-align: left">Jurisdiction</th>
+								            <th style="text-align: left">MAC Call Reference ID</th>
+								            <th style="text-align: left">QM Name/QM ID</th>
+								            <th style="text-align: left">QM Start Date/Time</th> 
+								            <th style="text-align: left">Scorecard Type</th>
+								            <th style="text-align: left">Status</th>
+								            <th style="text-align: left">Actions</th>
+								           
+								        </tr>
+								    </thead>
+				                    <tbody>  
+				                    </tbody>
 				                   
-				                    <!-- <p> Please provide your feedback below: </p> -->	
-				                  <div class="row" style="width:90%;">			                   
-				                   <c:if test="${not empty success}">
-				                 	<div class="successblock" ><spring:message code="${success}"></spring:message>
-				                    </div>
-				                 </c:if>
-				                  <c:if test="${not empty error}">
-				                 	<div class="errorblock" ><spring:message code="${success}"></spring:message>
-				                    </div>
-				                 </c:if>
-				                
-				                 </div>
-			               
-			                         <div class="row" id="scorecardlistdatatable">
-			                            <div class="col-lg-10 form-group">
-			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreCardLists" style="width: 90%">
-						                    <thead>
-										        <tr>
-										            <th style="text-align: left">MAC</th>
-										            <th style="text-align: left">Jurisdiction</th>
-										            <th style="text-align: left">MAC Call Reference ID</th>
-										            <th style="text-align: left">QM Name/QM ID</th>
-										            <th style="text-align: left">QM Start Date/Time</th> 
-										            <th style="text-align: left">Scorecard Type</th>
-										            <th style="text-align: left">Status</th>
-										            <th style="text-align: left">Actions</th>
-										           
-										        </tr>
-										    </thead>
-						                    <tbody>  
-						                    </tbody>
-						                   
-						                </table> 
-			                            </div>		                           
-			                        </div>         
+				                </table> 
+				                                
 				                    
 				                </div>
 				            </div>

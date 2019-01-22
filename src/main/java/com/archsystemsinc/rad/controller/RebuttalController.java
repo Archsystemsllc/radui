@@ -1,6 +1,8 @@
 package com.archsystemsinc.rad.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,7 +69,7 @@ public class RebuttalController {
 	@RequestMapping(value ={"/admin/rebuttallist/{sessionBack}", "/quality_manager/rebuttallist/{sessionBack}", "/cms_user/rebuttallist/{sessionBack}",
 			 "/mac_admin/rebuttallist/{sessionBack}","/mac_user/rebuttallist/{sessionBack}","/quality_monitor/rebuttallist/{sessionBack}"})		
 	public String getRebuttalList(@ModelAttribute("rebuttal") Rebuttal rebuttalFromModel, final BindingResult result,
-			final Model model,HttpServletRequest request, Authentication authentication,@PathVariable("sessionBack") final String sessionBackObject,HttpServletResponse response) {
+			final Model model,HttpServletRequest request, Authentication authentication,@PathVariable("sessionBack") final String sessionBackObject,HttpServletResponse response, HttpSession session) {
 		log.debug("--> getRebuttalList Screen <--");
 		
 		HashMap<Integer,Rebuttal> resultsMap = new HashMap<Integer,Rebuttal>();
@@ -139,13 +142,15 @@ public class RebuttalController {
 			
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				String jurisIdList = HomeController.LOGGED_IN_USER_JURISDICTION_IDS;		
+				Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
 				
-				if(jurisIdList != null && !jurisIdList.equalsIgnoreCase("")  && objectType == "New") {
+				rebuttalNew.setMacId(loggedInUserMacId);
+				String loggedInJurisdictionIdList = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");		
+				
+				if(loggedInJurisdictionIdList != null && !loggedInJurisdictionIdList.equalsIgnoreCase("")  && objectType == "New") {
 					ArrayList<Integer> jurisdictionArrayList = new ArrayList<Integer>();
 					
-					String[] jurisIds = jurisIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+					String[] jurisIds = loggedInJurisdictionIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 					
 					for (String jurisIdSingleValue: jurisIds) {
 						
@@ -156,13 +161,16 @@ public class RebuttalController {
 					
 					HashMap<Integer, String> programMap = new HashMap<Integer, String> ();
 					HashMap<Integer, String> locationMap = new HashMap<Integer, String> ();
-					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
-						HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+					
+					HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+					for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
+						
+						HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 						if (programTempMap == null) continue;
 						
 						programMap.putAll(programTempMap);
 						for(Integer programIdSingle: programTempMap.keySet()) {
-							HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+							HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(loggedInUserMacId+"_"+jurisIdSingle+"_"+programIdSingle);
 							if (locationTempMap == null) continue;
 							locationMap.putAll(locationTempMap);
 							locationTempMap = null;
@@ -175,11 +183,12 @@ public class RebuttalController {
 					
 				}				
 				
-				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-				model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);		
+				rebuttalNew.setMacId(loggedInUserMacId);
+								
+				model.addAttribute("macIdMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP"));		
+				model.addAttribute("jurisMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP") );	
 			} else {
-				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);		
+				model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);		
 				model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);	
 				model.addAttribute("programMapEdit", HomeController.ALL_PROGRAM_MAP);	
 			}
@@ -285,9 +294,10 @@ public class RebuttalController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
 			
-			if(HomeController.LOGGED_IN_USER_MAC_ID != null ) {
-				userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
+			if(loggedInUserMacId != null ) {
+				userSearchObject.setMacId(Long.valueOf(loggedInUserMacId));
 			}
 			
 			if(userFormSession.getJurId() !=null && !userFormSession.getJurId().equalsIgnoreCase("")) {
@@ -302,7 +312,7 @@ public class RebuttalController {
 			}			
 		}
 		
-		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);		
+		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication, session);		
 		
 		userSearchObject.setStatus(UIGenericConstants.RECORD_STATUS_ACTIVE);
 		userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
@@ -324,7 +334,7 @@ public class RebuttalController {
 		return "rebuttal";
 	}
 	
-	private HashMap<Integer,String> setMacRefInSession( HttpServletRequest request, Authentication authentication) {
+	private HashMap<Integer,String> setMacRefInSession( HttpServletRequest request, Authentication authentication, HttpSession session) {
 		
 		
 		HashMap<Integer, ScoreCard> resultsMap = new HashMap<Integer,ScoreCard>();
@@ -358,13 +368,16 @@ public class RebuttalController {
 			Date today = new Date();
 									
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+				Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
 				
-				scoreCardTemp.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				scoreCardTemp.setMacId(loggedInUserMacId);
 				
-				rebuttalNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+				rebuttalNew.setMacId(loggedInUserMacId);
 				
-				if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("")) {
-					String[] jurisIds = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+				String loggedInUserJurisdictionIds = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");
+				
+				if(loggedInUserJurisdictionIds !=null && !loggedInUserJurisdictionIds.equalsIgnoreCase("")) {
+					String[] jurisIds = loggedInUserJurisdictionIds.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 					
 					ArrayList<Integer> jurIdArrayList = new ArrayList<Integer>();
 					for (String jurisIdSingleValue: jurisIds) {
@@ -457,15 +470,16 @@ public class RebuttalController {
 	
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal", "/quality_manager/saveOrUpdateRebuttal", "/cms_user/saveOrUpdateRebuttal",
 			 "/mac_admin/saveOrUpdateRebuttal","/mac_user/saveOrUpdateRebuttal","/quality_monitor/saveOrUpdateRebuttal"}, method = RequestMethod.POST)	
-	public String saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result, 
+	public @ResponseBody Integer saveRebuttal(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result, 
 			final RedirectAttributes redirectAttributes, final Model model, HttpSession session, HttpServletResponse response) {
 
 		String returnView = "";
 		log.debug("--> saverebuttal <--");
 		ByteArrayResource fileAsResource = null;
+		Integer returnRebuttalId = 0;
 		try {
 		
-		MultipartFile rebuttalMultipartObject = rebuttal.getRebuttalFileObject();
+		//MultipartFile rebuttalMultipartObject = rebuttal.getRebuttalFileObject();
 
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
@@ -514,59 +528,8 @@ public class RebuttalController {
 					Rebuttal.class);
 			ObjectMapper mapper = new ObjectMapper();
 			Rebuttal rebuttalTempObject = responseObject.getBody();
-			
-			
-			
-			//Code to Upload File Object - Start
-			if (rebuttalMultipartObject != null && !rebuttalMultipartObject.isEmpty()) {
-				
-				String ROOT_URI_UPLOAD_ATTACHMENT = new String(HomeController.RAD_WS_URI + "uploadRebuttalFileObject");	
-				
-				
-					try {
-						fileAsResource = new ByteArrayResource(rebuttalMultipartObject.getBytes()) {
-						    @Override
-						    public String getFilename() {
-						        return rebuttalMultipartObject.getOriginalFilename();
-						    }
-						};
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}			
-				
-				//add file
-			    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-			    params.add("file", fileAsResource);
-			    
-			    HttpHeaders headers = new HttpHeaders();
-			    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-			    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
-			            new HttpEntity<>(params, headers);
-
-			    //add array
-			    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ROOT_URI_UPLOAD_ATTACHMENT);
-			   
-			    //add some String
-			    builder.queryParam("id", rebuttalTempObject.getId());
-
-			    //another staff
-			    String resultOutput = "";
-			  
-
-			    ResponseEntity<Boolean> responseEntity = basicAuthRestTemplate.exchange(
-			            builder.build().encode().toUri(),
-			            HttpMethod.POST,
-			            requestEntity,
-			            Boolean.class);
-			  //Code to Upload File Object - End
-				
-			}
-			
-		    
-			if (rebuttal.getId() == 0) {
-				
+					    
+			if (rebuttal.getId() == 0) {				
 				
 				redirectAttributes.addFlashAttribute("success",
 						"success.create.rebuttal");
@@ -575,16 +538,21 @@ public class RebuttalController {
 						"success.edit.rebuttal");
 			}
 			
+			if(rebuttalTempObject.getId() != 0) {
+				returnRebuttalId = rebuttalTempObject.getId();
+			}
+			
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
-		String url = "redirect:/"+userFolder+"/rebuttallist/false";
-		url = response.encodeRedirectURL(url);
-
-		return url;
+		//String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
+		//String url = "redirect:/"+userFolder+"/rebuttallist/false";
+		//url = response.encodeRedirectURL(url);
+		
+		
+		return returnRebuttalId;
 	}
 	
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal2", "/quality_manager/saveOrUpdateRebuttal2", "/cms_user/saveOrUpdateRebuttal2",
@@ -596,7 +564,7 @@ public class RebuttalController {
 		log.debug("--> saverebuttal <--");
 		
 		ByteArrayResource fileAsResource = null;
-		try {
+		/*try {
 			fileAsResource = new ByteArrayResource(rebuttal.getRebuttalFileObject().getBytes()) {
 			    @Override
 			    public String getFilename() {
@@ -607,7 +575,7 @@ public class RebuttalController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttalUpload");
 		
@@ -824,7 +792,9 @@ public class RebuttalController {
 		User userFormSession = (User) session.getAttribute("LoggedInUserForm");
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
+			
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			userSearchObject.setMacId(Long.valueOf(loggedInUserMacId));
 			
 			String[] jurisIds = userFormSession.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);
 			
@@ -836,7 +806,7 @@ public class RebuttalController {
 			userSearchObject.setJurIdList(jurIdArrayList);
 		}
 		
-		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication);		
+		HashMap<Integer,String> failedMacRefList = setMacRefInSession(request, authentication, session);		
 		
 		userSearchObject.setStatus(UIGenericConstants.RECORD_STATUS_ACTIVE);
 		userSearchObject.setRoleString(UIGenericConstants.MAC_USER_ROLE);
@@ -921,5 +891,28 @@ public class RebuttalController {
 		
 		model.addAttribute("pccContactPersonMap",pccContactPersonMap);
 		return "rebuttalview";
+	}	
+	
+	@RequestMapping(value ={"/admin/download-rebuttal/{id}", "/quality_manager/download-rebuttal/{id}", "/cms_user/download-rebuttal/{id}",
+			 "/mac_admin/download-rebuttal/{id}","/mac_user/download-rebuttal/{id}","/quality_monitor/download-rebuttal/{id}"}, method = RequestMethod.GET)		
+	public void downladRebuttalGet(@PathVariable("id") final Integer id, HttpSession session, HttpServletResponse response) {
+		HashMap<Integer,Rebuttal> resultsMap = (HashMap<Integer, Rebuttal>) session.getAttribute("SESSION_SCOPE_REBUTTAL_MAP");
+		Rebuttal rebuttal = resultsMap.get(id);		
+		try {
+			response.setContentType(rebuttal.getFileType());
+			response.setContentLength(rebuttal.getRebuttalFileAttachment().length);
+			response.setHeader("Content-Disposition","attachment; filename=\"" + rebuttal.getFileName() +"\"");
+						 
+			response.addHeader("Content-Disposition","attachment; filename=\"" + rebuttal.getFileName() +"\"");
+			response.addHeader("X-Frame-Options", "ALLOWALL");
+						 
+			InputStream targetStream = new ByteArrayInputStream(rebuttal.getRebuttalFileAttachment());
+			IOUtils.copy(targetStream, response.getOutputStream());
+			response.flushBuffer();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}	
 }

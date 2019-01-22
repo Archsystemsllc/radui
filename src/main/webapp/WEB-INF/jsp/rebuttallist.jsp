@@ -270,7 +270,7 @@ $(document).ready(function(){
 													<form:select path="macId" class="form-control required"
 														required="true" title="Select one Medicare Administrative Contractor ID from the List">
 														<form:option value="0" label="ALL" />
-														<form:options items="${macMapEdit}" />
+														<form:options items="${macIdMapEdit}" />
 													</form:select>
 												</div>
 												<div class="col-lg-4 form-group">

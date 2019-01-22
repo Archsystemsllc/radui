@@ -216,7 +216,7 @@ $(function() {
 		      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
 		      	       + '<td align="center">' + item[2] + '</td>'
 		      	     + '<td align="center">' + item[3] + '</td>'
-	      	        +'<td style="text-align: center"><a class="viewLink" href="${WEB_SERVICE_URL}download-document" >'+item[4]+'</a></td></tr>';
+	      	        +'<td style="text-align: center"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/download-qamenvironmentform/'+item[4]+'">Download</a></td></tr>';
 	      	        
 	  	    	});
 		    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
@@ -433,9 +433,8 @@ $(function() {
 				                    				                   
 			                        <div class="row">
 			                              <div class="col-lg-8 form-group" align="left">
-			                                <a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environmental Change Control Form">
-												<button type="button" name="downloadSampleTemplate" id="downloadSampleTemplate" title="Click here to download Sample QAM Environmental Change Control Form">Download Sample QAM Environmental Change Control Form</button></a>
+			                                <a href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environmental Change Control Form" style="color: blue">
+												Download Sample QAM Environmental Change Control Form</a>
 											<br/>&nbsp;
 											<br/>
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
@@ -469,14 +468,14 @@ $(function() {
 			                            </div>
 			                           </div>
 				                     <div class="row">
-			                             <div class="col-lg-6 form-group">
+			                             <div class="col-md-4 form-group">
 			                              <label for="name"> MAC:</label>
 			                                <form:select path="macIdU" class="form-control" id="macIdU" title="Select one MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 	
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                            <div class="col-md-4 form-group">
 			                             <label for="name"> Jurisdiction:</label>
 			                               	<form:select path="jurisdictionU" class="form-control" id="jurisdictionU" title="Select one Jurisdiction from the list">
 										   		<form:option value="" label="---Select Jurisdiction---"/>
@@ -484,7 +483,9 @@ $(function() {
 											</form:select>
 											<form:input type = "hidden" name="jurisdictionUText" path="jurisdictionUText" />
 			                            </div>
-			                            <div class="col-lg-6 form-group">
+			                           </div>
+			                           <div class="row">
+			                            <div class="col-md-4 form-group">
 			                               	<button class="btn btn-primary" type="submit" name="uploadQamEnvForm" id="uploadQamEnvForm" title="Select Upload File button to upload System Issue List">Upload File</button>
 			                            </div>
 			                        </div>
@@ -514,7 +515,7 @@ $(function() {
 			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple" title="Select one or multiple MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:option value="ALL" label="Select ALL" />
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">

@@ -84,7 +84,7 @@
     		$("#datePostedDiv").show();
     		$("#pccLocationId").prop('disabled', false);
     		$("#contactPerson").prop('disabled', false);
-    		       
+
     		if($("#accuracyCallFailureReason").val() != null ) {
 				failureBlockDisplay = true;				
 				$("#accuracyCallFailureReasonDiv").show();
@@ -137,6 +137,49 @@
 	});
 
 	$(function(){
+
+		$( "#rebuttalForm" ).submit(function( event ) {
+			  event.preventDefault();
+			  $form = $(this); //wrap this in jQuery
+			  var rebuttalSaveAction = $form.attr('action');
+
+			  var rebuttalForm = document.forms[1];			    
+			  var rebuttalFormData = new FormData(rebuttalForm);
+
+			  var username="qamadmin";
+			  var password="123456";
+			  
+			  $.ajax({ 
+			         type: "POST",
+			         data : rebuttalFormData,
+			         url : rebuttalSaveAction,
+			         processData: false,
+			         contentType: false,
+			         success: function(data){ 
+			        	
+			        	var ajaxReq = $.ajax({
+			        	      url : "${WEB_SERVICE_URL}uploadRebuttalFileObject",
+			        	      type : 'POST',
+			        	      data : rebuttalFormData,
+			        	      contentType : false,
+			        	      processData : false,
+			        	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+			        	      success: function(data){
+			        	    	
+			        	    	  window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';        
+			        	       
+			        	    	}
+			        	    });
+			        },
+			        failure: function () {
+			        	alert("Rebttal Saved Failed, Please contact administrator");
+			        }
+			});
+			    
+		});
+
+		
+		
 		$("select#macReferenceId").change(function(){
 			var scorecardId =  $(this).val();
 			$("#csrFullName").val("");
@@ -269,7 +312,7 @@
 			                	$('#confirm-msg').text('Please select Result');
 				            } else {
 				            	$("#rebuttalResult").val($("#rebuttalResultTemp").val());
-				            	//alert($("#rebuttalResult").val());
+				            	
 				            	$( this ).dialog("close");
 					        }               	 	
 		                },
@@ -282,7 +325,7 @@
 
 			}	
 	          
-	     }); 
+	     });
 	});
 </script>
 <script>
@@ -546,7 +589,7 @@
 			                            <div class="col-sm-10 form-group">
 			                                <label for="name">Attachments:</label>		
 			                                <c:if test="${rebuttal.id > 0}">
-												<span>${rebuttal.fileName}</span>
+											<a class="download_rebuttal222" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/download-rebuttal/${rebuttal.id}" style="color: blue">	<span>${rebuttal.fileName}</span></a>
 											</c:if>
 											</br>
 			                                <input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree that PHI/PII information is not included in the attachment.</input>	                                

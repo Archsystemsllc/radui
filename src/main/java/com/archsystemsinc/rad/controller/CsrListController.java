@@ -40,11 +40,13 @@ public class CsrListController {
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 			
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
+			session.getAttribute("LOGGED_IN_USER_MAC_MAP");
+			
+			model.addAttribute("macIdMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP"));		
+			model.addAttribute("jurisMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP") );			
 			
 		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);	
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);	
 			model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);			
 			
 		}		

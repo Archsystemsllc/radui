@@ -333,7 +333,7 @@ $(function(){
 										<label for="name"> MAC:</label>
 			                                <form:select path="macId" id="macId" class="form-control required" title="Select one Medicare Administrative Contractor ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
-											   <form:options items="${macIdMap}" />
+											   <form:options items="${macIdMapEdit}" />
 											</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group"  id="jurIdBlock">

@@ -31,7 +31,6 @@ import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.ScoreCard;
 import com.archsystemsinc.rad.model.User;
 import com.archsystemsinc.rad.service.impl.SecurityServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -58,7 +57,7 @@ public class ScoreCardController {
 	@RequestMapping(value ={"/admin/scorecardlist/{sessionBack}", "/quality_manager/scorecardlist/{sessionBack}", "/cms_user/scorecardlist/{sessionBack}",
 			 "/mac_admin/scorecardlist/{sessionBack}","/mac_user/scorecardlist/{sessionBack}","/quality_monitor/scorecardlist/{sessionBack}"})	
 	public String getScorecardList(@ModelAttribute("scorecard") ScoreCard scoreCardFromModel, final BindingResult result,
-			final Model model,HttpServletRequest request, Authentication authentication,@PathVariable("sessionBack") final String sessionBackObject) {
+			final Model model,HttpServletRequest request, Authentication authentication,@PathVariable("sessionBack") final String sessionBackObject, HttpSession session) {
 		log.debug("--> getScorecardList Screen <--");
 		ScoreCard scoreCardNew = null;
 		ScoreCard scoreCardFailObject = null;
@@ -143,23 +142,26 @@ public class ScoreCardController {
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				
+				Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+				String loggedInJurisdictionIdList = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");		
+				HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+				HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
 				
-				
-					model.addAttribute("macMapEdit", HomeController.LOGGED_IN_USER_MAC_MAP);		
-					model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+				model.addAttribute("macIdMapEdit", loggedInUserMacMap);		
+				model.addAttribute("jurisMapEdit", loggedInUserJurisdictionMaps);
 					
-					if(HomeController.LOGGED_IN_USER_JURISDICTION_IDS !=null && !HomeController.LOGGED_IN_USER_JURISDICTION_IDS.equalsIgnoreCase("") && objectType.equalsIgnoreCase("New")) {
-						String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+					if(loggedInJurisdictionIdList !=null && !loggedInJurisdictionIdList.equalsIgnoreCase("") && objectType.equalsIgnoreCase("New")) {
+						String[] jurisIdStrings = loggedInJurisdictionIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 						
-						for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+						for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
 							jurIdArrayList.add(jurisIdSingle);
-							HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+							HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 							if (programTempMap == null) continue;
 							
 							programMap.putAll(programTempMap);
 							for(Integer programIdSingle: programTempMap.keySet()) {
 								programIdArrayList.add(programIdSingle);
-								HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+								HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(loggedInUserMacId+"_"+jurisIdSingle+"_"+programIdSingle);
 								if (locationTempMap == null) continue;
 								locationMap.putAll(locationTempMap);
 								locationTempMap = null;
@@ -188,12 +190,12 @@ public class ScoreCardController {
 						if(jurisIds[0].equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 							scoreCardNew.setJurisdictionName(UIGenericConstants.ALL_STRING);
 							
-							for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+							for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
 								jurIdArrayList.add(jurisIdSingle);
 								
 								if(scoreCardNew.getProgramId()==0 ) {
 									//scoreCardNew.setProgramName(reportsForm.getProgramId());
-									HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+									HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 									if (programTempMap == null) continue;
 									
 									programMap.putAll(programTempMap);
@@ -225,8 +227,7 @@ public class ScoreCardController {
 							
 							for (String jurisIdSingleValue: jurisIds) {
 								jurIdArrayList.add(Integer.valueOf(jurisIdSingleValue));								
-								String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));								
-								
+								String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));							
 							}
 							
 							scoreCardNew.setJurIdList(jurIdArrayList);		
@@ -238,16 +239,16 @@ public class ScoreCardController {
 						
 					}
 					
-					String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+					String[] jurisIdStrings = loggedInJurisdictionIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 					programMap = new HashMap<Integer, String> ();
 				    locationMap = new HashMap<Integer, String> ();
-					for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
-						HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+					for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
+						HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 						if (programTempMap == null) continue;
 						
 						programMap.putAll(programTempMap);
 						for(Integer programIdSingle: programTempMap.keySet()) {
-							HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle+"_"+programIdSingle);
+							HashMap<Integer, String> locationTempMap = HomeController.MAC_JURISDICTION_PROGRAM_PCC_MAP.get(loggedInUserMacId+"_"+jurisIdSingle+"_"+programIdSingle);
 							if (locationTempMap == null) continue;
 							locationMap.putAll(locationTempMap);
 							locationTempMap = null;
@@ -259,17 +260,17 @@ public class ScoreCardController {
 					
 					//scoreCardNew.setCallResult(UIGenericConstants.QUALITY_MONITOR_PASS_STRING);
 					
-					scoreCardNew.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);		
+					scoreCardNew.setMacId(loggedInUserMacId);		
 					scoreCardNew.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_PASS_STRING);
 					
 					
 					
-					scoreCardFailObject.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
+					scoreCardFailObject.setMacId(loggedInUserMacId);
 					
 					scoreCardFailObject.setFinalScoreCardStatus(UIGenericConstants.FINAL_STATUS_FAIL_STRING);
 					
 			} else {
-				model.addAttribute("macMapEdit", HomeController.MAC_ID_MAP);				
+				model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);				
 				
 				if(scoreCardNew.getMacId() == null || scoreCardNew.getMacId() == 0) {
 					model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);
@@ -494,18 +495,23 @@ public class ScoreCardController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			String loggedInJurisdictionIdList = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");		
 			
-			scoreCard.setMacId(HomeController.LOGGED_IN_USER_MAC_ID);
-			String[] jurisIdStrings = HomeController.LOGGED_IN_USER_JURISDICTION_IDS.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
+			HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+			HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+			
+			scoreCard.setMacId(loggedInUserMacId);
+			String[] jurisIdStrings = loggedInJurisdictionIdList.split(UIGenericConstants.UI_JURISDICTION_SEPERATOR);
 			scoreCard.setJurisIdReportSearchString(jurisIdStrings);				
 			
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			model.addAttribute("macIdMapEdit", loggedInUserMacMap);		
+			model.addAttribute("jurisMapEdit", loggedInUserJurisdictionMaps);	
 			
 			HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCard.getMacId()+"_"+scoreCard.getJurId());
 			model.addAttribute("programMapEdit", programMap);
 		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);	
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);	
 			
 			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCard.getMacId());
 			model.addAttribute("jurisMapEdit", jurisMap);	
@@ -580,13 +586,19 @@ public class ScoreCardController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			String loggedInJurisdictionIdList = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");		
+			HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+			HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+			
+			model.addAttribute("macIdMapEdit", loggedInUserMacMap);		
+			model.addAttribute("jurisMapEdit", loggedInUserJurisdictionMaps);	
 			
 			HashMap<Integer,String> programMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(scoreCard.getMacId()+"_"+scoreCard.getJurId());
 			model.addAttribute("programMapEdit", programMap);
 		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 			
 			HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCard.getMacId());
 			model.addAttribute("jurisMapEdit", jurisMap);
@@ -641,14 +653,20 @@ public class ScoreCardController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			String loggedInJurisdictionIdList = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");	
+			HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+			HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+			
+			model.addAttribute("macIdMapEdit", loggedInUserMacMap);		
+			model.addAttribute("jurisMapEdit", loggedInUserJurisdictionMaps);	
 			
 			programMap = new HashMap<Integer, String> ();
 			
-			for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+			for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
 				jurIdArrayList.add(jurisIdSingle);
-				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+				HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 				if (programTempMap == null) continue;
 				
 				programMap.putAll(programTempMap);
@@ -659,7 +677,7 @@ public class ScoreCardController {
 			model.addAttribute("programMapEdit", programMap);	
 			
 		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 		}
 		model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);
 		
@@ -696,12 +714,17 @@ public class ScoreCardController {
 			
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
+				Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+				String loggedInJurisdictionIdList = (String) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS");	
+				HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+				HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+				
 				
 				programMap = new HashMap<Integer, String> ();
 				
-				for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
 					jurIdArrayList.add(jurisIdSingle);
-					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 					if (programTempMap == null) continue;
 					
 					programMap.putAll(programTempMap);									
@@ -710,14 +733,16 @@ public class ScoreCardController {
 				
 				
 			} else {
-				model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+				model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 				
 				HashMap<Integer,String> jurisMap = HomeController.MAC_JURISDICTION_MAP.get(scoreCard.getMacId());
+				Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
 				model.addAttribute("jurisMapEdit", jurisMap);
 				programMap = new HashMap<Integer, String> ();
-				for(Integer jurisIdSingle: HomeController.LOGGED_IN_USER_JURISDICTION_MAP.keySet()) {
+				HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+				for(Integer jurisIdSingle: loggedInUserJurisdictionMaps.keySet()) {
 					jurIdArrayList.add(jurisIdSingle);
-					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(HomeController.LOGGED_IN_USER_MAC_ID+"_"+jurisIdSingle);
+					HashMap<Integer, String> programTempMap = HomeController.MAC_JURISDICTION_PROGRAM_MAP.get(loggedInUserMacId+"_"+jurisIdSingle);
 					if (programTempMap == null) continue;
 					
 					programMap.putAll(programTempMap);
@@ -739,9 +764,10 @@ public class ScoreCardController {
 			scoreCard.setCallCatSubCatMsString(callSubCategoryStringMsTemp);
 	
 			model.addAttribute("subCategoryMapListEdit", subCategoryMapFinal);
-			
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+			HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+			HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+			model.addAttribute("macIdMapEdit", loggedInUserMacMap);		
+			model.addAttribute("jurisMapEdit", loggedInUserJurisdictionMaps);	
 			model.addAttribute("programMapEdit", programMap);	
 			
 			model.addAttribute("callCategoryMap", HomeController.CALL_CATEGORY_MAP);

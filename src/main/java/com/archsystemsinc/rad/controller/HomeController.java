@@ -94,15 +94,15 @@ public class HomeController {
 	
 	public static HashMap<String, String> CALL_CAT_SUB_CAT_MULTI_SELECT_MAP = null;
 	
-	public static HashMap<Integer, String> LOGGED_IN_USER_MAC_MAP;
-	public static HashMap<Integer, String> LOGGED_IN_USER_JURISDICTION_MAP;
-	public static HashMap<Integer, String> LOGGED_IN_USER_PCC_LOCATION_MAP;
+	private HashMap<Integer, String> SESSION_LOGGED_IN_USER_MAC_MAP;
+	private HashMap<Integer, String> SESSION_LOGGED_IN_USER_JURISDICTION_MAP;
+	private  HashMap<Integer, String> SESSION_LOGGED_IN_USER_PCC_LOCATION_MAP;
 	
-	public static Integer LOGGED_IN_USER_MAC_ID;
+	private  Integer SESSION_LOGGED_IN_USER_MAC_ID;
 	
-	public static String LOGGED_IN_USER_JURISDICTION_IDS;
+	private  String SESSION_LOGGED_IN_USER_JURISDICTION_IDS;
 	
-	public static String LOGGED_IN_USER_JURISDICTION_NAMES;
+	private  String SESSION_LOGGED_IN_USER_JURISDICTION_NAMES;
 	
 	@Autowired
 	UtilityFunctions utilityFunctions;
@@ -229,7 +229,7 @@ public class HomeController {
 		 model.addAttribute("menu_highlight", "scorecard");
 			List<MacInfo> macInfoTempList = null;
 			String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 			List<MacInfo> resultsListMac= new ArrayList<MacInfo>();
 			MacInfo macInfoSearchObject = new MacInfo();
 			basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
@@ -245,7 +245,7 @@ public class HomeController {
 			
 			
 			
-			model.addAttribute("macIdMap", macIdMap);
+			model.addAttribute("macIdMapEdit", macIdMap);
 		
 		
 		
@@ -371,7 +371,7 @@ public class HomeController {
 		model.addAttribute("menu_highlight", "scorecard");
 		List<MacInfo> macInfoTempList = null;
 		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
-		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 		List<MacInfo> resultsListMac= new ArrayList<MacInfo>();
 		MacInfo macInfoSearchObject = new MacInfo();
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
@@ -387,7 +387,7 @@ public class HomeController {
 		
 		
 		
-		model.addAttribute("macIdMap", macIdMap);
+		model.addAttribute("macIdMapEdit", macIdMap);
 		
 		List<JurisdictionInfo> jurisdictionInfoTempList = null;
 		
@@ -799,10 +799,13 @@ public class HomeController {
 			
 			if(user.getMacId() != null ) {
 				String macName = MAC_ID_MAP.get(user.getMacId().intValue());				
-				LOGGED_IN_USER_MAC_ID = user.getMacId().intValue();
+				SESSION_LOGGED_IN_USER_MAC_ID = user.getMacId().intValue();
+				
+				session.setAttribute("SESSION_LOGGED_IN_USER_MAC_ID", SESSION_LOGGED_IN_USER_MAC_ID);
 				
 				userBasedMacIdMap.put(user.getMacId().intValue(), macName);				
-				LOGGED_IN_USER_MAC_MAP = userBasedMacIdMap;
+				SESSION_LOGGED_IN_USER_MAC_MAP = userBasedMacIdMap;
+				session.setAttribute("SESSION_LOGGED_IN_USER_MAC_MAP", SESSION_LOGGED_IN_USER_MAC_MAP);
 				
 				//Jurisdiction Id Setup
 				
@@ -831,12 +834,17 @@ public class HomeController {
 			}
 			
 			
-			LOGGED_IN_USER_JURISDICTION_MAP = userBasedJurisdictionMap;
-			LOGGED_IN_USER_JURISDICTION_IDS = jurIdList;
-			LOGGED_IN_USER_JURISDICTION_NAMES =	jurisdictionNamesValues;
+			SESSION_LOGGED_IN_USER_JURISDICTION_MAP = userBasedJurisdictionMap;
+			SESSION_LOGGED_IN_USER_JURISDICTION_IDS = jurIdList;
+			SESSION_LOGGED_IN_USER_JURISDICTION_NAMES =	jurisdictionNamesValues;
 			
 			//PCC Location Id Setup		
-			LOGGED_IN_USER_PCC_LOCATION_MAP = userBasedPccLocationMap;
+			SESSION_LOGGED_IN_USER_PCC_LOCATION_MAP = userBasedPccLocationMap;
+			
+			session.setAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP", SESSION_LOGGED_IN_USER_JURISDICTION_MAP);
+			session.setAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_IDS", SESSION_LOGGED_IN_USER_JURISDICTION_IDS);
+			session.setAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_NAMES", SESSION_LOGGED_IN_USER_JURISDICTION_NAMES);
+			session.setAttribute("SESSION_LOGGED_IN_USER_PCC_LOCATION_MAP", SESSION_LOGGED_IN_USER_PCC_LOCATION_MAP);
 
 			//Setting Up Session Variables
 			 RAD_WS_URI = radServicesEndPoint;

@@ -575,10 +575,10 @@ $(function() {
 				                    
 				                    <div class="row">
 			                              <div class="col-lg-8 form-group" align="left">
-			                                <a class="${linkcolor }"
-												href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template">
-												<button type="button" name="downloadSampleTemplate" id="downloadSampleTemplate" title="Click here to download Sample CSR Template">Download Sample CSR Template</button></a>
-											<br/>&nbsp;
+			                                <a href="${pageContext.request.contextPath}/resources/static/CSR_LIST_TEMPLATE_SAMPLE.xlsx" title="Click here to download Sample CSR Template" style="color: blue">
+												Download Sample CSR Template</a>
+												
+										    <br/>&nbsp;
 											<br/>Note: CSR Status - Write A for active CSRs, T for terminated and / or inactive CSRs
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
 			                             </div>
@@ -606,7 +606,7 @@ $(function() {
 			                              <label for="name"> MAC:</label>
 			                                <form:select path="macIdU" class="form-control" id="macIdU" title="Select one MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -640,7 +640,7 @@ $(function() {
 			                             <label for="name"> MAC:</label>
 			                                <form:select path="macIdK" id="macIdK" class="form-control required" title="Select one MAC ID from the list">
 											   <form:option value="" label="---Select MAC---"/>
-											   <form:options items="${macIdMap}" />
+											   <form:options items="${macIdMapEdit}" />
 											</form:select> 	
 										
 			                            </div>
@@ -682,7 +682,7 @@ $(function() {
 			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple" title="Select one or multiple MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
 										  
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">

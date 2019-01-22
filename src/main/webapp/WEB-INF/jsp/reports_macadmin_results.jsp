@@ -19,38 +19,16 @@
 
 <!-- CSS for Bootstrap -->
 <!-- JQuery -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.1.1/css/autoFill.dataTables.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/colreorder/1.3.1/css/colReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.1/css/fixedColumns.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.1/css/fixedHeader.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/keytable/2.1.1/css/keyTable.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.1.1/css/rowReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/1.4.1/css/scroller.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css"/>
- 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/autofill/2.1.1/js/dataTables.autoFill.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.colVis.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.html5.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.flash.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.print.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.1/js/dataTables.colReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.1/js/dataTables.fixedHeader.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.1.1/js/dataTables.keyTable.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.1.1/js/dataTables.rowReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.1/js/dataTables.scroller.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> 
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 
 
 <script type="text/javascript">
@@ -73,26 +51,20 @@ $(document).ready(function() {
 	     buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle,
-			     customize: includeSubtotalsAll
+	             title: reportTitle
 	         },
 	         {
-	             extend: 'excel',
-	             customizeData: includeSubtotalsAll,
+	             extend: 'excel',	            
 	             title: reportTitle,			     
-	             messageOnTop: messageOnTop,
-	             
-	            
+	             messageTop: messageOnTop
 		      },
 	         {
-	             
 			     extend: 'pdf',
 			     title: reportTitle,
 			     	customize: function(doc) {
 			     		doc.defaultStyle.fontSize = 7;
 			     		doc.styles.tableHeader.fontSize = 7; 
-			       	},     
-			        customizeData: includeSubtotalsAll			       
+			       	}		       
 	         }	        
 	     ],
 	    // drawCallback: addSubtotalsAll,
@@ -155,107 +127,141 @@ $(document).ready(function() {
 	});
 	rebuttalReportDataTable.columns.adjust().draw();
 
-	// Example: add subtotals by letter of first name
-	function addSubtotalsAll(settings){
-	  var api = this.api(),
-	      rows = api.rows({ page: 'current' }),
-	      cols = api.columns({ page: 'current' }),
-	      last = null,
-	      next = null,
-	       
-	      agg  = {};
+	//Scorecard Data Table Code
+	var scoreableReportData =eval('${scoreableReportList}');
+	var scoreableReportDataTable = $('#scoreableReportDTId').DataTable( {
+		"aaData": scoreableReportData,
+		"aoColumns": [
+		{ "mData": "macName"},
+		{ "mData": "jurisdictionName"},
+		{ "mData": "program"},
+		{ "mData": "scorableCount"},
+		{ "mData": "scorablePassPercent"},
+		{ "mData": "scorablePass"},
+		{ "mData": "scorableFailPercent"},
+		{ "mData": "scorableFail"},		
+		{ "mData": "callDuration"},
+		{ "mData": "macName"},
+	
+		],		
+	    "columnDefs": [ 
+	    	{ 
+	           "render" : function(data, type, row) {
+	        	   var linkData = "";	        	  
+	        	   if(data != "zTotals" && row.program == null ) {
+						linkData = data ;
+		        	} else if (data=="zTotals" && row.program == null) {
+		        		linkData = "Grand Total";
+				     } else {
+				    	 linkData = "<span><a href='${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+data+"/"+row.jurisdictionName+"/"+row.program+"/ALL'>"+data+"</a></span>";
+					 }
+				
+				return linkData;
+		        },
+			   "targets" : 0
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 4
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+				var linkData = data +"%";
+				return linkData;
+	        },
+		   "targets" : 6
+		   },
+		   { 
+	           "render" : function(data, type, row) {
+	        	   var sortData = row.macName+"_"+row.jurisdictionName+"_";	        	  
+	        	   if(row.program == null) {
+	        		   sortData += "ZZZZ";
+		        	} else {
+		        		sortData += row.program;
+				     } 
+				
+				return sortData;
+		        },
+			   "targets" : 9,
+			   "visible": false
+		   }		
+		 ], 
+		 dom: 'Bfrtip',	
+	     buttons: [
+	         {
+	             extend: 'copy',
+	             title: reportTitle,	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8]
+	             }
+	         },
+	         {
+	             extend: 'excel',
+	           
+	             title: reportTitle,			     
+	             messageTop: messageOnTop,	
+	             filename: 'QAM Summary Report',	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8]
+	             }
+	             
+	            
+ 		      },
+ 		     {  
+ 			     extend: 'pdfHtml5',
+ 			     exportOptions: {
+ 	                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8]
+ 	             }, 	                     
+ 			     customize: function (doc) {
+ 			    	 var programs = scoreableReportDataTable.column(2).data().toArray();
+ 			    	 var list = 9;
+ 			    	for (var i = 0; i < programs.length; i++) {
+ 		               if (programs[i] == null) {
+ 			               if(i<programs.length-1) {
+ 			            	   for(var j=0; j<list; j++) {
+ 					            	  doc.content[2].table.body[i+1][j].fillColor = '#CEE9F5';
+ 						       } 
+ 				           } else {
+ 				        	   for(var j=0; j<list; j++) {
+ 					            	  doc.content[2].table.body[i+1][j].fillColor = '#58FAD0';
+ 						       } 
+ 					       } 
+ 			              
+ 		                 
+ 		               }
+ 		             }
+ 		             
+ 			     },
+ 			     title: reportTitle,
+ 				 messageTop: messageOnTop 	    	 	
+	         }	        
+	     ],
 	     
-	      
-	 var totalRows = api .column( 3 ) .data() . count();
-	  
-	  // only generate subtotals on initial display and when first column is sorted, but not other columns
-	  if ( api.order().length && api.order()[0][0] !== 0 )
-	    return;
-	  
-	  api.column(0, {page: 'current'}).data().each(function( text, rowNum, stack ){
-	    var current_row = rows.data()[rowNum];
-	    var next_rowNum = rowNum + 1;
-	   
-	    var intVal = function ( i ) {
-            return typeof i === 'string' ?
-                i.replace(/[\$,]/g, '')*1 :
-                typeof i === 'number' ?
-                    i : 0;
-        };
-        
-	   if (rowNum===totalRows-1){
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
+		  "language": {
+		      "emptyTable": "No data available"
+		    },
+		    "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {		    
+	               if ( aData.macName != "zTotals" && aData.program == null ) {
+	                   $('td', nRow).css('background-color', '#CEE9F5');
+	               } else if ( aData.macName == "zTotals" && aData.program == null ) {
+	            	   $('td', nRow).css('background-color', '#58FAD0');
+	               }               
+	           }
+	});
 
-			// Total over all pages for Scoreable Count
-	           var scoreableTotalCouunt = api.column( 3 ).data().reduce( function (a, b) {
-	                   return intVal(a) + intVal(b);
-	               }, 0 );
-		      
-		   // Average over all pages for Scoreable Pass
-		   var callDurationAverage = scoreableTotalCouunt / totalRows * 100;
-		  
-		        
-		 var $subtotal = $('<tr></tr>', {'class': 'subtotal'});
-	     
-	      cols.header().each(function(el, colNum){
-	        var $td = $('<td></td>');
-	        if (colNum === 1) {
-		          $td.text( "Average" );
-		    } else if (colNum === 2) {
-	          $td.text(""  );
-	        } else if (colNum === 3) {
-	          $td.text(callDurationAverage );
-	        } else if (colNum === 4) {
-	          $td.text("" );
-	        } 
-	        $subtotal.append($td);
-	       
-	      });
-	     
-	      $(rows.nodes()).eq(rowNum).after($subtotal );
-	    }
-	  
-	  });
-	  
-	}
+	// Sort by columns 1 and 2 and redraw
+	scoreableReportDataTable
+	    .order( [9, 'asc' ] )
+	    .draw();	
 
-	// for output formatting
-	function includeSubtotalsAll( data, button, exportObject){
-	  var classList = button.className.split(' ');
-	  
-	  // COPY
-	  if (classList.includes('buttons-copy')){
-	    
-	    data = $('#allScoreCardId').toTSV();
-	    exportObject.str = data;
-	    exportObject.rows = $('#allScoreCardId').find('tr').length - 1;  // did not include the footer
-	    
-	  } 
-	  // CSV
-	  else if (classList.includes('buttons-csv')){
-	    
-	    data = $('#allScoreCardId').toCSV();
-	    
-	  }
-	  // EXCEL/PDF/PRINT
-	  else if (classList.includes('buttons-excel') || classList.includes('buttons-pdf') ||  classList.includes('buttons-print')){
-		 
-	    // data is actually the object to use for EXCEL/PDF/PRINT
-	    var subtotals = [];
-	    $('#allScoreCardId tr.subtotal').each(function(){
-	      var $row = $(this),
-	          row_index = $row.index(), 
-	          row = $row.find('td,th').map(function(){return $(this).text();}).get();
-	      subtotals[ subtotals.length ] = {rowNum: row_index, data: row };
-	    });
-	    
-	    for (var i=0, n=subtotals.length; i<n; i++){
-	      var subtotal = subtotals[i];
-	      data.body.splice(subtotal.rowNum, 0, subtotal.data);
-	    }
-	  }
-	  
-	  return data;
-	}
+	scoreableReportDataTable.columns.adjust().draw();	
 	
 
 });
@@ -406,7 +412,33 @@ $(document).ready(function() {
 						                </div>
 						                </div>
 				                     </c:if>
-						                
+						             <c:if test="${SummaryScoreableReport == true}">
+				                   
+				                    <!-- <p> Please provide your feedback below: </p> -->				                   
+				                   <div class="row" id="scoreableReportDiv">
+			                            <div class="col-lg-10 form-group">
+			                        
+			                            <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="scoreableReportDTId" style="width: 95%">
+						                    <thead>
+										        <tr>
+										            <th style="text-align: left">MAC</th>
+										            <th style="text-align: left">Jurisdiction</th>
+										             <th style="text-align: left">Program</th>
+										            <th style="text-align: left">Scoreable Count</th>
+										             <th style="text-align: left">Scoreable Pass Percent</th>	
+										            <th style="text-align: left">Scoreable Pass Count</th>
+										           	<th style="text-align: left">Scoreable Fail Percent</th>									            
+										            <th style="text-align: left">Scoreable Fail Count</th>										            
+										            <th style="text-align: left">Avg Call Duration</th>					           
+										        </tr>
+										    </thead>
+						                    <tbody style="text-align: left">  
+						                    </tbody>
+						                </table> 
+						                </div>
+						                </div>
+				                     </c:if>
+				                        
 					                </div>
 					                </div>
 					            </div>  <!-- Main Row Div -->

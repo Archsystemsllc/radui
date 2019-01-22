@@ -90,7 +90,9 @@ public class UserController {
 		userSearchObject.setIgnoreCurrentUserId(userFormSession.getId());
 		
 		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			
+			userSearchObject.setMacId(Long.valueOf(loggedInUserMacId));
 			
 			String[] jurisIds = {""};
 			ArrayList<String> jurIdArrayList = new ArrayList<String>();
@@ -196,7 +198,9 @@ public class UserController {
 		userSearchObject.setIgnoreCurrentUserId(userFormSession.getId());
 		
 		if(roles.contains("MAC Admin") || roles.contains("MAC User")) {
-			userSearchObject.setMacId(Long.valueOf(HomeController.LOGGED_IN_USER_MAC_ID));
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			
+			userSearchObject.setMacId(Long.valueOf(loggedInUserMacId));
 			
 			String[] jurisIds = {""};
 			ArrayList<String> jurIdArrayList = new ArrayList<String>();
@@ -286,7 +290,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value ={"/admin/createusers", "/mac_admin/createusers"})
-	public String createUsers(Model model,Authentication authentication) {
+	public String createUsers(Model model,Authentication authentication, HttpSession session) {
 		User blank = new User();
 		Role br = new Role();
 		blank.setRole(br);
@@ -295,9 +299,12 @@ public class UserController {
 		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
 		String roles = authentication.getAuthorities().toString();
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
-			model.addAttribute("pccMapEdit", HomeController.LOGGED_IN_USER_PCC_LOCATION_MAP);	
+			Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
+			
+			model.addAttribute("macIdMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP"));		
+			model.addAttribute("jurisMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP") );
+			
+			model.addAttribute("pccMapEdit",session.getAttribute("SESSION_LOGGED_IN_USER_PCC_LOCATION_MAP"));	
 			
 			HashMap<Integer,String> roleMap = new HashMap<Integer, String>();	
 			
@@ -333,9 +340,10 @@ public class UserController {
 		ArrayList<Integer> jurIdArrayList = new ArrayList<Integer> ();
 		String roles = authentication.getAuthorities().toString();
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
-			model.addAttribute("pccMapEdit", HomeController.LOGGED_IN_USER_PCC_LOCATION_MAP);	
+			model.addAttribute("macIdMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP"));		
+			model.addAttribute("jurisMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP") );
+			
+			model.addAttribute("pccMapEdit",session.getAttribute("SESSION_LOGGED_IN_USER_PCC_LOCATION_MAP"));	
 			
 			HashMap<Integer,String> roleMap = new HashMap<Integer, String>();	
 			
@@ -369,7 +377,7 @@ public class UserController {
 	@RequestMapping(value ={"/admin/createUser","/mac_admin/createUser"}, method = RequestMethod.POST)	
 	public String createUser(@ModelAttribute("userForm") User userForm,
 			BindingResult bindingResult,
-			final RedirectAttributes redirectAttributes, Model model,Authentication authentication) {
+			final RedirectAttributes redirectAttributes, Model model,Authentication authentication, HttpSession session) {
 		log.debug("--> createUser:" + userForm);
 		userValidator.validate(userForm, bindingResult);
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
@@ -377,8 +385,9 @@ public class UserController {
 			model.addAttribute("userForm", userForm);
 			String roles = authentication.getAuthorities().toString();
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-				model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-				model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);	
+				model.addAttribute("macIdMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP"));		
+				model.addAttribute("jurisMapEdit", session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP") );
+				
 				
 				HashMap<Integer,String> roleMap = new HashMap<Integer, String>();	
 				
@@ -469,7 +478,7 @@ public class UserController {
 		blank.setRole(br);
 		model.addAttribute("userForm", blank);
 		model.addAttribute("allRoles", userService.findAllRoles());
-		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
 		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 
@@ -498,7 +507,7 @@ public class UserController {
 		log.debug("bindingResult.hasErrors()::" + bindingResult.getAllErrors());
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("allRoles", userService.findAllRoles());
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 			model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
 			model.addAttribute("progIds", HomeController.MAC_JURISDICTION_PROGRAM_MAP);
 			return "registration";
@@ -599,7 +608,7 @@ public class UserController {
 	 */
 	private void userDefaults(Model model) {
 		model.addAttribute("roleIds", HomeController.ROLE_MAP);
-		model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);
+		model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 		model.addAttribute("jurIds", HomeController.JURISDICTION_MAP);
 		model.addAttribute("orgIds", HomeController.ORGANIZATION_MAP);
 		model.addAttribute("pccIds", HomeController.PCC_LOC_MAP);
@@ -777,7 +786,7 @@ public class UserController {
 	 * @param logout
 	 * @return
 	 */
-	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/", "/login" })
 	
 	public String login(Model model, String error, HttpServletRequest request) {
 		log.debug("error::" + error);

@@ -1,5 +1,7 @@
 package com.archsystemsinc.rad.controller;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -37,12 +39,13 @@ public class SystemIssueFormController {
 		String roles = authentication.getAuthorities().toString();
 		
 		if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
-			
-			model.addAttribute("macIdMap", HomeController.LOGGED_IN_USER_MAC_MAP);		
-			model.addAttribute("jurisMapEdit", HomeController.LOGGED_IN_USER_JURISDICTION_MAP);			
+			HashMap<Integer, String> loggedInUserJurisdictionMaps = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_JURISDICTION_MAP");
+			HashMap<Integer, String> loggedInUserMacMap = (HashMap) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_MAP");
+			model.addAttribute("macIdMapEdit", loggedInUserMacMap);		
+			model.addAttribute("jurisMapEdit", loggedInUserJurisdictionMaps);			
 			
 		} else {
-			model.addAttribute("macIdMap", HomeController.MAC_ID_MAP);	
+			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);	
 			model.addAttribute("jurisMapEdit", HomeController.JURISDICTION_MAP);			
 			
 		}		

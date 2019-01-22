@@ -1,17 +1,13 @@
 package com.archsystemsinc.rad.configuration;
 
-import java.io.IOException;
-
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 import org.displaytag.filter.ResponseOverrideFilter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class SpringWebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -37,15 +33,11 @@ public class SpringWebInitializer extends AbstractAnnotationConfigDispatcherServ
     	return singleton;
 	}
  
-   /* @Override
-    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
-        registration.setMultipartConfig(getResolver());
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+              super.onStartup(servletContext);
+        servletContext.addListener(new SessionListener());
     }
-    */
-   /* private MultipartConfigElement getMultipartConfigElement() {
-        MultipartConfigElement multipartConfigElement = new MultipartConfigElement("/tmp");
-        return multipartConfigElement;
-    }*/
     
     @Value("${rad.uploadfile.server.location}")
     public static String SERVER_UPLOAD_FILE_LOCATION;

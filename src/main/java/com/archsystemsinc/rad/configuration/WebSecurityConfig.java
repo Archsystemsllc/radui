@@ -38,21 +38,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-    	http.authorizeRequests() 
-    	.antMatchers("/user/**").access("hasAuthority('Report Viewer')")
-        .antMatchers("/administrator/**").access("hasAuthority('Administrator')")
+    	http.authorizeRequests()     	
+    	.antMatchers("/resources/**", "/login").permitAll()  
+    	 .antMatchers("/administrator/**").access("hasAuthority('Administrator')")
         .antMatchers("/quality_manager/**").access("hasAuthority('Quality Manager')")
         .antMatchers("/cms_user/**").access("hasAuthority('CMS User')")
         .antMatchers("/mac_admin/**").access("hasAuthority('MAC Admin')")
         .antMatchers("/quality_monitor/**").access("hasAuthority('Quality Monitor')")
         .antMatchers("/mac_user/**").access("hasAuthority('MAC User')")
-        .antMatchers("/resources/**").permitAll()
-        .anyRequest().authenticated()
         .and().formLogin().loginPage("/login").permitAll().successHandler(customSuccessHandler)        
         .and().csrf()
         .and().exceptionHandling().accessDeniedPage("/Access_Denied")
-        .and().logout().logoutSuccessUrl("/login?logout");
-    	
+        .and().logout().logoutSuccessUrl("/login?logout")
+        .and().sessionManagement().maximumSessions(2).expiredUrl("/login?logout")
+        ;    	
     	
     } 
     

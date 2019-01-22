@@ -425,8 +425,8 @@
       			
       			var selectedJurisdiction = $('#jurId :selected').text();
       			var selectedMac = $('#macId :selected').text();
-      			
-      			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+selectedMac+"/"+selectedJurisdiction+"/"+reportSearchString;
+      			var selectedProgram = $('#programId :selected').text();
+      			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/mac-jur-report-drilldown/"+selectedMac+"/"+selectedJurisdiction+"/"+selectedProgram+"/"+reportSearchString;
       		} else {
       			window.location.href = "${pageContext.request.contextPath}/${SS_USER_FOLDER}/scorecardlist/true";
           	}
@@ -856,7 +856,7 @@
 			                               
 										<form:select path="macId" class="form-control required" id="macId" readonly="true">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 									
 										
 			                            </div>
@@ -977,7 +977,7 @@
 			                        <div class="row" id="accuracyCallFailureBlock1">
 			                        	<div class="col-lg-5 form-group">
 			                                <label for="accuracyCallFailureReason">Accuracy Call Failure Reason: </label>
-			                                 <form:input class="form-control required" type = "text" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
+			                                  <form:textarea  class="form-control required" type = "textarea" name = "accuracyCallFailureReason" path="accuracyCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
 										</div>
 			                            <div class="col-lg-5 form-group">
@@ -1025,7 +1025,7 @@
 			                        <div class="row" id="completenessCallFailureBlock">
 			                        <div class="col-lg-5 form-group">
 			                                <label for="completenessCallFailureReason">Completeness Call Failure Reason: </label>
-			                                 <form:input class="form-control required" type = "text" name = "completenessCallFailureReason" path="completenessCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
+			                                 <form:textarea class="form-control required" type = "textarea" name = "completenessCallFailureReason" path="completenessCallFailureReason" title="Enter the required Accuracy Call Failure Reason" />
 			                               
 									</div>
 			                        <div class="col-lg-5 form-group">

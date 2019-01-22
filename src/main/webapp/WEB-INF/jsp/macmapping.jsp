@@ -201,7 +201,7 @@
 										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
 										   <form:option value="" label="---Select MAC---"/>
 										  
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 									
 										
 			                            </div>

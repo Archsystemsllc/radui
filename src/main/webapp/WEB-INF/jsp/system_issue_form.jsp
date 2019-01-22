@@ -434,7 +434,7 @@ $(function() {
 			                              <label for="name"> MAC:</label>
 			                                <form:select path="macIdU" class="form-control" id="macIdU" title="Select one MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">
@@ -474,7 +474,7 @@ $(function() {
 			                               	<form:select path="macIdS" class="form-control" id="macIdS"  multiple="multiple" title="Select one or multiple MAC ID from the list">
 										   <form:option value="" label="---Select MAC---"/>
 										   <form:option value="ALL" label="Select ALL" />
-										   <form:options items="${macIdMap}" />
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-lg-6 form-group">

@@ -46,17 +46,17 @@
 		$('#toDateString').val("");
 		$('#macId').prop('selectedIndex',0);
 		$("#jurisdictionIds").get(0).options.length = 0;	    
-	  	$("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       
-	    $("#jurisdictionIds").get(0).options[1] = new Option("---Select All---", "ALL");	    
+	  /* 	$("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       */ 
+	    $("#jurisdictionIds").get(0).options[0] = new Option("ALL", "ALL");	    
 		$("#jurisId").get(0).options.length = 0;	
-		$("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");        
+		/* $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");         */
 		$("#programId").get(0).options.length = 0;	           
-	    $("#programId").get(0).options[0] = new Option("---Select Program---", "");
-	    $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+	  /*   $("#programId").get(0).options[0] = new Option("---Select Program---", ""); */
+	    $("#programId").get(0).options[0] = new Option("ALL", "ALL");
 		$('#pccLocationId').prop('selectedIndex',0);
 		$("#pccLocationId").get(0).options.length = 0;	           
-	    $("#pccLocationId").get(0).options[0] = new Option("---Select PCC/Location---", "");
-	    $("#pccLocationId").get(0).options[1] = new Option("---Select All---", "ALL");
+	  /*   $("#pccLocationId").get(0).options[0] = new Option("---Select PCC/Location---", ""); */
+	    $("#pccLocationId").get(0).options[0] = new Option("ALL", "ALL");
 		
 		$('#scoreCardType').prop('selectedIndex',0);  
 		$('#complianceReportType').prop('selectedIndex',0);
@@ -301,15 +301,15 @@
 	                    {macId: macIdValue , multipleInput: false}, function(data){
 	                    	
 	                 $("#jurisId").get(0).options.length = 0;	    
-	                 $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");              
+	                /*  $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");               */
 	      	      	 $.each(data, function (key,obj) {
 	      	  	    		$("#jurisId").get(0).options[$("#jurisId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
 	      	  	    	});  
 
 	      	  	     $("#jurisdictionIds").get(0).options.length = 0;	    
-	      	  	 	 $("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       
-	      	      	 $("#jurisdictionIds").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	  	 	/*  $("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");        */
+	      	      	 $("#jurisdictionIds").get(0).options[0] = new Option("ALL", "ALL");
 	      	  	    	$.each(data, function (key,obj) {
 	      	  	    		$("#jurisdictionIds").get(0).options[$("#jurisdictionIds").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -338,8 +338,8 @@
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
 	                
 	                 $("#programId").get(0).options.length = 0;	           
-	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
-	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	      	/*  $("#programId").get(0).options[0] = new Option("---Select Program---", ""); */
+	      	      	 $("#programId").get(0).options[0] = new Option("ALL", "ALL");
 	      	  	    	$.each(data, function (key,obj) {
 	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -365,8 +365,8 @@
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectProgram",{macId: macIdValue,jurisId: selectedJurisdiction}, function(data){
 	                
 	                 $("#programId").get(0).options.length = 0;	           
-	      	      	 $("#programId").get(0).options[0] = new Option("---Select Program---", "");
-	      	      	 $("#programId").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	      	/*  $("#programId").get(0).options[0] = new Option("---Select Program---", ""); */
+	      	      	 $("#programId").get(0).options[0] = new Option("ALL", "ALL");
 	      	  	    	$.each(data, function (key,obj) {
 	      	  	    		$("#programId").get(0).options[$("#programId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -397,8 +397,8 @@
 	            $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/selectLocation",{macId: $('#macId').val(),jurisId: selectedJurisdiction,programId: $(this).val(),programIdAvailableFlag: true}, function(data){
 	                
 	                 $("#pccLocationId").get(0).options.length = 0;	           
-	      	      	 $("#pccLocationId").get(0).options[0] = new Option("---Select PCC/Location---", "");
-	      	      	 $("#pccLocationId").get(0).options[1] = new Option("---Select All---", "ALL");
+	      	      	/*  $("#pccLocationId").get(0).options[0] = new Option("---Select PCC/Location---", ""); */
+	      	      	 $("#pccLocationId").get(0).options[0] = new Option("ALL", "ALL");
 	      	  	    	$.each(data, function (key,obj) {
 	      	  	    		$("#pccLocationId").get(0).options[$("#pccLocationId").get(0).options.length] = new Option(obj, key);
 	      	  	    		
@@ -451,25 +451,25 @@
 			                                <label for="name"> MAC:</label>
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
-										   <form:option value="" label="---Select MAC---"/>		
-										   <form:option value="ALL" label="---Select ALL---"/>								   
-										   <form:options items="${macIdMap}" />
+										  <%--  <form:option value="" label="---Select MAC---"/>		 --%>
+										   <form:option value="ALL" label="ALL"/>								   
+										   <form:options items="${macIdMapEdit}" />
 										</form:select> 									
 										
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="jurisMultiSelect">
 			                                <label for="jurisdictionIds"> Jurisdiction:</label>
 										<form:select path="jurisdictionIds" class="form-control required" id="jurisdictionIds" required="true" multiple="true" title="Select one or multiple Jurisdiction from the list">
-										  <form:option value="" label="---Select Jurisdiction---"/>
-										   <form:option value="ALL" label="---Select ALL---"/>
+										  <%-- <form:option value="" label="---Select Jurisdiction---"/> --%>
+										   <form:option value="ALL" label="ALL"/>
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="jurisSingleSelect">
 			                                <label for="jurisId"> Jurisdiction:</label>
 										<form:select path="jurisId" class="form-control required" id="jurisId" required="true" title="Select one Jurisdiction from the list">
-										  <form:option value="" label="---Select Jurisdiction---"/>		
-										   <form:option value="ALL" label="---Select ALL---"/>								   
+										  <%-- <form:option value="" label="---Select Jurisdiction---"/>		 --%>
+										   <form:option value="ALL" label="ALL"/>								   
 										   <form:options items="${jurisMapEdit}" />
 										</form:select> 				
 			                            </div>
@@ -478,16 +478,16 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="name"> Program:</label>
 										<form:select path="programId" class="form-control required" id="programId" required="true" title="Select one Program from the List">
-										   <form:option value="" label="---Select Program---"/>
-										    <form:option value="ALL" label="---Select ALL---"/>
+										  <%--  <form:option value="" label="---Select Program---"/> --%>
+										    <form:option value="ALL" label="ALL"/>
 										   <form:options items="${programMapEdit}" />
 										</form:select> 	
 			                            </div>
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> PCC/Location:</label>
 			                                <form:select path="pccLocationId" class="form-control required" id="pccLocationId" title="Select one Provider Contact Centers/Location from the List">
-			                                	<form:option value="" label="---Select PCC/Location---"/>
-											   <form:option value="ALL" label="---Select ALL---"/>
+			                                	<%-- <form:option value="" label="---Select PCC/Location---"/> --%>
+											   <form:option value="ALL" label="ALL"/>
 										   		<form:options items="${locationMapEdit}" />
 											</form:select> 
 			                            </div>
@@ -508,8 +508,8 @@
 			                            <div class="col-sm-6 form-group" id="scoreCardTypeDiv">
 			                                <label for="scoreCardType"> Scorecard Type:</label> 
 										  	<form:select path="scoreCardType" class="form-control required" id="scoreCardType" title="Select one ScoreCard Type from the List" >
-											   	<form:option value="" label="---Select Scorecard Type---"/>
-											   	<form:option value="ALL" label="---Select ALL---"/>
+											   <%-- 	<form:option value="" label="---Select Scorecard Type---"/> --%>
+											   	<form:option value="ALL" label="ALL"/>
 											  	<form:option value="Scoreable" />
 											  	<form:option value="Non-Scoreable" />
 											  	<form:option value="Does Not Count" />											  	
@@ -522,8 +522,8 @@
 			                            <div class="col-sm-6 form-group" id="complianceTypeDiv">
 			                                <label for="complianceReportType"> Compliance Type:</label> 
 										  	<form:select path="complianceReportType" class="form-control required" id="complianceReportType" title="Select one Compliance Type from the List" >
-											   <form:option value="" label="---Select Compliance Type---"/>
-											   	<form:option value="ALL" label="---Select ALL---"/>
+											  <%--  <form:option value="" label="---Select Compliance Type---"/> --%>
+											   	<form:option value="ALL" label="ALL"/>
 											  	<form:option value="Compliant" />
 											  	<form:option value="Non-Compliant" /> 	
 											</form:select> 
@@ -531,8 +531,8 @@
 			                            <div class="col-sm-6 form-group" id="callResultDiv">
 			                            <label for="callResult"> Call Result:</label> 
 			                                <form:select path="callResult" class="form-control required" id="callResult" title="Select one Call Result from the List" >
-											   	<form:option value="" label="---Select Call Result---"/>
-											   	<form:option value="ALL" label="---Select ALL---"/>
+											   	
+											   	<form:option value="ALL" label="ALL"/>
 											   	<form:option value="Pass" />	
 											  	<form:option value="Fail" />											  										  	
 											</form:select> 
@@ -540,16 +540,16 @@
 			                            <div class="col-sm-6 form-group" id="callCategoryTypeDiv">
 			                            <label for="callCategoryType"> Call Category:</label> 
 			                               <form:select path="callCategoryType" class="form-control required" id="callCategoryType" title="Select one Call Category Type from the List">
-											   	<form:option value="" label="---Select Call Category---"/>
-											   	<form:option value="ALL" label="---Select ALL---"/>
+											   <%-- 	<form:option value="" label="---Select Call Category---"/> --%>
+											   	<form:option value="ALL" label="ALL"/>
 											  	<form:options items="${callCategoryMap}" />										  	
 											</form:select> 		
 			                            </div>
 			                            <div class="col-sm-6 form-group" id="rebuttalStatusDiv">
 			                            <label for="rebuttalStatus"> Rebuttal Status:</label> 
 			                                <form:select path="rebuttalStatus" class="form-control required" id="rebuttalStatus" title="Select one Rebuttal Status from the List">
-											   <form:option value="" label="---Select Rebuttal Status---"/>
-											   	<form:option value="ALL" label="---Select ALL---"/>
+											  <%--  <form:option value="" label="---Select Rebuttal Status---"/> --%>
+											   	<form:option value="ALL" label="ALL"/>
 											  	<form:option value="Completed" />
 											  	<form:option value="Pending" />											  										  	
 											</form:select> 

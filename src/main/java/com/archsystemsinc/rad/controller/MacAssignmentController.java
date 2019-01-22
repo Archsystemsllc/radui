@@ -354,10 +354,10 @@ public class MacAssignmentController {
 				macAssignmentObjectTemp.setPlannedCalls(totalPlanned.toString());
 				macAssignmentObjectTemp.setMacJurisdictionProgramCompleted(totalCompleted);
 				macAssignmentList.add(macAssignmentObjectTemp);
-			}
+				
+				model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
+			}	
 			
-			
-			model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			
 			model.addAttribute("macAssignmentObjectForm", macAssignmentObject);
 			
