@@ -44,6 +44,8 @@
 			
 		$('#fromDateString').val("");
 		$('#toDateString').val("");
+		$('#fromDateStringMonthYear').val("");
+		$('#toDateStringMonthYear').val("");
 		$('#macId').prop('selectedIndex',0);
 		$("#jurisdictionIds").get(0).options.length = 0;	    
 	  /* 	$("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       */ 
@@ -74,7 +76,7 @@
 		$('#callCategoryTypeDiv').hide();
 		$('#rebuttalStatusDiv').hide();
 		$('#jurisSingleSelect').hide();
-		
+		$('#monthYearDatesDiv').hide();		
 
     	$('#fromDateString').datepicker({
     		maxDate: 0,
@@ -122,52 +124,105 @@
     	        $(this).val(previousToDate);      
     	        console.log("Error");
     	    }  
-    	}); 
+    	});
+
+
+    	$("#fromDateStringMonthYear").datepicker({ 
+            dateFormat: 'mm-yy',
+            maxDate: new Date,
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+    		onSelect: function(selected) {
+    			$("#toDateStringMonthYear").datepicker("option","minDate", selected)
+    		},
+
+            onClose: function(dateText, inst) {  
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
+            }
+        });
+
+        $("#fromDateStringMonthYear").focus(function () {
+            $(".ui-datepicker-calendar").hide();
+            $("#ui-datepicker-div").position({
+                my: "center top",
+                at: "center bottom",
+                of: $(this)
+            });    
+        });   
+
+    	$("#toDateStringMonthYear").datepicker({ 
+            dateFormat: 'mm-yy',
+            maxDate: new Date,
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            onSelect: function(selected) {
+    			$("#fromDateStringMonthYear").datepicker("option","maxDate", selected)
+    		},
+
+            onClose: function(dateText, inst) {  
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val(); 
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val(); 
+                $(this).val($.datepicker.formatDate('yy-mm', new Date(year, month, 1)));
+            }
+        });
+
+        $("#toDateStringMonthYear").focus(function () {
+            $(".ui-datepicker-calendar").hide();
+            $("#ui-datepicker-div").position({
+                my: "center top",
+                at: "center bottom",
+                of: $(this)
+            });    
+        }); 
 
     	var reportSelectValue=$('input:radio[name=mainReportSelect]:checked').val();
 
     	if (reportSelectValue == '') {    		
     		$('input:radio[name=mainReportSelect]')[0].checked = true;
-    		$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect').show();      			
+    		$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();      			
     		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);
-    		$("#jurisId").removeAttr('required');    		
-    		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv').hide();
+    		$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+    		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#monthYearDatesDiv').hide();
     		$('select[id="macId"] > option[value="ALL"]').show();    		
     		
         } else if (reportSelectValue == 'ScoreCard' ) {
                     	
-    		$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect').show();      		 		
+    		$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();      		 		
     		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);
-    		$("#jurisId").removeAttr('required');    		
-    		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv').hide();
+    		$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+    		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#monthYearDatesDiv').hide();
     		$('select[id="macId"] > option[value="ALL"]').show(); 
         } else if (reportSelectValue == 'Compliance' ) {
-        	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisSingleSelect').hide();            	
-        	$('#complianceTypeDiv,#datesDiv,#jurisMultiSelect').show();
+        	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisSingleSelect,#monthYearDatesDiv').hide();            	
+        	$('#complianceTypeDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();
     		$("#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);         		
-    		$("#jurisId,#programId,#pccLocationId,#scoreCardType,#callResult").removeAttr('required');
+    		$("#jurisId,#programId,#pccLocationId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');
     		$('select[id="macId"] > option[value="ALL"]').show();
     		
         } else if (reportSelectValue == 'Rebuttal' ) {
-        	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();        	    		
+        	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();        	    		
     		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#callCategoryType,#rebuttalStatus").attr('required',true);
-    		$("#jurisId,#scoreCardType,#callResult").removeAttr('required');    		
-    		$('#jurisSingleSelect,#complianceTypeDiv').hide();
+    		$("#jurisId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+    		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv').hide();
     		$('select[id="macId"] > option[value="ALL"]').show(); 
     		
         }  else if (reportSelectValue == 'Qasp' ) {            
-        	$('#jurisSingleSelect').show();
-        	$("#scoreCardType,#callResult,#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds").removeAttr('required');   
-        	$('#scoreCardTypeDiv,#callResultDiv,#complianceTypeDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisMultiSelect').hide();
+        	$('#jurisSingleSelect,#monthYearDatesDiv').show();
+        	$("#scoreCardType,#callResult,#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#fromDateString,#toDateString").removeAttr('required');   
+        	$('#scoreCardTypeDiv,#callResultDiv,#complianceTypeDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisMultiSelect,#datesDiv').hide();
         	$('select[id="macId"] > option[value="ALL"]').hide();        	
-        	$("#jurisId").attr('required',true);    				
+        	$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").attr('required',true);    				
     		$("#macId option[value='ALL']").hide();    		
         }  else if (reportSelectValue == 'Summary' ) {
                     	
-    		$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
-    		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+    		$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();  
+    		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');      		 		
     		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
-       		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+       		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv,#monthYearDatesDiv').hide();
     		$('select[id="macId"] > option[value="ALL"]').show(); 
     		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
         }
@@ -181,37 +236,38 @@
 
     	
             if (mainReportSelect=="ScoreCard") {
-            	$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect').show();        		 		
+            	$('input:radio[name=mainReportSelect]')[0].checked = true;
+        		$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();      			
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);
-        		$("#jurisId").removeAttr('required');    		
-        		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv').hide();
-        		$('select[id="macId"] > option[value="ALL"]').show(); 
+        		$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+        		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#monthYearDatesDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show();    		
             } else if (mainReportSelect=="Compliance") {
-            	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisSingleSelect').hide();            	
-            	$('#complianceTypeDiv,#datesDiv,#jurisMultiSelect').show();
+            	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisSingleSelect,#monthYearDatesDiv').hide();            	
+            	$('#complianceTypeDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();
         		$("#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);         		
-        		$("#jurisId,#programId,#pccLocationId,#scoreCardType,#callResult").removeAttr('required');
+        		$("#jurisId,#programId,#pccLocationId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');
         		$('select[id="macId"] > option[value="ALL"]').show();
         		
             } else if (mainReportSelect=="Rebuttal") {
-            	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();            	  		
+            	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();        	    		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#callCategoryType,#rebuttalStatus").attr('required',true);
-        		$("#jurisId,#scoreCardType,#callResult").removeAttr('required');    		
-        		$('#jurisSingleSelect,#complianceTypeDiv').hide();
+        		$("#jurisId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+        		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv').hide();
         		$('select[id="macId"] > option[value="ALL"]').show(); 
             } else if (mainReportSelect=="Qasp") {
-            	$('#jurisSingleSelect').show();
-            	$("#scoreCardType,#callResult,#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds").removeAttr('required');   
-            	$('#scoreCardTypeDiv,#callResultDiv,#complianceTypeDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisMultiSelect').hide();
+            	$('#jurisSingleSelect,#monthYearDatesDiv').show();
+            	$("#scoreCardType,#callResult,#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#fromDateString,#toDateString").removeAttr('required');   
+            	$('#scoreCardTypeDiv,#callResultDiv,#complianceTypeDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisMultiSelect,#datesDiv').hide();
             	$('select[id="macId"] > option[value="ALL"]').hide();        	
-            	$("#jurisId").attr('required',true);    				
+            	$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").attr('required',true);    				
         		$("#macId option[value='ALL']").hide();    		
             }else if (mainReportSelect == 'Summary' ) {
             	
-            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
-        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');      		 		
         		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
-           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv,#monthYearDatesDiv').hide();
         		$('select[id="macId"] > option[value="ALL"]').show(); 
         		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
             }
@@ -235,43 +291,49 @@
 		$("input[name='mainReportSelect']").change(function(){
 			mainReportSelect = $(this).val();
             if (mainReportSelect=="ScoreCard") {
-            	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();          		 		
+            	$('#scoreCardTypeDiv,#callResultDiv,#programPccLocDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();      		 		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);
-        		$("#jurisId").removeAttr('required');    		
-        		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv').hide();  
-        		$('select[id="macId"] > option[value="ALL"]').show();
+        		$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+        		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#monthYearDatesDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show(); 		
         		resetFields();    		
         		
             } else if (mainReportSelect=="Compliance") {
                 
-            	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisSingleSelect').hide();            	
-            	$('#complianceTypeDiv,#datesDiv,#jurisMultiSelect').show();
+            	$('#scoreCardTypeDiv,#callResultDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisSingleSelect,#monthYearDatesDiv').hide();            	
+            	$('#complianceTypeDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();
         		$("#fromDateString,#toDateString,#jurisdictionIds,#scoreCardType,#callResult").attr('required',true);         		
-        		$("#jurisId,#programId,#pccLocationId,#scoreCardType,#callResult").removeAttr('required');
+        		$("#jurisId,#programId,#pccLocationId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');
         		$('select[id="macId"] > option[value="ALL"]').show();
         		resetFields();
         		
             } else if (mainReportSelect=="Rebuttal") {
-            	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();            	    		
+            	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();        	    		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#callCategoryType,#rebuttalStatus").attr('required',true);
-        		$("#jurisId,#scoreCardType,#callResult").removeAttr('required');    		
-        		$('#scoreCardTypeDiv,#callResultDiv,#jurisSingleSelect,#complianceTypeDiv').hide();
+        		$("#jurisId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
+        		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv').hide();
         		$('select[id="macId"] > option[value="ALL"]').show(); 
         		resetFields();
             } else if (mainReportSelect=="Qasp") {
-            	$('#jurisSingleSelect').show();
-            	$("#scoreCardType,#callResult,#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds").removeAttr('required');             	
-            	$('#scoreCardTypeDiv,#callResultDiv,#complianceTypeDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisMultiSelect').hide();
+            	$('#jurisSingleSelect,#monthYearDatesDiv').show();
+            	$("#scoreCardType,#callResult,#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#fromDateString,#toDateString").removeAttr('required');   
+            	$('#scoreCardTypeDiv,#callResultDiv,#complianceTypeDiv,#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#jurisMultiSelect,#datesDiv').hide();
             	$('select[id="macId"] > option[value="ALL"]').hide();        	
-            	$("#jurisId").attr('required',true);    				
-        		$("#macId option[value='ALL']").hide();    
+            	$("#jurisId,#fromDateStringMonthYear,#toDateStringMonthYear").attr('required',true);    				
+        		$("#macId option[value='ALL']").hide();    		
         		resetFields();	
             }else if (mainReportSelect == 'Summary' ) {
             	
-            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect').show();  
-        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult").removeAttr('required');      		 		
+            	$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');      		 		
         		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
-           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv').hide();
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv,#monthYearDatesDiv').hide();
+        		$('select[id="macId"] > option[value="ALL"]').show(); 
+        		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
+        		$('#scoreCardTypeDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();  
+        		$("#complianceReportType,#callCategoryType,#rebuttalStatus,#programId,#pccLocationId,#jurisdictionIds,#jurisId,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');      		 		
+        		$("#fromDateString,#toDateString,#scoreCardType").attr('required',true);
+           		$('#jurisSingleSelect,#callCategoryTypeDiv,#rebuttalStatusDiv,#complianceTypeDiv,#callResultDiv,#monthYearDatesDiv').hide();
         		$('select[id="macId"] > option[value="ALL"]').show(); 
         		$('select[id="scoreCardType"] > option[value="Scoreable"]').show(); 
             }
@@ -502,6 +564,17 @@
 			                            <div class="col-sm-6 form-group">
 			                                <label for="email"> To Date:</label>
 			                                <form:input type = "text" class="form-control required"  id="toDateString" name = "toDateString" path="toDateString"  required="true" title="Choose To Date from the List" />
+			                            </div>
+			                        </div>
+			                         <div class="row" id="monthYearDatesDiv">
+			                            <div class="col-sm-6 form-group">
+			                                <label for="name"> From Date:</label>
+			                             
+										<form:input type = "text" class="form-control required" id="fromDateStringMonthYear" name = "fromDateStringMonthYear" path="fromDateStringMonthYear" required="true" title="Choose From Date from the Calendar" />
+			                            </div>
+			                            <div class="col-sm-6 form-group">
+			                                <label for="email"> To Date:</label>
+			                                <form:input type = "text" class="form-control required"  id="toDateStringMonthYear" name = "toDateStringMonthYear" path="toDateStringMonthYear"  required="true" title="Choose To Date from the List" />
 			                            </div>
 			                        </div>
 			                         <div class="row">

@@ -16,23 +16,14 @@
 <link rel="stylesheet" href="/resources/demos/style.css" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
-
-
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script> 
-<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script> 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> 
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 
 <script type="text/javascript">
@@ -79,7 +70,7 @@ $(document).ready(function() {
 		        	   var linkData = "";
 			        if(data != null) {		
 				        if(action == "view") {
-				        	linkData = "<div><input readonly type='text' value='"+data+"' size='6'></input></div>";	
+				        	linkData = data;	
 					    } else {
 					    	linkData = "<div><input type='text' class='numbersOnly' id='row_"+row.id+"' name='row_"+row.id+"' value='"+data+"' size='6'></input></div>";	
 						}		        
@@ -96,7 +87,7 @@ $(document).ready(function() {
 		        	   var linkData = "";
 			        if(data != null) {				        
 			        	 if(action == "view") {
-					        	linkData = "<div><input readonly type='text' value='"+data+"' size='6'></input></div>";	
+			        		 linkData = data;	
 						    } else {
 						    	linkData = "<div><input type='text' class='numbersOnly' id='row_"+row.id+"'  name='row_"+row.id+"'  value='"+data+"' size='6'></input></div>";	
 							}		   
@@ -113,7 +104,7 @@ $(document).ready(function() {
 		        	   var linkData = "";
 			        if(data != null) {				        
 			        	 if(action == "view") {
-					        	linkData = "<div><input readonly type='text' value='"+data+"' size='6'></input></div>";	
+			        		 linkData = data;	
 						    } else {
 						    	linkData = "<div><input type='text' class='numbersOnly' id='row_"+row.id+"'  name='row_"+row.id+"'  value='"+data+"' size='6'></input></div>";	
 							}		   
@@ -125,27 +116,57 @@ $(document).ready(function() {
 			   "targets" : 7
 			   }
 			 ],	   
-		dom: 'Bfrtip',	
-	    
-	     buttons: [
-	            $.extend( true, {}, buttonCommon, {
-	                extend: 'copyHtml5',	               
-		            title: reportTitle
-	            } ),
-	            $.extend( true, {}, buttonCommon, {
-	                extend: 'excelHtml5',	                
-		            title: reportTitle
-	            } ),
-	            $.extend( true, {}, buttonCommon, {
-	                extend: 'pdfHtml5',
-	                title: reportTitle,	                
-	            } )
-	        ],
-	        
-		  "paging" : false,
-		  "pageLength" : 100,
-		  "ordering" : true		   
-	});
+			 dom: 'Bfrtip',	
+			 buttons: [
+		         {
+		             extend: 'copy',
+		             title: reportTitle
+		         },
+		         {
+		             extend: 'excel',
+		             title: reportTitle,
+		             messageTop: reportTitle
+	 		      },
+		         {  
+				     extend: 'pdfHtml5',
+				     orientation : 'landscape',
+		             pageSize : 'LEGAL',	   
+		              
+				     customize: function (doc) {
+				    	 var programs = macAssignmentDataTable.column(2).data().toArray();
+				    	 var list = 13;
+			             for (var i = 0; i < programs.length; i++) {
+			               if (programs[i] == null) {
+				              
+					        	   for(var j=0; j<list; j++) {
+						            	  doc.content[2].table.body[i+1][j].fillColor = '#58FAD0';
+							       } 
+						      
+				              
+			                 
+			               }
+			             }
+				     },
+				     title: reportTitle,
+					 messageTop: reportTitle	
+		         }	        
+		     ],
+		     
+			  "paging" : false,
+			  "searching": false,
+			  "sorting" : false,
+			  "pageLength" : 100,		 
+			  "language": {
+			      "emptyTable": "No data available"
+			    },
+
+		      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {		    
+	                if ( aData.macName == "zTotals" && aData.program == null ) {
+	            	   $('td', nRow).css('background-color', '#58FAD0');
+	               }
+	               
+	           }
+		});
 
 	$('button[id=save]').click(function() {	
         var data = macAssignmentDataTable.rows().data();
@@ -164,19 +185,19 @@ $(document).ready(function() {
 				 idValue = "NoId";
 			 }
 
-			 var rifkinCindyInputValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('input').val();
+			 var rifkinCindyInputValue = macAssignmentDataTable.cell(index,5).nodes().to$().find('input').val();
 			
 			 if(rifkinCindyInputValue == "") {
 				 rifkinCindyInputValue = "NoInput";
 			 }
 
-			 var riveraLydiaInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
+			 var riveraLydiaInputValue = macAssignmentDataTable.cell(index,6).nodes().to$().find('input').val();
 			
 			 if(riveraLydiaInputValue == "") {
 				 riveraLydiaInputValue = "NoInput";
 			 }
 
-			 var galtinJaneeneInputValue = macAssignmentDataTable.cell(index,8).nodes().to$().find('input').val();
+			 var galtinJaneeneInputValue = macAssignmentDataTable.cell(index,7).nodes().to$().find('input').val();
 			
 			 if(galtinJaneeneInputValue == "") {
 				 galtinJaneeneInputValue = "NoInput";
@@ -189,13 +210,6 @@ $(document).ready(function() {
 		     
 		     finalDataSet[index] = eachRecord;
 		 }); 
-
-		 /*  $.getJSON("${pageContext.request.contextPath}/${SS_USER_FOLDER}/save-macassignmentlist",                    
-	             {monthNumber: monthYear, finalDataSet: finalDataSet}, function(){
-	            	
-	         
-	     })
-	     .complete(function() { $("#reportsForm").submit(); }); */
 
 		 $.ajax({ 
 			      type: "GET",

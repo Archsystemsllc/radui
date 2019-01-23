@@ -80,7 +80,7 @@ public class QamEnvironmentFormController {
 		String ROOT_URI = new String(HomeController.RAD_WS_URI + "findEnvironmentalChangeControlForm");
 		ResponseEntity<QamEnvironmentForm> webServiceResponse = basicAuthRestTemplate.postForEntity(ROOT_URI, qamEnvironmentForm,QamEnvironmentForm.class);
 		
-		QamEnvironmentForm qamEnvironmentFormTemp = mapper.convertValue(webServiceResponse, new TypeReference<QamEnvironmentForm>() { });
+		QamEnvironmentForm qamEnvironmentFormTemp = mapper.convertValue(webServiceResponse.getBody(), new TypeReference<QamEnvironmentForm>() { });
 		
 		
 		try {

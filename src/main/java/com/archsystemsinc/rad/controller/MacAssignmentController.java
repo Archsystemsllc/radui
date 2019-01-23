@@ -173,6 +173,10 @@ public class MacAssignmentController {
 					searchFromDate = fromDateCalendar.getTime();
 					searchToDate = today;
 				}
+				
+				String currentMonthYear = monthYearFormat.format(cal.getTime());
+				macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
+				model.addAttribute("currentMonthYear", currentMonthYear);
 			} else {
 				
 				
@@ -353,12 +357,10 @@ public class MacAssignmentController {
 				macAssignmentObjectTemp.setAssignedCallsForJaneene(user3TotalAssignedCount+"("+user3TotalCompletedCount+")");
 				macAssignmentObjectTemp.setPlannedCalls(totalPlanned.toString());
 				macAssignmentObjectTemp.setMacJurisdictionProgramCompleted(totalCompleted);
-				macAssignmentList.add(macAssignmentObjectTemp);
-				
-				model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
+				macAssignmentList.add(macAssignmentObjectTemp);			
 			}	
 			
-			
+			model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			model.addAttribute("macAssignmentObjectForm", macAssignmentObject);
 			
 			String ROOT_URI_USER_SEARCH = new String(HomeController.RAD_WS_URI + "searchUsers");

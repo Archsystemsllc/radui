@@ -1,6 +1,5 @@
 package com.archsystemsinc.rad.model;
 
-import java.util.Date;
 
 /**
  * This persistent class for the user database table.
@@ -73,7 +72,7 @@ public class QamEnvironmentForm {
 	private String formType;
 	
 	
-	
+
 	
     
 	public Long getMacLookupId() {

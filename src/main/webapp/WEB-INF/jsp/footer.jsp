@@ -36,11 +36,17 @@
 	<footer id="footer" class="midnight-blue">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-md-6">
 			
+			<p>Internet browsers compatible with CRAD are: &nbsp;
+			1. Internet Explorer (Version 8.0 or higher) &nbsp;
+			2. Chrome <br/>
+			Few versions of IE 11.0 have issues with CRAD functionality.&nbsp;
+			Recommended browser to use is chrome
+			</p>
 				
 			</div>
-			<div class="col-sm-6">
+			<div class="col-md-6">
 				<ul class="pull-right" style="margin-top: 14px">
 					<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/dashboard" title="Home Page">Home</a></li>
 					<sec:authorize access="hasAuthority('Administrator') or hasAuthority('Quality Manager') or hasAuthority('MAC Admin') or hasAuthority('MAC User')  or hasAuthority('CMS User')">

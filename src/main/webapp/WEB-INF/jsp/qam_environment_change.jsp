@@ -213,6 +213,8 @@ $(function() {
 		    	var trHTML = '<tbody>';  
 		    	$.each(data, function (i, item) {  	        
 	      	        trHTML += '<tr>'
+	      	        	 + '<td align="center">' + item[5]  + '</td>'
+	      	        	 + '<td align="center">' + item[6]  + '</td>'
 		      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
 		      	       + '<td align="center">' + item[2] + '</td>'
 		      	     + '<td align="center">' + item[3] + '</td>'
@@ -543,7 +545,9 @@ $(function() {
 			                                <table style="border-collapse: separate; border-spacing: 2px;" class="display data_tbl" id="qamEnvironmentMonthLists" style="width: 80%">
 											<thead>
 												<tr>
-													<th title="Monthly">Month</th>
+													<th title="File Name">File Name</th>
+													<th title="Monthly">Form Type</th>
+													<th title="Monthly">Month Year</th>
 													<th title="MAC">Mac</th>
 													<th title="Jurisdiction">Jurisdiction</th>
 													<th title="Action">Download</th>

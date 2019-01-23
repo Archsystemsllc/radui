@@ -218,12 +218,12 @@
       			var selectedJurisdiction = $('#jurId :selected').text();
       			var selectedProgram = $('#programId :selected').text();
       			$.ajax({	    			
-  	    			url : "${WEB_SERVICE_URL}csrListNames",
+  	    			url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrListNamesUI",
   	    			contentType: "application/json; charset=utf-8",
-  	    			headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
   	    			dataType: "json",
   	    			data: { term:autocompleteContext, macIdS: selectedMac, jurisdictionS: selectedJurisdiction,programS: selectedProgram},
       				success: function(data) {
+          				
       					response(data);
       				}
       			});
@@ -282,10 +282,10 @@
     	})
    	    .autocomplete( "instance" )._renderItem = function( ul, item ) {
        	  var returnName = "";
-       	  if(item.middleName == null || item.middleName == "NULL") {
-       		returnName = item.firstName+" "+item.lastName + " ---- " +item.level
+       	  if(item.middleName == null || item.middleName.toLowerCase() == "NULL".toLowerCase() ) {
+       			returnName = item.firstName+" "+item.lastName + " ---- " +item.level
           } else {
-        	  returnName = item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level;
+        	  	returnName = item.firstName+" "+item.middleName+" "+item.lastName + " ---- " +item.level;
           }
            	  
    	      return $( "<li>" )

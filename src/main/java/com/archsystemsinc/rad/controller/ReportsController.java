@@ -1,9 +1,7 @@
 package com.archsystemsinc.rad.controller;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -445,20 +443,43 @@ public class ReportsController {
 			
 			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
 			
-			if(reportsForm.getFromDateString() != null && 
-					!reportsForm.getFromDateString().equalsIgnoreCase("")) {
-				String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
-				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
-				reportsForm.setFromDate(filterFromDate);			
+			if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
+				SimpleDateFormat myMonthYearPathFormat = new SimpleDateFormat("yyyy-MM_dd hh:mm:ss a");
+				
+				if(reportsForm.getFromDateStringMonthYear() != null && 
+						!reportsForm.getFromDateStringMonthYear().equalsIgnoreCase("")) {
+					
+					String filterFromDateString = reportsForm.getFromDateStringMonthYear()+"_16 00:00:00 AM";
+					Date filterFromDate = myMonthYearPathFormat.parse(filterFromDateString);					
+					
+					reportsForm.setFromDate(filterFromDate);			
+				}
+				
+				
+				if(reportsForm.getToDateStringMonthYear() != null && 
+						!reportsForm.getToDateStringMonthYear().equalsIgnoreCase("")) {
+					String filterToDateString = reportsForm.getToDateStringMonthYear()+"_15 23:59:59 PM";
+					Date filterToDate = myMonthYearPathFormat.parse(filterToDateString);					
+					reportsForm.setToDate(filterToDate);
+				}
+				
+			} else {
+				if(reportsForm.getFromDateString() != null && 
+						!reportsForm.getFromDateString().equalsIgnoreCase("")) {
+					String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
+					Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+					reportsForm.setFromDate(filterFromDate);			
+				}
+				
+				
+				if(reportsForm.getToDateString() != null && 
+						!reportsForm.getToDateString().equalsIgnoreCase("")) {
+					String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
+					Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+					reportsForm.setToDate(filterToDate);
+				}
 			}
 			
-			
-			if(reportsForm.getToDateString() != null && 
-					!reportsForm.getToDateString().equalsIgnoreCase("")) {
-				String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
-				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
-				reportsForm.setToDate(filterToDate);
-			}
 			
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
@@ -1522,7 +1543,14 @@ public class ReportsController {
 				String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
 				
 				Calendar calObject = Calendar.getInstance();
-				calObject.setTime(scoreCard.getQamStartdateTime());
+				calObject.setTime(scoreCard.getQamStartdateTime());				
+				
+				Integer dayOfMonth = calObject.get(Calendar.DAY_OF_MONTH);
+				
+				if(dayOfMonth <= 15) {					
+					calObject.add(Calendar.MONTH, -1);					
+				} 
+				
 				Integer year = calObject.get(Calendar.YEAR); 
 				String monthName = calObject.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 				
@@ -2085,9 +2113,9 @@ public class ReportsController {
 					} 			
 					finalResultsMap.put(macKey, qamMacByJurisdictionReviewReport);
 				}
-				if(reportsForm.getMacId().equalsIgnoreCase("ALL")) {
+				
 					finalResultsMap = generateQamSummaryFinalRow(finalResultsMap,"Mac");
-				}				
+								
 				
 			} else if( (reportsForm.getMacId() != null || reportsForm.getMacId().equalsIgnoreCase("") || reportsForm.getMacId().equalsIgnoreCase("ALL"))
 					&& (reportsForm.getJurIdList() != null || reportsForm.getJurIdList().size() > 0 || reportsForm.getJurisdictionNameValues().equalsIgnoreCase("ALL"))
@@ -2267,9 +2295,9 @@ public class ReportsController {
 									
 					finalResultsMap.put(macJurisKey, qamMacByJurisdictionReviewReport);
 				}
-				if(reportsForm.getMacId().equalsIgnoreCase("ALL") && reportsForm.getJurisdictionNameValues().equalsIgnoreCase("ALL")) {
+				
 					finalResultsMap = generateQamSummaryFinalRow(finalResultsMap,"Jurisdiction");
-				}
+				
 							
 				
 			} else if( (reportsForm.getMacId() != null || reportsForm.getMacId().equalsIgnoreCase("") || reportsForm.getMacId().equalsIgnoreCase("ALL"))
@@ -2452,9 +2480,9 @@ public class ReportsController {
 					finalResultsMap.put(macJurisKey, qamMacByJurisdictionReviewReport);
 				}
 				
-				if(reportsForm.getMacId().equalsIgnoreCase("ALL") && reportsForm.getJurisdictionNameValues().equalsIgnoreCase("ALL") && reportsForm.getProgramId().equalsIgnoreCase("ALL")) {
+				
 					finalResultsMap = generateQamSummaryFinalRow(finalResultsMap,"Program");
-				}			
+					
 				
 			}
 		} catch (NumberFormatException e) {

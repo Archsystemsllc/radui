@@ -42,7 +42,7 @@ public class ReportsForm {
     private String fromDateString;
     
     private String toDateString;
-    
+        
     private String complianceReportType;
     
     private String callCategoryType;
@@ -59,7 +59,29 @@ public class ReportsForm {
     
     private boolean reasonReportFlag;
     
+    private String fromDateStringMonthYear;
+    
+    private String toDateStringMonthYear;
+    
+    
+    
 	
+	public String getFromDateStringMonthYear() {
+		return fromDateStringMonthYear;
+	}
+
+	public void setFromDateStringMonthYear(String fromDateStringMonthYear) {
+		this.fromDateStringMonthYear = fromDateStringMonthYear;
+	}
+
+	public String getToDateStringMonthYear() {
+		return toDateStringMonthYear;
+	}
+
+	public void setToDateStringMonthYear(String toDateStringMonthYear) {
+		this.toDateStringMonthYear = toDateStringMonthYear;
+	}
+
 	public boolean isReasonReportFlag() {
 		return reasonReportFlag;
 	}
