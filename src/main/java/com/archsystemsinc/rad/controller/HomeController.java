@@ -228,7 +228,7 @@ public class HomeController {
 		
 		 model.addAttribute("menu_highlight", "scorecard");
 			List<MacInfo> macInfoTempList = null;
-			String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+			String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 			model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 			List<MacInfo> resultsListMac= new ArrayList<MacInfo>();
 			MacInfo macInfoSearchObject = new MacInfo();
@@ -321,7 +321,7 @@ public class HomeController {
 				
 				Date currentDateTime = new Date();
 				  
-				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);		
+				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime, UIGenericConstants.DATE_TYPE_FULL);		
 				
 				
 				
@@ -370,7 +370,7 @@ public class HomeController {
 		
 		model.addAttribute("menu_highlight", "scorecard");
 		List<MacInfo> macInfoTempList = null;
-		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 		model.addAttribute("macIdMapEdit", HomeController.MAC_ID_MAP);
 		List<MacInfo> resultsListMac= new ArrayList<MacInfo>();
 		MacInfo macInfoSearchObject = new MacInfo();

@@ -244,8 +244,8 @@
     			var firstName = ui.item.firstName.substr(0,1);
     			var lastName = ui.item.lastName.substr(0,5);
 
-    			//var dateString= $('#callMonitoringDate_Alt').val();
-    			var dateTypeValue = $('#callMonitoringDate').datepicker('getDate');
+    			//var dateString= $('#callMonitoringDateString_Alt').val();
+    			var dateTypeValue = $('#callMonitoringDateString').datepicker('getDate');
     			var dateConvertedValue =$.datepicker.formatDate('yymmdd', dateTypeValue);
     			
     			
@@ -295,9 +295,9 @@
 
    	    //Dates Initialisation Functionality
     	
-    	$('#callMonitoringDate').datepicker({
+    	$('#callMonitoringDateString').datepicker({
     		maxDate: 0,
-    		altField: "#callMonitoringDate_Alt",
+    		altField: "#callMonitoringDateString_Alt",
     		altFieldTimeOnly: false,
     		altFormat: "yymmdd"
     	});    	
@@ -973,9 +973,9 @@
 				                    
 				                    <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="callMonitoringDate"> Call Monitoring Date:</label>
-			                                <form:input type = "text" class="form-control required" id="callMonitoringDate" name = "callMonitoringDate" path="callMonitoringDate" required="true" title="Choose Call Monitoring Date from the Calendar"/>
-			                            	<input type="hidden" id="callMonitoringDate_Alt"></input>
+			                                <label for="callMonitoringDateString"> Call Monitoring Date:</label>
+			                                <form:input type = "text" class="form-control required" id="callMonitoringDateString" name = "callMonitoringDateString" path="callMonitoringDateString" required="true" title="Choose Call Monitoring Date from the Calendar"/>
+			                            	<input type="hidden" id="callMonitoringDateString_Alt"></input>
 			                            </div>
 			                      		<div class="col-lg-6 form-group">
 			                                <label for="systemScreenAccess">IMD-System Screen Access </label>
@@ -1349,7 +1349,7 @@
 			                            </div>
 			                            <%-- <div class="col-lg-6 form-group">
 			                                
-			                                <label for="callMonitoringDate">CMS Calibration Update Date:</label>
+			                                <label for="callMonitoringDateString">CMS Calibration Update Date:</label>
 			                                <form:input class="form-control required" type ="text" path="cmsCalibrationUpdateDateTime" disabled="true" title="Choose CMS Calibration Update Date from the Calendar"/>
 			                            
 			                                

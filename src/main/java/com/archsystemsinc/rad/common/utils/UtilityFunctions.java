@@ -39,26 +39,42 @@ public class UtilityFunctions {
 	       return sortedHashMap;
 	  }
 	
-	private static final SimpleDateFormat usEstDateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
-
+	private static final SimpleDateFormat usEstDateFormatFullDate = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 	
-	public String convertToStringFromDate(Date dateValue) {
-				
-		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-		usEstDateFormat.setTimeZone(tzInAmerica);
+	private static final SimpleDateFormat usEstDateFormatOnlyDate = new SimpleDateFormat("MM/dd/yyyy");
+
+	TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+	public String convertToStringFromDate(Date dateValue, String dateType) {				
+		
+		String dateValueString = "";
 		if(dateValue!=null) {
-			String dateValueString = usEstDateFormat.format(dateValue);
+			if(dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_FULL)) {
+				usEstDateFormatFullDate.setTimeZone(tzInAmerica);
+				dateValueString = usEstDateFormatFullDate.format(dateValue);
+			} else if (dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_ONLY_DATE)) {
+				usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
+				dateValueString = usEstDateFormatOnlyDate.format(dateValue);
+			}
+			
 			return dateValueString;
 		} else return null;
 		
 	}
 
 	
-	public Date convertToDateFromString(String dataString) {
+	public Date convertToDateFromString(String dataString, String dateType) {
 		try {
-			TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-			usEstDateFormat.setTimeZone(tzInAmerica);
-			return usEstDateFormat.parse(dataString);
+			Date returnDateValue = null;
+			
+			if(dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_FULL)) {
+				usEstDateFormatFullDate.setTimeZone(tzInAmerica);
+				returnDateValue = usEstDateFormatFullDate.parse(dataString);				
+			} else if (dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_ONLY_DATE)) {				
+				usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
+				returnDateValue = usEstDateFormatOnlyDate.parse(dataString);			
+			}
+			return returnDateValue;
+			
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

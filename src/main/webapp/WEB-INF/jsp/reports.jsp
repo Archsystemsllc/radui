@@ -51,7 +51,7 @@
 	  /* 	$("#jurisdictionIds").get(0).options[0] = new Option("---Select Jurisdiction---", "");       */ 
 	    $("#jurisdictionIds").get(0).options[0] = new Option("ALL", "ALL");	    
 		$("#jurisId").get(0).options.length = 0;	
-		/* $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");         */
+		 $("#jurisId").get(0).options[0] = new Option("---Select Jurisdiction---", "");         
 		$("#programId").get(0).options.length = 0;	           
 	  /*   $("#programId").get(0).options[0] = new Option("---Select Program---", ""); */
 	    $("#programId").get(0).options[0] = new Option("ALL", "ALL");
@@ -513,7 +513,7 @@
 			                                <label for="name"> MAC:</label>
 			                               
 										<form:select path="macId" class="form-control required" id="macId" required="true" title="Select one Medical Administrative Contractor ID from the List">
-										  <%--  <form:option value="" label="---Select MAC---"/>		 --%>
+										  <form:option value="" label="---Select MAC---"/>		
 										   <form:option value="ALL" label="ALL"/>								   
 										   <form:options items="${macIdMapEdit}" />
 										</form:select> 									
@@ -568,12 +568,12 @@
 			                        </div>
 			                         <div class="row" id="monthYearDatesDiv">
 			                            <div class="col-sm-6 form-group">
-			                                <label for="name"> From Date:</label>
+			                                <label for="name"> From Date (YYYY-MM):</label>
 			                             
 										<form:input type = "text" class="form-control required" id="fromDateStringMonthYear" name = "fromDateStringMonthYear" path="fromDateStringMonthYear" required="true" title="Choose From Date from the Calendar" />
 			                            </div>
 			                            <div class="col-sm-6 form-group">
-			                                <label for="email"> To Date:</label>
+			                                <label for="email"> To Date (YYYY-MM):</label>
 			                                <form:input type = "text" class="form-control required"  id="toDateStringMonthYear" name = "toDateStringMonthYear" path="toDateStringMonthYear"  required="true" title="Choose To Date from the List" />
 			                            </div>
 			                        </div>

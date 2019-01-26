@@ -401,7 +401,7 @@ public class ScoreCardController {
 			if(scoreCardModelObject.getFilterFromDateString() != null && 
 					!scoreCardModelObject.getFilterFromDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = scoreCardModelObject.getFilterFromDateString() + " 00:00:00 AM";
-				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				scoreCardModelObject.setFilterFromDate(filterFromDate);
 				
 				if (scoreCardFailObject != null) {
@@ -413,7 +413,7 @@ public class ScoreCardController {
 			if(scoreCardModelObject.getFilterToDateString() != null && 
 					!scoreCardModelObject.getFilterToDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = scoreCardModelObject.getFilterToDateString() + " 11:59:59 PM";
-				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				scoreCardModelObject.setFilterToDate(filterToDate);
 				
 				if (scoreCardFailObject != null) {
@@ -426,8 +426,7 @@ public class ScoreCardController {
 			ResponseEntity<List> responseEntity = basicAuthRestTemplate.postForEntity(ROOT_URI, scoreCardModelObject, List.class);
 			ObjectMapper mapper = new ObjectMapper();
 			resultsMap = responseEntity.getBody();
-			List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap, new TypeReference<List<ScoreCard>>() { });
-			
+			List<ScoreCard> scoreCardList = mapper.convertValue(resultsMap, new TypeReference<List<ScoreCard>>() { });			
 			
 			List<ScoreCard> scoreCardFailList = null;
 			//Scorecard Fail List
@@ -450,7 +449,7 @@ public class ScoreCardController {
 			}
 			
 			for(ScoreCard scoreCardTemp: scoreCardList) {
-				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCardTemp.getQamStartdateTime());
+				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCardTemp.getQamStartdateTime(), UIGenericConstants.DATE_TYPE_FULL);
 				scoreCardTemp.setQamStartdateTimeString(qamStartdateTimeString);
 				scoreCardTemp.setMacName(HomeController.MAC_ID_MAP.get(scoreCardTemp.getMacId()));
 				scoreCardTemp.setJurisdictionName(HomeController.JURISDICTION_MAP.get(scoreCardTemp.getJurId()));
@@ -476,11 +475,14 @@ public class ScoreCardController {
 		model.addAttribute("ReportSearchString", reportSearchString);
 		ScoreCard scoreCard = resultsMap.get(id);
 		
-		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
-		String qamEndDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamEnddateTime());
+		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime(), UIGenericConstants.DATE_TYPE_FULL);
+		String qamEndDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamEnddateTime(), UIGenericConstants.DATE_TYPE_FULL);
+		String callMonitoringDateString = utilityFunctions.convertToStringFromDate(scoreCard.getCallMonitoringDate(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
 		
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
+		scoreCard.setCallMonitoringDateString(callMonitoringDateString);
+		
 		
 		//System Screen Access--Start
 		if(scoreCard.getSystemScreenAccess() != null && !scoreCard.getSystemScreenAccess().equalsIgnoreCase("")) {
@@ -568,8 +570,8 @@ public class ScoreCardController {
 		model.addAttribute("ReportSearchString", reportSearchString);
 		ScoreCard scoreCard = resultsMap.get(id);
 		
-		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
-		String qamEndDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamEnddateTime());
+		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime(), UIGenericConstants.DATE_TYPE_FULL);
+		String qamEndDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamEnddateTime(), UIGenericConstants.DATE_TYPE_FULL);
 		
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
@@ -644,7 +646,7 @@ public class ScoreCardController {
 		model.addAttribute("menu_highlight", "scorecard");
 		model.addAttribute("ReportSearchString","null");
 		
-		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 		
 		scoreCard.setQamStartdateTimeString(qamStartdateTime);
 		scoreCard.setCallLanguage("English");
@@ -830,12 +832,13 @@ public class ScoreCardController {
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 				String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateScoreCard");
 				
-				
-				Date qamStartDateTime = utilityFunctions.convertToDateFromString(scoreCard.getQamStartdateTimeString());
+				Date callMonitoringDate = utilityFunctions.convertToDateFromString(scoreCard.getCallMonitoringDateString(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+				scoreCard.setCallMonitoringDate(callMonitoringDate);
+				Date qamStartDateTime = utilityFunctions.convertToDateFromString(scoreCard.getQamStartdateTimeString(), UIGenericConstants.DATE_TYPE_FULL);
 				scoreCard.setQamStartdateTime(qamStartDateTime);
 			     
-				String qamEnddateTimeString = utilityFunctions.convertToStringFromDate(currentDateTime);
-				Date qamEnddateTime = utilityFunctions.convertToDateFromString(qamEnddateTimeString);
+				String qamEnddateTimeString = utilityFunctions.convertToStringFromDate(currentDateTime, UIGenericConstants.DATE_TYPE_FULL);
+				Date qamEnddateTime = utilityFunctions.convertToDateFromString(qamEnddateTimeString, UIGenericConstants.DATE_TYPE_FULL);
 				scoreCard.setQamEnddateTimeString(qamEnddateTimeString);
 				scoreCard.setQamEnddateTime(qamEnddateTime);
 				scoreCard.setUserId(userFormSession.getId().intValue());

@@ -349,7 +349,7 @@ public class ReportsController {
 				scoreCard.setMacName(macName);
 				scoreCard.setJurisdictionName(jurisName);
 				
-				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime());
+				String qamStartdateTimeString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime(), UIGenericConstants.DATE_TYPE_FULL);
 				scoreCard.setQamStartdateTimeString(qamStartdateTimeString);
 				if(searchString.equalsIgnoreCase(UIGenericConstants.ALL_STRING)) {
 					resultsMap.put(scoreCard.getId(), scoreCard);
@@ -467,7 +467,7 @@ public class ReportsController {
 				if(reportsForm.getFromDateString() != null && 
 						!reportsForm.getFromDateString().equalsIgnoreCase("")) {
 					String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
-					Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+					Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 					reportsForm.setFromDate(filterFromDate);			
 				}
 				
@@ -475,7 +475,7 @@ public class ReportsController {
 				if(reportsForm.getToDateString() != null && 
 						!reportsForm.getToDateString().equalsIgnoreCase("")) {
 					String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
-					Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+					Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 					reportsForm.setToDate(filterToDate);
 				}
 			}
@@ -895,7 +895,7 @@ public class ReportsController {
 			if(reportsForm.getFromDateString() != null && 
 					!reportsForm.getFromDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
-				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				reportsForm.setFromDate(filterFromDate);			
 			}
 			
@@ -903,7 +903,7 @@ public class ReportsController {
 			if(reportsForm.getToDateString() != null && 
 					!reportsForm.getToDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
-				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				reportsForm.setToDate(filterToDate);
 			}
 			

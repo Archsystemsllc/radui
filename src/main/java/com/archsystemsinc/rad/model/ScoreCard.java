@@ -39,7 +39,7 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private String callLanguage;
 
 	
-	private String callMonitoringDate;
+	private Date callMonitoringDate;
 
 	
 	private String callResult;
@@ -167,7 +167,12 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private String qamEnddateTimeString;
 	
 	
+	
+	
 	//Temporatry Fields
+	
+	private String callMonitoringDateString;
+	
 	private String macIdReportSearchString;	
 	
 	private String[] jurisIdReportSearchString;
@@ -189,6 +194,16 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	private String macAssignmentSearchString;	
 	
 	private boolean newMedicareCardCallTracking;
+	
+	
+
+	public String getCallMonitoringDateString() {
+		return callMonitoringDateString;
+	}
+
+	public void setCallMonitoringDateString(String callMonitoringDateString) {
+		this.callMonitoringDateString = callMonitoringDateString;
+	}
 
 	public ArrayList<Integer> getProgramIdList() {
 		return programIdList;
@@ -636,17 +651,16 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 
 
 
-	public String getCallMonitoringDate() {
+	
+
+
+	public Date getCallMonitoringDate() {
 		return callMonitoringDate;
 	}
 
-
-
-	public void setCallMonitoringDate(String callMonitoringDate) {
+	public void setCallMonitoringDate(Date callMonitoringDate) {
 		this.callMonitoringDate = callMonitoringDate;
 	}
-
-
 
 	public String getCallResult() {
 		return callResult;

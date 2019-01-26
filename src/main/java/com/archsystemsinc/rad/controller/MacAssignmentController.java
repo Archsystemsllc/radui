@@ -133,6 +133,8 @@ public class MacAssignmentController {
 		Date searchFromDate = new Date(), searchToDate = new Date();
 		
 		SimpleDateFormat myMonthYearPathFormat = new SimpleDateFormat("MM_yyyy_dd hh:mm:ss a");
+		
+		String macAssignmentType = "New";
 	
 		try {
 			
@@ -177,6 +179,8 @@ public class MacAssignmentController {
 				String currentMonthYear = monthYearFormat.format(cal.getTime());
 				macAssignmentSearchObject.setAssignedMonthYear(currentMonthYear);
 				model.addAttribute("currentMonthYear", currentMonthYear);
+				
+				macAssignmentType = "New";
 			} else {
 				
 				
@@ -203,6 +207,8 @@ public class MacAssignmentController {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				macAssignmentType = "Edit";
 			}
 			
 			model.addAttribute("action", action);		
@@ -343,6 +349,7 @@ public class MacAssignmentController {
 					macAssignmentMap.put(macAssignmentObjectTemp.getId(),macAssignmentObjectTemp);
 				}
 				session.setAttribute("SESSION_SCOPE_MAC_ASSIGNMENT_MAP", macAssignmentMap);
+				model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			}
 				
 			if(action.equalsIgnoreCase("View")) {
@@ -357,10 +364,11 @@ public class MacAssignmentController {
 				macAssignmentObjectTemp.setAssignedCallsForJaneene(user3TotalAssignedCount+"("+user3TotalCompletedCount+")");
 				macAssignmentObjectTemp.setPlannedCalls(totalPlanned.toString());
 				macAssignmentObjectTemp.setMacJurisdictionProgramCompleted(totalCompleted);
-				macAssignmentList.add(macAssignmentObjectTemp);			
+				macAssignmentList.add(macAssignmentObjectTemp);		
+				model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
 			}	
 			
-			model.addAttribute("MAC_ASSIGNMENT_REPORT",mapper.writeValueAsString(macAssignmentList).replaceAll("'", " "));
+			
 			model.addAttribute("macAssignmentObjectForm", macAssignmentObject);
 			
 			String ROOT_URI_USER_SEARCH = new String(HomeController.RAD_WS_URI + "searchUsers");
@@ -424,7 +432,7 @@ public class MacAssignmentController {
 		MacAssignmentObject macAssignmentObject = null;
 		ArrayList<MacAssignmentObject> macAssignmentObjectList = new ArrayList<MacAssignmentObject>();
 		
-		String currentDate = utilityFunctions.convertToStringFromDate(new Date());
+		String currentDate = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 				
 		try {
 			HashMap<Integer, MacAssignmentObject> macAssignmentMap=(HashMap<Integer, MacAssignmentObject>) session.getAttribute("SESSION_SCOPE_MAC_ASSIGNMENT_MAP");

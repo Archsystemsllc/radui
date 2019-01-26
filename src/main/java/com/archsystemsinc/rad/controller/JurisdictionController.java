@@ -144,7 +144,7 @@ public class JurisdictionController {
 				
 				Date currentDateTime = new Date();
 				  
-				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);
+				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime, UIGenericConstants.DATE_TYPE_FULL);
 				
 				if(jurisdictionInfo.getId() == null || jurisdictionInfo.getId()== 0) {
 					jurisdictionInfo.setCreatedBy(userForm.getUserName());
@@ -191,7 +191,7 @@ public class JurisdictionController {
 		
 		model.addAttribute("menu_highlight", "scorecard");
 		
-		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 		
 		
 		model.addAttribute("jurisdiction", jurisdictionInfo);

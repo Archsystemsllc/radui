@@ -208,7 +208,7 @@ public class RebuttalController {
 			if(rebuttalNew.getFilterFromDateString() != null && 
 					!rebuttalNew.getFilterFromDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = rebuttalNew.getFilterFromDateString() + " 00:00:00 AM";
-				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				rebuttalNew.setFilterFromDate(filterFromDate);
 				
 				
@@ -218,7 +218,7 @@ public class RebuttalController {
 			if(rebuttalNew.getFilterToDateString() != null && 
 					!rebuttalNew.getFilterToDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = rebuttalNew.getFilterToDateString() + " 11:59:59 PM";
-				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				rebuttalNew.setFilterToDate(filterToDate);
 				
 				
@@ -242,7 +242,7 @@ public class RebuttalController {
 				
 				if(rebuttal.getDatePosted() != null) {
 					rebuttal.setDatePostedString(
-							utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted()));
+							utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted(), UIGenericConstants.DATE_TYPE_FULL));
 				}
 				rebuttal.setDescriptionComments(rebuttal.getDescriptionComments().replaceAll("\n","::"));
 				rebuttal.setDescriptionComments(rebuttal.getDescriptionComments().replaceAll("<br/>","::"));
@@ -355,7 +355,7 @@ public class RebuttalController {
 			//Restricting From Date to CRAD Migration Date Into CMS
 			
 			String filterFromDateString = "12/15/2018 00:00:00 AM";
-			Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString);
+			Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
 				
 			scoreCardTemp.setFilterFromDate(filterFromDate);	
 			rebuttalNew.setFilterFromDate(filterFromDate);
@@ -765,7 +765,7 @@ public class RebuttalController {
 		
 		HashMap<Integer,String> pccContactPersonMap = new HashMap<Integer,String>();
 		
-		String datePostedString = utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted());
+		String datePostedString = utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted(), UIGenericConstants.DATE_TYPE_FULL);
 		
 		if(rebuttal.getRebuttalStatus() == null) {
 			rebuttal.setRebuttalCompleteFlag("");
@@ -776,7 +776,7 @@ public class RebuttalController {
 		} 
 		if(rebuttal.getDatePosted() != null) {
 			rebuttal.setDatePostedString(
-					utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted()));
+					utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted(), UIGenericConstants.DATE_TYPE_FULL));
 		}
 		rebuttal.setCallCategoryForDisplay(rebuttal.getCallCategory());
 		rebuttal.setLobForDisplay(rebuttal.getLob());
@@ -849,7 +849,7 @@ public class RebuttalController {
 		}
 		if(rebuttal.getDatePosted() != null) {
 			rebuttal.setDatePostedString(
-					utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted()));
+					utilityFunctions.convertToStringFromDate(rebuttal.getDatePosted(), UIGenericConstants.DATE_TYPE_FULL));
 		}
 		
 		if(rebuttal.getRebuttalStatus() == null) {

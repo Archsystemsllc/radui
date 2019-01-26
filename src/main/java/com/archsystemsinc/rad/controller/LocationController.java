@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.archsystemsinc.rad.common.utils.UIGenericConstants;
 import com.archsystemsinc.rad.common.utils.UtilityFunctions;
 import com.archsystemsinc.rad.configuration.BasicAuthRestTemplate;
 import com.archsystemsinc.rad.model.Location;
@@ -131,7 +132,7 @@ public class LocationController {
 				
 				Date currentDateTime = new Date();
 				  
-				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);
+				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime, UIGenericConstants.DATE_TYPE_FULL);
 				
 				if(location.getId() == null || location.getId()== 0) {
 					location.setCreatedBy(userForm.getUserName());
@@ -178,7 +179,7 @@ public class LocationController {
 		
 		model.addAttribute("menu_highlight", "scorecard");
 		
-		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 		
 		
 		model.addAttribute("location", location);

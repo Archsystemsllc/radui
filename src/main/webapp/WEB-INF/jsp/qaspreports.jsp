@@ -23,44 +23,21 @@
 
 
 
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/autofill/2.1.1/css/autoFill.dataTables.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.1.2/css/buttons.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/colreorder/1.3.1/css/colReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.2.1/css/fixedColumns.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.1/css/fixedHeader.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/keytable/2.1.1/css/keyTable.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.0.2/css/responsive.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowreorder/1.1.1/css/rowReorder.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/1.4.1/css/scroller.dataTables.min.css"/>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css"/>
- 
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/autofill/2.1.1/js/dataTables.autoFill.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.colVis.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.1.2/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.html5.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.flash.js"></script>
-<script type="text/javascript" src="http://vol7ron.github.io/assets/js/buttons.print.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.3.1/js/dataTables.colReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.1/js/dataTables.fixedColumns.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.1/js/dataTables.fixedHeader.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/keytable/2.1.1/js/dataTables.keyTable.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.0.2/js/dataTables.responsive.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/rowreorder/1.1.1/js/dataTables.rowReorder.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.1/js/dataTables.scroller.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> 
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 
 
 <script type="text/javascript">
 $(document).ready(function() {		
 	var messageOnTop = 'MAC:${reportsForm.macName}'+'  '+'Jurisdiction:${reportsForm.jurisdictionName}\n'
-	+'Report From Date:${reportsForm.fromDateString}'+'  '+'Report To Date:${reportsForm.toDateString}';
+	+'Report From Date:${reportsForm.fromDateStringMonthYear}'+'  '+'Report To Date:${reportsForm.toDateStringMonthYear}';
 	var reportTitle = '${ReportTitle}\n'+messageOnTop;
 	
 
@@ -97,10 +74,10 @@ $(document).ready(function() {
 	             messageTop: messageOnTop,
 	             title: reportTitle,
 			     customize: function (xlsx) {
-			         console.log(xlsx);
-			         alert("test");
-			         var sheet = xlsx.xl.worksheets['Sheet1.xml'];
-			         alert("Test1");
+			         /* console.log(xlsx);
+			         //alert("test");
+			         var sheet = xlsx.xl.worksheets['sheet1.xml'];
+			         //alert("Test1");
 			         var downrows = 3;
 			         var clRow = $('row', sheet);
 			         //update Row
@@ -138,9 +115,9 @@ $(document).ready(function() {
 			         //insert
 			         var r1 = Addrow(1, [{ k: 'A', v: 'ColA' }, { k: 'B', v: '' }, { k: 'C', v: '' }]);
 			         var r2 = Addrow(2, [{ k: 'A', v: '' }, { k: 'B', v: 'ColB' }, { k: 'C', v: '' }]);
-			         var r3 = Addrow(3, [{ k: 'A', v: '' }, { k: 'B', v: '' }, { k: 'C', v: 'ColC' }]);
+			         var r3 = Addrow(3, [{ k: 'A', v: '' }, { k: 'B', v: '' }, { k: 'C', v: 'ColC' }]); */
 			         
-			         sheet.childNodes[0].childNodes[1].innerHTML = r1 + r2+ r3+ r4+ sheet.childNodes[0].childNodes[1].innerHTML;
+			         //sheet.childNodes[0].childNodes[1].innerHTML = sheet.childNodes[0].childNodes[1].innerHTML +r1 + r2 + r3;
 			     }
 	            
  		      },
@@ -159,6 +136,7 @@ $(document).ready(function() {
 	      drawCallback: addSubtotals,
 		  "paging" : false,
 		  "pageLength" : 100,
+		  "searching": false,
 		  "ordering" : true,
 		  "language": {
 		      "emptyTable": "No data available"
@@ -502,11 +480,11 @@ $(document).ready(function() {
 			                         <div class="row">
 			                            <div class="col-lg-4 form-group">
 			                                <label for="name"> Report From Date:</label>
-			                                 <label for="name"> ${reportsForm.fromDateString}</label>
+			                                 <label for="name"> ${reportsForm.fromDateStringMonthYear}</label>
 			                            </div>
 			                            <div class="col-lg-4 form-group">
 			                                <label for="name"> Report To Date:</label>
-			                                 <label for="name"> ${reportsForm.toDateString}</label>
+			                                 <label for="name"> ${reportsForm.toDateStringMonthYear}</label>
 			                            </div>
 			                        </div>
 				                    

@@ -33,4 +33,7 @@ public class UIGenericConstants {
 	public static final Long RECORD_STATUS_ACTIVE = 1l;
 	
 	public static final String ALL_STRING = "ALL";
+	
+	public static final String DATE_TYPE_FULL = "FULL_DATE";
+	public static final String DATE_TYPE_ONLY_DATE = "ONLY_DATE";
 }

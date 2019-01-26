@@ -144,7 +144,7 @@ public class MacController {
 				
 				Date currentDateTime = new Date();
 				  
-				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime);
+				String currentDateString = utilityFunctions.convertToStringFromDate(currentDateTime, UIGenericConstants.DATE_TYPE_FULL);
 				
 				if(macInfo.getId() == null || macInfo.getId()== 0) {
 					macInfo.setCreatedBy(userForm.getUserName());
@@ -191,7 +191,7 @@ public class MacController {
 		
 		model.addAttribute("menu_highlight", "scorecard");
 		
-		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date());
+		String qamStartdateTime = utilityFunctions.convertToStringFromDate(new Date(), UIGenericConstants.DATE_TYPE_FULL);
 		
 		
 		model.addAttribute("macinfo", macInfo);
