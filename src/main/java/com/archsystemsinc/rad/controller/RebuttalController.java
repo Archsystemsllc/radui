@@ -1,8 +1,11 @@
 package com.archsystemsinc.rad.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +24,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,6 +35,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +43,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -474,7 +481,7 @@ public class RebuttalController {
 		Integer returnRebuttalId = 0;
 		try {
 		
-		//MultipartFile rebuttalMultipartObject = rebuttal.getRebuttalFileObject();
+		MultipartFile file = rebuttal.getRebuttalFileObject();
 
 		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
@@ -482,11 +489,11 @@ public class RebuttalController {
 		String pattern = "MM/dd/yyyy hh:mm:ss a";
 		
 		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
-       TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-       sdfAmerica.setTimeZone(tzInAmerica);
-       String currentDateString = sdfAmerica.format(new Date());
+		TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
+		sdfAmerica.setTimeZone(tzInAmerica);
+		String currentDateString = sdfAmerica.format(new Date());
        
-       User user =  (User) session.getAttribute("LoggedInUserForm");
+		User user =  (User) session.getAttribute("LoggedInUserForm");
 		rebuttal.setUserId(user.getId().intValue());
        
        if(rebuttal.getId()==0) {
@@ -538,17 +545,46 @@ public class RebuttalController {
 			}
 			
 			
+			ROOT_URI = new String(HomeController.RAD_WS_URI + "uploadRebuttalFileObject");
+			
+			MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+		      bodyMap.add("rebuttalFileObject", getUserFileResource(file));
+		      bodyMap.add("rebuttalId", returnRebuttalId);
+		      HttpHeaders headers = new HttpHeaders();
+		      headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+		      HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
+
+		      //RestTemplate restTemplate = new RestTemplate();
+		     ResponseEntity<String> fileUploadResponse = basicAuthRestTemplate.exchange(ROOT_URI,
+		              HttpMethod.POST, requestEntity, String.class);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
-		//String url = "redirect:/"+userFolder+"/rebuttallist/false";
-		//url = response.encodeRedirectURL(url);
-		
+			
 		
 		return returnRebuttalId;
 	}
+	
+	public static Resource getUserFileResource(MultipartFile multiPartfile) throws IOException {
+	      //todo replace tempFile with a real file
+		
+	      //Path tempFile = Files.createTempFile(multiPartfile.getOriginalFilename(), ".pdf");
+	     // Files.write(tempFile, multiPartfile.getBytes());
+	     // System.out.println("uploading: " + tempFile);
+	      //File file = tempFile.toFile();
+	      //to upload in-memory bytes use ByteArrayResource instead
+	      String file_name = multiPartfile.getOriginalFilename();
+	      ByteArrayResource contentsAsResource = new ByteArrayResource(multiPartfile.getBytes()) {
+		        @Override
+		        public String getFilename() {
+		            return file_name; // Filename has to be returned in order to be able to post.
+		        }
+		    };
+	      return contentsAsResource;
+	      //return new FileSystemResource(file);
+	  }
 	
 	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal2", "/quality_manager/saveOrUpdateRebuttal2", "/cms_user/saveOrUpdateRebuttal2",
 			 "/mac_admin/saveOrUpdateRebuttal2","/mac_user/saveOrUpdateRebuttal2","/quality_monitor/saveOrUpdateRebuttal2"}, method = RequestMethod.POST)	

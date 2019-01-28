@@ -148,6 +148,8 @@
 
 			  var username="qamadmin";
 			  var password="123456";
+
+			   
 			  
 			  $.ajax({ 
 			         type: "POST",
@@ -156,8 +158,8 @@
 			         processData: false,
 			         contentType: false,
 			         success: function(data){ 
-			        	
-			        	var ajaxReq = $.ajax({
+			        	 window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';   
+			        	/* var ajaxReq = $.ajax({
 			        	      url : "${WEB_SERVICE_URL}uploadRebuttalFileObject",
 			        	      type : 'POST',
 			        	      data : rebuttalFormData,
@@ -169,12 +171,12 @@
 			        	    	  window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';        
 			        	       
 			        	    	}
-			        	    });
+			        	    }); */
 			        },
 			        failure: function () {
 			        	alert("Rebttal Saved Failed, Please contact administrator");
 			        }
-			});
+			}); 
 			    
 		});
 

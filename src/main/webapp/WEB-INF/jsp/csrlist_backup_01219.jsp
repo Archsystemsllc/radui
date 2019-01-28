@@ -86,7 +86,7 @@ $(function() {
    
     	var validatedMac = $('#macIdU').val();
 		var validateJurisdiction = $('#jurisdictionU option:selected').val(); 
-	    var fileUpload = $('#csrFileObject').val();
+	    var fileUpload = $('#file').val();
 		
 	  if(fileUpload == "" && validatedMac == "" && validateJurisdiction == "") {
 		  $('#alertMsg').text("Please Select Mac Id and Jurisdiction Id");
@@ -104,33 +104,11 @@ $(function() {
 
 	  $('#jurisdictionUText').val($('#jurisdictionU option:selected').text()); 
 	 	
-    var formData = new FormData(document.forms[0]); 
-
-    console.log("FormData"+formData);   
+    var form = document.forms[0];
     
-    $.ajax({	    
-		  				
-			url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/uploadCsrListUI",
-			contentType: "multipart/form-data",
-			data: formData,
-			 processData: false,
-		     contentType: false,
-		     type: 'POST',
-			success: function(data) {
-								
-		    	 $('#alertMsg').text(data.erroMessage);
-			      $('button[id=keepPreviousListButton]').prop('disabled',false);		 
-			},
-			failure: function (jqXHR) {
-		    	 $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-		 	      		' - '+jqXHR.statusText+')');
-		 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-		     }
-		});	 
-
+    var formData = new FormData(form);
     
-    
-   /*  var username="qamadmin";
+    var username="qamadmin";
     var password="123456";
     // Ajax call for file uploaling
     var ajaxReq = $.ajax({
@@ -174,7 +152,7 @@ $(function() {
     	$('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
           		' - '+jqXHR.statusText+')');
     	
-    }); */
+    });
   });  
 
   
@@ -200,24 +178,25 @@ $(function() {
 					return;
 				} 
 	  
-	  $.ajax({	    
-		  				
-			url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/keepCurrentListUI",
-			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			data: {userId: $('#userId').val(), macIdK: selectedMac, jurisdictionK: JSON.stringify(selectedJurisdiction)},
-			success: function(data) {
-								
-		    	 $('#alertMsg').text(data.erroMessage);
-			      $('button[id=keepPreviousListButton]').prop('disabled',false);		 
-			},
-			failure: function (jqXHR) {
-		    	 $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-		 	      		' - '+jqXHR.statusText+')');
-		 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
-		     }
-		});	 
-	 
+	  var username="qamadmin";
+	  var password="123456";
+	  $.ajax({ 
+	      type: "GET",
+	      dataType: "json",
+	      data: {userId: $('#userId').val(), macIdK: selectedMac, jurisdictionK: JSON.stringify(selectedJurisdiction)},
+	      url : "${WEB_SERVICE_URL}keepCurrentList",
+	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+	     success: function(data){	    
+		     //alert("Inside success"+data.erroMessage+data.status);
+	    	 $('#alertMsg').text(data.erroMessage);
+		      $('button[id=keepPreviousListButton]').prop('disabled',false);		    
+	     },
+	     failure: function (jqXHR) {
+	    	 $('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
+	 	      		' - '+jqXHR.statusText+')');
+	 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
+	     }
+	 	});
 	 });  
 
   $(document).on('click',".viewLink",function (){    
@@ -242,24 +221,23 @@ $(function() {
 	 
 	 	var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
 		var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
-
-		 $.ajax({	    
-				
-				url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrListUI",
-				contentType: "application/json; charset=utf-8",
-				dataType: "json",
-				data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
-				success: function(data) {
-										
-						$('#csrListViewDiv').show();
-			            $('#csrLists').show();	            
-			        	CsrListTable.clear().draw();
-			        	CsrListTable.rows.add(data).draw();	 
-				},
-				failure: function (jqXHR) {
-					 $("#csrLists").append("No Data Available to Display");
-			     }
-			});	     
+	  
+	     $.ajax({ 
+	         type: "GET",
+	         dataType: "json",
+	         data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
+	         url : "${WEB_SERVICE_URL}csrList",
+	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+	        success: function(data){ 
+	        	$('#csrListViewDiv').show();
+	            $('#csrLists').show();	            
+	        	CsrListTable.clear().draw();
+	        	CsrListTable.rows.add(data).draw();	
+	        },
+	        failure: function () {
+	            $("#csrLists").append("Error when fetching data please contact administrator");
+	        }
+	    });
 	 });
 
 	$('#searchCsr').click(function(e){ 
@@ -303,38 +281,52 @@ $(function() {
 		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
 		 var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
 	 	
-	 	
+	 	var username="qamadmin";
+	   	var password="123456";
 
 	   	$.ajax({	    			
-  			url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrListMonthsUI",
+  			url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrListMonths",
   			contentType: "application/json; charset=utf-8",
   			dataType: "json",
   			data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
-			success: function(data) {
- 					
-				var resultCount = data.length;
-			     alert("Result Count:"+resultCount);
-			        if(resultCount==0) {
-			        	$('#searchalertMsg').text('No Data Found for the Selected Months');
-			        	
-				    } else {
-				    	 
-				    	var trHTML = '<tbody>';  
-				    	$.each(data, function (i, item) {  	        
-			      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
-			      	        $('#searchalertMsgSucess').text('CSR Monthly List Available Retrieved Successfully for Selected MAC and Jurisdiction');
-			      	      
-			  	    	});
-				    	trHTML += '</tbody>';
-				    	$('#csrListMonthDiv').show();
-				  	    $('#csrMonthLists').append(trHTML);
-				  	    $('#csrMonthLists').show();
-					 }
-			},
-	        failure: function () {
+				success: function(data) {
+  				
+					response(data);
+				}
+		});
+
+	   	
+	 	$.ajax({ 
+           type: "GET",
+           dataType: "json",
+           data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
+           url : "${WEB_SERVICE_URL}csrListMonths",
+           headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+          success: function(data){	    
+	        var resultCount = data.length;
+	       // alert("Result Count:"+resultCount);
+	        if(resultCount==0) {
+	        	$('#searchalertMsg').text('No Data Found for the Selected Months');
+	        	
+		    } else {
+		    	 
+		    	var trHTML = '<tbody>';  
+		    	$.each(data, function (i, item) {  	        
+	      	        trHTML += '<tr><td align="center">' + item[0] + ' ' + item[1] + '</td><td style="text-align: center"><a class="viewLink" href="#" >View</a></td></tr>';
+	      	        $('#searchalertMsgSucess').text('CSR Monthly List Available Retrieved Successfully for Selected MAC and Jurisdiction');
+	      	      
+	  	    	});
+		    	trHTML += '</tbody>';
+		    	$('#csrListMonthDiv').show();
+		  	    $('#csrMonthLists').append(trHTML);
+		  	    $('#csrMonthLists').show();
+			 } 
+          },
+          failure: function () {
               $("#csrMonthLists").append("Error when fetching data please contact administrator");
-          	}
-		});	 
+          }
+      });
+
  	});	
 
 	$("select#macIdK").change(function(){
@@ -616,8 +608,7 @@ $(function() {
 			                                <label for="file">CSR List Upload: </label>
 										
 										<form:input type = "hidden" path="userId" />
-										<form:input type="file" path="csrFileObject" id="csrFileObject" class="form-control input-sm" style="box-sizing: content-box;" title="Select Choose File button to upload CSR List from Local"></form:input>
-										
+										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload CSR List from Local">
 										</input>
 			                            </div>
 			                          </div>

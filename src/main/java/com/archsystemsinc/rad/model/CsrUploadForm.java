@@ -1,5 +1,7 @@
 package com.archsystemsinc.rad.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * This persistent class for the user database table.
  */
@@ -22,8 +24,16 @@ public class CsrUploadForm {
     
     private String fromDate;
     private String toDate;   
+    private MultipartFile csrFileObject;
     
     
+    
+	public MultipartFile getCsrFileObject() {
+		return csrFileObject;
+	}
+	public void setCsrFileObject(MultipartFile csrFileObject) {
+		this.csrFileObject = csrFileObject;
+	}
 	public String getJurisdictionUText() {
 		return jurisdictionUText;
 	}
