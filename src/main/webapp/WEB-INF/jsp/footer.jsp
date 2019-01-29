@@ -38,10 +38,9 @@
 		<div class="row">
 			<div class="col-md-6">
 			
-			<p>Internet browsers compatible with CRAD are: &nbsp;
-			1. Internet Explorer (Version 8.0 or higher) &nbsp;
-			2. Chrome <br/>
-			Few versions of IE 11.0 have issues with CRAD functionality.&nbsp;
+			<p>Internet browsers compatible with CRAD are: </br>
+			1. Internet Explorer (Version 8.0 or higher) &nbsp;	2. Chrome, </br>
+			Few versions of IE 11.0 have issues with CRAD functionality.</br>
 			Recommended browser to use is chrome
 			</p>
 				

@@ -1,11 +1,8 @@
 package com.archsystemsinc.rad.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -136,12 +132,9 @@ public class RebuttalController {
 					toDateCalendar.setTime(today);
 					String toDate = mdyFormat.format(toDateCalendar.getTime());
 					
-					rebuttalNew.setFilterToDateString(toDate);
-					
+					rebuttalNew.setFilterToDateString(toDate);					
 				}
-			}
-			
-			
+			}			
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 				Integer loggedInUserMacId = (Integer) session.getAttribute("SESSION_LOGGED_IN_USER_MAC_ID");
@@ -567,14 +560,8 @@ public class RebuttalController {
 		return returnRebuttalId;
 	}
 	
-	public static Resource getUserFileResource(MultipartFile multiPartfile) throws IOException {
-	      //todo replace tempFile with a real file
+	public static Resource getUserFileResource(MultipartFile multiPartfile) throws IOException {	     
 		
-	      //Path tempFile = Files.createTempFile(multiPartfile.getOriginalFilename(), ".pdf");
-	     // Files.write(tempFile, multiPartfile.getBytes());
-	     // System.out.println("uploading: " + tempFile);
-	      //File file = tempFile.toFile();
-	      //to upload in-memory bytes use ByteArrayResource instead
 	      String file_name = multiPartfile.getOriginalFilename();
 	      ByteArrayResource contentsAsResource = new ByteArrayResource(multiPartfile.getBytes()) {
 		        @Override
@@ -583,216 +570,9 @@ public class RebuttalController {
 		        }
 		    };
 	      return contentsAsResource;
-	      //return new FileSystemResource(file);
+	     
 	  }
 	
-	@RequestMapping(value ={"/admin/saveOrUpdateRebuttal2", "/quality_manager/saveOrUpdateRebuttal2", "/cms_user/saveOrUpdateRebuttal2",
-			 "/mac_admin/saveOrUpdateRebuttal2","/mac_user/saveOrUpdateRebuttal2","/quality_monitor/saveOrUpdateRebuttal2"}, method = RequestMethod.POST)	
-	public String saveRebuttal2(@ModelAttribute("rebuttal") Rebuttal rebuttal, final BindingResult result, 
-			final RedirectAttributes redirectAttributes, final Model model, HttpSession session, HttpServletResponse response) {
-
-		String returnView = "";
-		log.debug("--> saverebuttal <--");
-		
-		ByteArrayResource fileAsResource = null;
-		/*try {
-			fileAsResource = new ByteArrayResource(rebuttal.getRebuttalFileObject().getBytes()) {
-			    @Override
-			    public String getFilename() {
-			        return rebuttal.getRebuttalFileObject().getOriginalFilename();
-			    }
-			};
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttalUpload");
-		
-		String pattern = "MM/dd/yyyy hh:mm:ss a";
-
-	    //add file
-	    LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
-	    params.add("file", fileAsResource);
-
-	    //add array
-	    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(ROOT_URI);
-	   
-	    
-	   
-	    //add some String
-	    //builder.queryParam("name", name);
-
-	    //another staff
-	    String resultOutput = "";
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-	    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity =
-	            new HttpEntity<>(params, headers);
-
-	    ResponseEntity<Rebuttal> responseEntity = basicAuthRestTemplate.exchange(
-	            builder.build().encode().toUri(),
-	            HttpMethod.POST,
-	            requestEntity,
-	            Rebuttal.class);
-	    
-	   /* ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
-				Rebuttal.class);*/
-
-	  /*  HttpStatus statusCode = responseEntity.getStatusCode();
-	    if (statusCode == HttpStatus.ACCEPTED) {
-	        result = responseEntity.getBody();
-	    }*/
-	    return resultOutput;
-
-		//Finish
-		
-		
-		
-		
-		
-		
-		
-		/*
-
-		BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
-		String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateRebuttal");
-		
-		String pattern = "MM/dd/yyyy hh:mm:ss a";
-		
-		
-		String fileName = "";
-		 MultipartFile tempMultipartFile = null;
-		 LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-		 map.add("file", new ClassPathResource(file));
-		 HttpHeaders headers = new HttpHeaders();
-		 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-		 HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new    HttpEntity<LinkedMultiValueMap<String, Object>>(
-		                     map, headers);
-		 ResponseEntity<String> result = template.get().exchange(
-		                     contextPath.get() + path, HttpMethod.POST, requestEntity,
-		                     String.class);
-		
-		if (rebuttal.getRebuttalFileObject() != null && !rebuttal.getRebuttalFileObject().isEmpty()) {
-           try {
-               fileName = rebuttal.getRebuttalFileObject().getOriginalFilename();
-               tempMultipartFile = rebuttal.getRebuttalFileObject();
-               byte[] bytes = rebuttal.getRebuttalFileObject().getBytes();
-               rebuttal.setRebuttalFileAttachment(bytes);
-               rebuttal.setHttpFileData(new ByteArrayResource(bytes));
-               BufferedOutputStream buffStream = 
-                       new BufferedOutputStream(new FileOutputStream(new File(SERVER_UPLOAD_FILE_LOCATION + fileName)));
-               buffStream.write(bytes);
-               buffStream.close();
-               //return "You have successfully uploaded " + fileName;
-           } catch (Exception e) {
-               //return "You failed to upload " + fileName + ": " + e.getMessage();
-           }
-       } else {
-           //return "Unable to upload. File is empty.";
-       }
-		
-		//Nulling the File Value
-		rebuttal.setRebuttalFileObject(null);
-		SimpleDateFormat sdfAmerica = new SimpleDateFormat(pattern);
-      TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
-      sdfAmerica.setTimeZone(tzInAmerica);
-      String currentDateString = sdfAmerica.format(new Date());
-      
-      User user =  (User) session.getAttribute("LoggedInUserForm");
-		rebuttal.setUserId(user.getId().intValue());
-      
-      if(rebuttal.getId()==0) {
-  		rebuttal.setDatePosted(new Date() );
-  		rebuttal.setCreatedDate(currentDateString);
-  		rebuttal.setUpdatedDate(currentDateString);
-  		rebuttal.setCreatedBy(user.getUserName());
-      } else {
-      	rebuttal.setUpdatedDate(currentDateString);
-      	rebuttal.setUpdatedBy(user.getUserName());
-      }
-      
-		if(rebuttal.getRebuttalCompleteFlag()==null) {
-			rebuttal.setRebuttalStatus("Pending");
-		} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("Yes")) {
-			rebuttal.setRebuttalStatus("Completed");
-			
-		} else if(rebuttal.getRebuttalCompleteFlag().equalsIgnoreCase("No")) {
-			rebuttal.setRebuttalStatus("Pending");
-			rebuttal.setRebuttalResult("Pending");
-		} 
-		
-		if (rebuttal.getDescriptionComments() != null && !rebuttal.getDescriptionComments().equalsIgnoreCase("")) {
-			rebuttal.setDescriptionComments(rebuttal.getDescriptionComments()+"::"+rebuttal.getDescriptionCommentsAppend());
-		} else {
-			rebuttal.setDescriptionComments(rebuttal.getDescriptionCommentsAppend());
-		}
-		
-		
-		 
-		
-		try {
-			rebuttal.setMacName(HomeController.MAC_ID_MAP.get(rebuttal.getMacId()));
-			rebuttal.setJurisName(HomeController.JURISDICTION_MAP.get(rebuttal.getJurisId()));
-			
-			ResponseEntity<Rebuttal> responseObject = basicAuthRestTemplate.postForEntity(ROOT_URI, rebuttal,
-					Rebuttal.class);
-			if (rebuttal.getId() == 0) {
-				redirectAttributes.addFlashAttribute("success",
-						"success.create.rebuttal");
-			} else {
-				redirectAttributes.addFlashAttribute("success",
-						"success.edit.rebuttal");
-			}
-			
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String userFolder = (String) session.getAttribute("SS_USER_FOLDER"); 
-		String url = "redirect:/"+userFolder+"/rebuttallist/false";
-		url = response.encodeRedirectURL(url);
-
-		return url;*/
-	}
-	
-	
-	/*public DocumentDetailed uploadDocumentInIfs(MultipartFile file, String userProfile) {
-	    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(backendURL + "documents/upload");
-	    builder.queryParam("user", userProfile);
-	    URI uri = builder.build().encode().toUri();
-
-	    File tempFile = null;
-	    try {
-	        String extension = "." + getFileExtention(file.getOriginalFilename());
-	        tempFile = File.createTempFile("temp", extension);
-	        file.transferTo(tempFile);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-
-	    LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-	    map.add("file", new FileSystemResource(tempFile));
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-	    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
-
-	    Document document = null;
-	    try {
-	        ResponseEntity<Document> responseEntity =
-	                restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Document.class);
-	        document = responseEntity.getBody();
-	    } catch (Exception e) {
-	        e.getMessage();
-	    }
-
-	    return document;
-	}
-	*/
 	@RequestMapping(value ={"/admin/edit-rebuttal/{id}", "/quality_manager/edit-rebuttal/{id}", "/cms_user/edit-rebuttal/{id}",
 			 "/mac_admin/edit-rebuttal/{id}","/mac_user/edit-rebuttal/{id}","/quality_monitor/edit-rebuttal/{id}"}, method = RequestMethod.GET)		
 	public String editRebuttalGet(@PathVariable("id") final Integer id, @ModelAttribute("userForm") User userForm,final Model model, HttpSession session,HttpServletRequest request, Authentication authentication) {

@@ -92,24 +92,7 @@
     		$("#rebuttalForm :input").prop("disabled", true);
         }
     	
-    	$("#csrFullName" ).autocomplete({
-    		source: function(request, response) {
-    			var autocompleteContext = request.term;
-    			var selectedMac = $('select[name=macId]').val();
-    			var selectedJurisdiction = $('#jurId :selected').text();
-    			var selectedProgram = $('#programId :selected').text();
-    			$.ajax({
-	    			url:"${WEB_SERVICE_URL}csrListNames",
-	    			contentType: "application/json; charset=utf-8",
-	    			headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-	    			dataType: "json",
-	    			data: { term:autocompleteContext, macIdS: selectedMac, jurisdictionS: selectedJurisdiction,programS: selectedProgram},
-    				success: function(data) {
-    					response(data);
-    				}
-    			});
-    		}
-    	});
+    	
 	});
 
 	$(function(){

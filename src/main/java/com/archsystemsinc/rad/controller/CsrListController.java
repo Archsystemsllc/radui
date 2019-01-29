@@ -188,6 +188,8 @@ public class CsrListController {
 			
 			//String uploadResult=csrListService.uploadFileData(uploadedFile,userId,null,macId,jurisdictionList);
 			//response.setStatus(uploadResult);
+		     
+		     response = fileUploadResponse.getBody();
 		} catch (Exception e) {
 			log.error("Error while uploading data",e);
 			response.setStatus("ERROR");

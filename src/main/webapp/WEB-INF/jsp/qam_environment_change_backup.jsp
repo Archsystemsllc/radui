@@ -12,9 +12,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>QAM Environmental Change Control Form</title>
-<link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css" />
@@ -82,7 +80,8 @@ $(function() {
 	
   $('button[id=uploadQamEnvForm]').click(function(e) {
     e.preventDefault();
-  
+    //Disable submit button
+    //$(this).prop('disabled',true);
     $('#qamEnvironmentListViewDiv').hide();
 	$('#qamEnvironmentListMonthDiv').hide();
    
@@ -106,7 +105,8 @@ $(function() {
 
 	  $('#jurisdictionUText').val($('#jurisdictionU').val()); 
 	 	
-    var form = document.forms[0];    
+    var form = document.forms[0];
+    
     var formData = new FormData(form);    
   
     // Ajax call for file uploaling
@@ -117,7 +117,8 @@ $(function() {
       cache : false,
       contentType : false,
       processData : false,
-      success: function(data) {
+      ,
+		success: function(data) {
 							
 			 $('#alertMsg').text(data.status);      
 		     
@@ -126,8 +127,41 @@ $(function() {
 		failure: function (jqXHR) {
 			$('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
 	          		' - '+jqXHR.statusText+')');
-	     }  
-  	}); 
+	     }
+    /* 
+      xhr: function(){
+        //Get XmlHttpRequest object
+         var xhr = $.ajaxSettings.xhr() ;
+        
+        //Set onprogress event handler 
+         xhr.upload.onprogress = function(event){
+          	var perc = Math.round((event.loaded / event.total) * 100);
+          	$('#progressBar').text(perc + '%');
+          	$('#progressBar').css('width',perc + '%');
+         };
+         return xhr ;
+    	},
+    	beforeSend: function( xhr ) {
+    		//Reset alert message and progress bar
+    		$('#alertMsg').text('');
+    		$('#progressBar').text('');
+    		$('#progressBar').css('width','0%');
+        } */
+    });
+  
+    // Called on success of file upload
+   /*  ajaxReq.done(function(data) {
+      $('#alertMsg').text(data.status);      
+     
+      resetFields();
+    });
+    
+    // Called on failure of file upload
+    ajaxReq.fail(function(jqXHR) {
+    	$('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
+          		' - '+jqXHR.statusText+')');
+    	
+    }); */
   }); 
 
 	$('#searchQamEnvironment').click(function(e){ 
@@ -168,44 +202,46 @@ $(function() {
 	        });
 		 
 		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	
-		 var selectedJurisdiction = JSON.stringify(selectedJurisArr); 	 	
+		 var selectedJurisdiction = JSON.stringify(selectedJurisArr); 
 	 	
-	   	$.ajax({	    			
-  			url : "${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamEnvListMonthsUI",
-  			contentType: "application/json; charset=utf-8",
-  			dataType: "json",
-  			data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
-			success: function(data) {
- 					
-				var resultCount = data.length;
-			   
-			     if(resultCount==0) {
-			        	$('#searchalertMsg').text('No Data Found for the Selected Months');
-				    } else {
-				    	 
-				    	var trHTML = '<tbody>';  
-				    	$.each(data, function (i, item) {  	        
-			      	        trHTML += '<tr>'
-			      	        	 + '<td align="center">' + item[5]  + '</td>'
-			      	        	 + '<td align="center">' + item[6]  + '</td>'
-				      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
-				      	       + '<td align="center">' + item[2] + '</td>'
-				      	     + '<td align="center">' + item[3] + '</td>'
-			      	        +'<td style="text-align: center"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/download-qamenvironmentform/'+item[4]+'">Download</a></td></tr>';
-			      	        
-			  	    	});
-				    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
-				    	trHTML += '</tbody>';
-				    	$('#qamEnvironmentListMonthDiv').show();
-				  	    $('#qamEnvironmentMonthLists').append(trHTML);
-				  	    $('#qamEnvironmentMonthLists').show();
-					 } 
-			},
-	        failure: function () {
-              $("#csrMonthLists").append("Error when fetching data please contact administrator");
-          	}
-		});	
-	 	
+	 	var username="qamadmin";
+	   	var password="123456";
+	 	$.ajax({ 
+           type: "GET",
+           dataType: "json",
+           data: {fromDate: $("#fromDate").val(), toDate: $("#toDate").val(), macIdS: selectedMac, jurisdictionS: selectedJurisdiction},
+           url : "${WEB_SERVICE_URL}qamEnvListMonths",
+           headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+          success: function(data){	    
+	        var resultCount = data.length;
+	       // alert("Result Count:"+resultCount);
+	        if(resultCount==0) {
+	        	$('#searchalertMsg').text('No Data Found for the Selected Months');
+		    } else {
+		    	 
+		    	var trHTML = '<tbody>';  
+		    	$.each(data, function (i, item) {  	        
+	      	        trHTML += '<tr>'
+	      	        	 + '<td align="center">' + item[5]  + '</td>'
+	      	        	 + '<td align="center">' + item[6]  + '</td>'
+		      	       + '<td align="center">' + item[0] + ' ' + item[1] + '</td>'
+		      	       + '<td align="center">' + item[2] + '</td>'
+		      	     + '<td align="center">' + item[3] + '</td>'
+	      	        +'<td style="text-align: center"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/download-qamenvironmentform/'+item[4]+'">Download</a></td></tr>';
+	      	        
+	  	    	});
+		    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
+		    	trHTML += '</tbody>';
+		    	$('#qamEnvironmentListMonthDiv').show();
+		  	    $('#qamEnvironmentMonthLists').append(trHTML);
+		  	    $('#qamEnvironmentMonthLists').show();
+			 } 
+          },
+          failure: function () {
+              $("#qamEnvironmentMonthLists").append("Error when fetching data please contact administrator");
+          }
+      });
+
  	});	
 
 	$("select#macIdK").change(function(){
@@ -266,7 +302,33 @@ $(function() {
 	  	  	    	});  	   
 	           });
 		}
-    });  
+    });
+
+    $(document).on('click',".viewLink",function (){    
+	
+		var row= $(this).closest('tr');  
+	  	var monthYear=$("td:eq(0)",row).text(); 
+		var docIdValue = $("td:eq(3)",row).text();
+	  	var username="qamadmin";
+		var password="123456";	
+
+		//alert(docIdValue);
+	  
+	     $.ajax({ 
+	         type: "POST",
+	         dataType: "json",
+	         data: {docId: docIdValue},
+	         url : "${WEB_SERVICE_URL}download-document",
+	         headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
+	        success: function(data){ 
+	        	alert("Successfully downloaded");
+	        },
+	        failure: function () {
+	            $("#csrLists").append("Error when fetching data please contact administrator");
+	        }
+	    });
+	 });
+    
    
 });
 </script>

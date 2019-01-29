@@ -126,62 +126,14 @@ $(function() {
 		 	      		' - '+jqXHR.statusText+')');
 		 	      $('button[id=keepPreviousListButton]').prop('disabled',false);
 		     }
-		});	 
-
-    
-    
-   /*  var username="qamadmin";
-    var password="123456";
-    // Ajax call for file uploaling
-    var ajaxReq = $.ajax({
-      url : "${WEB_SERVICE_URL}uploadCsrList",
-      type : 'POST',
-      data : formData,
-      cache : false,
-      contentType : false,
-      processData : false,
-      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-      xhr: function(){
-        //Get XmlHttpRequest object
-         var xhr = $.ajaxSettings.xhr() ;
-        
-        //Set onprogress event handler 
-         xhr.upload.onprogress = function(event){
-          	var perc = Math.round((event.loaded / event.total) * 100);
-          	$('#progressBar').text(perc + '%');
-          	$('#progressBar').css('width',perc + '%');
-         };
-         return xhr ;
-    	},
-    	beforeSend: function( xhr ) {
-    		//Reset alert message and progress bar
-    		$('#alertMsg').text('');
-    		$('#successMsg').text('');
-    		$('#progressBar').text('');
-    		$('#progressBar').css('width','0%');
-        }
-    });
+		});
   
-    // Called on success of file upload
-    ajaxReq.done(function(data) {
-       
-      $('#successMsg').text(data.status);
-      resetFields();
-    });
-    
-    // Called on failure of file upload
-    ajaxReq.fail(function(jqXHR) {
-    	$('#alertMsg').text(jqXHR.responseText+'('+jqXHR.status+
-          		' - '+jqXHR.statusText+')');
-    	
-    }); */
   });  
 
   
   $('button[id=keepPreviousListButton]').click(function(e) {
 	  e.preventDefault();
-	  //var result = $("#csrupload").valid();
-	  //alert("result:"+result);
+	  
 	  $('#csrListViewDiv').hide();
 	  $('#csrListMonthDiv').hide();
 	  
@@ -232,8 +184,7 @@ $(function() {
 		 var row= $(this).closest('tr');  
 	  	var monthYear=$("td:eq(0)",row).text(); 
 
-	  	var username="qamadmin";
-		var password="123456";
+	  
 
 		var selectedJurisArr = [];
         $.each($("#jurisdictionS option:selected"), function(){            
@@ -313,7 +264,7 @@ $(function() {
 			success: function(data) {
  					
 				var resultCount = data.length;
-			     alert("Result Count:"+resultCount);
+			     
 			        if(resultCount==0) {
 			        	$('#searchalertMsg').text('No Data Found for the Selected Months');
 			        	

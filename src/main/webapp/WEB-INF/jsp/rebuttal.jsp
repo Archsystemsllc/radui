@@ -158,20 +158,8 @@
 			         processData: false,
 			         contentType: false,
 			         success: function(data){ 
-			        	 window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';   
-			        	/* var ajaxReq = $.ajax({
-			        	      url : "${WEB_SERVICE_URL}uploadRebuttalFileObject",
-			        	      type : 'POST',
-			        	      data : rebuttalFormData,
-			        	      contentType : false,
-			        	      processData : false,
-			        	      headers:{  "Authorization": "Basic " + btoa(username+":"+password)},
-			        	      success: function(data){
-			        	    	
-			        	    	  window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';        
-			        	       
-			        	    	}
-			        	    }); */
+			        	 window.location.href= '${pageContext.request.contextPath}/${SS_USER_FOLDER}/rebuttallist/sessionBack=true';  
+			        	
 			        },
 			        failure: function () {
 			        	alert("Rebttal Saved Failed, Please contact administrator");

@@ -5,7 +5,7 @@ package com.archsystemsinc.rad.model;
  * This persistent class for the user database table.
  */
 
-public class QamEnvironmentForm {
+public class QamEnvironmentChangeForm {
     
 	//JSP Form Elements
     private String keepCurrentListCB;
