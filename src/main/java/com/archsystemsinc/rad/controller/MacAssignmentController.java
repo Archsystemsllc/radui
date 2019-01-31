@@ -130,7 +130,7 @@ public class MacAssignmentController {
 		Integer user1TotalAssignedCount = 0, user2TotalAssignedCount = 0, user3TotalAssignedCount = 0;
 		Integer user1TotalCompletedCount = 0, user2TotalCompletedCount = 0, user3TotalCompletedCount = 0;
 		Integer macJurisdictionProgramPlanned = 0,  macJurisdictionProgramCompleted = 0, totalPlanned = 0, totalCompleted = 0;
-		Date searchFromDate = new Date(), searchToDate = new Date();
+		Date searchFromDateForQamStartDate = new Date(), searchToDateForQamStartDate = new Date();
 		
 		SimpleDateFormat myMonthYearPathFormat = new SimpleDateFormat("MM_yyyy_dd hh:mm:ss a");
 		
@@ -168,12 +168,12 @@ public class MacAssignmentController {
 				
 				if(dayOfMonth <= 15) {					
 					fromDateCalendar.add(Calendar.MONTH, -1);	
-					searchFromDate = fromDateCalendar.getTime();
-					searchToDate = today;
+					searchFromDateForQamStartDate = fromDateCalendar.getTime();
+					searchToDateForQamStartDate = today;
 				} else {
 					fromDateCalendar.set(Calendar.DATE, 16);
-					searchFromDate = fromDateCalendar.getTime();
-					searchToDate = today;
+					searchFromDateForQamStartDate = fromDateCalendar.getTime();
+					searchToDateForQamStartDate = today;
 				}
 				
 				String currentMonthYear = monthYearFormat.format(cal.getTime());
@@ -186,10 +186,10 @@ public class MacAssignmentController {
 				
 				try {
 					String filterFromDateString = monthYearPath+"_16 00:00:00 AM";
-					searchFromDate = myMonthYearPathFormat.parse(filterFromDateString);
+					searchFromDateForQamStartDate = myMonthYearPathFormat.parse(filterFromDateString);
 					
 					Calendar cal = Calendar.getInstance();
-					cal.setTime(searchFromDate);
+					cal.setTime(searchFromDateForQamStartDate);
 					cal.add(Calendar.MONTH, 1);		
 					cal.set(Calendar.DATE, 15);
 					
@@ -198,7 +198,7 @@ public class MacAssignmentController {
 					cal.set(Calendar.SECOND, 59);
 					cal.set(Calendar.AM_PM, Calendar.PM);
 					
-					searchToDate = cal.getTime();
+					searchToDateForQamStartDate = cal.getTime();
 					
 					macAssignmentSearchObject.setAssignedMonthYear(monthYearPath);
 					model.addAttribute("currentMonthYear", monthYearPath);
@@ -270,8 +270,8 @@ public class MacAssignmentController {
 							List<ScoreCard> scoreCardList;
 														
 							scoreCard = new ScoreCard();
-							scoreCard.setFilterFromDate(searchFromDate);
-							scoreCard.setFilterToDate(searchToDate);
+							scoreCard.setFilterFromDateForQamStartDateTime(searchFromDateForQamStartDate);
+							scoreCard.setFilterToDateForQamStartDateTime(searchToDateForQamStartDate);
 							scoreCard.setMacId(macAssignmentObjectTemp.getMacId());
 							scoreCard.setJurId(macAssignmentObjectTemp.getJurisdictionId());
 							scoreCard.setProgramId(macAssignmentObjectTemp.getProgramId());

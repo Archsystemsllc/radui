@@ -170,7 +170,7 @@ public class QamEnvironmentFormController {
 		QamEnvironmentChangeForm qamEnvironmentChangeForm = new QamEnvironmentChangeForm();
 		//List<CsrLists> csrListNames = new ArrayList<CsrLists>();
 		List<Object[]> resultsList = new ArrayList<Object[]> ();
-		try {
+		try {			
 			qamEnvironmentChangeForm.setMacIdS(macLookupIdList.substring(1,macLookupIdList.length()-1));
 			qamEnvironmentChangeForm.setJurisdictionS(jurisdictionList.substring(1,jurisdictionList.length()-1));
 			qamEnvironmentChangeForm.setFromDate(from);

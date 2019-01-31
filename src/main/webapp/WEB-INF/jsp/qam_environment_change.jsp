@@ -164,7 +164,7 @@ $(function() {
 
 		  var selectedJurisArr = [];
 	        $.each($("#jurisdictionS option:selected"), function(){            
-	        	selectedJurisArr.push($(this).text());
+	        	selectedJurisArr.push($(this).val());
 	        });
 		 
 		 var selectedMac = JSON.stringify($('select[name=macIdS]').val());     	

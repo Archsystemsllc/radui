@@ -162,12 +162,11 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private Date filterToDate;
 	
+	
+	
 	private String qamStartdateTimeString;
 	
-	private String qamEnddateTimeString;
-	
-	
-	
+	private String qamEnddateTimeString;	
 	
 	//Temporatry Fields
 	
@@ -195,7 +194,27 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private boolean newMedicareCardCallTracking;
 	
+	private Date filterFromDateForQamStartDateTime;
 	
+	private Date filterToDateForQamStartDateTime;	
+	
+
+	
+	public Date getFilterFromDateForQamStartDateTime() {
+		return filterFromDateForQamStartDateTime;
+	}
+
+	public void setFilterFromDateForQamStartDateTime(Date filterFromDateForQamStartDateTime) {
+		this.filterFromDateForQamStartDateTime = filterFromDateForQamStartDateTime;
+	}
+
+	public Date getFilterToDateForQamStartDateTime() {
+		return filterToDateForQamStartDateTime;
+	}
+
+	public void setFilterToDateForQamStartDateTime(Date filterToDateForQamStartDateTime) {
+		this.filterToDateForQamStartDateTime = filterToDateForQamStartDateTime;
+	}
 
 	public String getCallMonitoringDateString() {
 		return callMonitoringDateString;

@@ -44,6 +44,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ReportsController {
 	private static final Logger log = Logger.getLogger(ReportsController.class);
 	
+	 @Autowired
+	 UtilityFunctions utilityFunctions;
+	
 	 @RequestMapping(value ={"/admin/reports", "/quality_manager/reports", "/cms_user/reports",
 			 "/mac_admin/reports","/mac_user/reports","/quality_monitor/reports"})		
 	public String viewReports(Model model, HttpSession session, Authentication authentication) {
@@ -417,11 +420,7 @@ public class ReportsController {
 		return "rebuttalreportlist";
 	}
 	 
-	 private static final SimpleDateFormat usEstDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	 @Autowired
-	 UtilityFunctions utilityFunctions;
-	 
-	 
+ 
 	@RequestMapping(value ={"/admin/getMacJurisReport", "/quality_manager/getMacJurisReport", "/cms_user/getMacJurisReport",
 			 "/mac_admin/getMacJurisReport","/mac_user/getMacJurisReport","/quality_monitor/getMacJurisReport"})			
 	public String getMacJurisReport(@ModelAttribute("reportsForm") ReportsForm reportsForm,  final BindingResult result,
@@ -445,14 +444,13 @@ public class ReportsController {
 			
 			if(reportsForm.getMainReportSelect().equalsIgnoreCase("Qasp")) {
 				SimpleDateFormat myMonthYearPathFormat = new SimpleDateFormat("yyyy-MM_dd hh:mm:ss a");
-				
+							
 				if(reportsForm.getFromDateStringMonthYear() != null && 
 						!reportsForm.getFromDateStringMonthYear().equalsIgnoreCase("")) {
 					
-					String filterFromDateString = reportsForm.getFromDateStringMonthYear()+"_16 00:00:00 AM";
-					Date filterFromDate = myMonthYearPathFormat.parse(filterFromDateString);					
-					
-					reportsForm.setFromDate(filterFromDate);			
+					String filterFromDateString = reportsForm.getFromDateStringMonthYear()+"_01 00:00:00 AM";
+					Date filterFromDate = myMonthYearPathFormat.parse(filterFromDateString);
+					reportsForm.setFromDate(filterFromDate);					
 				}
 				
 				
@@ -460,7 +458,14 @@ public class ReportsController {
 						!reportsForm.getToDateStringMonthYear().equalsIgnoreCase("")) {
 					String filterToDateString = reportsForm.getToDateStringMonthYear()+"_15 23:59:59 PM";
 					Date filterToDate = myMonthYearPathFormat.parse(filterToDateString);					
-					reportsForm.setToDate(filterToDate);
+					Calendar calendar = Calendar.getInstance();  					
+					calendar.setTime(filterToDate);  
+
+				    calendar.add(Calendar.MONTH, 1);  
+				    calendar.set(Calendar.DAY_OF_MONTH, 1);  
+				    calendar.add(Calendar.DATE, -1);  
+				    Date lastDayOfMonth = calendar.getTime();  
+				    reportsForm.setToDate(lastDayOfMonth);			
 				}
 				
 			} else {
@@ -1543,13 +1548,15 @@ public class ReportsController {
 				String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
 				
 				Calendar calObject = Calendar.getInstance();
-				calObject.setTime(scoreCard.getQamStartdateTime());				
+				calObject.setTime(scoreCard.getCallMonitoringDate());				
 				
-				Integer dayOfMonth = calObject.get(Calendar.DAY_OF_MONTH);
 				
-				if(dayOfMonth <= 15) {					
-					calObject.add(Calendar.MONTH, -1);					
-				} 
+				/*  Commented the code to remove < 1 Functionality
+				 * 	Integer dayOfMonth = calObject.get(Calendar.DAY_OF_MONTH);
+				
+					if(dayOfMonth <= 15) {					
+						calObject.add(Calendar.MONTH, -1);					
+					} */
 				
 				Integer year = calObject.get(Calendar.YEAR); 
 				String monthName = calObject.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
@@ -1648,12 +1655,20 @@ public class ReportsController {
 			QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(macJurisKey);
 			
 			if(qamMacByJurisdictionReviewReport.getScoreCardType().equalsIgnoreCase("Scoreable")) {
-				Float scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
-				scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
-				Float scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
-				scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
-				qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
-				qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);
+				if(qamMacByJurisdictionReviewReport.getScorableCount() != 0) {
+					Float scPassPercent =  ((float)qamMacByJurisdictionReviewReport.getScorablePass()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+					scPassPercent =  Float.valueOf((twoDForm.format(scPassPercent)));
+					Float scFailPercent =  ((float)qamMacByJurisdictionReviewReport.getScorableFail()*100/qamMacByJurisdictionReviewReport.getScorableCount());
+					scFailPercent =  Float.valueOf((twoDForm.format(scFailPercent)));
+					qamMacByJurisdictionReviewReport.setScorablePassPercent(scPassPercent);			
+					qamMacByJurisdictionReviewReport.setScorableFailPercent(scFailPercent);
+				} else {
+					qamMacByJurisdictionReviewReport.setScorablePassPercent(0.0f);			
+					qamMacByJurisdictionReviewReport.setScorableFailPercent(0.0f);
+				}
+				
+				
+				
 				
 			} 
 			

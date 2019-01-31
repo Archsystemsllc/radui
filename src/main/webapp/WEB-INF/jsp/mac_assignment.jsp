@@ -81,9 +81,23 @@ $(document).ready(function() {
 		{ "mData": "assignedCallsForCindy"},
 		{ "mData": "assignedCallsForLydia"},
 		{ "mData": "assignedCallsForJaneene"},
-		{ "mData": "macJurisdictionProgramCompleted"}
+		{ "mData": "macJurisdictionProgramCompleted"},
+		{ "mData": "macName"}
 		],	
 		 "columnDefs": [ 
+			 	{ 
+		           "render" : function(data, type, row) {
+		        	   var linkData = "";	        	  
+		        	   if (data=="zTotals" ) {
+			        		linkData = "Grand Total";
+					     } else {
+							linkData = data;
+					     }
+					
+					return linkData;
+			        },
+				   "targets" : 0
+			   	},
 		        { 
 		           "render" : function(data, type, row) {
 		        	   var linkData = "";
@@ -133,22 +147,44 @@ $(document).ready(function() {
 					return linkData;
 		        },
 			   "targets" : 7
-			   }
+			   },
+			   { 
+		           "render" : function(data, type, row) {
+		        	   var sortData = row.macName+"_"+row.jurisdictionName+"_";	        	  
+		        	   if(row.program == null) {
+		        		   sortData += "ZZZZ";
+			        	} else {
+			        		sortData += row.program;
+					     } 
+					
+					return sortData;
+			        },
+				   "targets" : 9,
+				   "visible": false
+			   }	
 			 ],	   
 			 dom: 'Bfrtip',	
 			 buttons: [
 		         {
 		             extend: 'copy',
-		             title: reportTitle
+		             title: reportTitle,	   
+		             exportOptions: {
+		                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8]
+		             }
 		         },
 		         {
 		             extend: 'excel',
 		             title: reportTitle,
-		             messageTop: reportTitle
+		             messageTop: reportTitle,	   
+		             exportOptions: {
+		                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8]
+		             }
 	 		      },
 		         {  
-				     extend: 'pdfHtml5',
-		              
+				     extend: 'pdfHtml5',	   
+		             exportOptions: {
+		                    columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8]
+		             },		              
 				     customize: function (doc) {
 				    	 var programs = macAssignmentDataTable.column(2).data().toArray();
 				    	 var list = 13;
@@ -157,10 +193,7 @@ $(document).ready(function() {
 				              
 					        	   for(var j=0; j<list; j++) {
 						            	  doc.content[2].table.body[i+1][j].fillColor = '#58FAD0';
-							       } 
-						      
-				              
-			                 
+							       }
 			               }
 			             }
 				     },
@@ -184,6 +217,11 @@ $(document).ready(function() {
 	               
 	           }
 		});
+
+	// Sort by columns 1 and 2 and redraw
+	macAssignmentDataTable
+	    .order( [ 9, 'asc' ] )
+	    .draw();
 
 	$('button[id=save]').click(function() {	
         var data = macAssignmentDataTable.rows().data();

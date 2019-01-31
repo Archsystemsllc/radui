@@ -73,7 +73,7 @@ public class ScoreCardController {
 		model.addAttribute("menu_highlight", "scorecard");
 		String objectType = "";
 		
-		SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+		//SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
 		
 		Date today = new Date();			
 		
@@ -107,8 +107,8 @@ public class ScoreCardController {
 				fromDateCalendar.setTime(today);
 				
 				fromDateCalendar.add(Calendar.MONTH, -6);
-				String fromDate = mdyFormat.format(fromDateCalendar.getTime());				
-				
+				String fromDate = utilityFunctions.convertToStringFromDate(fromDateCalendar.getTime(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+							
 				scoreCardNew.setFilterFromDateString(fromDate);
 				
 				if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
@@ -122,7 +122,8 @@ public class ScoreCardController {
 					} 
 					
 					toDateCalendar.set(Calendar.DATE, 14);		
-					String toDate = mdyFormat.format(toDateCalendar.getTime());
+					String toDate = utilityFunctions.convertToStringFromDate(toDateCalendar.getTime(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+							
 					
 					scoreCardFailObject.setFilterFromDateString(fromDate);
 					
@@ -133,8 +134,8 @@ public class ScoreCardController {
 					// Restricting Mac User and Mac Admin to only see data until 15th of the Month, based on the day
 					Calendar toDateCalendar = Calendar.getInstance();
 					toDateCalendar.setTime(today);
-					String toDate = mdyFormat.format(toDateCalendar.getTime());
-					
+					String toDate = utilityFunctions.convertToStringFromDate(toDateCalendar.getTime(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+										
 					scoreCardNew.setFilterToDateString(toDate);
 					
 				}

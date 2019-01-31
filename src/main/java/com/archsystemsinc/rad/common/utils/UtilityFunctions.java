@@ -42,6 +42,8 @@ public class UtilityFunctions {
 	private static final SimpleDateFormat usEstDateFormatFullDate = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 	
 	private static final SimpleDateFormat usEstDateFormatOnlyDate = new SimpleDateFormat("MM/dd/yyyy");
+	
+	private static final SimpleDateFormat usEstDateFormatMonthYearReportDate = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
 
 	TimeZone tzInAmerica = TimeZone.getTimeZone("America/New_York");
 	public String convertToStringFromDate(Date dateValue, String dateType) {				
@@ -67,10 +69,10 @@ public class UtilityFunctions {
 			Date returnDateValue = null;
 			
 			if(dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_FULL)) {
-				usEstDateFormatFullDate.setTimeZone(tzInAmerica);
+				//usEstDateFormatFullDate.setTimeZone(tzInAmerica);
 				returnDateValue = usEstDateFormatFullDate.parse(dataString);				
 			} else if (dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_ONLY_DATE)) {				
-				usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
+				//usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
 				returnDateValue = usEstDateFormatOnlyDate.parse(dataString);			
 			}
 			return returnDateValue;
