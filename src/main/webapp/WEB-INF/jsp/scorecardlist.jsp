@@ -187,6 +187,7 @@ $(document).ready(function(){
 		}
         return returnData;
     }},
+    { "mData": "callMonitoringDateString"},
 	{ "mData": "qamStartdateTimeString"},
 	{ "mData": "scorecardType"},
 	{ "mData": "finalScoreCardStatus"},
@@ -216,7 +217,7 @@ $(document).ready(function(){
             return linkData;		
              
         },
-	   "targets" : 7
+	   "targets" : 8
 	   },
 	 ],
 	 //dom: 'Bfrtip',
@@ -226,7 +227,7 @@ $(document).ready(function(){
          {
              extend: 'copyHtml5',
              exportOptions: {
-                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                 columns: [ 0, 1, 2, 3, 4, 5, 6, 7]
              },
              messageTop: messageOnTop,
              title: reportTitle,
@@ -234,7 +235,7 @@ $(document).ready(function(){
          {
              extend: 'excelHtml5',
              exportOptions: {
-                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                 columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
              },
              messageTop: messageOnTop,
              title: reportTitle,
@@ -242,7 +243,7 @@ $(document).ready(function(){
          {
              extend: 'pdfHtml5',
              exportOptions: {
-                 columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                 columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
              },
              orientation : 'landscape',
              pageSize : 'LEGAL',
@@ -353,7 +354,6 @@ $(function(){
 														<form:option value="Does Not Count" />
 													</form:select>
 												</div>
-												</sec:authorize>
 												<div class="col-md-4 col-md-offset-0 form-group">
 													<label for="name">Status:</label>
 													<form:select class="form-control  required" id="callResult"
@@ -363,6 +363,19 @@ $(function(){
 														<form:option value="Fail" />
 													</form:select>
 												</div>
+												</sec:authorize>
+												<sec:authorize access="hasAuthority('MAC User')  or hasAuthority('MAC Admin')">
+												
+												<div class="col-md-4 col-md-offset-1 form-group">
+													<label for="name">Status:</label>
+													<form:select class="form-control  required" id="callResult"
+														path="callResult" title="Select one Status from the List" required="true" >
+														<form:option value="ALL" label="ALL" />
+														<form:option value="Pass" />
+														<form:option value="Fail" />
+													</form:select>
+												</div>
+												</sec:authorize>
 											</div>
 											
 											<div class="row">
@@ -428,6 +441,7 @@ $(function(){
 								            <th style="text-align: left">Jurisdiction</th>
 								            <th style="text-align: left">MAC Call Reference ID</th>
 								            <th style="text-align: left">QM Name/QM ID</th>
+								            <th style="text-align: left">Call Monitoring Date</th>
 								            <th style="text-align: left">QM Start Date/Time</th> 
 								            <th style="text-align: left">Scorecard Type</th>
 								            <th style="text-align: left">Status</th>

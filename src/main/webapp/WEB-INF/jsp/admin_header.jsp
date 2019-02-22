@@ -154,7 +154,7 @@
 										<span class="caret"></span>
 										<ul class="dropdown-menu">		
 											<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/csrlist" title="Customer Service Representative List Upload Page">CSR List Upload</a></li>								
-									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload Environemental Change Control Form">Envrionmental Change Control Form</a></li>	
+									      	<li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/qamenvironmentform" title="Upload Environment Change Control Form">Environment Change Control Form</a></li>	
 									      	<%-- <li><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/systemissueform" title="Upload System Issue Form">System Issue Form</a></li>									       --%>
 									    </ul>
 										</li>

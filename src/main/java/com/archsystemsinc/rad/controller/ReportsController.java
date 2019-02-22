@@ -2,6 +2,7 @@ package com.archsystemsinc.rad.controller;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Comparator;
@@ -17,7 +18,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -437,7 +440,8 @@ public class ReportsController {
 		
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
 		String roles = authentication.getAuthorities().toString();
-			
+		
+		String initialFromDateString = "", initialToDateString = "";
 		try {
 			
 			SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -456,7 +460,7 @@ public class ReportsController {
 				
 				if(reportsForm.getToDateStringMonthYear() != null && 
 						!reportsForm.getToDateStringMonthYear().equalsIgnoreCase("")) {
-					String filterToDateString = reportsForm.getToDateStringMonthYear()+"_15 23:59:59 PM";
+					String filterToDateString = reportsForm.getToDateStringMonthYear()+"_15 11:59:59 PM";
 					Date filterToDate = myMonthYearPathFormat.parse(filterToDateString);					
 					Calendar calendar = Calendar.getInstance();  					
 					calendar.setTime(filterToDate);  
@@ -471,17 +475,18 @@ public class ReportsController {
 			} else {
 				if(reportsForm.getFromDateString() != null && 
 						!reportsForm.getFromDateString().equalsIgnoreCase("")) {
+					initialFromDateString = reportsForm.getFromDateString();
 					String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
-					Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
-					reportsForm.setFromDate(filterFromDate);			
+					reportsForm.setFromDateString(filterFromDateString);
+							
 				}
 				
 				
 				if(reportsForm.getToDateString() != null && 
 						!reportsForm.getToDateString().equalsIgnoreCase("")) {
-					String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
-					Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
-					reportsForm.setToDate(filterToDate);
+					initialToDateString = reportsForm.getToDateString();
+					String filterToDateString = reportsForm.getToDateString() + " 11:59:59 PM";
+					reportsForm.setToDateString(filterToDateString);
 				}
 			}
 			
@@ -870,6 +875,9 @@ public class ReportsController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+		reportsForm.setFromDateString(initialFromDateString);
+		reportsForm.setToDateString(initialToDateString);
 		session.setAttribute("ReportsFormSession", reportsForm);
 		model.addAttribute("reportsForm", reportsForm);
 		return returnView;
@@ -892,6 +900,7 @@ public class ReportsController {
 		
 		HashMap<String,QamMacByJurisdictionReviewReport> finalResultsMap = new HashMap<String,QamMacByJurisdictionReviewReport> ();
 		String roles = authentication.getAuthorities().toString();
+		String initialFromDateString = "", initialToDateString = "";
 			
 		try {
 			
@@ -899,17 +908,18 @@ public class ReportsController {
 			
 			if(reportsForm.getFromDateString() != null && 
 					!reportsForm.getFromDateString().equalsIgnoreCase("")) {
+				initialFromDateString = reportsForm.getFromDateString();
 				String filterFromDateString = reportsForm.getFromDateString() + " 00:00:00 AM";
-				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
-				reportsForm.setFromDate(filterFromDate);			
+				reportsForm.setFromDateString(filterFromDateString);
+						
 			}
 			
 			
 			if(reportsForm.getToDateString() != null && 
 					!reportsForm.getToDateString().equalsIgnoreCase("")) {
-				String filterFromDateString = reportsForm.getToDateString() + " 11:59:59 PM";
-				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
-				reportsForm.setToDate(filterToDate);
+				initialToDateString = reportsForm.getToDateString();
+				String filterToDateString = reportsForm.getToDateString() + " 11:59:59 PM";
+				reportsForm.setToDateString(filterToDateString);
 			}
 			
 			reportsForm.setCallResult(UIGenericConstants.ALL_STRING);
@@ -1057,6 +1067,8 @@ public class ReportsController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		reportsForm.setFromDateString(initialFromDateString);
+		reportsForm.setToDateString(initialToDateString);
 		session.setAttribute("ReportsFormSession", reportsForm);
 		model.addAttribute("reportsForm", reportsForm);
 		return returnView;
@@ -1502,7 +1514,18 @@ public class ReportsController {
 			MacInfo macInfo = HomeController.MAC_OBJECT_MAP.get(csrLog.getMacId());
 			if(macInfo != null) {
 				String macNameTemp = macInfo.getMacName();
-				String jurisdictionTemp = csrLog.getJurisdiction();
+				
+				String jurisdictionTemp = "";
+			
+				try {
+					Integer jurisdictionId = Integer.valueOf(csrLog.getJurisdiction());
+					jurisdictionTemp = HomeController.JURISDICTION_MAP.get(jurisdictionId);
+				} catch (NumberFormatException e) {
+					System.out.println("Compliance Report: Jurisdiction is String Error");
+					jurisdictionTemp = csrLog.getJurisdiction();
+				}
+				
+				
 				
 				Calendar calObject = Calendar.getInstance();
 				calObject.setTime(csrLog.getCreatedDate());
@@ -1547,8 +1570,8 @@ public class ReportsController {
 				String macNameTemp = macInfo.getMacName();
 				String jurisdictionTemp = HomeController.JURISDICTION_MAP.get(scoreCard.getJurId());
 				
-				Calendar calObject = Calendar.getInstance();
-				calObject.setTime(scoreCard.getCallMonitoringDate());				
+				//Calendar calObject = Calendar.getInstance();
+				//calObject.setTime(scoreCard.getCallMonitoringDate().get);				
 				
 				
 				/*  Commented the code to remove < 1 Functionality
@@ -1558,8 +1581,10 @@ public class ReportsController {
 						calObject.add(Calendar.MONTH, -1);					
 					} */
 				
-				Integer year = calObject.get(Calendar.YEAR); 
-				String monthName = calObject.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+				LocalDate callMonitoringLocalDate = utilityFunctions.convertToLocalDateFromString(scoreCard.getCallMonitoringDateString(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+				
+				Integer year = callMonitoringLocalDate.getYear();
+				String monthName = callMonitoringLocalDate.getMonth().name();
 				
 				//ArrayList<ScoreCard> scoreCardListTemp = qaspReportSessionObject.get(monthName+"_"+year);
 				QamMacByJurisdictionReviewReport qamMacByJurisdictionReviewReport = finalResultsMap.get(monthName+"_"+year);

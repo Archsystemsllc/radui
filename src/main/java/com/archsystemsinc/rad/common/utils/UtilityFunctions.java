@@ -2,6 +2,8 @@ package com.archsystemsinc.rad.common.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -51,10 +53,10 @@ public class UtilityFunctions {
 		String dateValueString = "";
 		if(dateValue!=null) {
 			if(dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_FULL)) {
-				usEstDateFormatFullDate.setTimeZone(tzInAmerica);
+				//usEstDateFormatFullDate.setTimeZone(tzInAmerica);
 				dateValueString = usEstDateFormatFullDate.format(dateValue);
 			} else if (dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_ONLY_DATE)) {
-				usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
+				//usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
 				dateValueString = usEstDateFormatOnlyDate.format(dateValue);
 			}
 			
@@ -83,5 +85,43 @@ public class UtilityFunctions {
 			return null;
 		}
 	}
-
+	
+	public String convertToStringFromLocalDate(LocalDate dateValue, String dateType) {				
+		
+		String dateValueString = "";
+		if(dateValue!=null) {
+			if(dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_FULL)) {
+				 DateTimeFormatter dateFormatter1 = DateTimeFormatter
+				            .ofPattern("MM/dd/yyyy hh:mm:ss a");
+				dateValueString = dateValue.format(dateFormatter1);
+			} else if (dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_ONLY_DATE)) {
+				 DateTimeFormatter dateFormatter1 = DateTimeFormatter
+				            .ofPattern("MM/dd/yyyy");
+				dateValueString = dateValue.format(dateFormatter1);
+			}
+			
+			return dateValueString;
+		} else return null;
+		
+	}	
+	
+	public LocalDate convertToLocalDateFromString(String dataString, String dateType) {
+		try {
+			LocalDate  returnDateValue = null;
+			
+			if(dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_FULL)) {
+				//usEstDateFormatFullDate.setTimeZone(tzInAmerica);
+				returnDateValue = LocalDate.parse(dataString,DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a"));				
+			} else if (dateType.equalsIgnoreCase(UIGenericConstants.DATE_TYPE_ONLY_DATE)) {				
+				//usEstDateFormatOnlyDate.setTimeZone(tzInAmerica);
+				returnDateValue = LocalDate.parse(dataString,DateTimeFormatter.ofPattern("MM/dd/yyyy"));			
+			}
+			return returnDateValue;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}	
 }

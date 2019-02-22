@@ -11,7 +11,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>QAM Environmental Change Control Form</title>
+<title>QAM Environment Change Control Form</title>
 <link href="${pageContext.request.contextPath}/resources/css/table.css" rel="stylesheet" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/images/Comrad_icon.png" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -194,7 +194,7 @@ $(function() {
 			      	        +'<td style="text-align: center"><a href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/download-qamenvironmentform/'+item[4]+'">Download</a></td></tr>';
 			      	        
 			  	    	});
-				    	$('#searchalertMsg').text('QAM Environmental Change Control Form Months Retrieved');
+				    	$('#searchalertMsg').text('QAM Environment Change Control Form Months Retrieved');
 				    	trHTML += '</tbody>';
 				    	$('#qamEnvironmentListMonthDiv').show();
 				  	    $('#qamEnvironmentMonthLists').append(trHTML);
@@ -382,8 +382,8 @@ $(function() {
 				                    				                   
 			                        <div class="row">
 			                              <div class="col-lg-8 form-group" align="left">
-			                                <a href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environmental Change Control Form" style="color: blue">
-												Download Sample QAM Environmental Change Control Form</a>
+			                                <a href="${pageContext.request.contextPath}/resources/static/QAM_ENVIRONMENT_CHANGE_FORM_SAMPLE.xlsx" title="Click here to download Sample QAM Environment Change Control Form" style="color: blue">
+												Download Sample QAM Environment Change Control Form</a>
 											<br/>&nbsp;
 											<br/>
 											<input type="hidden" id="userRole" value='${SS_LOGGED_IN_USER_ROLE}'/>
@@ -395,10 +395,10 @@ $(function() {
 				            
 				             <div class="row" style="border:1px solid black;">
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                 <h2>Upload QAM Environmental Change Control Form Section</h2> 
+				                 <h2>Upload QAM Environment Change Control Form Section</h2> 
 				                     <div class="row">
 			                            <div class="col-lg-6 form-group">
-			                                <label for="file">QAM Environmental Change Control Form Upload: </label>
+			                                <label for="file">QAM Environment Change Control Form Upload: </label>
 										
 										<form:input type = "hidden" path="userId" />
 										<input class="form-control" id="file" type="file" name="file" style="box-sizing: content-box;" title="Select Choose File button to upload System Issue List from Local">
@@ -444,7 +444,7 @@ $(function() {
 									
 				           <div class="row " >
 				                <div class="col-lg-8 col-lg-offset-1 form-container">
-				                    <h2>Search QAM Environmental Change Control Form</h2> 
+				                    <h2>Search QAM Environment Change Control Form</h2> 
 				                    <!-- <p> Please provide your feedback below: </p> -->
 				                    <div class="row">
 				                      <div id="searchalertMsg" style="color: blue;font-size: 18px;"  class="col-lg-8 form-group"></div>
@@ -476,7 +476,7 @@ $(function() {
 										</form:select>
 			                            </div>
 			                            <div class="col-lg-6 form-group">
-			                               	<button class="btn btn-primary" id="searchQamEnvironment" title="Select Search QAM Environmental Change Control Form button to get the QAM list">Search</button>
+			                               	<button class="btn btn-primary" id="searchQamEnvironment" title="Select Search QAM Environment Change Control Form button to get the QAM list">Search</button>
 			                            </div>
 			                        </div>
 				                </div>

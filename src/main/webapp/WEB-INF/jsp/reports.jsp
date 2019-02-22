@@ -207,7 +207,7 @@
         	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();        	    		
     		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#callCategoryType,#rebuttalStatus").attr('required',true);
     		$("#jurisId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
-    		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv').hide();
+    		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv,#scoreCardTypeDiv,#callResultDiv').hide();
     		$('select[id="macId"] > option[value="ALL"]').show(); 
     		
         }  else if (reportSelectValue == 'Qasp' ) {            
@@ -253,7 +253,7 @@
             	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();        	    		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#callCategoryType,#rebuttalStatus").attr('required',true);
         		$("#jurisId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
-        		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv').hide();
+        		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv,#scoreCardTypeDiv,#callResultDiv').hide();
         		$('select[id="macId"] > option[value="ALL"]').show(); 
             } else if (mainReportSelect=="Qasp") {
             	$('#jurisSingleSelect,#monthYearDatesDiv').show();
@@ -311,7 +311,7 @@
             	$('#callCategoryTypeDiv,#rebuttalStatusDiv,#programPccLocDiv,#datesDiv,#jurisMultiSelect,#datesDiv').show();        	    		
         		$("#programId,#pccLocationId,#fromDateString,#toDateString,#jurisdictionIds,#callCategoryType,#rebuttalStatus").attr('required',true);
         		$("#jurisId,#scoreCardType,#callResult,#fromDateStringMonthYear,#toDateStringMonthYear").removeAttr('required');    		
-        		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv').hide();
+        		$('#jurisSingleSelect,#complianceTypeDiv,#monthYearDatesDiv,#scoreCardTypeDiv,#callResultDiv').hide();
         		$('select[id="macId"] > option[value="ALL"]').show(); 
         		resetFields();
             } else if (mainReportSelect=="Qasp") {

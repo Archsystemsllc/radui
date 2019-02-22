@@ -160,7 +160,7 @@ $(function() {
 			data: {userId: $('#userId').val(), macIdK: selectedMac, jurisdictionK: JSON.stringify(selectedJurisdiction)},
 			success: function(data) {
 								
-		    	 $('#alertMsg').text(data.erroMessage);
+		    	 $('#alertMsg').text(data.status);
 			      $('button[id=keepPreviousListButton]').prop('disabled',false);		 
 			},
 			failure: function (jqXHR) {

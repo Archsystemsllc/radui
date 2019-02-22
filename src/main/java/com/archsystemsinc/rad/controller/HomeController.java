@@ -813,7 +813,7 @@ public class HomeController {
 					String[] jurisIds = user.getJurId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);				
 					
 					for (String jurisIdSingleValue: jurisIds) {
-						if(jurisIdSingleValue != null && jurisIdSingleValue.equalsIgnoreCase("")) {
+						if(jurisIdSingleValue != null && !jurisIdSingleValue.equalsIgnoreCase("")) {
 							String jurisdictionTempName = HomeController.JURISDICTION_MAP.get(Integer.valueOf(jurisIdSingleValue));				
 							jurisdictionNamesValues += jurisdictionTempName+ " ";
 							jurIdList += jurisIdSingleValue + UIGenericConstants.UI_JURISDICTION_SEPERATOR;
@@ -826,7 +826,7 @@ public class HomeController {
 					String[] pccIdUiValue = user.getPccId().split(UIGenericConstants.DB_JURISDICTION_SEPERATOR);				
 					
 					for (String pccIdSingleValue: pccIdUiValue) {
-						if(pccIdSingleValue != null && pccIdSingleValue.equalsIgnoreCase("")) {
+						if(pccIdSingleValue != null && !pccIdSingleValue.equalsIgnoreCase("")) {
 							String pccTempName = HomeController.PCC_LOC_MAP.get(Integer.valueOf(pccIdSingleValue));	
 							userBasedPccLocationMap.put(Integer.valueOf(pccIdSingleValue), pccTempName);
 						}						

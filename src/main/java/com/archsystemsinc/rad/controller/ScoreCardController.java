@@ -1,6 +1,5 @@
 package com.archsystemsinc.rad.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,8 +72,9 @@ public class ScoreCardController {
 		model.addAttribute("menu_highlight", "scorecard");
 		String objectType = "";
 		
-		//SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");
+		//SimpleDateFormat mdyFormat = new SimpleDateFormat("MM/dd/yyyy");		
 		
+		String initialFromDateString = "", initialToDateString = "";
 		Date today = new Date();			
 		
 		try {
@@ -88,6 +88,10 @@ public class ScoreCardController {
 				}
 				scoreCardNew = scoreCardFromModel;				
 				objectType = "Model";
+				initialFromDateString = scoreCardNew.getFilterFromDateString();
+				initialToDateString = scoreCardNew.getFilterToDateString();
+				
+				
 			} else if(scoreCardFromSession != null && sessionBackObject.equalsIgnoreCase("true")) {
 				if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
 					scoreCardFailObject = new ScoreCard();
@@ -95,6 +99,8 @@ public class ScoreCardController {
 				//Back Button is Clicked				
 				scoreCardNew = scoreCardFromSession;
 				objectType = "Session";
+				initialFromDateString = scoreCardNew.getFilterFromDateString();
+				initialToDateString = scoreCardNew.getFilterToDateString();
 			} else {
 				//ScoreCard Menu Item Is Clicked
 				scoreCardNew = new ScoreCard();
@@ -139,6 +145,8 @@ public class ScoreCardController {
 					scoreCardNew.setFilterToDateString(toDate);
 					
 				}
+				initialFromDateString = scoreCardNew.getFilterFromDateString();
+				initialToDateString = scoreCardNew.getFilterToDateString();
 			}
 			
 			if(roles.contains(UIGenericConstants.MAC_ADMIN_ROLE_STRING) || roles.contains(UIGenericConstants.MAC_USER_ROLE_STRING)) {
@@ -357,7 +365,10 @@ public class ScoreCardController {
 			HashMap<Integer, ScoreCard> resultsMap = retrieveScoreCardList(scoreCardNew, scoreCardFailObject);
 			ObjectMapper mapper = new ObjectMapper();
 			//Convert the result set to string and replace single character with spaces
-			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));
+			model.addAttribute("scoreCardList",mapper.writeValueAsString(resultsMap.values()).replaceAll("'", " "));		
+			
+			scoreCardNew.setFilterFromDateString(initialFromDateString);
+			scoreCardNew.setFilterToDateString(initialToDateString);
 			
 			model.addAttribute("scorecard", scoreCardNew);
 			model.addAttribute("ScoreCardFilter",true);
@@ -402,23 +413,23 @@ public class ScoreCardController {
 			if(scoreCardModelObject.getFilterFromDateString() != null && 
 					!scoreCardModelObject.getFilterFromDateString().equalsIgnoreCase("")) {
 				String filterFromDateString = scoreCardModelObject.getFilterFromDateString() + " 00:00:00 AM";
-				Date filterFromDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
-				scoreCardModelObject.setFilterFromDate(filterFromDate);
+				
+				scoreCardModelObject.setFilterFromDateString(filterFromDateString);
 				
 				if (scoreCardFailObject != null) {
-					scoreCardFailObject.setFilterFromDate(filterFromDate);
+					scoreCardFailObject.setFilterFromDateString(filterFromDateString);
 				}
 			}
 			
 			
 			if(scoreCardModelObject.getFilterToDateString() != null && 
 					!scoreCardModelObject.getFilterToDateString().equalsIgnoreCase("")) {
-				String filterFromDateString = scoreCardModelObject.getFilterToDateString() + " 11:59:59 PM";
-				Date filterToDate = utilityFunctions.convertToDateFromString(filterFromDateString, UIGenericConstants.DATE_TYPE_FULL);
-				scoreCardModelObject.setFilterToDate(filterToDate);
+				String filterToDateString = scoreCardModelObject.getFilterToDateString() + " 11:59:59 PM";
+				
+				scoreCardModelObject.setFilterToDateString(filterToDateString);
 				
 				if (scoreCardFailObject != null) {
-					scoreCardFailObject.setFilterToDate(filterToDate);
+					scoreCardFailObject.setFilterToDateString(filterToDateString);
 				}
 			}
 			
@@ -478,11 +489,11 @@ public class ScoreCardController {
 		
 		String qamStartDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamStartdateTime(), UIGenericConstants.DATE_TYPE_FULL);
 		String qamEndDateString = utilityFunctions.convertToStringFromDate(scoreCard.getQamEnddateTime(), UIGenericConstants.DATE_TYPE_FULL);
-		String callMonitoringDateString = utilityFunctions.convertToStringFromDate(scoreCard.getCallMonitoringDate(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+		//String callMonitoringDateString = utilityFunctions.convertToStringFromLocalDate(scoreCard.getCallMonitoringDate(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
 		
 		scoreCard.setQamStartdateTimeString(qamStartDateString);
 		scoreCard.setQamEnddateTimeString(qamEndDateString);
-		scoreCard.setCallMonitoringDateString(callMonitoringDateString);
+		//scoreCard.setCallMonitoringDateString(callMonitoringDateString);
 		
 		
 		//System Screen Access--Start
@@ -830,11 +841,15 @@ public class ScoreCardController {
 				}
 				scoreCard.setCallCatSubCatMsString(callSubCategoryStringMsTemp);
 				
+				//Setting Call Monitoring Date, because of Issue on 02/06/2019
+				String callMonitoringDateStringTemp = scoreCard.getCallMonitoringDateString() + " 11:59:59 AM";
+				scoreCard.setCallMonitoringDateString(callMonitoringDateStringTemp);
+				
 				BasicAuthRestTemplate basicAuthRestTemplate = new BasicAuthRestTemplate("qamadmin", "123456");
 				String ROOT_URI = new String(HomeController.RAD_WS_URI + "saveOrUpdateScoreCard");
 				
-				Date callMonitoringDate = utilityFunctions.convertToDateFromString(scoreCard.getCallMonitoringDateString(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
-				scoreCard.setCallMonitoringDate(callMonitoringDate);
+				//LocalDate callMonitoringDate = utilityFunctions.convertToLocalDateFromString(scoreCard.getCallMonitoringDateString(), UIGenericConstants.DATE_TYPE_ONLY_DATE);
+				//scoreCard.setCallMonitoringDate(callMonitoringDate);
 				Date qamStartDateTime = utilityFunctions.convertToDateFromString(scoreCard.getQamStartdateTimeString(), UIGenericConstants.DATE_TYPE_FULL);
 				scoreCard.setQamStartdateTime(qamStartDateTime);
 			     

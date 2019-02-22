@@ -1,8 +1,11 @@
 package com.archsystemsinc.rad.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class ScoreCard  implements Comparable<ScoreCard>{
@@ -38,10 +41,6 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private String callLanguage;
 
-	
-	private Date callMonitoringDate;
-
-	
 	private String callResult;
 
 	
@@ -170,7 +169,7 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	//Temporatry Fields
 	
-	private String callMonitoringDateString;
+	
 	
 	private String macIdReportSearchString;	
 	
@@ -198,8 +197,20 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	
 	private Date filterToDateForQamStartDateTime;	
 	
-
+	private String callMonitoringDateString;
 	
+	private LocalDate callMonitoringDate;
+	
+	
+	
+	public LocalDate getCallMonitoringDate() {
+		return callMonitoringDate;
+	}
+
+	public void setCallMonitoringDate(LocalDate callMonitoringDate) {
+		this.callMonitoringDate = callMonitoringDate;
+	}
+
 	public Date getFilterFromDateForQamStartDateTime() {
 		return filterFromDateForQamStartDateTime;
 	}
@@ -667,19 +678,9 @@ public class ScoreCard  implements Comparable<ScoreCard>{
 	public void setCallLanguage(String callLanguage) {
 		this.callLanguage = callLanguage;
 	}
-
-
-
 	
 
-
-	public Date getCallMonitoringDate() {
-		return callMonitoringDate;
-	}
-
-	public void setCallMonitoringDate(Date callMonitoringDate) {
-		this.callMonitoringDate = callMonitoringDate;
-	}
+	
 
 	public String getCallResult() {
 		return callResult;

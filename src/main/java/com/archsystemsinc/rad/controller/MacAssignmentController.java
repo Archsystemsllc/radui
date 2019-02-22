@@ -3,7 +3,6 @@
  */
 package com.archsystemsinc.rad.controller;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -130,7 +129,7 @@ public class MacAssignmentController {
 		Integer user1TotalAssignedCount = 0, user2TotalAssignedCount = 0, user3TotalAssignedCount = 0;
 		Integer user1TotalCompletedCount = 0, user2TotalCompletedCount = 0, user3TotalCompletedCount = 0;
 		Integer macJurisdictionProgramPlanned = 0,  macJurisdictionProgramCompleted = 0, totalPlanned = 0, totalCompleted = 0;
-		Date searchFromDateForQamStartDate = new Date(), searchToDateForQamStartDate = new Date();
+		Date searchFromDateForCallMonitoringDate = new Date(), searchToDateForCallMonitoringDate = new Date();
 		
 		SimpleDateFormat myMonthYearPathFormat = new SimpleDateFormat("MM_yyyy_dd hh:mm:ss a");
 		
@@ -168,12 +167,12 @@ public class MacAssignmentController {
 				
 				if(dayOfMonth <= 15) {					
 					fromDateCalendar.add(Calendar.MONTH, -1);	
-					searchFromDateForQamStartDate = fromDateCalendar.getTime();
-					searchToDateForQamStartDate = today;
+					searchFromDateForCallMonitoringDate = fromDateCalendar.getTime();
+					searchToDateForCallMonitoringDate = today;
 				} else {
 					fromDateCalendar.set(Calendar.DATE, 16);
-					searchFromDateForQamStartDate = fromDateCalendar.getTime();
-					searchToDateForQamStartDate = today;
+					searchFromDateForCallMonitoringDate = fromDateCalendar.getTime();
+					searchToDateForCallMonitoringDate = today;
 				}
 				
 				String currentMonthYear = monthYearFormat.format(cal.getTime());
@@ -185,20 +184,20 @@ public class MacAssignmentController {
 				
 				
 				try {
-					String filterFromDateString = monthYearPath+"_16 00:00:00 AM";
-					searchFromDateForQamStartDate = myMonthYearPathFormat.parse(filterFromDateString);
+					String filterFromDateString = monthYearPath+"_01 00:00:00 AM";
+					searchFromDateForCallMonitoringDate = myMonthYearPathFormat.parse(filterFromDateString);
 					
 					Calendar cal = Calendar.getInstance();
-					cal.setTime(searchFromDateForQamStartDate);
+					cal.setTime(searchFromDateForCallMonitoringDate);
 					cal.add(Calendar.MONTH, 1);		
-					cal.set(Calendar.DATE, 15);
+					cal.add(Calendar.DATE, -1);  
 					
 					cal.set(Calendar.HOUR, 11);
 					cal.set(Calendar.MINUTE, 59);
 					cal.set(Calendar.SECOND, 59);
 					cal.set(Calendar.AM_PM, Calendar.PM);
 					
-					searchToDateForQamStartDate = cal.getTime();
+					searchToDateForCallMonitoringDate = cal.getTime();
 					
 					macAssignmentSearchObject.setAssignedMonthYear(monthYearPath);
 					model.addAttribute("currentMonthYear", monthYearPath);
@@ -270,8 +269,11 @@ public class MacAssignmentController {
 							List<ScoreCard> scoreCardList;
 														
 							scoreCard = new ScoreCard();
-							scoreCard.setFilterFromDateForQamStartDateTime(searchFromDateForQamStartDate);
-							scoreCard.setFilterToDateForQamStartDateTime(searchToDateForQamStartDate);
+							//scoreCard.setFilterFromDateForQamStartDateTime(searchFromDateForQamStartDate);
+							//scoreCard.setFilterToDateForQamStartDateTime(searchToDateForQamStartDate);
+							scoreCard.setFilterFromDate(searchFromDateForCallMonitoringDate);
+							scoreCard.setFilterToDate(searchToDateForCallMonitoringDate);
+							
 							scoreCard.setMacId(macAssignmentObjectTemp.getMacId());
 							scoreCard.setJurId(macAssignmentObjectTemp.getJurisdictionId());
 							scoreCard.setProgramId(macAssignmentObjectTemp.getProgramId());

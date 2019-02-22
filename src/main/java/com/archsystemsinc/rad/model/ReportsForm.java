@@ -1,5 +1,6 @@
 package com.archsystemsinc.rad.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -53,6 +54,8 @@ public class ReportsForm {
     
     private ArrayList<String> jurisdictionNameList;
     
+    private ArrayList<Integer> macIdList;
+    
     private String jurisdictionNameValues;
     
     private String[] jurisdictionIds;
@@ -63,9 +66,15 @@ public class ReportsForm {
     
     private String toDateStringMonthYear;
     
-    
-    
-	
+   	
+	public ArrayList<Integer> getMacIdList() {
+		return macIdList;
+	}
+
+	public void setMacIdList(ArrayList<Integer> macIdList) {
+		this.macIdList = macIdList;
+	}
+
 	public String getFromDateStringMonthYear() {
 		return fromDateStringMonthYear;
 	}

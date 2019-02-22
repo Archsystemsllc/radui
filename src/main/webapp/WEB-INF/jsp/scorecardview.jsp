@@ -751,7 +751,7 @@
 			                            <div class="col-lg-6 form-group">
 			                                <label for="name"> Call Monitoring Date:</label>
 			                                <input type="hidden" id="callMonitoringDate_Alt"></input>
-			                                <form:input type = "text" class="form-control required" path="callMonitoringDate" readonly="true"/>
+			                                <form:input type = "text" class="form-control required" path="callMonitoringDateString" readonly="true"/>
 			                            </div>
 			                           <div class="col-lg-6 form-group">
 			                              <label for="systemScreenAccess">IMD-System Screen Access</label>

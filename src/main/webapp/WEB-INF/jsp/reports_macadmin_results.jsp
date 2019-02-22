@@ -19,6 +19,9 @@
 
 <!-- CSS for Bootstrap -->
 <!-- JQuery -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css"/> -->
+
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -29,7 +32,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script> 
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-
+<!--    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.js"></script> -->
 
 <script type="text/javascript">
 $(document).ready(function() {		
@@ -47,33 +50,74 @@ $(document).ready(function() {
 		{ "mData": "callDuration"},
 		{ "mData": "finalCallResult"}
 		],		
-		dom: 'B<"clear">lfrtip',	
-	     buttons: [
+		dom: 'Bfrtip',	
+		 buttons: [
 	         {
 	             extend: 'copy',
-	             title: reportTitle
+	             title: reportTitle,	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3]
+	             }
 	         },
 	         {
-	             extend: 'excel',	            
-	             title: reportTitle,			     
-	             messageTop: messageOnTop
-		      },
-	         {
-			     extend: 'pdf',
-			     title: reportTitle,
-			     	customize: function(doc) {
-			     		doc.defaultStyle.fontSize = 7;
-			     		doc.styles.tableHeader.fontSize = 7; 
-			       	}		       
+	             extend: 'excel',
+	             title: reportTitle,
+	             messageTop: messageOnTop,
+	             filename: 'All Scorecard Report',	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3]
+	             }
+ 		      },
+	         {  
+			     extend: 'pdfHtml5',
+			     orientation : 'landscape',
+	             pageSize : 'LEGAL',	   
+	             exportOptions: {
+	                    columns: [ 0, 1, 2, 3]
+	             },  
+	                     
+			     /* customize: function (doc) {
+			    	 var programs = allScoreCardDataTable.column(2).data().toArray();
+			    	 var list = 13;
+		             for (var i = 0; i < programs.length; i++) {
+		               if (programs[i] == null) {
+			               if(i<programs.length-1) {
+			            	   for(var j=0; j<list; j++) {
+					            	  doc.content[2].table.body[i+1][j].fillColor = '#CEE9F5';
+						       } 
+				           } else {
+				        	   for(var j=0; j<list; j++) {
+					            	  doc.content[2].table.body[i+1][j].fillColor = '#58FAD0';
+						       } 
+					       } 
+			              
+		                 
+		               }
+		             }
+			     },
+ */			     title: reportTitle,
+				 messageTop: messageOnTop   	
+		              
+		          	            
 	         }	        
 	     ],
 	    // drawCallback: addSubtotalsAll,
-		  "paging" : true,
-		  "pageLength" : 20,
-		  "ordering" : true,
+	     "paging" : false,
+		  "searching": false,
+		  "sorting" : false,
+		  "pageLength" : 100,		 
 		  "language": {
 		      "emptyTable": "No data available"
-		}
+		    },
+
+		      "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {		    
+	               if ( aData.macName != "zTotals" && aData.program == null ) {
+	                   $('td', nRow).css('background-color', '#CEE9F5');
+	               } else if ( aData.macName == "zTotals" && aData.program == null ) {
+	            	   $('td', nRow).css('background-color', '#58FAD0');
+	               }
+	               
+	           }
 	       
 	});
 	
