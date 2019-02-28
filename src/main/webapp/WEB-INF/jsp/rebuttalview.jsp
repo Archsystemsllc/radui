@@ -391,21 +391,25 @@
 			                                <label for="name">Description/Comments:</label>
 			                                <form:textarea class="required form-control" type = "textarea" name = "descriptionComments" path="descriptionComments" readonly="true"/>
 			                            </div>		                           
-			                        </div>    
+			                        </div>  
+			                        
+			                       
 					                </c:if>
-			                        
-			                        
-			                        <%--  <div class="row">
-			                            <div class="col-sm-10 form-group">
-			                                <label for="name">Attachments:</label>			                                
-			                               <span>${rebuttal.fileName}</span>
-										
-			                            </div>		                           
-			                        </div>     --%>
+			                       
 			                        </fieldset>   
 				                    
 				                </div>
 				            </div>		
+				            
+				             <div class="row">
+	                            <div class="col-md-10 col-md-offset-1 form-container">
+	                                <label for="name">Attachments:</label>		
+	                                <c:if test="${rebuttal.id > 0}">
+									<a class="download_rebuttal222" href="${pageContext.request.contextPath}/${SS_USER_FOLDER}/download-rebuttal/${rebuttal.id}" style="color: blue">	<span>${rebuttal.fileName}</span></a>
+									</c:if>
+									</br>
+	                            </div>		                           
+	                        </div>       
 				            
 								<!-- </div> -->
 							</div>

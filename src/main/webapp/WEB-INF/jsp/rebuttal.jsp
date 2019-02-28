@@ -142,15 +142,10 @@
 			  event.preventDefault();
 			  $form = $(this); //wrap this in jQuery
 			  var rebuttalSaveAction = $form.attr('action');
-
-			  var rebuttalForm = document.forms[1];			    
-			  var rebuttalFormData = new FormData(rebuttalForm);
-
-			  var username="qamadmin";
-			  var password="123456";
-
-			   
 			  
+			  var rebuttalForm = document.getElementById('rebuttalForm');		    
+			  var rebuttalFormData = new FormData(rebuttalForm);
+			  				  
 			  $.ajax({ 
 			         type: "POST",
 			         data : rebuttalFormData,
@@ -162,7 +157,7 @@
 			        	
 			        },
 			        failure: function () {
-			        	alert("Rebttal Saved Failed, Please contact administrator");
+			        	alert("Rebttal Save Failed, Please contact administrator");
 			        }
 			}); 
 			    
@@ -213,7 +208,7 @@
 		              		$("#failureReason").val(data.failReason);
 		              		
 		              		$("#callTime").val(data.callTime);
-		              		$("#callDate").val(data.callMonitoringDate);
+		              		$("#callDate").val(data.callMonitoringDateString);
 		              		
 		              		$("#macCallReferenceNumber").val(data.macCallReferenceNumber);
 		              		$("#macId").val(data.macId);

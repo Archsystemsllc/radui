@@ -537,19 +537,20 @@ public class RebuttalController {
 				returnRebuttalId = rebuttalTempObject.getId();
 			}
 			
-			
-			ROOT_URI = new String(HomeController.RAD_WS_URI + "uploadRebuttalFileObject");
-			
-			MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
-		      bodyMap.add("rebuttalFileObject", getUserFileResource(file));
-		      bodyMap.add("rebuttalId", returnRebuttalId);
-		      HttpHeaders headers = new HttpHeaders();
-		      headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-		      HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
+			if(file != null) {
+				ROOT_URI = new String(HomeController.RAD_WS_URI + "uploadRebuttalFileObject");
+				
+				MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+			      bodyMap.add("rebuttalFileObject", getUserFileResource(file));
+			      bodyMap.add("rebuttalId", returnRebuttalId);
+			      HttpHeaders headers = new HttpHeaders();
+			      headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			      HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
 
-		      //RestTemplate restTemplate = new RestTemplate();
-		     ResponseEntity<String> fileUploadResponse = basicAuthRestTemplate.exchange(ROOT_URI,
-		              HttpMethod.POST, requestEntity, String.class);
+			      //RestTemplate restTemplate = new RestTemplate();
+			     ResponseEntity<String> fileUploadResponse = basicAuthRestTemplate.exchange(ROOT_URI,
+			              HttpMethod.POST, requestEntity, String.class);
+			}
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -561,15 +562,18 @@ public class RebuttalController {
 	}
 	
 	public static Resource getUserFileResource(MultipartFile multiPartfile) throws IOException {	     
-		
-	      String file_name = multiPartfile.getOriginalFilename();
-	      ByteArrayResource contentsAsResource = new ByteArrayResource(multiPartfile.getBytes()) {
-		        @Override
-		        public String getFilename() {
-		            return file_name; // Filename has to be returned in order to be able to post.
-		        }
-		    };
-	      return contentsAsResource;
+		ByteArrayResource contentsAsResource = null;
+		  if(multiPartfile != null) {
+			  String file_name = multiPartfile.getOriginalFilename();
+		      contentsAsResource = new ByteArrayResource(multiPartfile.getBytes()) {
+			        @Override
+			        public String getFilename() {
+			            return file_name; // Filename has to be returned in order to be able to post.
+			        }
+			    };
+		     
+		  }
+		  return contentsAsResource; 
 	     
 	  }
 	

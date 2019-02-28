@@ -100,7 +100,7 @@ public class Rebuttal implements Comparable<Rebuttal> {
 	
 	//Temporaray Variables
 	
-	
+	private String rebuttalResultTemp;
 	
 	private String descriptionCommentsAppend;
 	
@@ -150,6 +150,16 @@ public class Rebuttal implements Comparable<Rebuttal> {
 	
 	
 	
+	public String getRebuttalResultTemp() {
+		return rebuttalResultTemp;
+	}
+
+
+	public void setRebuttalResultTemp(String rebuttalResultTemp) {
+		this.rebuttalResultTemp = rebuttalResultTemp;
+	}
+
+
 	public Integer getQamId() {
 		return qamId;
 	}
