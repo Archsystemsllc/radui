@@ -61,7 +61,7 @@
 								<div class="header">Resources</div>	
 												
 						<ul style="padding-left:480px;padding-top:10px;font-size:18px;">
-						<li style="padding-top:10px;"><a href="${pageContext.request.contextPath}/resources/documents/CRAD_Help_Guide_Final_022019.pdf" title="Help Guide Document" target="_blank">Help Guide</a> </li>
+						<li style="padding-top:10px;"><a href="${pageContext.request.contextPath}/resources/documents/CRAD_Help_Guide_Final_022019_V2.pdf" title="Help Guide Document" target="_blank">Help Guide</a> </li>
 						<li style="padding-top:20px;"><a href="${pageContext.request.contextPath}/resources/documents/CRAD_QAM_MAC_Handbook_022019.pdf" title="QAM Handbook Document" target="_blank">QAM Handbook</a></li>
 						</ul>
 					</div>
